@@ -6,8 +6,8 @@ import {
   Render,
   Param,
   Query,
-  HttpService,
 } from '@nestjs/common';
+import { HttpService } from '@nestjs/axios';
 import { AppService } from './app.service';
 import { Response } from 'express';
 import { AuthService } from './Authentication/auth.service';
@@ -22,12 +22,6 @@ export class AppController {
     private authService: AuthService,
   ) {}
 
-  @Get('/logout')
-  logout(@Request() req, @Res() res: Response) {
-    req.logout();
-    res.redirect('/login');
-  }
-
   @Get('/login')
   @Render('login')
   root() {
@@ -38,14 +32,14 @@ export class AppController {
   @Render('index')
   async index(@Query() query: any, @Res() res: Response) {
     if (!query.code) {
-      res.redirect('/login');
+      return res.redirect('/login');
     }
     const tokenData = {
       client_id: process.env.CLIENT_ID,
       client_secret: process.env.CLIENT_SECRET,
       grant_type: 'client_credentials',
       code: query.code,
-      redirect_uri: 'http://localhost:3000/auth/discord',
+      redirect_uri: process.env.REDIRECT_URI,
       scope: 'identify',
     };
 
