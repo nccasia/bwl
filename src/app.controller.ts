@@ -41,8 +41,8 @@ export class AppController {
       res.redirect('/login');
     }
     const tokenData = {
-      client_id: '953902393085554690',
-      client_secret: 'sIN8MXz6uQmQm4llzAvcl-7tyvG-5WCT',
+      client_id: process.env.CLIENT_ID,
+      client_secret: process.env.CLIENT_SECRET,
       grant_type: 'client_credentials',
       code: query.code,
       redirect_uri: 'http://localhost:3000/auth/discord',
