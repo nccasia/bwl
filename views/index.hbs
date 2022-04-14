@@ -2,7 +2,8 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Home</title>
+    <title>Bwl | Home</title>
+    <link rel="icon" type="image/x-icon" href="./assets/img/favicon.png">
     <link href="./assets/css/main.css" rel="stylesheet" />
   </head>
   <body>
@@ -10,7 +11,10 @@
     <nav class="nav-header">
         <div class="collapse navbar-collapse" id="navbarNav">
             <div class="navbar-nav">
-                    <a class="nav-link" href="/login">Logout</a>
+                <img src="https://cdn.discordapp.com/avatars/{{user.id}}/{{user.avatar}}"
+                                        width="50" class="img-people" alt="avatar">
+                <div>{{ user.username }}</div>
+                <a class="nav-link" href="/logout">Logout</a>
             </div>
       </div>
     </nav>
@@ -19,7 +23,7 @@
     <div class="row row-content">
         <div class="list-view">
                 <div id="infinite-scroll">
-                    {{#each data }}
+                    {{#each posts }}
                           <div style="position: relative; display: flex; flex-direction: column; min-width: 0; word-wrap: break-word; background-color: #fff; background-clip: border-box; border: 1px solid rgba(0,0,0,.125);margin-bottom: 30px;border-radius: 0.25rem;">
                             <div id="header" class="content-head">
                                 <div class="list-avatar">

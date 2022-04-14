@@ -92,6 +92,6 @@ export class AppService {
         },
       };
     });
-    return { data };
+    return data;
   }
 }
