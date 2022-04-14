@@ -51,17 +51,16 @@ export class AppController {
         throw new error();
       }
     } else if (query.code) {
-      const tokenData = {
+      const body = new URLSearchParams({
         client_id: process.env.CLIENT_ID,
         client_secret: process.env.CLIENT_SECRET,
-        grant_type: 'client_credentials',
+        grant_type: 'authorization_code',
         code: query.code,
         redirect_uri: process.env.REDIRECT_URI,
         scope: 'identify',
-      };
+      });
 
       try {
-        const body = `client_id=${tokenData.client_id}&client_secret=${tokenData.client_secret}&code=${query.code}&grant_type=${tokenData.grant_type}&scope=${tokenData.scope}`;
         return this.httpService
           .post(tokenURL, body, {
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -110,7 +109,7 @@ export class AppController {
     const url = `https://discord.com/api/oauth2/authorize?client_id=${
       process.env.CLIENT_ID
     }&redirect_uri=${encodeURIComponent(
-      process.env.REDIRECT_INDEX,
+      process.env.REDIRECT_URI,
     )}&response_type=code&scope=identify`;
     return { url };
   }
