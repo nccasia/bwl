@@ -11,6 +11,7 @@ import { HttpService } from '@nestjs/axios';
 import { AppService } from './app.service';
 import { Response } from 'express';
 import { AuthService } from './Authentication/auth.service';
+import { first, from, map, switchMap, tap } from 'rxjs';
 const tokenURL = 'https://discord.com/api/oauth2/token';
 const apiURLBase = 'https://discord.com/api/users/@me';
 
@@ -22,14 +23,7 @@ export class AppController {
     private authService: AuthService,
   ) {}
 
-  @Get('/login')
-  @Render('login')
-  root() {
-    return {};
-  }
-
   @Get('')
-  @Render('index')
   async index(@Query() query: any, @Res() res: Response) {
     if (!query.code) {
       return res.redirect('/login');
@@ -45,39 +39,57 @@ export class AppController {
 
     try {
       const body = `client_id=${tokenData.client_id}&client_secret=${tokenData.client_secret}&code=${query.code}&grant_type=${tokenData.grant_type}&scope=${tokenData.scope}`;
-      const accessTokenData = await this.httpService
+      return this.httpService
         .post(tokenURL, body, {
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         })
-        .toPromise();
+        .pipe(
+          switchMap((response) => {
+            return this.httpService.get(apiURLBase, {
+              headers: {
+                Authorization: `Bearer ${response.data.access_token}`,
+              },
+            });
+          }),
+          map((userResponse) => {
+            return userResponse.data;
+          }),
+          map(async (user) => {
+            const userDb = await this.authService.findUserFromDiscordId(
+              user.id,
+            );
 
-      const userData = await this.httpService
-        .get(apiURLBase, {
-          headers: {
-            Authorization: `Bearer ${accessTokenData.data.access_token}`,
-          },
-        })
-        .toPromise();
-      const user = await this.authService.findUserFromDiscordId(
-        userData.data.id,
-      );
-
-      if (!user) {
-        await this.authService.saveUser(
-          userData.data.id,
-          userData.data.username,
-          userData.data.avatar,
-          userData.data.discriminator,
+            if (!userDb) {
+              await this.authService.saveUser(
+                user.id,
+                user.username,
+                user.avatar,
+                user.discriminator,
+              );
+            }
+            const posts = await this.appService.getAll(1);
+            return res.render('index', posts);
+          }),
+          first(),
         );
-      }
     } catch (error) {
       throw new error();
     }
-    return this.appService.getAll(1);
+  }
+
+  @Get('/login')
+  @Render('login')
+  root() {
+    const url = `https://discord.com/api/oauth2/authorize?client_id=${
+      process.env.CLIENT_ID
+    }&redirect_uri=${encodeURIComponent(
+      process.env.REDIRECT_INDEX,
+    )}&response_type=code&scope=identify`;
+    return { url };
   }
 
   @Get('/getAllPaging')
-  getAllPaging(@Param('page') page: number = 1) {
+  getAllPaging(@Query('page') page = 1) {
     return this.appService.getAll(page <= 0 ? 1 : page);
   }
 }

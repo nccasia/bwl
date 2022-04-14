@@ -21,25 +21,27 @@ export class AppService {
         $group: {
           _id: '$messageId',
           totalReact: { $addToSet: '$authorId' },
-          emoji: { $addToSet: '$emoji' },
-          count: { $addToSet: '$count' },
+          emoji: { $push: '$emoji' },
+          count: { $sum: 1 },
         },
       },
       {
-        $project: {
-          _id: 0,
-          messageId: '$_id',
-          totalReact: {
-            $size: '$totalReact',
-          },
-          emoji: 1,
-          count: 1,
-        },
+        $sort: { count: -1 },
       },
+      // {
+      //   $project: {
+      //     _id: 0,
+      //     messageId: '$_id',
+      //     totalReact: {
+      //       $size: '$totalReact',
+      //     },
+      //     emoji: 1,
+      //   },
+      // },
       {
         $lookup: {
           from: 'komu_bwls',
-          localField: 'messageId',
+          localField: '_id',
           foreignField: 'messageId',
           as: 'author_message',
         },
@@ -47,6 +49,8 @@ export class AppService {
       {
         $unwind: '$author_message',
       },
+      { $skip: (page - 1) * 10 },
+      { $limit: 10 },
       {
         $lookup: {
           from: 'komu_users',
@@ -59,44 +63,32 @@ export class AppService {
         $unwind: '$author',
       },
       {
-        $sort: { totalReact: -1 },
-      },
-      {
-        $group: {
-          _id: '$author.id',
-          author: { $first: '$author' },
-          message: { $first: '$author_message' },
-          totalReact: { $first: '$totalReact' },
-          emojis: { $addToSet: '$emoji' },
+        $project: {
+          _id: 0,
+          author: 1,
+          message: '$author_message',
+          totalReact: 1,
+          emojis: '$emoji',
         },
       },
+    ];
+    let data = await this.komuReaction.aggregate(aggregatorOpts as any).exec();
 
-      {
-        $sort: { totalReact: 1 },
-      },
-      { $skip: (page - 1) * 10 },
-      { $limit: 10 },
-    ];
-    // const data = await this.komuReaction.aggregate(aggregatorOpts as any);
-    const commentsFake = [
-      {
-        links: ['d86f40c5-ba12-4f02-8f72-049a191eba3c_unknown.png'],
-        user: {
-          id: '921585573901254727',
-          username: 'huu.daohoang',
-          avatar: 'd127c6f6c932b5d80f1a6f1914e962de',
-        },
-        comment: 'abcada',
-      },
-    ];
-    const data = await (
-      await this.komuReaction.aggregate(aggregatorOpts as any)
-    ).map((item) => {
+    data = data.map((item) => {
+      item.emojis = item.emojis.reduce((result, emoji) => {
+        const exists = result.find((e) => e.name === emoji);
+        if (exists) {
+          exists.count++;
+        } else {
+          result.push({ name: emoji, count: 1 });
+        }
+        return result;
+      }, []);
       return {
         ...item,
         message: {
           ...item.message,
-          comments: commentsFake,
+          comments: [],
         },
       };
     });

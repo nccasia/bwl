@@ -2,15 +2,7 @@
   <head>
     <meta charset='utf-8' />
     <title>Login</title>
-    <link href='/dist/output.css' rel='stylesheet' />
-    <style>
-      .container{ display: flex; align-items: center; flex-direction: column;
-      justify-content: center; margin-top: 110px; } .btn-login{ box-sizing:
-      border-box; background: #7289DA; border: none; color: #fff; height: 40px;
-      width: 328px; border-radius: 3px; cursor: pointer; transition: 0.2s ease;
-      user-select: none; font-size: 14px; } .icon-discord{ overflow: hidden;
-      vertical-align: middle; }
-    </style>
+    <link href="./assets/css/main.css" rel="stylesheet" />
   </head>
   <body>
     <div class='container'>
@@ -19,7 +11,7 @@
           <button
             class='btn-login'
             type='button'
-            onclick="location.href='https://discord.com/api/oauth2/authorize?client_id=953902393085554690&redirect_uri=http%3A%2F%2Flocalhost%3A3000&response_type=code&scope=identify'"
+            onclick="location.href='{{url}}'"
           >
             <svg
               xmlns='http://www.w3.org/2000/svg'

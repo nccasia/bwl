@@ -11,7 +11,7 @@ import { HttpModule } from '@nestjs/axios';
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    MongooseModule.forRoot('mongodb://localhost/bwl'),
+    MongooseModule.forRoot('mongodb://172.16.100.114:27017/komubot'),
     AuthModule,
     KomuUsersModule,
     ReactionModule,
