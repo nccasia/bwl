@@ -71,6 +71,7 @@
   padding-left: 1rem;
   padding-right: 1rem;
   padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 .list-avatar {
   display: flex;
@@ -124,6 +125,8 @@
   font-size: 1rem;
   line-height: 1.5;
   border-radius: 0.25rem;
+  display: flex;
+  align-items: center;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
     border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
@@ -155,4 +158,8 @@
 
 .comment-box {
   padding: 1rem;
+}
+.emoji {
+  width: 16px;
+  margin-right: 4px;
 }

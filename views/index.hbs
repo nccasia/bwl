@@ -41,13 +41,13 @@
                                 <div class="d-flex flex-row align-items-center ellipsis">
                                     <small>
                                       
-                                      {{#formatDay this.message.createdTimestamp}}{{/formatDay}}
+                                      {{#formatDay this.createdTimestamp}}{{/formatDay}}
                                     </small>
                               </div>
                           </div>
                      
                           <div class="image">
-                             {{#each this.message.links}}
+                             {{#each this.links}}
                                  <img src="http://bwl.vn/images/{{this}}" class="img-fluid" alt="{{this}}">
                              {{/each}}
                           </div>
@@ -55,10 +55,14 @@
                           <div id="reaction" class="reaction-user">
                             <div class="box-reaction">
                                 <ul class="box-reaction-list">
-                                    {{#each this.emojis}}
+                                    {{#each this.reactions}}
                                         <li class="list-inline-item list-reaction">
                                             <button class="btn-reaction">
+                                              {{#if this.id}}
+                                                <img class="emoji" src="https://cdn.discordapp.com/emojis/{{this.id}}.png" alt="{{this.name}}" /> {{ this.count }}
+                                              {{else}}
                                                 {{ this.name }} {{ this.count }}
+                                              {{/if}}
                                             </button>
                                         </li>
                                     {{/each}}
@@ -67,12 +71,12 @@
                         </div>
                          
                         <div class="comment-box">
-                          <div data-id="{{ this.message.messageId }}" class="show-comments d-flex flex-row muted-color">
-                              <span>{{  this.message.comments.length  }}  comments</span>
+                          <div data-id="{{ this.messageId }}" class="show-comments d-flex flex-row muted-color">
+                              <span>{{  this.comments.length  }}  comments</span>
                           </div>
-                          <div id="comments-{{ this.message.messageId }}" class="comments" style="display: none;">
+                          <div id="comments-{{ this.messageId }}" class="comments" style="display: none;">
                             <hr>
-                            {{#each this.message.comments as | comment|}}
+                            {{#each this.comments as | comment|}}
                               <div class="d-flex flex-row mb-2">
                                         {{#if comment.user.avatar}}
                                           <img src="{{ comment.user.avatar }}" width="40" class="rounded-image" alt="avatar">
@@ -138,12 +142,12 @@
                 }
             })
             .done(function (response) {
-                if (response.data.length == "") {
+                if (response.length == "") {
                     $('.ajax-load').html("No more records found");
                     return;
                 }
                 $('.ajax-load').hide();
-                $("#infinite-scroll").append(getHtmlContent(response.data));
+                $("#infinite-scroll").append(getHtmlContent(response));
             })
             .fail(function () {
                 alert('Server not responding!');
@@ -162,8 +166,8 @@
       for (let index = 0; index < data.length; index++) {
 
         let author = data[index].author;
-        let emojis = data[index].emojis;
-        let message = data[index].message;
+        let emojis = data[index].reactions;
+        let message = data[index];
 
         htmlContent += `<div style="position: relative; display: flex; flex-direction: column; min-width: 0; word-wrap: break-word; background-color: #fff; background-clip: border-box; border: 1px solid rgba(0,0,0,.125);margin-bottom: 30px;border-radius: 0.25rem;">`;
         htmlContent += `<div id="header" class="content-head">`;
@@ -190,7 +194,11 @@
 
         htmlContent += `<div id="reaction" class="reaction-user"><div class="box-reaction"><ul class="box-reaction-list">`;
         for (let emojiIndex = 0; emojiIndex < emojis.length; emojiIndex++) {
-          htmlContent += `<li class="list-inline-item list-reaction"><button class="btn-reaction">${emojis[emojiIndex].name} ${emojis[emojiIndex].count}</button></li>`;
+          let emojiContent = emojis[emojiIndex].name + ' ' + emojis[emojiIndex].count;
+          if (emojis[emojiIndex].id) {
+            emojiContent = `<img class="emoji" src="https://cdn.discordapp.com/emojis/${emojis[emojiIndex].id}.png" alt="${emojis[emojiIndex].name}"> ${emojis[emojiIndex].count}`;
+          }
+          htmlContent += `<li class="list-inline-item list-reaction"><button class="btn-reaction">${emojiContent}</button></li>`;
         }
         htmlContent += `</ul></div></div>`;
 
