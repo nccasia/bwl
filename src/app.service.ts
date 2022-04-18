@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { Reaction, ReactionDocument } from './Reaction/reaction.schema';
 import { emojis } from './constants';
 import { Message, MessageDocument } from './Message/message.schema';
+import { Comment, CommentDocument } from './Comment/comment.schema';
 
 @Injectable()
 export class AppService {
@@ -12,6 +13,8 @@ export class AppService {
     private readonly komuReaction: Model<ReactionDocument>,
     @InjectModel(Message.name)
     private readonly komuMessage: Model<MessageDocument>,
+    @InjectModel(Comment.name)
+    private readonly komuComment: Model<CommentDocument>,
   ) {}
 
   getHello(): string {
@@ -44,9 +47,9 @@ export class AppService {
         },
       },
     ];
-    let data = await this.komuMessage.aggregate(aggregatorOpts as any).exec();
+    const data = await this.komuMessage.aggregate(aggregatorOpts as any).exec();
 
-    data = data.map((item) => {
+    for (const item of data) {
       item.reactions = item.reactions.reduce((result, reaction) => {
         const exists = result.find((e) => e.name === reaction.emoji);
         const emojiWithId = emojis.find((e) => e.name === reaction.emoji);
@@ -62,11 +65,42 @@ export class AppService {
         }
         return result;
       }, []);
-      return {
-        ...item,
-        comments: [],
-      };
-    });
+      item.totalComment = await this.komuComment
+        .count({
+          messageId: item.messageId,
+        })
+        .exec();
+    }
     return data;
+  }
+
+  async getComments(messageId: string) {
+    return this.komuComment
+      .aggregate([
+        {
+          $match: {
+            messageId,
+          },
+        },
+        {
+          $lookup: {
+            from: 'komu_users',
+            localField: 'authorId',
+            foreignField: 'id',
+            as: 'author',
+          },
+        },
+      ])
+      .exec();
+  }
+
+  async comment({ messageId, content, authorId }) {
+    const comment = new this.komuComment({
+      messageId,
+      authorId,
+      content,
+      createdTimestamp: Date.now(),
+    });
+    return comment.save();
   }
 }

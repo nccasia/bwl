@@ -1,11 +1,20 @@
-import { Controller, Get, Res, Query, Render, Req } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Res,
+  Query,
+  Render,
+  Req,
+  Post,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { AppService } from './app.service';
 import { Request, Response } from 'express';
 import { AuthService } from './Authentication/auth.service';
 import { first, map, switchMap } from 'rxjs';
-const tokenURL = 'https://discord.com/api/oauth2/token';
-const apiURLBase = 'https://discord.com/api/users/@me';
+const discordTokenUrl = 'https://discord.com/api/oauth2/token';
+const discordUserUrl = 'https://discord.com/api/users/@me';
 
 @Controller()
 export class AppController {
@@ -20,7 +29,7 @@ export class AppController {
     if (req.cookies['token']) {
       try {
         return this.httpService
-          .get(apiURLBase, {
+          .get(discordUserUrl, {
             headers: {
               Authorization: `Bearer ${req.cookies['token']}`,
             },
@@ -62,13 +71,13 @@ export class AppController {
 
       try {
         return this.httpService
-          .post(tokenURL, body, {
+          .post(discordTokenUrl, body, {
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           })
           .pipe(
             switchMap((response) => {
               res.cookie('token', response.data.access_token);
-              return this.httpService.get(apiURLBase, {
+              return this.httpService.get(discordUserUrl, {
                 headers: {
                   Authorization: `Bearer ${response.data.access_token}`,
                 },
@@ -123,5 +132,40 @@ export class AppController {
   @Get('/getAllPaging')
   getAllPaging(@Query('page') page = 1) {
     return this.appService.getAll(page <= 0 ? 1 : page);
+  }
+
+  @Post('/comment')
+  async comment(@Req() req: Request, @Res() res: Response) {
+    if (!req.cookies['token']) {
+      throw new UnauthorizedException();
+    }
+    return this.httpService
+      .get(discordUserUrl, {
+        headers: {
+          Authorization: `Bearer ${req.cookies['token']}`,
+        },
+      })
+      .pipe(
+        map((userResponse) => {
+          return userResponse.data;
+        }),
+        first(),
+      )
+      .subscribe({
+        next: async (user) => {
+          const { content, messageId } = req.body;
+          await this.appService.comment({
+            content,
+            messageId,
+            authorId: user.id,
+          });
+          return res.json({ success: true });
+        },
+        error: (error) => {
+          return res
+            .status(401)
+            .json({ success: false, error: error.response.data.message });
+        },
+      });
   }
 }

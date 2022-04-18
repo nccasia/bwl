@@ -8,6 +8,7 @@ import { KomuUsersModule } from './Komu_users/komu_users.module';
 import { ReactionModule } from './Reaction/reaction.module';
 import { HttpModule } from '@nestjs/axios';
 import { MessageModule } from './Message/message.module';
+import { CommentModule } from './Comment/comment.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { MessageModule } from './Message/message.module';
     KomuUsersModule,
     ReactionModule,
     MessageModule,
+    CommentModule,
     HttpModule,
   ],
   controllers: [AppController],
