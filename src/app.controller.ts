@@ -168,4 +168,11 @@ export class AppController {
         },
       });
   }
+
+  @Get('/comments')
+  async getComments(@Req() req: Request, @Res() res: Response) {
+    const { messageId } = req.query;
+    const comments = await this.appService.getComments(messageId as string);
+    return res.json({ comments });
+  }
 }

@@ -46,6 +46,14 @@ export class AppService {
           as: 'reactions',
         },
       },
+      {
+        $lookup: {
+          from: 'komu_bwlcomments',
+          localField: 'messageId',
+          foreignField: 'messageId',
+          as: 'comments',
+        },
+      },
     ];
     const data = await this.komuMessage.aggregate(aggregatorOpts as any).exec();
 
