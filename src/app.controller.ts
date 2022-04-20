@@ -154,12 +154,12 @@ export class AppController {
       .subscribe({
         next: async (user) => {
           const { content, messageId } = req.body;
-          await this.appService.comment({
+          const comment = await this.appService.comment({
             content,
             messageId,
             authorId: user.id,
           });
-          return res.json({ success: true });
+          return res.json({ success: true, comment });
         },
         error: (error) => {
           return res
