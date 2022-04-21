@@ -15,12 +15,34 @@
 <body>
   {{--header--}}
   <nav class="nav-header">
+      <div class="collapse navbar-collapse" id="navbarNav">
+          <div class="navbar-nav">
+              <div class="notification" id="notification{{posts.messageId}}">
+                  <svg viewBox="0 0 28 28" alt="" class="icon_notification" fill="currentColor" height="20" width="20">
+                  <path d="M7.847 23.488C9.207 23.488 11.443 23.363 14.467 22.806 13.944 24.228 12.581 25.247 10.98 25.247 9.649 25.247 8.483 24.542 7.825 23.488L7.847 23.488ZM24.923 15.73C25.17 17.002 24.278 18.127 22.27 19.076 21.17 19.595 18.724 20.583 14.684 21.369 11.568 21.974 9.285 22.113 7.848 22.113 7.421 22.113 7.068 22.101 6.79 22.085 4.574 21.958 3.324 21.248 3.077 19.976 2.702 18.049 3.295 17.305 4.278 16.073L4.537 15.748C5.2 14.907 5.459 14.081 5.035 11.902 4.086 7.022 6.284 3.687 11.064 2.753 15.846 1.83 19.134 4.096 20.083 8.977 20.506 11.156 21.056 11.824 21.986 12.355L21.986 12.356 22.348 12.561C23.72 13.335 24.548 13.802 24.923 15.73Z"></path></svg>
+              </div>
+              <div class="navbar-content-notification" style="display: none;">
+                  <div class="navbar-content-toggle-notification">
+                    <img src="https://cdn.discordapp.com/avatars/{{user.id}}/{{user.avatar}}"
+                                width="50" class="img-notification" alt="avatar">
+                    <div id="content-message" class="content-message">bbb</div>
+                  </div>
+              </div>
+          </div>
+      </div>
+
     <div class="collapse navbar-collapse" id="navbarNav">
       <div class="navbar-nav">
-        <img src="https://cdn.discordapp.com/avatars/{{user.id}}/{{user.avatar}}" width="50" class="img-people"
-          alt="avatar">
-        <div>{{ user.username }}</div>
-        <a class="nav-link" href="/logout">Logout</a>
+        	<img src="https://cdn.discordapp.com/avatars/{{user.id}}/{{user.avatar}}"
+                                width="50" class="img-people" alt="avatar">
+          <div class="navbar-content" style="display: none;">
+              <div class="navbar-content-toggle">
+                <img src="https://cdn.discordapp.com/avatars/{{user.id}}/{{user.avatar}}"
+                                      width="50" class="img-people" alt="avatar">
+                <div class="navbar-user">{{ user.username }}</div>
+                <a class="nav-link" href="/logout">Logout</a>
+              </div>
+          </div>
       </div>
     </div>
   </nav>
@@ -80,9 +102,24 @@
             </div>
 
             <div class="interaction">
-              <button class="like">Like</button>
-              <button class="comment" onclick="getComment()" data-message-id="{{this.messageId}}">Comment ({{ this.totalComment }})</button>
+              <button class="like" id="like-{{this.messageId}}" data-message-id="{{this.messageId}}" data-author-id="{{this.authorId}}">Like</button>
+              {{!-- ({{this.totalLike}}) --}}
+              <button class="comment" data-message-id="{{this.messageId}}">Comment({{ this.totalComment }})</button>
             </div>
+                  
+              <div id="comments-{{ this.messageId}}" class="comments" data-id="{{this.messageId}}" style="display: none;">
+                  <div class="d-flex flex-row mb-2" >
+                        <div class="show-author-comments">
+                             <div class="comment-text{{this.messageId}}" id="comment-text"></div>
+                        </div>
+                  </div>
+              </div>
+              <div class="inputWithIcon">
+                  <input placeholder="Add a comment..." data-message-id={{this.messageId}} data-author-id={{this.authorId}}
+                  data-author-user={{this.authorUser}} data-author-avatar={{this.authorAvatar}}/>       
+                  <svg aria-label="Emoji" class="_8-yf5 " color="#262626" fill="#262626" height="24" role="img" viewBox="0 0 24 24" width="24"><path d="M15.83 10.997a1.167 1.167 0 101.167 1.167 1.167 1.167 0 00-1.167-1.167zm-6.5 1.167a1.167 1.167 0 10-1.166 1.167 1.167 1.167 0 001.166-1.167zm5.163 3.24a3.406 3.406 0 01-4.982.007 1 1 0 10-1.557 1.256 5.397 5.397 0 008.09 0 1 1 0 00-1.55-1.263zM12 .503a11.5 11.5 0 1011.5 11.5A11.513 11.513 0 0012 .503zm0 21a9.5 9.5 0 119.5-9.5 9.51 9.51 0 01-9.5 9.5z"></path></svg>
+              </div>
+
           </div>
           {{/each}}
         </div>
@@ -96,5 +133,36 @@
     </div>
   </div>
 </body>
+<script>
+  $(document).ready(function() {
+    
+})
 
+
+</script>
 </html>
+
+            {{!-- $('.like').click(function(){
+      const messageId = $(this).data('message-id');
+      const authorId = $(this).data('author-id');
+   
+      const $this = this;
+
+      let count = 0;
+
+      $.ajax({
+        url: '/like',
+        type: 'POST',
+        data: {
+          messageId,
+          authorId,
+        },
+        success: function (data) {
+        
+      },
+        
+    });
+      --}}
+
+
+     

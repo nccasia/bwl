@@ -15,6 +15,12 @@ export class Comment {
   content: string;
 
   @Prop()
+  authorUser: string;
+
+  @Prop()
+  authorAvatar: string;
+
+  @Prop()
   createdTimestamp: number;
 }
 

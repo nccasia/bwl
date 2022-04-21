@@ -135,7 +135,7 @@ export class AppController {
   }
 
   @Post('/comment')
-  async comment(@Req() req: Request, @Res() res: Response) {
+  async postComment(@Req() req: Request, @Res() res: Response) {
     if (!req.cookies['token']) {
       throw new UnauthorizedException();
     }
@@ -154,12 +154,14 @@ export class AppController {
       .subscribe({
         next: async (user) => {
           const { content, messageId } = req.body;
-          await this.appService.comment({
+          const comment = await this.appService.comment({
             content,
             messageId,
             authorId: user.id,
+            authorUser: user.username,
+            authorAvatar: user.avatar
           });
-          return res.json({ success: true });
+          return res.json({ success: true, comment });
         },
         error: (error) => {
           return res
@@ -174,5 +176,46 @@ export class AppController {
     const { messageId } = req.query;
     const comments = await this.appService.getComments(messageId as string);
     return res.json({ comments });
+  }
+
+  @Post('/like')
+  async postLike(@Req() req: Request, @Res() res: Response) {
+    if (!req.cookies['token']) {
+      throw new UnauthorizedException();
+    }
+    return this.httpService
+      .get(discordUserUrl, {
+        headers: {
+          Authorization: `Bearer ${req.cookies['token']}`,
+        },
+      })
+      .pipe(
+        map((userResponse) => {
+          return userResponse.data;
+        }),
+        first(),
+      )
+      .subscribe({
+        next: async (user) => {
+          const { messageId } = req.body;
+          const like = await this.appService.like({
+            messageId,
+            authorId: user.id,
+          });
+          return res.json({ success: true, like });
+        },
+        error: (error) => {
+          return res
+            .status(401)
+            .json({ success: false, error: error.response.data.message });
+        },
+      });
+  }
+
+  @Get('/likes')
+  async getLikes(@Req() req: Request, @Res() res: Response) {
+    const { messageId } = req.query;
+    const likes = await this.appService.getLikes(messageId as string);
+    return res.json({ likes });
   }
 }

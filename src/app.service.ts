@@ -5,6 +5,7 @@ import { Reaction, ReactionDocument } from './Reaction/reaction.schema';
 import { emojis } from './constants';
 import { Message, MessageDocument } from './Message/message.schema';
 import { Comment, CommentDocument } from './Comment/comment.schema';
+import { Like, LikeDocument } from './Like/like.schema';
 
 @Injectable()
 export class AppService {
@@ -15,8 +16,10 @@ export class AppService {
     private readonly komuMessage: Model<MessageDocument>,
     @InjectModel(Comment.name)
     private readonly komuComment: Model<CommentDocument>,
+    @InjectModel(Like.name)
+    private readonly komuLike: Model<LikeDocument>,
   ) {}
-
+ 
   getHello(): string {
     return 'Hello World!';
   }
@@ -54,6 +57,14 @@ export class AppService {
           as: 'comments',
         },
       },
+      {
+        $lookup: {
+          from: 'komu_bwllikes',
+          localField: 'messageId',
+          foreignField: 'messageId',
+          as: 'likes',
+        },
+      },
     ];
     const data = await this.komuMessage.aggregate(aggregatorOpts as any).exec();
 
@@ -74,6 +85,11 @@ export class AppService {
         return result;
       }, []);
       item.totalComment = await this.komuComment
+        .count({
+          messageId: item.messageId,
+        })
+        .exec();
+      item.totalLike = await this.komuLike
         .count({
           messageId: item.messageId,
         })
@@ -102,13 +118,45 @@ export class AppService {
       .exec();
   }
 
-  async comment({ messageId, content, authorId }) {
+  async comment({ messageId, content, authorId, authorUser, authorAvatar }){
     const comment = new this.komuComment({
       messageId,
       authorId,
       content,
+      authorUser,
+      authorAvatar,
       createdTimestamp: Date.now(),
     });
     return comment.save();
   }
+
+  async getLikes(messageId: string) {
+    return this.komuLike
+      .aggregate([
+        {
+          $match: {
+            messageId,
+          },
+        },
+        {
+          $lookup: {
+            from: 'komu_users',
+            localField: 'authorId',
+            foreignField: 'id',
+            as: 'author',
+          },
+        },
+      ])
+      .exec();
+  }
+
+  async like({ messageId, authorId }) {
+    const like = new this.komuLike({
+      messageId,
+      authorId,
+      createdTimestamp: Date.now(),
+    });
+    return like.save();
+  }
+
 }
