@@ -10,6 +10,7 @@ import { HttpModule } from '@nestjs/axios';
 import { MessageModule } from './Message/message.module';
 import { CommentModule } from './Comment/comment.module';
 import { LikeModule } from './Like/like.module';
+import { NotificationModule } from './Notification/notification.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { LikeModule } from './Like/like.module';
     MessageModule,
     CommentModule,
     LikeModule,
+    NotificationModule,
     HttpModule,
   ],
   controllers: [AppController],

@@ -289,13 +289,13 @@
 }
 
 .comments {
-  width        : 99%;
-  line-height  : 23px;
-  min-height   : 30px;
-  padding      : 10px 10px;
-  margin-bottom: 20px;
-  margin-top   : 10px;
-  font-family  : inherit;
+  width           : 99%;
+  line-height     : 23px;
+  min-height      : 30px;
+  padding         : 10px 10px;
+  /* margin-bottom: 20px; */
+  margin-top      : 10px;
+  font-family     : inherit;
 
 }
 
@@ -331,7 +331,8 @@
 }
 
 .inputWithIcon {
-  position: relative;
+  position  : relative;
+  margin-top: 10px;
 }
 
 svg {
@@ -343,7 +344,7 @@ svg {
 }
 
 input {
-  width        : 94%;
+  width        : 93%;
   height       : 45px;
   line-height  : 23px;
   padding      : 3px;
@@ -372,11 +373,12 @@ input {
 }
 
 svg.icon_notification {
-  margin-left  : 1100px;
-  margin-top   : 22px;
-  background   : #e4e6eb;
-  border-radius: 50%;
-  padding      : 10px 10px;
+  margin-left     : 1090px;
+  margin-top      : 22px;
+  background      : #e4e6eb;
+  border-radius   : 50%;
+  padding         : 10px 10px;
+  /* position     : relative; */
 }
 
 
@@ -396,19 +398,28 @@ svg.icon_notification {
 }
 
 .navbar-content-notification {
-  margin-top      : 70px;
-  margin-right    : 100px !important;
-  position        : fixed;
-  width           : 355px;
-  height          : 150px;
   background-color: #fff;
-  box-shadow      : rgba(0, 0, 0, 0.35) 0px 5px 15px;
-  border-radius   : 6px;
+  box-shadow      : rgb(0 0 0 / 35%) 0px 5px 15px;
   display         : flex;
   flex-direction  : column;
-  padding         : 10px 10px;
 }
 
 .content-message {
   font-size: 16px;
+}
+
+.content-notification {
+  padding: 6px;
+}
+
+
+.show-comment-like {
+  position        : absolute;
+  top             : 20px;
+  left            : 1116px;
+  border-radius   : 50%;
+  background-color: #e41e3f;
+  color           : white;
+  font-size       : 15px;
+  padding         : 4px 4px;
 }

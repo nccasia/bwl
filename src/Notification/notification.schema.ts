@@ -1,10 +1,11 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
-export type CommentDocument = Comment & Document;
+export type NotificationDocument = Notification & Document;
 
-@Schema({ collection: 'komu_bwlcomments' })
-export class Comment {
+@Schema({ collection: 'komu_bwlnotifications' })
+export class Notification {
+
   @Prop()
   messageId: string;
 
@@ -13,6 +14,9 @@ export class Comment {
 
   @Prop()
   content: string;
+
+  @Prop()
+  status: number;
 
   @Prop()
   authorUser: string;
@@ -24,4 +28,4 @@ export class Comment {
   createdTimestamp: number;
 }
 
-export const CommentSchema = SchemaFactory.createForClass(Comment);
+export const NotificationSchema = SchemaFactory.createForClass(Notification);

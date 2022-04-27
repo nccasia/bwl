@@ -3,7 +3,7 @@ import { Document } from 'mongoose';
 
 export type LikeDocument = Like & Document;
 
-@Schema({ collection: 'komu_likes' })
+@Schema({ collection: 'komu_bwllikes' })
 export class Like {
   @Prop()
   messageId: string;

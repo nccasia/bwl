@@ -6,6 +6,10 @@ import { emojis } from './constants';
 import { Message, MessageDocument } from './Message/message.schema';
 import { Comment, CommentDocument } from './Comment/comment.schema';
 import { Like, LikeDocument } from './Like/like.schema';
+import {
+  Notification,
+  NotificationDocument,
+} from './Notification/notification.schema';
 
 @Injectable()
 export class AppService {
@@ -18,8 +22,20 @@ export class AppService {
     private readonly komuComment: Model<CommentDocument>,
     @InjectModel(Like.name)
     private readonly komuLike: Model<LikeDocument>,
+    @InjectModel(Notification.name)
+    private readonly komuNotification: Model<NotificationDocument>,
   ) {}
- 
+
+  async findLikeFromDiscordId(
+    authorId: string,
+    messageId: string,
+  ): Promise<any> {
+    return this.komuLike.findOne({ authorId: authorId, messageId: messageId });
+  }
+  async findLikeMessageFromDiscordId(messageId: string): Promise<any> {
+    return this.komuLike.find({ messageId: messageId });
+  }
+
   getHello(): string {
     return 'Hello World!';
   }
@@ -60,9 +76,17 @@ export class AppService {
       {
         $lookup: {
           from: 'komu_bwllikes',
-          localField: 'messageId',
-          foreignField: 'messageId',
+          localField: 'authorId',
+          foreignField: 'authorId',
           as: 'likes',
+        },
+      },
+      {
+        $lookup: {
+          from: 'komu_bwlnotifications',
+          localField: 'authorId',
+          foreignField: 'authorId',
+          as: 'notifications',
         },
       },
     ];
@@ -89,7 +113,13 @@ export class AppService {
           messageId: item.messageId,
         })
         .exec();
+
       item.totalLike = await this.komuLike
+        .count({
+          messageId: item.messageId,
+        })
+        .exec();
+      item.totalNotification = await this.komuNotification
         .count({
           messageId: item.messageId,
         })
@@ -118,7 +148,7 @@ export class AppService {
       .exec();
   }
 
-  async comment({ messageId, content, authorId, authorUser, authorAvatar }){
+  async comment({ messageId, content, authorId, authorUser, authorAvatar }) {
     const comment = new this.komuComment({
       messageId,
       authorId,
@@ -127,7 +157,15 @@ export class AppService {
       authorAvatar,
       createdTimestamp: Date.now(),
     });
-    return comment.save();
+    const notification = new this.komuNotification({
+      messageId,
+      authorId,
+      content,
+      authorUser,
+      authorAvatar,
+      createdTimestamp: Date.now(),
+    })
+    return comment.save(), notification.save();
   }
 
   async getLikes(messageId: string) {
@@ -156,7 +194,55 @@ export class AppService {
       authorId,
       createdTimestamp: Date.now(),
     });
-    return like.save();
+
+    const notification = new this.komuNotification({
+      messageId,
+      authorId, 
+      createTimestamp: Date.now(),
+    })
+
+    return like.save(), notification.save();
   }
 
+  async unlike({ messageId, authorId }) {
+    const dislike = await this.komuLike
+      .remove({
+        messageId,
+        authorId,
+      })
+      .exec();
+    return true;
+  }
+
+  // async getNotifications(messageId: string) {
+  //   return this.komuNotification
+  //     .aggregate([
+  //         {
+  //           $match: {
+  //             messageId,
+  //           },
+  //         },
+  //         {
+  //           $lookup: {
+  //             from: 'komu_users',
+  //             localField: 'authorId',
+  //             foreignField: 'id',
+  //             as: 'author',
+  //           },
+  //         },
+  //       ])
+  //       .exec();
+    
+  // }
+
+  async notification({ messageId, content, authorId, status }) {
+    const notification = new this.komuNotification({
+      messageId,
+      authorId,
+      content,
+      status,
+      createdTimestamp: Date.now(),
+    });
+    return notification.save();
+  }
 }

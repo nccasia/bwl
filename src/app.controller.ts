@@ -90,7 +90,6 @@ export class AppController {
               const userDb = await this.authService.findUserFromDiscordId(
                 user.id,
               );
-
               if (!userDb) {
                 await this.authService.saveUser(
                   user.id,
@@ -159,7 +158,7 @@ export class AppController {
             messageId,
             authorId: user.id,
             authorUser: user.username,
-            authorAvatar: user.avatar
+            authorAvatar: user.avatar,
           });
           return res.json({ success: true, comment });
         },
@@ -197,12 +196,28 @@ export class AppController {
       )
       .subscribe({
         next: async (user) => {
-          const { messageId } = req.body;
-          const like = await this.appService.like({
+          const { count, messageId } = req.body;
+          const userDB = await this.appService.findLikeFromDiscordId(
+            user.id,
             messageId,
-            authorId: user.id,
-          });
-          return res.json({ success: true, like });
+          );
+          const messageDB = await this.appService.findLikeMessageFromDiscordId(
+            messageId,
+          );
+
+          if (messageDB && !userDB) {
+            const like = await this.appService.like({
+              messageId,
+              authorId: user.id,
+            });
+            return res.json({ success: true, like });
+          } else if (userDB) {
+            const dislike = await this.appService.unlike({
+              messageId,
+              authorId: user.id,
+            });
+            return res.json({ success: true, dislike });
+          }
         },
         error: (error) => {
           return res
@@ -218,4 +233,45 @@ export class AppController {
     const likes = await this.appService.getLikes(messageId as string);
     return res.json({ likes });
   }
+
+  // @Post('/notification')
+  // async postNotification(@Req() req: Request, @Res() res: Response) {
+  //   if (!req.cookies['token']) {
+  //     throw new UnauthorizedException();
+  //   }
+  //   return this.httpService
+  //     .get(discordUserUrl, {
+  //       headers: {
+  //         Authorization: `Bearer ${req.cookies['token']}`,
+  //       },
+  //     })
+  //     .pipe(
+  //       map((userResponse) => {
+  //         return userResponse.data;
+  //       }),
+  //       first(),
+  //     )
+  //     .subscribe({
+  //       next: async (user) => {
+  //         const { content, messageId } = req.body;
+  //         const notification = await this.appService.notification({
+  //           messageId,
+  //           authorId: user.id,
+  //         });
+  //         return res.json({ success: true, notification });
+  //       },
+  //       error: (error) => {
+  //         return res
+  //           .status(401)
+  //           .json({ success: false, error: error.response.data.message });
+  //       },
+  //     });
+  // }
+
+  // @Get('/notifications')
+  // async getNotifications(@Req() req: Request, @Res() res: Response) {
+  //   const { messageId } = req.query;
+  //   const notifications = await this.appService.getNotifications(messageId);
+  //   return res.json({ notifications });
+  // }
 }

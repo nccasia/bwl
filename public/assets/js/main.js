@@ -1,3 +1,4 @@
+//  eslint-disable @typescript-eslint/no-this-alias
 $(document).ready(function () {
   // $('.show-comments').click(function () {
   //   var $toggle = $(this);
@@ -69,8 +70,10 @@ $(document).ready(function () {
             '<br>' +
             `<span class='comment-text'>${data.comment.content}</span></div>`;
 
-          console.log('conten-comment: ', contentComment);
+          console.log('content-comment: ', contentComment);
           $('.comment-text' + data.comment.messageId).append(contentComment);
+
+          location.reload();
           $($this).val('');
         },
         error: function () {
@@ -82,7 +85,6 @@ $(document).ready(function () {
 
   $('.comment').show(function () {
     const messageId = $(this).data('message-id');
-    const $this = this;
 
     $.ajax({
       url: '/comments?messageId=' + messageId,
@@ -106,9 +108,36 @@ $(document).ready(function () {
                   item[i].content + '<br>'
                 }</span></div>`;
               $('.comment-text' + messageId).append(content);
+
+              let notificationComment =
+                `<div class='.content-notification'>
+              <img src="https://cdn.discordapp.com/avatars/${author[j].id}/${author[j].avatar}" width="30"
+              class="img-people-comment" alt="avatar">` +
+                `<span class="comment-username">${author[j].username}</span>` +
+                'đã bình luận bài viết có nội dung ' +
+                `<small class="content">${item[i].content}</small>` +
+                `</div>`;
+              $('#content-message' + messageId).append(notificationComment);
             }
           }
         });
+      },
+    });
+  });
+
+  $('.like').click(function () {
+    const messageId = $(this).data('message-like-id');
+    const authorId = $('.navbar-user').data('user-id');
+
+    $.ajax({
+      url: '/like',
+      type: 'POST',
+      data: {
+        messageId: messageId,
+        authorId: authorId,
+      },
+      success: function (data) {
+        location.reload();
       },
     });
   });
@@ -190,7 +219,7 @@ function getHtmlContent(data) {
     htmlContent += `<button class="comment" style="dislay:none" data-message-id="${message.messageId}">Comment(${message.totalComment})</button>`;
     htmlContent += `</div>`;
 
-    htmlContent += `<div id="comments-${message.messageId}" class="comments" data-id="{{this.messageId}}" style="display: none;">`;
+    htmlContent += `<div id="comments-${message.messageId}" class="comments" data-id="${message.messageId}" style="display: none;">`;
     htmlContent += `<div class="d-flex flex-row mb-2" >`;
     htmlContent += `<div class="show-author-comments">`;
     htmlContent += `<div class="comment-text${message.messageId}" id="comment-text"></div>`;
