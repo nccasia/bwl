@@ -10,6 +10,7 @@ import {
   Notification,
   NotificationDocument,
 } from './Notification/notification.schema';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable()
 export class AppService {
@@ -34,6 +35,17 @@ export class AppService {
   }
   async findLikeMessageFromDiscordId(messageId: string): Promise<any> {
     return this.komuLike.find({ messageId: messageId });
+
+  }
+  
+  private events = new Subject<MessageEvent>();
+
+  addEvent(event) {
+    this.events.next(event);
+  }
+
+  sendEvents(): Observable<MessageEvent> {
+    return this.events.asObservable();
   }
 
   getHello(): string {
@@ -164,8 +176,11 @@ export class AppService {
       authorUser,
       authorAvatar,
       createdTimestamp: Date.now(),
-    })
-    return comment.save(), notification.save();
+    });
+    await comment.save();
+    await notification.save();
+    this.addEvent({ data: { comment } });
+    return comment;
   }
 
   async getLikes(messageId: string) {
@@ -201,7 +216,11 @@ export class AppService {
       createTimestamp: Date.now(),
     })
 
-    return like.save(), notification.save();
+    await like.save();
+    await notification.save();
+    this.addEvent({ data: { like } });
+
+    return like;
   }
 
   async unlike({ messageId, authorId }) {

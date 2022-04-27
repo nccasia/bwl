@@ -73,7 +73,6 @@ $(document).ready(function () {
           console.log('content-comment: ', contentComment);
           $('.comment-text' + data.comment.messageId).append(contentComment);
 
-          location.reload();
           $($this).val('');
         },
         error: function () {
@@ -137,7 +136,6 @@ $(document).ready(function () {
         authorId: authorId,
       },
       success: function (data) {
-        location.reload();
       },
     });
   });
@@ -234,3 +232,8 @@ function getHtmlContent(data) {
   }
   return htmlContent;
 }
+
+const evtSource = new EventSource('/sse');
+evtSource.onmessage = ({ data }) => {
+  console.log('New message', JSON.parse(data));
+};

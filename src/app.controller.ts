@@ -7,12 +7,13 @@ import {
   Req,
   Post,
   UnauthorizedException,
+  Sse,
 } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { AppService } from './app.service';
 import { Request, Response } from 'express';
 import { AuthService } from './Authentication/auth.service';
-import { first, map, switchMap } from 'rxjs';
+import { first, map, Observable, switchMap } from 'rxjs';
 const discordTokenUrl = 'https://discord.com/api/oauth2/token';
 const discordUserUrl = 'https://discord.com/api/users/@me';
 
@@ -23,6 +24,11 @@ export class AppController {
     private httpService: HttpService,
     private authService: AuthService,
   ) {}
+
+  @Sse('/sse')
+  sse(): Observable<MessageEvent> {
+    return this.appService.sendEvents();
+  }
 
   @Get('')
   async index(@Query() query: any, @Req() req: Request, @Res() res: Response) {
