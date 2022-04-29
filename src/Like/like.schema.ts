@@ -11,9 +11,6 @@ export class Like {
   @Prop()
   authorId: string;
 
-  // @Prop()
-  // username: string;
-
   @Prop()
   createdTimestamp: number;
 }

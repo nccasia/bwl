@@ -14,14 +14,14 @@ export class Comment {
   @Prop()
   content: string;
 
-  @Prop()
-  authorUser: string;
-
-  @Prop()
-  authorAvatar: string;
+  // @Prop()
+  // authorUser: string;
 
   // @Prop()
-  // username: string;
+  // authorAvatar: string;
+
+  @Prop()
+  count: number;
 
   @Prop()
   createdTimestamp: number;

@@ -11,7 +11,7 @@ $(document).ready(function () {
     $(id).toggle();
   });
 
-  $('.img-people').click(function () {
+  $('.img-people-avatar').click(function () {
     $('.navbar-content').toggle();
   });
 
@@ -45,7 +45,7 @@ $(document).ready(function () {
       const authorAvatar = $('.navbar-user').data('user-avatar');
       const textComment = $(this).val();
       const $this = this;
-      const username = $(this).data('username');
+      let count = 0;
 
       $.ajax({
         url: '/comment',
@@ -54,10 +54,10 @@ $(document).ready(function () {
           messageId,
           authorId,
           content: textComment,
+          count,
         },
         success: function (data) {
-          console.log('data', data);
-
+          // console.log('data', data);
           let contentComment =
             `<div class='content-comment'>
             <img src="https://cdn.discordapp.com/avatars/${authorId}/${authorAvatar}" width="30"
@@ -81,6 +81,7 @@ $(document).ready(function () {
 
   $('.comment').show(function () {
     const messageId = $(this).data('message-id');
+
     $.ajax({
       url: '/comments?messageId=' + messageId,
       type: 'GET',
@@ -92,8 +93,8 @@ $(document).ready(function () {
             for (let j = 0; j < author.length; j++) {
               let content =
                 `<div class='content-comment'>
-              <img src="https://cdn.discordapp.com/avatars/${author[j].id}/${author[j].avatar}" width="30"
-              class="img-comment" alt="avatar">` +
+                <img src="https://cdn.discordapp.com/avatars/${author[j].id}/${author[j].avatar}" width="30"
+                class="img-comment" alt="avatar">` +
                 `<span class='author-comment'>${author[j].username}</span>` +
                 `<span class='timeStamp'>${dayjs(
                   new Date(+item[i].createdTimestamp.toString()),
@@ -111,7 +112,7 @@ $(document).ready(function () {
   });
 
   $('.like').click(function () {
-    const messageId = $(this).data('message-like-id');
+    const messageId = $(this).data('message-id');
     const authorId = $('.navbar-user').data('user-id');
 
     $.ajax({
@@ -121,21 +122,66 @@ $(document).ready(function () {
         messageId: messageId,
         authorId: authorId,
       },
-      success: function (data) {},
+      success: function (data) {
+        // console.log(data);
+        $('.like').css('color', 'blue');
+      },
     });
   });
+
+  // $('.notifications').show(function () {
+  //   const messageId = $(this).data('message-id');
+  //   var count = 0;
+
+  //   $.ajax({
+  //     url: '/notifications?messageId=' + messageId,
+  //     type: 'GET',
+  //     success: function (data) {
+  //       //console.log(data)
+  //       const userId = $('.navbar-user').attr('data-user-id');
+  //       $.each(data, function (key, item) {
+  //         for (let i = 0; i < item.length; i++) {
+  //           let author = item[i].author;
+  //           let message = item[i].message;
+  //           let notificationComment = '';
+
+  //           if (userId === message[0].authorId) {
+  //             if (item[i].content) {
+  //               notificationComment +=
+  //                 `<div class='content-comment'>
+  //               <img src="https://cdn.discordapp.com/avatars/${author[0].id}/${author[0].avatar}"
+  //               class="img-people-comment" alt="avatar" width="30">` +
+  //                 `<span class='author-comment'> ${author[0].username} </span>` +
+  //                 ` đã bình luận bài viết của bạn có nội dung:` +
+  //                 `<span> ${item[i].content}</span></div>`;
+  //             } else {
+  //               notificationComment +=
+  //                 `<div class='content-comment'>
+  //               <img src="https://cdn.discordapp.com/avatars/${author[0].id}/${author[0].avatar}"
+  //               class="img-people-comment" alt="avatar" width="30">` +
+  //                 `<span class='author-comment'> ${author[0].username} </span>` +
+  //                 ` đã thích bài viết của bạn. </div>`;
+  //             }
+  //           }
+  //           $('#notification' + item[i].messageId).append(notificationComment);
+  //         }
+  //       });
+  //     },
+  //     error: function () {
+  //       console.log('Error in Operation');
+  //     },
+  //   });
+  // });
 });
 
 function getHtmlContent(data) {
   var htmlContent = '';
-  // console.log(data);
   for (let index = 0; index < data.length; index++) {
     let author = data[index].author;
     let emojis = data[index].reactions;
     let message = data[index];
     let comment = data[index].comments;
 
-    // console.log(data[index].comments);
     htmlContent += `<div style="position: relative; display: flex; flex-direction: column; min-width: 0; word-wrap: break-word; background-color: #fff; background-clip: border-box; border: 1px solid rgba(0,0,0,.125);margin-bottom: 30px;border-radius: 0.25rem;">`;
     htmlContent += `<div id="header" class="content-head">`;
     htmlContent += `<div class="list-avatar">`;
@@ -201,19 +247,19 @@ function getHtmlContent(data) {
     //   htmlContent += ` </div></div>`;
     // }
 
-    htmlContent += `<div class="interaction"><button class="like">Like</button>`;
-    htmlContent += `<button class="comment" style="dislay:none" data-message-id="${message.messageId}">Comment(${message.totalComment})</button>`;
+    htmlContent += `<div class="interaction"><button class="like" id="like-${message.messageId}" data-message-id="${message.messageId}" data-total-like="${message.totalLike}">Like (${message.totalLike})</button>`;
+    htmlContent += `<button class="comment" data-message-id="${message.messageId}">Comment (${message.totalComment})</button>`;
     htmlContent += `</div>`;
 
-    htmlContent += `<div id="comments-${message.messageId}" class="comments" data-id="${message.messageId}" style="display: none;">`;
+    htmlContent += `<div id="comments-${message.messageId}" class="comments" data-message-id="${message.messageId}" style="display: none;">`;
     htmlContent += `<div class="d-flex flex-row mb-2" >`;
     htmlContent += `<div class="show-author-comments">`;
     htmlContent += `<div class="comment-text${message.messageId}" id="comment-text"></div>`;
     htmlContent += `</div></div></div>`;
 
     htmlContent += `<div class="inputWithIcon">`;
-    htmlContent += `<input placeholder="Add a comment..." data-message-id=${message.messageId} data-author-id=${message.authorId}/>       `;
-    htmlContent += `<svg aria-label="Emoji" class="_8-yf5 " color="#262626" fill="#262626" height="24" role="img" viewBox="0 0 24 24" width="24"><path d="M15.83 10.997a1.167 1.167 0 101.167 1.167 1.167 1.167 0 00-1.167-1.167zm-6.5 1.167a1.167 1.167 0 10-1.166 1.167 1.167 1.167 0 001.166-1.167zm5.163 3.24a3.406 3.406 0 01-4.982.007 1 1 0 10-1.557 1.256 5.397 5.397 0 008.09 0 1 1 0 00-1.55-1.263zM12 .503a11.5 11.5 0 1011.5 11.5A11.513 11.513 0 0012 .503zm0 21a9.5 9.5 0 119.5-9.5 9.51 9.51 0 01-9.5 9.5z"></path></svg>`;
+    htmlContent += `<input placeholder="Add a comment..." data-message-id="${message.messageId}" data-author-id="${message.authorId}" data-author-user="${message.authorUser}" data-author-avatar="${message.authorAvatar}" data-username="${message.author.username}"/>`;
+    htmlContent += `<svg aria-label="Emoji" class="_8-yf5" color="#262626" fill="#262626" height="24" role="img" viewBox="0 0 24 24" width="24"><path d="M15.83 10.997a1.167 1.167 0 101.167 1.167 1.167 1.167 0 00-1.167-1.167zm-6.5 1.167a1.167 1.167 0 10-1.166 1.167 1.167 1.167 0 001.166-1.167zm5.163 3.24a3.406 3.406 0 01-4.982.007 1 1 0 10-1.557 1.256 5.397 5.397 0 008.09 0 1 1 0 00-1.55-1.263zM12 .503a11.5 11.5 0 1011.5 11.5A11.513 11.513 0 0012 .503zm0 21a9.5 9.5 0 119.5-9.5 9.51 9.51 0 01-9.5 9.5z"></path></svg>`;
     htmlContent += `</div></div>`;
 
     htmlContent += `</div></div></div>`;
@@ -224,29 +270,42 @@ function getHtmlContent(data) {
 const evtSource = new EventSource('/sse');
 evtSource.onmessage = ({ data }) => {
   let dataJson = JSON.parse(data);
-
   console.log('New message', JSON.parse(data));
 
   let messageAuthor = dataJson.messageAuthor;
   let commentAuthor = dataJson.commentAuthor;
   let likeAuthor = dataJson.likeAuthor;
+  let comment = dataJson.comment;
+  let message = dataJson.message;
 
   const userId = $('.navbar-user').attr('data-user-id');
   console.log(userId);
 
   let notificationComment = ``;
+  var count = 0;
 
-  if (commentAuthor) {
-    if (userId === messageAuthor.id) {
+  if (userId === messageAuthor.id) {
+    if (commentAuthor) {
       $.toast({
         heading: 'Comment',
         text: `${commentAuthor.username} đã bình luận về bài viết của bạn`,
         showHideTransition: 'slide',
         icon: 'info',
       });
-    }
-  } else if (likeAuthor) {
-    if (userId === messageAuthor.id) {
+      // notificationComment +=
+      //   `<div class='content-comment'>
+      //   <img src="https://cdn.discordapp.com/avatars/${commentAuthor.id}/${commentAuthor.avatar}"
+      //   class="img-people-comment" alt="avatar" width="30">` +
+      //   `<span class='author-comment'> ${commentAuthor.username} </span>` +
+      //   ` đã bình luận bài viết của bạn có nội dung:` +
+      //   `<span> ${comment.content}</span></div>`;
+    } else if (likeAuthor) {
+      // notificationComment +=
+      //   `<div class='content-comment'>
+      //   <img src="https://cdn.discordapp.com/avatars/${likeAuthor.id}/${likeAuthor.avatar}"
+      //   class="img-people-comment" alt="avatar" width="30">` +
+      //   `<span class='author-comment'> ${likeAuthor.username} </span>` +
+      //   ` đã thích bài viết của bạn. </div>`;
       $.toast({
         heading: 'Like',
         text: `${likeAuthor.username} đã thích bài viết của bạn`,
@@ -254,13 +313,22 @@ evtSource.onmessage = ({ data }) => {
         icon: 'info',
       });
     }
-    notificationComment +=
-      `<div class='content-comment'>
-    <img src="https://cdn.discordapp.com/avatars/${commentAuthor.id}/${commentAuthor.avatar}"
-    class="img-people-comment" alt="avatar" width="30">` +
-      `<span class='author-comment'>${commentAuthor.username}</span>` +
-      `đã thích bài viết của bạn`;
+    // count = count + 1;
+    // var count1 = $('.show-comment-like').val();
+
+    // if (count1 == ' ') {
+    //   count1 = 0;
+    //   console.log('count1: ' + count1);
+    //   $('.show-comment-like').append(count + count1);
+    //   console.log(count + count1);
+    // } else {
+    //   $('.show-comment-like').append(parseInt(count + count1));
+    //   console.log(count + count1);
+    // }
+    // $('#notification' + message[0].messageId).append(notificationComment);
   }
 
-  $('#notification' + comment.messageId).append(notificationComment);
+  // $('.notification').click(function () {
+  //   $('.show-comment-like').text('');
+  // });
 };

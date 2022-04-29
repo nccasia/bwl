@@ -30,15 +30,15 @@
 }
 
 .nav-header {
-  position        : fixed;
-  top             : 0;
-  right           : 0;
-  left            : 0;
-  z-index         : 1030;
-  background-color: #ffffff;
-  display         : flex;
-  justify-content : end;
-  padding         : 20px 55px;
+  position           : fixed;
+  top                : 0;
+  right              : 0;
+  left               : 0;
+  z-index            : 1030;
+  /* background-color: #ffffff; */
+  display            : flex;
+  justify-content    : end;
+  padding            : 20px 55px;
 }
 
 .nav-link {
@@ -90,6 +90,13 @@
 }
 
 .img-people {
+  border-radius : 50%;
+  margin-right  : 0.5rem;
+  vertical-align: middle;
+  border-style  : none;
+}
+
+.img-people-avatar {
   border-radius : 50%;
   margin-right  : 0.5rem;
   vertical-align: middle;
@@ -185,14 +192,6 @@
   font-size    : 14px;
 }
 
-.icon-discord {
-  overflow      : hidden;
-  vertical-align: middle;
-}
-
-/* .comment-box {
-  padding: 1rem;
-} */
 .emoji {
   width       : 16px;
   margin-right: 4px;
@@ -231,6 +230,15 @@
 
 
 .navbar-nav .img-people {
+  cursor        : pointer;
+  margin-left   : 9.2rem;
+  border-radius : 50%;
+  margin-right  : 0.5rem;
+  vertical-align: middle;
+  border-style  : none;
+}
+
+.navbar-nav .img-people-avatar {
   cursor        : pointer;
   margin-left   : 9.2rem;
   border-radius : 50%;
@@ -282,25 +290,21 @@
   margin-right: 8rem;
 }
 
-.navbar-content-toggle-notification {
+.navbar-content-toggle .img-people-avatar {
   margin-right: 8rem;
-  display     : flex;
-  gap         : 20px;
 }
 
 .comments {
-  width           : 99%;
-  line-height     : 23px;
-  min-height      : 30px;
-  padding         : 10px 10px;
-  /* margin-bottom: 20px; */
-  margin-top      : 10px;
-  font-family     : inherit;
+  width      : 99%;
+  line-height: 23px;
+  min-height : 30px;
+  padding    : 10px 10px;
+  margin-top : 10px;
+  font-family: inherit;
 
 }
 
 .show-author-comments {
-  /* display     : flex; */
   padding-left: 10px;
   font-family : -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   margin-top  : 10px;
@@ -312,6 +316,13 @@
   font-weight: 600;
 
 }
+
+/* .author-comment-notification {
+  min-height  : 30px;
+  font-size   : 15px;
+  font-weight : 600;
+  padding-left: 10px;
+} */
 
 .author {
   min-height : 30px;
@@ -328,6 +339,7 @@
 
 .content-comment {
   padding: 6px;
+  cursor : pointer;
 }
 
 .inputWithIcon {
@@ -370,6 +382,7 @@ input {
 
 .notification {
   margin-right: 100px;
+  cursor      : pointer;
 }
 
 svg.icon_notification {
@@ -402,6 +415,16 @@ svg.icon_notification {
   box-shadow      : rgb(0 0 0 / 35%) 0px 5px 15px;
   display         : flex;
   flex-direction  : column;
+  padding         : 10px 10px;
+  overflow-y      : scroll;
+  height          : 490px;
+  width           : 400px;
+  border-radius   : 10px;
+}
+
+.collapse.navbar-collapse.nav-notification {
+  margin-right: -252px;
+  margin-top  : 59px;
 }
 
 .content-message {
@@ -422,4 +445,26 @@ svg.icon_notification {
   color           : white;
   font-size       : 15px;
   padding         : 4px 4px;
+}
+
+.nav {
+  background-color: white;
+  height          : 100px;
+  position        : fixed;
+  margin-top      : -100px;
+  width           : 100%;
+  line-height     : 30px;
+  z-index         : 1000;
+}
+
+.img-people-comment {
+  border-radius: 50%;
+}
+
+.material-symbols-outlined {
+  font-size: 20px;
+}
+
+span.material-symbols-outlined {
+  font-size: 20px;
 }

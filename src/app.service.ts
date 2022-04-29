@@ -256,7 +256,6 @@ export class AppService {
 
     await like.save();
     await notification.save();
-    // this.addEvent({ data: { like } });
     this.addEvent({ data: { like, likeAuthor, message, messageAuthor } });
     return like;
   }
@@ -298,15 +297,4 @@ export class AppService {
       ])
       .exec();
   }
-
-  // async notification({ messageId, content, authorId }) {
-  //   const notification = new this.komuNotification({
-  //     messageId,
-  //     authorId,
-  //     content,
-  //     //status,
-  //     createdTimestamp: Date.now(),
-  //   });
-  //   return notification.save();
-  // }
 }

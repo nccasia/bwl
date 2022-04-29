@@ -21,10 +21,7 @@ export class Notification {
   status: number;
 
   @Prop()
-  authorUser: string;
-
-  @Prop()
-  authorAvatar: string;
+  count: number;
 
   @Prop()
   createdTimestamp: number;

@@ -164,7 +164,6 @@ export class AppController {
             messageId,
             authorId,
           });
-
           const userDB = await this.appService.findCommentMessageFromDiscordId(
             user.id,
           );
@@ -216,9 +215,7 @@ export class AppController {
           const messageDB = await this.appService.findLikeMessageFromDiscordId(
             messageId,
           );
-
           const usernameDB = await this.appService.findLikeMessageId(user.id);
-
           const messageLikeDB = await this.appService.findLikeId(messageId);
 
           if (messageDB && !userDB) {
@@ -249,41 +246,6 @@ export class AppController {
     const { messageId } = req.query;
     const likes = await this.appService.getLikes(messageId as string);
     return res.json({ likes });
-  }
-
-  @Post('/notification')
-  async postNotification(@Req() req: Request, @Res() res: Response) {
-    if (!req.cookies['token']) {
-      throw new UnauthorizedException();
-    }
-    return this.httpService
-      .get(discordUserUrl, {
-        headers: {
-          Authorization: `Bearer ${req.cookies['token']}`,
-        },
-      })
-      .pipe(
-        map((userResponse) => {
-          return userResponse.data;
-        }),
-        first(),
-      )
-      .subscribe({
-        next: async (user) => {
-          const { messageId, content } = req.body;
-          const notification = await this.appService.comment({
-            content,
-            messageId,
-            authorId: user.id,
-          });
-          return res.json({ success: true, notification });
-        },
-        error: (error) => {
-          return res
-            .status(401)
-            .json({ success: false, error: error.response.data.message });
-        },
-      });
   }
 
   @Get('/notifications')
