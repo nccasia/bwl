@@ -41,12 +41,6 @@
   padding            : 20px 55px;
 }
 
-.nav-link {
-  text-decoration: none;
-  font-size      : 18px;
-  color          : gray;
-}
-
 .main-content {
   margin-top   : 100px;
   margin-bottom: 30px;
@@ -198,35 +192,38 @@
 }
 
 .interaction {
-  padding        : 0 1rem;
-  background     : #ddd;
-  display        : flex;
-  justify-content: center;
-  gap            : 10px;
-  position       : relative;
+  padding           : 0 1rem;
+  /* background     : #ddd; */
+  display           : flex;
+  justify-content   : center;
+  gap               : 10px;
+  position          : relative;
+  border-top        : 1px solid #80808045;
 }
 
 .interaction>button {
-  flex      : 1;
-  text-align: center;
-  padding   : 1rem;
-  cursor    : pointer;
-  border    : 0;
-  background: transparent;
+  flex       : 1;
+  text-align : center;
+  padding    : 1rem;
+  cursor     : pointer;
+  border     : 0;
+  background : transparent;
+  font-size  : 15px;
+  font-family: sans-serif;
+  color      : #65676b;
 }
 
-.interaction:after {
-  content   : '';
-  position  : absolute;
-  display   : block;
-  width     : 2px;
-  height    : 80%;
-  background: #ccc;
-  top       : 50%;
-  left      : 50%;
-  transform : translate(-50%, -50%);
-}
-
+/* .interaction:after {
+  content      : '';
+  position     : absolute;
+  display      : block;
+  width        : 2px;
+  height       : 80%;
+  background   : #80808045;
+  top          : 50%;
+  left         : 50%;
+  transform    : translate(-50%, -50%);
+} */
 
 
 .navbar-nav .img-people {
@@ -247,12 +244,8 @@
   border-style  : none;
 }
 
-.nav-link {
-  margin-left: 10px;
-}
-
 .navbar-content {
-  margin-top      : 10px;
+  /* margin-top      : 10px; */
   position        : fixed;
   width           : 250px;
   height          : 150px;
@@ -271,35 +264,32 @@
   font-weight  : 650;
   text-align   : center;
   margin-bottom: 18px;
+  padding-top  : 10px;
 }
 
-.navbar-content .nav-link {
+/* .navbar-content .nav-link {
   border-style : solid;
   border-color : #d3d3d3e0;
   border-width : 1px;
   border-radius: 3px;
   padding      : 5px 5px;
   margin-top   : 5px;
-}
-
-.navbar-content .nav-link:hover {
-  background-color: #d3d3d3;
-}
+} */
 
 .navbar-content-toggle .img-people {
   margin-right: 8rem;
 }
 
-.navbar-content-toggle .img-people-avatar {
+/* .navbar-content-toggle .img-people-avatar {
   margin-right: 8rem;
-}
+} */
 
 .comments {
   width      : 99%;
   line-height: 23px;
   min-height : 30px;
   padding    : 10px 10px;
-  margin-top : 10px;
+  margin-top : 0px;
   font-family: inherit;
 
 }
@@ -386,7 +376,7 @@ input {
 }
 
 svg.icon_notification {
-  margin-left     : 1090px;
+  margin-left     : 72rem;
   margin-top      : 22px;
   background      : #e4e6eb;
   border-radius   : 50%;
@@ -437,9 +427,10 @@ svg.icon_notification {
 
 
 .show-comment-like {
+  display         : none;
   position        : absolute;
   top             : 20px;
-  left            : 1116px;
+  left            : 73.7rem;
   border-radius   : 50%;
   background-color: #e41e3f;
   color           : white;
@@ -467,4 +458,63 @@ svg.icon_notification {
 
 span.material-symbols-outlined {
   font-size: 20px;
+}
+
+.likes {
+  color: blue;
+}
+
+.count-like-comment {
+  display        : flex;
+  gap            : 32rem;
+  justify-content: flex-start;
+  margin-left    : 16px;
+  color          : #65676b;
+  font-family    : sans-serif;
+  margin-bottom  : 5px;
+}
+
+.count-comment {
+  margin-left: 9rem;
+}
+
+.profile {
+  display     : flex;
+  margin-right: 11rem;
+}
+
+.nav-link {
+  text-decoration: none;
+}
+
+.link {
+  margin-top : 10px;
+  display    : flex;
+  margin-left: 9rem;
+  width      : 40%;
+  padding    : 7px;
+}
+
+.icon-logout {
+  height          : 36px;
+  width           : 36px;
+  background-color: #80808030;
+  justify-content : center;
+  border-radius   : 50%;
+  box-sizing      : border-box;
+  position        : relative;
+}
+
+.text-logout {
+  font-size   : 1.2rem;
+  font-family : inherit;
+  color       : black;
+  padding-top : 8px;
+  font-weight : 500;
+  padding-left: 10px;
+}
+
+.link:hover {
+  background-color: #80808030;
+  border-radius   : 1rem;
 }

@@ -81,8 +81,8 @@ export class AppService {
     const aggregatorOpts = [
       { $match: { channelId: '924543969357099018' } },
       { $sort: { _id: -1 } },
-      { $skip: (page - 1) * 10 },
-      { $limit: 10 },
+      { $skip: (page - 1) * 20 },
+      { $limit: 20 },
       {
         $lookup: {
           from: 'komu_users',

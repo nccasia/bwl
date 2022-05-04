@@ -114,7 +114,9 @@ $(document).ready(function () {
   $('.like').click(function () {
     const messageId = $(this).data('message-id');
     const authorId = $('.navbar-user').data('user-id');
+    var qn = $(this);
 
+    qn.toggleClass('likes');
     $.ajax({
       url: '/like',
       type: 'POST',
@@ -124,54 +126,60 @@ $(document).ready(function () {
       },
       success: function (data) {
         // console.log(data);
-        $('.like').css('color', 'blue');
+
+        // if (data.messageId && !data.authorId) {
+        //   $('#likes-' + data.messageId).addClass('likes');
+        // } else if (data.authorId) {
+        //   $('#likes-' + data.messageId).removeClass('likes');
+        // }
+        location.reload();
       },
     });
   });
 
-  // $('.notifications').show(function () {
-  //   const messageId = $(this).data('message-id');
-  //   var count = 0;
+  $('.notifications').show(function () {
+    const messageId = $(this).data('message-id');
+    var count = 0;
 
-  //   $.ajax({
-  //     url: '/notifications?messageId=' + messageId,
-  //     type: 'GET',
-  //     success: function (data) {
-  //       //console.log(data)
-  //       const userId = $('.navbar-user').attr('data-user-id');
-  //       $.each(data, function (key, item) {
-  //         for (let i = 0; i < item.length; i++) {
-  //           let author = item[i].author;
-  //           let message = item[i].message;
-  //           let notificationComment = '';
+    $.ajax({
+      url: '/notifications?messageId=' + messageId,
+      type: 'GET',
+      success: function (data) {
+        //console.log(data)
+        const userId = $('.navbar-user').attr('data-user-id');
+        $.each(data, function (key, item) {
+          for (let i = 0; i < item.length; i++) {
+            let author = item[i].author;
+            let message = item[i].message;
+            let notificationComment = '';
 
-  //           if (userId === message[0].authorId) {
-  //             if (item[i].content) {
-  //               notificationComment +=
-  //                 `<div class='content-comment'>
-  //               <img src="https://cdn.discordapp.com/avatars/${author[0].id}/${author[0].avatar}"
-  //               class="img-people-comment" alt="avatar" width="30">` +
-  //                 `<span class='author-comment'> ${author[0].username} </span>` +
-  //                 ` đã bình luận bài viết của bạn có nội dung:` +
-  //                 `<span> ${item[i].content}</span></div>`;
-  //             } else {
-  //               notificationComment +=
-  //                 `<div class='content-comment'>
-  //               <img src="https://cdn.discordapp.com/avatars/${author[0].id}/${author[0].avatar}"
-  //               class="img-people-comment" alt="avatar" width="30">` +
-  //                 `<span class='author-comment'> ${author[0].username} </span>` +
-  //                 ` đã thích bài viết của bạn. </div>`;
-  //             }
-  //           }
-  //           $('#notification' + item[i].messageId).append(notificationComment);
-  //         }
-  //       });
-  //     },
-  //     error: function () {
-  //       console.log('Error in Operation');
-  //     },
-  //   });
-  // });
+            if (userId === message[0].authorId) {
+              if (item[i].content) {
+                notificationComment +=
+                  `<div class='content-comment'>
+                <img src="https://cdn.discordapp.com/avatars/${author[0].id}/${author[0].avatar}"
+                class="img-people-comment" alt="avatar" width="30">` +
+                  `<span class='author-comment'> ${author[0].username} </span>` +
+                  ` đã bình luận bài viết của bạn có nội dung:` +
+                  `<span> ${item[i].content}</span></div>`;
+              } else {
+                notificationComment +=
+                  `<div class='content-comment'>
+                <img src="https://cdn.discordapp.com/avatars/${author[0].id}/${author[0].avatar}"
+                class="img-people-comment" alt="avatar" width="30">` +
+                  `<span class='author-comment'> ${author[0].username} </span>` +
+                  ` đã thích bài viết của bạn. </div>`;
+              }
+            }
+            $('#notification' + item[i].messageId).append(notificationComment);
+          }
+        });
+      },
+      error: function () {
+        console.log('Error in Operation');
+      },
+    });
+  });
 });
 
 function getHtmlContent(data) {
@@ -247,8 +255,36 @@ function getHtmlContent(data) {
     //   htmlContent += ` </div></div>`;
     // }
 
-    htmlContent += `<div class="interaction"><button class="like" id="like-${message.messageId}" data-message-id="${message.messageId}" data-total-like="${message.totalLike}">Like (${message.totalLike})</button>`;
-    htmlContent += `<button class="comment" data-message-id="${message.messageId}">Comment (${message.totalComment})</button>`;
+    htmlContent += `<div class='like-comment'>`;
+    htmlContent += `<div>`;
+    if (message.totalLike) {
+      htmlContent += `<img class='j1lvzwm4' height='18' role='presentation' src="data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 16 16'%3e%3cdefs%3e%3clinearGradient id='a' x1='50%25' x2='50%25' y1='0%25' y2='100%25'%3e%3cstop offset='0%25' stop-color='%2318AFFF'/%3e%3cstop offset='100%25' stop-color='%230062DF'/%3e%3c/linearGradient%3e%3cfilter id='c' width='118.8%25' height='118.8%25' x='-9.4%25' y='-9.4%25' filterUnits='objectBoundingBox'%3e%3cfeGaussianBlur in='SourceAlpha' result='shadowBlurInner1' stdDeviation='1'/%3e%3cfeOffset dy='-1' in='shadowBlurInner1' result='shadowOffsetInner1'/%3e%3cfeComposite in='shadowOffsetInner1' in2='SourceAlpha' k2='-1' k3='1' operator='arithmetic' result='shadowInnerInner1'/%3e%3cfeColorMatrix in='shadowInnerInner1' values='0 0 0 0 0 0 0 0 0 0.299356041 0 0 0 0 0.681187726 0 0 0 0.3495684 0'/%3e%3c/filter%3e%3cpath id='b' d='M8 0a8 8 0 00-8 8 8 8 0 1016 0 8 8 0 00-8-8z'/%3e%3c/defs%3e%3cg fill='none'%3e%3cuse fill='url(%23a)' xlink:href='%23b'/%3e%3cuse fill='black' filter='url(%23c)' xlink:href='%23b'/%3e%3cpath fill='white' d='M12.162 7.338c.176.123.338.245.338.674 0 .43-.229.604-.474.725a.73.73 0 01.089.546c-.077.344-.392.611-.672.69.121.194.159.385.015.62-.185.295-.346.407-1.058.407H7.5c-.988 0-1.5-.546-1.5-1V7.665c0-1.23 1.467-2.275 1.467-3.13L7.361 3.47c-.005-.065.008-.224.058-.27.08-.079.301-.2.635-.2.218 0 .363.041.534.123.581.277.732.978.732 1.542 0 .271-.414 1.083-.47 1.364 0 0 .867-.192 1.879-.199 1.061-.006 1.749.19 1.749.842 0 .261-.219.523-.316.666zM3.6 7h.8a.6.6 0 01.6.6v3.8a.6.6 0 01-.6.6h-.8a.6.6 0 01-.6-.6V7.6a.6.6 0 01.6-.6z'/%3e%3c/g%3e%3c/svg%3e" width='18'/>`;
+      htmlContent += `<span> ${message.totalLike} </span>`;
+    } else {
+      htmlContent += ``;
+    }
+    htmlContent += `</div>`;
+    htmlContent += `<div class='count-comment'>`;
+    if (message.totalComment) {
+      htmlContent += `${message.totalComment} bình luận`;
+    } else {
+      htmlContent += ``;
+    }
+    htmlContent += `</div>`;
+    htmlContent += `</div>`;
+
+    htmlContent += `<div class="interaction"><button class="like" id="like-${message.messageId}" data-message-id="${message.messageId}" data-total-like="${message.totalLike}">`;
+    if (message.totalLike) {
+      htmlContent += `<span class='likes'>`;
+      htmlContent += `<i data-visualcompletion='css-img' class='hu5pjgll op6gxeva' style='background-image: url(&quot;https://static.xx.fbcdn.net/rsrc.php/v3/yI/r/Z7CRdrrbx1y.png&quot;); background-position: 0px -253px; background-size: auto; width: 18px; height: 18px; background-repeat: no-repeat; display: inline-block;'></i> Thích`;
+      htmlContent += `</span>`;
+    } else {
+      htmlContent += `<span>`;
+      htmlContent += `<i data-visualcompletion='css-img' class='hu5pjgll m6k467ps' style="background-image:url('https://static.xx.fbcdn.net/rsrc.php/v3/yI/r/Z7CRdrrbx1y.png');background-position:0 -272px;background-size:auto;width:18px;height:18px;background-repeat:no-repeat;display:inline-block"></i> Thích`;
+      htmlContent += `</span>`;
+    }
+    htmlContent += `</button>`;
+    htmlContent += `<button class="comment" data-message-id="${message.messageId}"><i data-visualcompletion='css-img' class='hu5pjgll m6k467ps' style="background-image:url('https://static.xx.fbcdn.net/rsrc.php/v3/yI/r/Z7CRdrrbx1y.png');background-position:0 -234px;background-size:auto;width:18px;height:18px;background-repeat:no-repeat;display:inline-block"></i> Bình luận (${message.totalComment})</button>`;
     htmlContent += `</div>`;
 
     htmlContent += `<div id="comments-${message.messageId}" class="comments" data-message-id="${message.messageId}" style="display: none;">`;
@@ -258,7 +294,7 @@ function getHtmlContent(data) {
     htmlContent += `</div></div></div>`;
 
     htmlContent += `<div class="inputWithIcon">`;
-    htmlContent += `<input placeholder="Add a comment..." data-message-id="${message.messageId}" data-author-id="${message.authorId}" data-author-user="${message.authorUser}" data-author-avatar="${message.authorAvatar}" data-username="${message.author.username}"/>`;
+    htmlContent += `<input placeholder="Add a comment..." data-message-id="${message.messageId}" />`;
     htmlContent += `<svg aria-label="Emoji" class="_8-yf5" color="#262626" fill="#262626" height="24" role="img" viewBox="0 0 24 24" width="24"><path d="M15.83 10.997a1.167 1.167 0 101.167 1.167 1.167 1.167 0 00-1.167-1.167zm-6.5 1.167a1.167 1.167 0 10-1.166 1.167 1.167 1.167 0 001.166-1.167zm5.163 3.24a3.406 3.406 0 01-4.982.007 1 1 0 10-1.557 1.256 5.397 5.397 0 008.09 0 1 1 0 00-1.55-1.263zM12 .503a11.5 11.5 0 1011.5 11.5A11.513 11.513 0 0012 .503zm0 21a9.5 9.5 0 119.5-9.5 9.51 9.51 0 01-9.5 9.5z"></path></svg>`;
     htmlContent += `</div></div>`;
 
@@ -292,20 +328,20 @@ evtSource.onmessage = ({ data }) => {
         showHideTransition: 'slide',
         icon: 'info',
       });
-      // notificationComment +=
-      //   `<div class='content-comment'>
-      //   <img src="https://cdn.discordapp.com/avatars/${commentAuthor.id}/${commentAuthor.avatar}"
-      //   class="img-people-comment" alt="avatar" width="30">` +
-      //   `<span class='author-comment'> ${commentAuthor.username} </span>` +
-      //   ` đã bình luận bài viết của bạn có nội dung:` +
-      //   `<span> ${comment.content}</span></div>`;
+      notificationComment +=
+        `<div class='content-comment'>
+        <img src="https://cdn.discordapp.com/avatars/${commentAuthor.id}/${commentAuthor.avatar}"
+        class="img-people-comment" alt="avatar" width="30">` +
+        `<span class='author-comment'> ${commentAuthor.username} </span>` +
+        ` đã bình luận bài viết của bạn có nội dung:` +
+        `<span> ${comment.content}</span></div>`;
     } else if (likeAuthor) {
-      // notificationComment +=
-      //   `<div class='content-comment'>
-      //   <img src="https://cdn.discordapp.com/avatars/${likeAuthor.id}/${likeAuthor.avatar}"
-      //   class="img-people-comment" alt="avatar" width="30">` +
-      //   `<span class='author-comment'> ${likeAuthor.username} </span>` +
-      //   ` đã thích bài viết của bạn. </div>`;
+      notificationComment +=
+        `<div class='content-comment'>
+        <img src="https://cdn.discordapp.com/avatars/${likeAuthor.id}/${likeAuthor.avatar}"
+        class="img-people-comment" alt="avatar" width="30">` +
+        `<span class='author-comment'> ${likeAuthor.username} </span>` +
+        ` đã thích bài viết của bạn. </div>`;
       $.toast({
         heading: 'Like',
         text: `${likeAuthor.username} đã thích bài viết của bạn`,
@@ -313,22 +349,33 @@ evtSource.onmessage = ({ data }) => {
         icon: 'info',
       });
     }
-    // count = count + 1;
-    // var count1 = $('.show-comment-like').val();
+    count = count + 1;
+    var count1 = $('.show-comment-like').val();
 
-    // if (count1 == ' ') {
+    // if (count1 == '') {
     //   count1 = 0;
-    //   console.log('count1: ' + count1);
-    //   $('.show-comment-like').append(count + count1);
-    //   console.log(count + count1);
+    //   console.log('count1: ' + +count1);
+    //   $('.show-comment-like').show();
+    //   $('.show-comment-like').append(+count1);
+    //   console.log(count + +count1);
     // } else {
-    //   $('.show-comment-like').append(parseInt(count + count1));
-    //   console.log(count + count1);
+    //   console.log('count1: ' + count1);
+    //   $('.show-comment-like').show();
+    //   $('.show-comment-like').append(+count1);
+    //   console.log(count + +count1);
     // }
-    // $('#notification' + message[0].messageId).append(notificationComment);
+    // console.log('count: ' + count);
+    // console.log('count1: ' + +count1);
+    $('.show-comment-like').show();
+    var count2 = count + +count1;
+    $('.show-comment-like').append(count2);
+    // console.log(count + +count1);
+
+    $('#notification' + message[0].messageId).append(notificationComment);
   }
 
-  // $('.notification').click(function () {
-  //   $('.show-comment-like').text('');
-  // });
+  $('.notification').click(function () {
+    // $('.show-comment-like').show();
+    $('.show-comment-like').text('');
+  });
 };
