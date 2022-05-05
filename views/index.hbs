@@ -202,7 +202,10 @@
                     {{else}}
                     {{/if}}
                   </div>
-                  <div class='count-comment'>
+                  <div
+                    class='count-comment'
+                    data-message-id='{{this.messageId}}'
+                  >
                     {{#if this.totalComment}}
                       <span>
                         {{this.totalComment}}

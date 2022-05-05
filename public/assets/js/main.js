@@ -11,6 +11,11 @@ $(document).ready(function () {
     $(id).toggle();
   });
 
+  $('.count-comment').click(function () {
+    const id = '#comments-' + $(this).data('message-id');
+    $(id).toggle();
+  });
+
   $('.img-people-avatar').click(function () {
     $('.navbar-content').toggle();
   });
@@ -19,15 +24,18 @@ $(document).ready(function () {
     $('.navbar-content-notification').toggle();
   });
 
-  window.addEventListener('mouseup', function (event) {
-    var pol = document.getElementById('user');
-    if (event.target != pol && event.target.parentNode != pol) {
-      pol.style.display = 'none';
+  $(document).mouseup((e) => {
+    $user = $('#user');
+    if (!$user.is(e.target) && $user.has(e.target).length === 0) {
+      $user.css('display', 'none');
     }
 
-    var pol = document.getElementById('notification');
-    if (event.target != pol && event.target.parentNode != pol) {
-      pol.style.display = 'none';
+    $notification = $('#notification');
+    if (
+      !$notification.is(e.target) &&
+      $notification.has(e.target).length === 0
+    ) {
+      $notification.css('display', 'none');
     }
   });
 
