@@ -7,12 +7,13 @@ import {
   Req,
   Post,
   UnauthorizedException,
+  Sse,
 } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { AppService } from './app.service';
 import { Request, Response } from 'express';
 import { AuthService } from './Authentication/auth.service';
-import { first, map, switchMap } from 'rxjs';
+import { first, map, Observable, switchMap } from 'rxjs';
 const discordTokenUrl = 'https://discord.com/api/oauth2/token';
 const discordUserUrl = 'https://discord.com/api/users/@me';
 
@@ -23,6 +24,11 @@ export class AppController {
     private httpService: HttpService,
     private authService: AuthService,
   ) {}
+
+  @Sse('/sse')
+  sse(): Observable<MessageEvent> {
+    return this.appService.sendEvents();
+  }
 
   @Get('')
   async index(@Query() query: any, @Req() req: Request, @Res() res: Response) {
@@ -90,7 +96,6 @@ export class AppController {
               const userDb = await this.authService.findUserFromDiscordId(
                 user.id,
               );
-
               if (!userDb) {
                 await this.authService.saveUser(
                   user.id,
@@ -135,7 +140,7 @@ export class AppController {
   }
 
   @Post('/comment')
-  async comment(@Req() req: Request, @Res() res: Response) {
+  async postComment(@Req() req: Request, @Res() res: Response) {
     if (!req.cookies['token']) {
       throw new UnauthorizedException();
     }
@@ -153,13 +158,20 @@ export class AppController {
       )
       .subscribe({
         next: async (user) => {
-          const { content, messageId } = req.body;
-          await this.appService.comment({
+          const { content, messageId, authorId } = req.body;
+          const comment = await this.appService.comment({
             content,
             messageId,
-            authorId: user.id,
+            authorId,
           });
-          return res.json({ success: true });
+          const userDB = await this.appService.findCommentMessageFromDiscordId(
+            user.id,
+          );
+          const messageDB = await this.appService.findCommentFromDiscordId(
+            messageId,
+          );
+
+          return res.json({ success: true, comment, userDB, messageDB });
         },
         error: (error) => {
           return res
@@ -174,5 +186,74 @@ export class AppController {
     const { messageId } = req.query;
     const comments = await this.appService.getComments(messageId as string);
     return res.json({ comments });
+  }
+
+  @Post('/like')
+  async postLike(@Req() req: Request, @Res() res: Response) {
+    if (!req.cookies['token']) {
+      throw new UnauthorizedException();
+    }
+    return this.httpService
+      .get(discordUserUrl, {
+        headers: {
+          Authorization: `Bearer ${req.cookies['token']}`,
+        },
+      })
+      .pipe(
+        map((userResponse) => {
+          return userResponse.data;
+        }),
+        first(),
+      )
+      .subscribe({
+        next: async (user) => {
+          const { messageId, authorId } = req.body;
+          const userDB = await this.appService.findLikeFromDiscordId(
+            user.id,
+            messageId,
+          );
+          const messageDB = await this.appService.findLikeMessageFromDiscordId(
+            messageId,
+          );
+          const usernameDB = await this.appService.findLikeMessageId(user.id);
+          const messageLikeDB = await this.appService.findLikeId(messageId);
+
+          if (messageDB && !userDB) {
+            const like = await this.appService.like({
+              messageId,
+              authorId,
+            });
+            // return res.json({ success: true, like });
+            return res.json({ success: true, like, usernameDB, messageLikeDB });
+          } else if (userDB) {
+            const dislike = await this.appService.unlike({
+              messageId,
+              authorId: user.id,
+            });
+            return res.json({ success: true, dislike });
+          }
+        },
+        error: (error) => {
+          return res
+            .status(401)
+            .json({ success: false, error: error.response.data.message });
+        },
+      });
+  }
+
+  @Get('/likes')
+  async getLikes(@Req() req: Request, @Res() res: Response) {
+    const { messageId } = req.query;
+    const likes = await this.appService.getLikes(messageId as string);
+    return res.json({ likes });
+  }
+
+  @Get('/notifications')
+  async getNotifications(@Req() req: Request, @Res() res: Response) {
+    const { messageId } = req.query;
+    const notifications = await this.appService.getNotifications(
+      messageId as string,
+    );
+    return res.json({ notifications });
   }
 }
