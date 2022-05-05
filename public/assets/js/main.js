@@ -11,12 +11,32 @@ $(document).ready(function () {
     $(id).toggle();
   });
 
+  $('.count-comment').click(function () {
+    const id = '#comments-' + $(this).data('message-id');
+    $(id).toggle();
+  });
+
   $('.img-people-avatar').click(function () {
     $('.navbar-content').toggle();
   });
 
   $('.notification').click(function () {
     $('.navbar-content-notification').toggle();
+  });
+
+  $(document).mouseup((e) => {
+    $user = $('#user');
+    if (!$user.is(e.target) && $user.has(e.target).length === 0) {
+      $user.css('display', 'none');
+    }
+
+    $notification = $('#notification');
+    if (
+      !$notification.is(e.target) &&
+      $notification.has(e.target).length === 0
+    ) {
+      $notification.css('display', 'none');
+    }
   });
 
   const container = $('#infinite-scroll');
