@@ -24,9 +24,7 @@ $(document).ready(function () {
     if (event.target != pol && event.target.parentNode != pol) {
       pol.style.display = 'none';
     }
-  });
 
-  window.addEventListener('mouseup', function (event) {
     var pol = document.getElementById('notification');
     if (event.target != pol && event.target.parentNode != pol) {
       pol.style.display = 'none';
