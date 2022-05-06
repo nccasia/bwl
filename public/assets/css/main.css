@@ -3,9 +3,12 @@
   align-items    : center;
   flex-direction : column;
   justify-content: center;
-  margin-top     : 110px;
+  margin-top     : 90px;
 }
-
+body{
+  width: 100%;
+  margin: 0;
+}
 .btn-login {
   box-sizing   : border-box;
   background   : #7289da;
@@ -38,11 +41,11 @@
   /* background-color   : #ffffff; */
   display               : flex;
   justify-content       : end;
-  padding               : 20px 55px;
+  padding               : 15px 55px;
 }
 
 .main-content {
-  margin-top   : 100px;
+  margin-top   : 90px;
   margin-bottom: 30px;
 }
 
@@ -102,6 +105,7 @@
   margin-right  : 0.5rem;
   vertical-align: middle;
   border-style  : none;
+  height: 30px;
 }
 
 .img-notification {
@@ -199,9 +203,12 @@
   gap               : 10px;
   position          : relative;
   border-top        : 1px solid #80808045;
+  align-items: center;
 }
 
 .interaction>button {
+  display           : flex;
+  justify-content   : center;
   flex       : 1;
   text-align : center;
   padding    : 1rem;
@@ -298,12 +305,16 @@
   padding-left: 10px;
   font-family : -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   margin-top  : 10px;
+  
 }
 
 .author-comment {
   min-height : 30px;
   font-size  : 15px;
   font-weight: 600;
+  display: flex;
+  align-items: center;
+  padding-right: 8px;
 
 }
 
@@ -324,14 +335,36 @@
 .comment-text {
   min-height  : 30px;
   font-size   : 14px;
-  padding-left: 37px;
+  /* padding-left: 37px; */
 }
-
+.content-comments {
+  padding: 6px;
+  cursor : pointer;
+  display: flex;
+  align-items: center;
+  width: 99%;
+}
 .content-comment {
   padding: 6px;
   cursor : pointer;
+  display: flex;
+  align-items: center;
+  width: 99%;
 }
-
+.content-comment:hover{
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
+.column{
+  display: flex;
+  flex-direction: column;
+  width: 99%;
+}
+.space-between{
+  display: flex;
+  justify-content: space-between;
+  width: 99%;
+}
 .inputWithIcon {
   position  : relative;
   margin-top: 10px;
@@ -361,7 +394,6 @@ input {
 }
 
 .timeStamp {
-  padding-left: 30rem;
   color       : rgb(0 0 0 / 58%);
   font-size   : 13px;
 }
@@ -373,6 +405,7 @@ input {
 .notification {
   /* margin-right: 100px; */
   cursor: pointer;
+
 }
 
 svg.icon_notification {
@@ -412,8 +445,9 @@ svg.icon_notification {
   display         : flex;
   flex-direction  : column;
   padding         : 10px 10px;
-  overflow-y      : scroll;
-  height          : 490px;
+  overflow-y      : auto;
+  height          : auto;
+  min-height: 300px;
   width           : 400px;
   border-radius   : 10px;
 }
@@ -445,16 +479,19 @@ svg.icon_notification {
 
 .nav {
   background-color: white;
-  height          : 100px;
+  height          : 90px;
   position        : fixed;
-  margin-top      : -100px;
+  margin-top      : -90px;
   width           : 100%;
   line-height     : 30px;
   z-index         : 1000;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 0px 8px;
+
 }
 
 .img-people-comment {
   border-radius: 50%;
+  padding: 0 8px;
 }
 
 .material-symbols-outlined {
@@ -467,20 +504,29 @@ span.material-symbols-outlined {
 
 .likes {
   color: blue;
+  display: flex;
+  align-items: center;
 }
 
 .count-like-comment {
   display        : flex;
   gap            : 32rem;
-  justify-content: flex-start;
-  margin-left    : 16px;
+  justify-content: space-between;
+  margin    :0 16px;
   color          : #65676b;
   font-family    : sans-serif;
   margin-bottom  : 5px;
+  align-items: center;
+
 }
+.flex{
+  display: flex;
+align-items: center;}
 
 .count-comment {
+  display: flex;
   margin-left: 9rem;
+  white-space: nowrap;
 }
 
 .profile {
