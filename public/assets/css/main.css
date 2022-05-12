@@ -9,6 +9,7 @@
 body {
   width: 100%;
   margin: 0;
+  position: relative;
 }
 
 .btn-login {
@@ -47,7 +48,6 @@ body {
   z-index: 9998;
   background-color: #fff;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 0px 10px;
-
 }
 
 .main-content {
@@ -202,19 +202,17 @@ body {
 }
 
 .interaction {
-  padding: 0 1rem;
-  /* background     : #ddd; */
   display: flex;
   justify-content: center;
-  gap: 10px;
   position: relative;
   border-top: 1px solid #80808045;
   align-items: center;
 }
 
-.interaction>button {
+.interaction > button {
   display: flex;
   justify-content: center;
+  align-items: center;
   flex: 1;
   text-align: center;
   padding: 1rem;
@@ -225,19 +223,6 @@ body {
   font-family: sans-serif;
   color: #65676b;
 }
-
-/* .interaction:after {
-  content      : '';
-  position     : absolute;
-  display      : block;
-  width        : 2px;
-  height       : 80%;
-  background   : #80808045;
-  top          : 50%;
-  left         : 50%;
-  transform    : translate(-50%, -50%);
-} */
-
 
 .navbar-nav .img-people {
   cursor: pointer;
@@ -259,7 +244,7 @@ body {
 .navbar-content {
   position: fixed;
   width: auto;
-  height: 150px;
+  height: auto;
   background-color: #fff;
   box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   border-radius: 6px;
@@ -280,38 +265,23 @@ body {
   padding-top: 10px;
 }
 
-/* .navbar-content .nav-link {
-  border-style : solid;
-  border-color : #d3d3d3e0;
-  border-width : 1px;
-  border-radius: 3px;
-  padding      : 5px 5px;
-  margin-top   : 5px;
-} */
-
-/* .navbar-content-toggle .img-people {
-  margin-right: 8rem;
-} */
-
-/* .navbar-content-toggle .img-people-avatar {
-  margin-right: 8rem;
-} */
-
+.comment {
+  border-left: rgba(52, 63, 66, 0.5) solid 1px;
+}
+.comment:hover {
+  background-color: rgba(52, 63, 66, 0.35);
+}
 .comments {
-  width: 99%;
-  line-height: 23px;
-  min-height: 30px;
-  padding: 10px 10px;
-  margin-top: 0px;
-  font-family: inherit;
+  width: 100%;
 
+  font-family: inherit;
 }
 
 .show-author-comments {
   padding-left: 10px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif;
   margin-top: 10px;
-
 }
 
 .author-comment {
@@ -321,27 +291,19 @@ body {
   display: flex;
   align-items: center;
   padding-right: 8px;
-
 }
-
-/* .author-comment-notification {
-  min-height  : 30px;
-  font-size   : 15px;
-  font-weight : 600;
-  padding-left: 10px;
-} */
 
 .author {
   min-height: 30px;
   font-size: 15px;
   font-weight: 600;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
+    Arial, sans-serif;
 }
 
 .comment-text {
   min-height: 30px;
   font-size: 14px;
-  /* padding-left: 37px; */
 }
 
 .content-comments {
@@ -379,24 +341,27 @@ body {
 
 .inputWithIcon {
   position: relative;
-  margin-top: 10px;
-}
-
-svg {}
-
-input {
-  width: 93%;
-  height: 45px;
-  line-height: 23px;
-  padding: 3px;
-  padding-left: 45px;
-  font-size: 15px;
-  font-family: inherit;
+  display: flex;
+  align-items: center;
+  margin: 0 30px;
   border-top: 1px solid #ebebeb;
-  border-bottom: none;
   border-left: none;
   border-right: none;
+
+  border-bottom: none;
+}
+
+svg {
+}
+
+input {
+  width: 100%;
+  padding: 3px;
+  font-size: 15px;
+  font-family: inherit;
+  border: none;
   outline: none;
+  padding: 20px 0 20px 10px;
 }
 
 .timeStamp {
@@ -409,9 +374,7 @@ input {
 }
 
 .notification {
-  /* margin-right: 100px; */
   cursor: pointer;
-
 }
 
 .btnNotification {
@@ -422,19 +385,19 @@ svg.icon_notification {
   background: #e4e6eb;
   border-radius: 50%;
   padding: 10px 10px;
-  /* position     : relative; */
 }
 
 @media only screen and (min-width: 1600px) {
-  svg.icon_notification {}
+  svg.icon_notification {
+  }
 }
 
 .logoNcc {
   width: 50px;
   height: 50px;
   align-items: center;
-  display:flex;
-  margin-left:25px
+  display: flex;
+  margin-left: 25px;
 }
 
 .alert {
@@ -446,7 +409,8 @@ svg.icon_notification {
   z-index: 9999;
 }
 
-.listNotification {}
+.listNotification {
+}
 
 .navbar-content-notification {
   background-color: #fff;
@@ -455,14 +419,16 @@ svg.icon_notification {
   flex-direction: column;
   padding: 10px 10px;
   overflow-y: auto;
-  height: auto;
+  max-height: 88vh;
   width: 400px;
   border-radius: 10px;
-
+  height: auto;
   margin-right: 20px;
 }
 
-.collapse.navbar-collapse.nav-notification {}
+.collapse.navbar-collapse.nav-notification {
+  position: relative;
+}
 
 .content-message {
   font-size: 16px;
@@ -475,15 +441,18 @@ svg.icon_notification {
 .show-comment-like {
   display: none;
   position: absolute;
-  top: 20px;
-  left: 73.7rem;
+  top: -15px;
+  right: 15px;
+  width: 15px;
+  height: 15px;
+  align-items: center;
+  text-align: center;
   border-radius: 50%;
   background-color: #e41e3f;
   color: white;
   font-size: 15px;
   padding: 4px 4px;
 }
-
 
 .img-people-comment {
   border-radius: 50%;
@@ -497,6 +466,12 @@ svg.icon_notification {
 span.material-symbols-outlined {
   font-size: 20px;
 }
+.like {
+  border-right: rgba(52, 63, 66, 0.5) solid 1px;
+}
+.like:hover {
+  background-color: rgba(52, 63, 66, 0.35);
+}
 
 .likes {
   color: blue;
@@ -504,16 +479,24 @@ span.material-symbols-outlined {
   align-items: center;
 }
 
+.person-icon {
+  border-radius: 50%;
+  border: 2px solid #65676b;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  cursor: pointer;
+}
 .count-like-comment {
   display: flex;
-  gap: 32rem;
   justify-content: space-between;
   margin: 0 16px;
   color: #65676b;
   font-family: sans-serif;
   margin-bottom: 5px;
   align-items: center;
-
 }
 
 .flex {
@@ -529,41 +512,56 @@ span.material-symbols-outlined {
 
 .profile {
   display: flex;
+  margin-top: 10px;
 }
 
 .nav-link {
   text-decoration: none;
   display: flex;
-  justify-content: flex-end;
+  width: 100%;
+  align-items: center;
 }
 
 .link {
-  margin-top: 10px;
+  margin: 10px 0;
   display: flex;
-  width: 70%;
   padding: 7px;
+  width: 100%;
+  align-items: center;
 }
 
 .icon-logout {
-  height: 36px;
-  width: 36px;
-  background-color: #80808030;
-  justify-content: center;
-  border-radius: 50%;
-  box-sizing: border-box;
-  position: relative;
+  height: 26px;
+  width: 26px;
 }
-
+.icon-radius {
+  border-radius: 50%;
+  padding: 10px;
+  background-color: #80808030;
+}
 .text-logout {
   font-size: 1.2rem;
   font-family: inherit;
   color: black;
-  padding-top: 8px;
   font-weight: 500;
   padding-left: 10px;
+  width: fit-content;
+  white-space: nowrap;
 }
 
 .link:hover {
   background-color: #80808030;
   border-radius: 1rem;
+}
+.scrollup {
+  width: 40px;
+  height: 40px;
+  opacity: 0.3;
+  position: fixed;
+  bottom: 50px;
+  right: 50px;
+  display: none;
+  text-indent: -9999px;
+  background: url(http://seenual.com/wp-content/uploads/2016/03/icon_top.png)
+    no-repeat;
 }
