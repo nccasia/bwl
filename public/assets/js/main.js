@@ -19,6 +19,9 @@ $(document).ready(function () {
   $('.img-people-avatar').click(function () {
     $('.navbar-content').toggle();
   });
+  $('.person-icon').click(function () {
+    $('.navbar-content').toggle();
+  });
 
   $('.notification').click(function () {
     $('.navbar-content-notification').toggle();
@@ -104,7 +107,13 @@ $(document).ready(function () {
             $($this).val('');
           },
           error: function () {
-            $('.comment-text' + messageId).html('<p>No Create comment</p>');
+            // $('.comment-text' + messageId).html('<p>No Create comment</p>');
+            $.toast({
+              heading: 'Warning',
+              text: `Bạn cần đăng nhập để bình luận`,
+              showHideTransition: 'slide',
+              icon: 'warning',
+            });
           },
         });
       }
@@ -120,6 +129,7 @@ $(document).ready(function () {
       success: function (data) {
         $.each(data, function (key, item) {
           //console.log(item);
+
           for (let i = 0; i < item.length; i++) {
             let author = item[i].author;
             for (let j = 0; j < author.length; j++) {
@@ -149,7 +159,6 @@ $(document).ready(function () {
     const messageId = $(this).data('message-id');
     const authorId = $('.navbar-user').data('user-id');
     var qn = $(this);
-
     qn.toggleClass('likes');
     $.ajax({
       url: '/like',
@@ -167,6 +176,15 @@ $(document).ready(function () {
         //   $('#likes-' + data.messageId).removeClass('likes');
         // }
         location.reload();
+      },
+      error: function () {
+        // $('.comment-text' + messageId).html('<p>No Create comment</p>');
+        $.toast({
+          heading: 'Warning',
+          text: `Bạn cần đăng nhập để thích`,
+          showHideTransition: 'slide',
+          icon: 'warning',
+        });
       },
     });
   });
@@ -322,7 +340,7 @@ function getHtmlContent(data) {
     htmlContent += `<button class="comment" data-message-id="${message.messageId}"><i data-visualcompletion='css-img' class='hu5pjgll m6k467ps' style="background-image:url('https://static.xx.fbcdn.net/rsrc.php/v3/yI/r/Z7CRdrrbx1y.png');background-position:0 -234px;background-size:auto;width:18px;height:18px;background-repeat:no-repeat;display:inline-block"></i> Bình luận (${message.totalComment})</button>`;
     htmlContent += `</div>`;
 
-    htmlContent += `<div id="comments-${message.messageId}" class="comments" data-message-id="${message.messageId}" style="display: none;">`;
+    htmlContent += `<div id="comments-${message.messageId}" class="comments" data-message-id="${message.messageId}" >`;
     htmlContent += `<div class="d-flex flex-row mb-2" >`;
     htmlContent += `<div class="show-author-comments">`;
     htmlContent += `<div class="comment-text${message.messageId}" id="comment-text"></div>`;
@@ -414,3 +432,17 @@ evtSource.onmessage = ({ data }) => {
     $('.show-comment-like').text('');
   });
 };
+$(document).ready(function () {
+  $(window).scroll(function () {
+    if ($(this).scrollTop() > 100) {
+      $('.scrollup').fadeIn();
+    } else {
+      $('.scrollup').fadeOut();
+    }
+  });
+
+  $('.scrollup').click(function () {
+    $('html, body').animate({ scrollTop: 0 }, 600);
+    return false;
+  });
+});
