@@ -175,7 +175,7 @@ $(document).ready(function () {
         // } else if (data.authorId) {
         //   $('#likes-' + data.messageId).removeClass('likes');
         // }
-        // location.reload();
+        location.reload();
       },
       error: function () {
         // $('.comment-text' + messageId).html('<p>No Create comment</p>');
