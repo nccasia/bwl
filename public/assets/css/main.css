@@ -76,20 +76,30 @@ body {
 .list-view {
   max-width: 800px;
 }
-
-.content-head {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
+.none{
+  display: none;
 }
+.post {
+  position: relative;
+  background-color: #fff;
+  margin-bottom: 30px
+}
+
+.form-like {
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px
+}
+
+.like-comment {}
+
+.content-head {}
 
 .list-avatar {
   display: flex;
   align-items: center;
+  padding: 15px;
 }
 
 .img-people {
@@ -124,16 +134,18 @@ body {
   font-weight: 700;
 }
 
+.cD {
+  cursor: default;
+
+}
+
 .img-fluid {
   max-width: 100%;
   height: auto;
 }
 
 .reaction-user {
-  padding-left: 1rem;
-  padding-right: 1rem;
-  padding-top: 1rem;
-  padding-bottom: 0.5rem;
+  padding: 10px 15px;
 }
 
 .box-reaction {
@@ -151,25 +163,19 @@ body {
 
 .list-reaction {
   float: left;
-  margin-right: 5px;
+  margin-right: 10px;
 }
 
 .btn-reaction {
   cursor: pointer;
-  text-align: center;
-  white-space: nowrap;
-  outline: none;
+  width: 50px;
+  height: 40px;
+  gap: 2px;
   background-color: #ffffff;
-  border: 2px solid rgba(0, 0, 0, 0.1);
-  min-width: 60px;
-  margin-bottom: 5px;
-  font-weight: 400;
-  padding: 0.375rem 0.75rem;
-  font-size: 1rem;
-  line-height: 1.5;
-  border-radius: 0.25rem;
+  border: 2px solid rgba(0, 0, 0, 0.3);
   display: flex;
   align-items: center;
+  justify-content: center;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
     border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
@@ -209,7 +215,7 @@ body {
   align-items: center;
 }
 
-.interaction > button {
+.interaction>button {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -268,20 +274,22 @@ body {
 .comment {
   border-left: rgba(52, 63, 66, 0.5) solid 1px;
 }
+
 .comment:hover {
   background-color: rgba(52, 63, 66, 0.35);
 }
+
 .comments {
   width: 100%;
 
   font-family: inherit;
 }
 
+.colorLike {}
+
 .show-author-comments {
   padding-left: 10px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
-    Arial, sans-serif;
-  margin-top: 10px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
 .author-comment {
@@ -351,8 +359,7 @@ body {
   border-bottom: none;
 }
 
-svg {
-}
+svg {}
 
 input {
   width: 100%;
@@ -365,7 +372,7 @@ input {
 }
 
 .timeStamp {
-  color: rgb(0 0 0 / 58%);
+  color: black;
   font-size: 13px;
 }
 
@@ -388,8 +395,7 @@ svg.icon_notification {
 }
 
 @media only screen and (min-width: 1600px) {
-  svg.icon_notification {
-  }
+  svg.icon_notification {}
 }
 
 .logoNcc {
@@ -409,8 +415,7 @@ svg.icon_notification {
   z-index: 9999;
 }
 
-.listNotification {
-}
+.listNotification {}
 
 .navbar-content-notification {
   background-color: #fff;
@@ -448,7 +453,7 @@ svg.icon_notification {
   align-items: center;
   text-align: center;
   border-radius: 50%;
-  background-color: #e41e3f;
+  background-color: #ff8d4d;
   color: white;
   font-size: 15px;
   padding: 4px 4px;
@@ -466,9 +471,11 @@ svg.icon_notification {
 span.material-symbols-outlined {
   font-size: 20px;
 }
+
 .like {
   border-right: rgba(52, 63, 66, 0.5) solid 1px;
 }
+
 .like:hover {
   background-color: rgba(52, 63, 66, 0.35);
 }
@@ -489,6 +496,7 @@ span.material-symbols-outlined {
   margin: 0;
   cursor: pointer;
 }
+
 .count-like-comment {
   display: flex;
   justify-content: space-between;
@@ -508,6 +516,10 @@ span.material-symbols-outlined {
   display: flex;
   margin-left: 9rem;
   white-space: nowrap;
+}
+
+button:active {
+  border: none;
 }
 
 .profile {
@@ -534,11 +546,13 @@ span.material-symbols-outlined {
   height: 26px;
   width: 26px;
 }
+
 .icon-radius {
   border-radius: 50%;
   padding: 10px;
   background-color: #80808030;
 }
+
 .text-logout {
   font-size: 1.2rem;
   font-family: inherit;
@@ -549,10 +563,16 @@ span.material-symbols-outlined {
   white-space: nowrap;
 }
 
+.interaction button:active {
+  border: none;
+  background-color: black;
+}
+
 .link:hover {
   background-color: #80808030;
   border-radius: 1rem;
 }
+
 .scrollup {
   width: 40px;
   height: 40px;
@@ -562,6 +582,5 @@ span.material-symbols-outlined {
   right: 50px;
   display: none;
   text-indent: -9999px;
-  background: url(http://seenual.com/wp-content/uploads/2016/03/icon_top.png)
-    no-repeat;
+  background: url(http://seenual.com/wp-content/uploads/2016/03/icon_top.png) no-repeat;
 }
