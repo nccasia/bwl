@@ -1,0 +1,132 @@
+.dark-header {
+  background-color: #242526 !important;
+}
+
+.dark-mode {
+  background-color: #18191a !important;
+  color: white;
+}
+
+.dark-container {
+  background-color: #18191a !important;
+  color: white;
+}
+
+.dateTime {
+  color: #242526;
+}
+
+.dark-list {
+  background-color: #242526 !important;
+}
+
+.dark-post {
+  background-color: white;
+}
+
+.dark-icon {
+    background-color: white;
+}
+
+.dark-fluid{
+    background-color: #f0f2f5 ;
+}
+
+.dark-dropdowns {
+    background-color: #242526;
+}
+
+.dark-post-data-container{
+    background-color: white;
+}
+.dark-flex{
+  background: #0E8EF2;
+}
+
+.dark-flex-3{    
+  background: #0E8EF2;
+}
+
+.cmt {
+  color: #787878;
+}
+.cmt-2 {
+  color: #787878;
+}
+
+.like-3{
+  color: #787878;
+}
+
+/* .flex-3 {
+  background-color: #E4E6EB;
+} */
+ 
+.emojionearea-inline-active {
+  background-color: #3a3b3c !important  ;
+  color: #f0f2f5 !important;
+}
+
+.emojionearea-editor{
+  color: #000 !important;
+}
+
+.emojionearea-editor-active {
+  color: #f0f2f5 !important;
+}
+/* .btnNotification.active .notifition{
+  background-color: #0E8EF2;
+}
+.notifition-active {
+  background-color: #0E8EF2 !important;
+} */
+
+.emojionearea-wrapper {
+  color: #3a3b3c !important;
+}
+
+.emojionearea-wrapper-active {
+  color: #f0f2f5 !important;
+}
+
+#active-2 {
+  background-color: #0E8EF2;
+  display: none;
+}
+
+/* THE NOTIFICAIONS WINDOW. THIS REMAINS HIDDEN WHEN THE PAGE LOADS. */
+#notifications {
+  display:none;
+  width:430px;
+  position:absolute;
+  top:30px;
+  left:0;
+  background:#FFF;
+  border:solid 1px rgba(100, 100, 100, .20);
+  -webkit-box-shadow:0 3px 8px rgba(0, 0, 0, .20);
+  z-index: 0;
+}
+/* AN ARROW LIKE STRUCTURE JUST OVER THE NOTIFICATIONS WINDOW */
+#notifications:before {         
+  content: '';
+  display:block;
+  width:0;
+  height:0;
+  color:transparent;
+  border:10px solid #CCC;
+  border-color:transparent transparent #FFF;
+  margin-top:-20px;
+  margin-left:10px;
+}
+
+#noti_Button {
+  width:22px;
+  height:22px;
+  line-height:22px;
+  border-radius:50%;
+  -moz-border-radius:50%; 
+  -webkit-border-radius:50%;
+  background:#FFF;
+  margin:-3px 10px 0 10px;
+  cursor:pointer;
+}
