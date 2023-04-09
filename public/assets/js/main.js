@@ -6,11 +6,13 @@ $(document).ready(function () {
   //   $(id).toggle();
   // });
 
-  $('.comment').click(function () {
+  $('body').on('click', '.comment', function () {
+    console.log('coment scuces');
     const id = '#comments-' + $(this).data('message-id');
     $(id).toggle();
   });
-
+  // bây giờ là khi ấn vào button chứa các icon là các emoji thì chúng ta sẽ tạo ra sự kiến click truyền messesag id là emoji bao gồm mảng chứa thông tin các iscon , tính toán và
+  // lại banwgfg hàm reducer cho mảng icon .
   $('.count-comment').click(function () {
     const id = '#comments-' + $(this).data('message-id');
     $(id).toggle();
@@ -23,9 +25,9 @@ $(document).ready(function () {
     $('.navbar-content').toggle();
   });
 
-  $('.notification').click(function () {
-    $('.navbar-content-notification').toggle();
-  });
+  // $('.notification').click(function () {
+  //   $('.navbar-content-notification').toggle();
+  // });
 
   $(document).mouseup((e) => {
     $user = $('#user');
@@ -60,68 +62,77 @@ $(document).ready(function () {
     console.log('Scroll at bottom', event, response);
   });
 
-  $('input').keyup(function (e) {
-    if (e.keyCode == 13) {
-      const messageId = $(this).data('message-id');
-      const authorId = $('.navbar-user').data('user-id');
-      const authorUser = $('.navbar-user').data('user-name');
-      const authorAvatar = $('.navbar-user').data('user-avatar');
-      const textComment = $(this).val();
-      const $this = this;
-      let count = 0;
-      if (textComment.trim().length == 0) {
-        // $.toast({
-        //   heading: 'Warning',
-        //   text: `Hãy nhập gì đó trước khi gửi!`,
-        //   showHideTransition: 'slide',
-        //   icon: 'warning',
-        // });
-      } else {
-        $($this).val('');
-        $.ajax({
-          url: '/comment',
-          type: 'POST',
-          data: {
-            messageId,
-            authorId,
-            content: textComment,
-            count,
-          },
-          success: function (data) {
-            let contentComment =
-              `<div class='content-comments'>
-            <img src="https://cdn.discordapp.com/avatars/${authorId}/${authorAvatar}" width="30"
-              class="img-comment" alt="avatar">` +
-              `<div class='column'>
-              <div class='space-between'> 
-              <span class='author-comment'>
-              ${authorUser}</span>
-              <span class='timeStamp'>${dayjs(
-                new Date(+data.comment.createdTimestamp.toString()),
-              ).format('DD/MM/YYYY hh:mm A')}</span> </div> 
-              
-            <span class='comment-text'>${
-              data.comment.content
-            }</span></div></div>`;
+  $('.input-emojis').emojioneArea({
+    pickerPosition: 'bottom',
+    tonesStyle: 'bullet',
+    events: {
+      keyup: function (editor, e) {
+        if (e.which == 13) {
+          console.log('this : ', this);
+          const messageId = this.source[0].dataset.messageId;
 
-            $('.comment-text' + data.comment.messageId).append(contentComment);
-            $($this).val('');
-          },
-          error: function () {
-            // $('.comment-text' + messageId).html('<p>No Create comment</p>');
-            $.toast({
-              heading: 'Warning',
-              text: `Bạn cần đăng nhập để bình luận`,
-              showHideTransition: 'slide',
-              icon: 'warning',
+          const authorId = $('.navbar-user').data('user-id');
+          const authorUser = $('.navbar-user').data('user-name');
+          const authorAvatar = $('.navbar-user').data('user-avatar');
+          const textComment = this.getText();
+
+          if (textComment.trim().length == 0) {
+            // $.toast({
+            //   heading: 'Warning',
+            //   text: `Hãy nhập gì đó trước khi gửi!`,
+            //   showHideTransition: 'slide',
+            //   icon: 'warning',
+            // });
+          } else {
+            this.setText('');
+            $.ajax({
+              url: '/comment',
+              type: 'POST',
+              data: {
+                messageId,
+                authorId,
+                content: textComment,
+                count,
+              },
+              success: function (data) {
+                let contentComment =
+                  `<div class='content-comments'>
+                <img src="https://cdn.discordapp.com/avatars/${authorId}/${authorAvatar}" width="30"
+                  class="img-comment" alt="avatar">` +
+                  `<div class='column'>
+                  <div class='space-between'> 
+                  <span class='author-comment'>
+                  ${authorUser}</span>
+                  <span class='timeStamp'>${dayjs(
+                    new Date(+data.comment.createdTimestamp.toString()),
+                  ).format('DD/MM/YYYY hh:mm A')}</span> </div> 
+                  
+                <span class='comment-text'>${
+                  data.comment.content
+                }</span></div></div>`;
+
+                $('.comment-text' + data.comment.messageId).append(
+                  contentComment,
+                );
+              },
+              error: function () {
+                // $('.comment-text' + messageId).html('<p>No Create comment</p>');
+                $.toast({
+                  heading: 'Warning',
+                  text: `Bạn cần đăng nhập để bình luận`,
+                  showHideTransition: 'slide',
+                  icon: 'warning',
+                });
+              },
             });
-          },
-        });
-      }
-    }
+          }
+        }
+      },
+    },
   });
 
-  $('.comment').show(function () {
+
+  $('body').on('show', '.comment', function () {
     const messageId = $(this).data('message-id');
 
     $.ajax({
@@ -155,8 +166,8 @@ $(document).ready(function () {
       },
     });
   });
-
-  $('.like').click(function () {
+  $('body').on('click', '.like', function () {
+    console.log('click event success');
     const messageId = $(this).data('message-id');
     const authorId = $('.navbar-user').data('user-id');
     var qn = $(this);
@@ -188,54 +199,105 @@ $(document).ready(function () {
       },
     });
   });
-
+ 
   $('.notifications').show(function () {
+    
     const messageId = $(this).data('message-id');
     var count = 0;
 
     $.ajax({
       url: '/notifications?messageId=' + messageId,
-      type: 'GET',
+      type: 'GET', 
       success: function (data) {
-        //console.log(data)
+      
+        count = data.notifications.length;
+       console.log('data : ', data)
         const userId = $('.navbar-user').attr('data-user-id');
         $.each(data, function (key, item) {
           for (let i = 0; i < item.length; i++) {
             let author = item[i].author;
             let message = item[i].message;
             let notificationComment = '';
-
+            let timeNotifi =  new Date((new Date().getTime()- new Date(+message[0].createdTimestamp.$numberDecimal).getTime())).getDate();
+            if(timeNotifi < 1) {
+              timeNotifi *= 24;
+              if(timeNotifi < 1) {
+                timeNotifi *= 60;
+              }
+            }
             if (userId === message[0].authorId) {
               if (item[i].content) {
                 notificationComment +=
                   `<div class='content-comment'>
-                <img src="https://cdn.discordapp.com/avatars/${author[0].id}/${author[0].avatar}"
-                class="img-people-comment" alt="avatar" width="30">` +
-                  `<span >
-                  <b> ${author[0].username}</b>
-                   đã bình luận bài viết của bạn có nội dung: ${item[i].content} <span></div>`;
+                        <div class='content-comment-infor'>
+                            <img src="https://cdn.discordapp.com/avatars/${author[0].id}/${author[0].avatar}"
+                            class="img-people-comment" alt="avatar" width="30">` +
+                              `<span >
+                              <b> ${author[0].username}</b>
+                              đã bình luận bài viết của bạn có nội dung: ${item[i].content} </span>
+                        </div>
+                        <p class='time-notifi'>
+                          ${timeNotifi} ngày trước
+                        </p>
+                   </div>`;
               } else {
+                console.log(item[i])
                 notificationComment +=
                   `<div class='content-comment'>
-                <img src="https://cdn.discordapp.com/avatars/${author[0].id}/${author[0].avatar}"
-                class="img-people-comment" alt="avatar" width="30">` +
-                  `<span><b> ${author[0].username} </b>
-                  đã thích bài viết của bạn. </span></div>`;
+                        <div class='content-comment-infor'>
+                            <img src="https://cdn.discordapp.com/avatars/${author[0].id}/${author[0].avatar}"
+                            class="img-people-comment" alt="avatar" width="30">` +
+                              `<span><b> ${author[0].username} </b>
+                              đã thích bài viết của bạn. </span>
+                        </div>
+                        <p class='time-notifi'>
+                        ${timeNotifi} ngày trước
+                      </p>
+                  </div>`;
               }
             }
             $('#notification' + item[i].messageId).append(notificationComment);
           }
+         
         });
+        showNotifiCounter(count)
       },
       error: function () {
         console.log('Error in Operation');
       },
     });
   });
+
+  $('.btnNotification').click(function () {
+
+    $('.navbar-content-notification').fadeToggle('fast', 'linear', function () {
+      if ($('.navbar-content-notification').is(':hidden')) {
+        console.log('notifa');
+        $('.btnNotification').css('background-color', '#2E467C');
+      } else {
+        $('.notification').css('background-color', 'rgb(178 200 229)'); 
+        $('.notification-bell').css('color', 'hsl(214, 89%, 52%)')};
+    });
+    $('#noti_Counter').fadeOut('slow');
+    return false;
+  });
+  $(document).click(function () {
+    $('.navbar-content-notification').hide();
+    if ($('.navbar-content-notification').is(':hidden')) {
+      $('.notification').css('background-color', '#e4e6eb'); 
+      $('.notification-bell').css('color', '#333');
+    }
+  });
+  $('body').on('click', '.content-comment', function () {
+    console.log('content comment', this)
+   $(this).children().css('color', '#65676b')
+  })
+ 
 });
 
 function getHtmlContent(data) {
   var htmlContent = '';
+  console.log('data : ', data);
   for (let index = 0; index < data.length; index++) {
     let author = data[index].author;
     let emojis = data[index].reactions;
@@ -277,12 +339,26 @@ function getHtmlContent(data) {
     htmlContent += `</div>`;
 
     htmlContent += `<div id="reaction" class="reaction-user"><div class="box-reaction"><ul class="box-reaction-list">`;
-    for (let emojiIndex = 0; emojiIndex < emojis.length; emojiIndex++) {
-      let emojiContent =
-        emojis[emojiIndex].name + ' ' + emojis[emojiIndex].count;
-      if (emojis[emojiIndex].id) {
-        emojiContent = `<img class="emoji" src="https://cdn.discordapp.com/emojis/${emojis[emojiIndex].id}.png" alt="${emojis[emojiIndex].name}"> ${emojis[emojiIndex].count}`;
+    if (message.totalLike) {
+      htmlContent += `<li class='form-like'>`;
+      htmlContent += `<button class="btn-reaction" data-bs-toggle="modal" data-bs-target="#emojiModal">
+                    <img class='j1lvzwm4' height='18' role='presentation' src="data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 16 16'%3e%3cdefs%3e%3clinearGradient id='a' x1='50%25' x2='50%25' y1='0%25' y2='100%25'%3e%3cstop offset='0%25' stop-color='%2318AFFF'/%3e%3cstop offset='100%25' stop-color='%230062DF'/%3e%3c/linearGradient%3e%3cfilter id='c' width='118.8%25' height='118.8%25' x='-9.4%25' y='-9.4%25' filterUnits='objectBoundingBox'%3e%3cfeGaussianBlur in='SourceAlpha' result='shadowBlurInner1' stdDeviation='1'/%3e%3cfeOffset dy='-1' in='shadowBlurInner1' result='shadowOffsetInner1'/%3e%3cfeComposite in='shadowOffsetInner1' in2='SourceAlpha' k2='-1' k3='1' operator='arithmetic' result='shadowInnerInner1'/%3e%3cfeColorMatrix in='shadowInnerInner1' values='0 0 0 0 0 0 0 0 0 0.299356041 0 0 0 0 0.681187726 0 0 0 0.3495684 0'/%3e%3c/filter%3e%3cpath id='b' d='M8 0a8 8 0 00-8 8 8 8 0 1016 0 8 8 0 00-8-8z'/%3e%3c/defs%3e%3cg fill='none'%3e%3cuse fill='url(%23a)' xlink:href='%23b'/%3e%3cuse fill='black' filter='url(%23c)' xlink:href='%23b'/%3e%3cpath fill='white' d='M12.162 7.338c.176.123.338.245.338.674 0 .43-.229.604-.474.725a.73.73 0 01.089.546c-.077.344-.392.611-.672.69.121.194.159.385.015.62-.185.295-.346.407-1.058.407H7.5c-.988 0-1.5-.546-1.5-1V7.665c0-1.23 1.467-2.275 1.467-3.13L7.361 3.47c-.005-.065.008-.224.058-.27.08-.079.301-.2.635-.2.218 0 .363.041.534.123.581.277.732.978.732 1.542 0 .271-.414 1.083-.47 1.364 0 0 .867-.192 1.879-.199 1.061-.006 1.749.19 1.749.842 0 .261-.219.523-.316.666zM3.6 7h.8a.6.6 0 01.6.6v3.8a.6.6 0 01-.6.6h-.8a.6.6 0 01-.6-.6V7.6a.6.6 0 01.6-.6z'/%3e%3c/g%3e%3c/svg%3e" width='18'/>
+                    </button>`;
+      htmlContent += `</li>`;
+    }
+    const emojisFilter =
+      emojis.length > 3
+        ? emojis
+            .sort((a, b) => b.count > a.count)
+            .filter((value, index) => index === 0 || index === 1 || index === 2)
+        : emojis;
+    for (let emojiIndex = 0; emojiIndex < emojisFilter.length; emojiIndex++) {
+      let emojiContent = emojisFilter[emojiIndex].name;
+      // emojis[emojiIndex].name + ' ' + emojis[emojiIndex].count;
+      if (emojisFilter[emojiIndex].id) {
+        emojiContent = `<img class="emoji" src="https://cdn.discordapp.com/emojis/${emojisFilter[emojiIndex].id}.png" alt="${emojisFilter[emojiIndex].name}"/> `;
       }
+
       htmlContent += `<li class="list-inline-item list-reaction"><button class="btn-reaction">${emojiContent}</button></li>`;
     }
     htmlContent += `</ul></div></div>`;
@@ -312,20 +388,6 @@ function getHtmlContent(data) {
     //   htmlContent += ` </div></div>`;
     // }
 
-    htmlContent += `<div class='like-comment'>`;
-    htmlContent += `<div>`;
-    if (message.totalLike) {
-      htmlContent += `<div class='form-like'>`;
-
-      htmlContent += `<img class='j1lvzwm4' height='18' role='presentation' src="data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 16 16'%3e%3cdefs%3e%3clinearGradient id='a' x1='50%25' x2='50%25' y1='0%25' y2='100%25'%3e%3cstop offset='0%25' stop-color='%2318AFFF'/%3e%3cstop offset='100%25' stop-color='%230062DF'/%3e%3c/linearGradient%3e%3cfilter id='c' width='118.8%25' height='118.8%25' x='-9.4%25' y='-9.4%25' filterUnits='objectBoundingBox'%3e%3cfeGaussianBlur in='SourceAlpha' result='shadowBlurInner1' stdDeviation='1'/%3e%3cfeOffset dy='-1' in='shadowBlurInner1' result='shadowOffsetInner1'/%3e%3cfeComposite in='shadowOffsetInner1' in2='SourceAlpha' k2='-1' k3='1' operator='arithmetic' result='shadowInnerInner1'/%3e%3cfeColorMatrix in='shadowInnerInner1' values='0 0 0 0 0 0 0 0 0 0.299356041 0 0 0 0 0.681187726 0 0 0 0.3495684 0'/%3e%3c/filter%3e%3cpath id='b' d='M8 0a8 8 0 00-8 8 8 8 0 1016 0 8 8 0 00-8-8z'/%3e%3c/defs%3e%3cg fill='none'%3e%3cuse fill='url(%23a)' xlink:href='%23b'/%3e%3cuse fill='black' filter='url(%23c)' xlink:href='%23b'/%3e%3cpath fill='white' d='M12.162 7.338c.176.123.338.245.338.674 0 .43-.229.604-.474.725a.73.73 0 01.089.546c-.077.344-.392.611-.672.69.121.194.159.385.015.62-.185.295-.346.407-1.058.407H7.5c-.988 0-1.5-.546-1.5-1V7.665c0-1.23 1.467-2.275 1.467-3.13L7.361 3.47c-.005-.065.008-.224.058-.27.08-.079.301-.2.635-.2.218 0 .363.041.534.123.581.277.732.978.732 1.542 0 .271-.414 1.083-.47 1.364 0 0 .867-.192 1.879-.199 1.061-.006 1.749.19 1.749.842 0 .261-.219.523-.316.666zM3.6 7h.8a.6.6 0 01.6.6v3.8a.6.6 0 01-.6.6h-.8a.6.6 0 01-.6-.6V7.6a.6.6 0 01.6-.6z'/%3e%3c/g%3e%3c/svg%3e" width='18'/>`;
-      htmlContent += `<span> ${message.totalLike} </span>`;
-      htmlContent += `</div>`;
-    } else {
-      htmlContent += `<div class='form-like'>`;
-      htmlContent += ``;
-
-      htmlContent += `</div>`;
-    }
     // htmlContent += `</div>`;
     // htmlContent += `<div class='count-comment'>`;
     // if (message.totalComment) {
@@ -338,28 +400,36 @@ function getHtmlContent(data) {
 
     htmlContent += `<div class="interaction"><button class="like" id="like-${message.messageId}" data-message-id="${message.messageId}" data-total-like="${message.totalLike}">`;
     if (message.totalLike) {
-      htmlContent += `<span class='likes'>`;
-      htmlContent += `<i data-visualcompletion='css-img' class='hu5pjgll op6gxeva colorLike' style='background-image: url(&quot;https://static.xx.fbcdn.net/rsrc.php/v3/yK/r/xiGk4dAS60k.png&quot;); background-position: 0px -253px; background-size: auto; width: 18px; height: 18px; background-repeat: no-repeat; display: inline-block;'></i> Thích`;
-      htmlContent += `</span>`;
+      htmlContent += `<span class="likes" id="likes-1008856661638791250">
+      <i data-visualcompletion="css-img" style="background-image: url(&quot;https://static.xx.fbcdn.net/rsrc.php/v3/yI/r/Z7CRdrrbx1y.png&quot;); background-position: 0px -253px; background-size: auto; width: 18px; height: 18px; background-repeat: no-repeat; display: inline-block;filter: invert(39%) sepia(57%) saturate(200%) saturate(200%) saturate(200%) saturate(200%) saturate(200%) saturate(147.75%) hue-rotate(202deg) brightness(97%) contrast(96%);"></i>
+      <span style="padding-left: 8px;">Thích</span>
+    </span>`;
     } else {
-      htmlContent += `<span>`;
-      htmlContent += `<i data-visualcompletion='css-img' class='hu5pjgll m6k467ps colorLike' style="background-image:url('https://static.xx.fbcdn.net/rsrc.php/v3/yK/r/xiGk4dAS60k.png');background-position:0 -272px;background-size:auto;width:18px;height:18px;background-repeat:no-repeat;display:inline-block"></i> Thích`;
-      htmlContent += `</span>`;
+      htmlContent += `<span id="likes-1008675966119325696">
+      <i data-visualcompletion="css-img" style="background-image:url('https://static.xx.fbcdn.net/rsrc.php/v3/yI/r/Z7CRdrrbx1y.png');background-position:0 -272px;background-size:auto;width:18px;height:18px;background-repeat:no-repeat;display:inline-block;"></i>
+      <span style="padding-left: 8px;">Thích</span>
+    </span>`;
     }
     htmlContent += `</button>`;
-    htmlContent += `<button class="comment" data-message-id="${message.messageId}"><i data-visualcompletion='css-img' class='hu5pjgll m6k467ps' style="background-image:url('https://static.xx.fbcdn.net/rsrc.php/v3/yI/r/Z7CRdrrbx1y.png');background-position:0 -234px;background-size:auto;width:18px;height:18px;background-repeat:no-repeat;display:inline-block"></i> Bình luận (${message.totalComment})</button>`;
+    htmlContent += `<button class="comment" data-message-id="${
+      message.messageId
+    }"><i data-visualcompletion='css-img' class='hu5pjgll m6k467ps' style="background-image:url('https://static.xx.fbcdn.net/rsrc.php/v3/yI/r/Z7CRdrrbx1y.png');background-position:0 -234px;background-size:auto;width:18px;height:18px;background-repeat:no-repeat;display:inline-block"></i> Bình luận ${
+      message.totalComment ? `(${message.totalComment})` : ''
+    }</button>`;
     htmlContent += `</div>`;
-
-    htmlContent += `<div id="comments-${message.messageId}" class="comments" data-message-id="${message.messageId}" >`;
-    htmlContent += `<div class="d-flex flex-row mb-2" >`;
-    htmlContent += `<div class="show-author-comments">`;
-    htmlContent += `<div class="comment-text${message.messageId}" id="comment-text"></div>`;
-    htmlContent += `</div></div></div>`;
-
-    htmlContent += `<div class="inputWithIcon">`;
-    htmlContent += `<input placeholder="Add a comment..." data-message-id="${message.messageId}" required/>`;
-    htmlContent += `<svg aria-label="Emoji" class="_8-yf5" color="#262626" fill="#262626" height="24" role="img" viewBox="0 0 24 24" width="24"><path d="M15.83 10.997a1.167 1.167 0 101.167 1.167 1.167 1.167 0 00-1.167-1.167zm-6.5 1.167a1.167 1.167 0 10-1.166 1.167 1.167 1.167 0 001.166-1.167zm5.163 3.24a3.406 3.406 0 01-4.982.007 1 1 0 10-1.557 1.256 5.397 5.397 0 008.09 0 1 1 0 00-1.55-1.263zM12 .503a11.5 11.5 0 1011.5 11.5A11.513 11.513 0 0012 .503zm0 21a9.5 9.5 0 119.5-9.5 9.51 9.51 0 01-9.5 9.5z"></path></svg>`;
-    htmlContent += `</div></div>`;
+    htmlContent += `<div id="comments-${message.messageId}" class="comments" data-message-id="${message.messageId}" style="display : none">
+                          <div class="show-author-comments">
+                                 <div class="comment-text${message.messageId}" id="comment-text"></div>
+                          </div>
+                          <div class='inputWithIcon'>
+                                        <input
+                                            class="input-emojis"
+                                            name='comment_id'
+                                            placeholder='Add a comment...'
+                                            data-message-id='${message.messageId}'
+                                          />
+                          </div>
+    </div>`;
 
     htmlContent += `</div></div></div>`;
   }
@@ -367,6 +437,7 @@ function getHtmlContent(data) {
 }
 var count = 0;
 $("[name='comment_id']").attr('required', true);
+
 const evtSource = new EventSource('/sse');
 
 evtSource.onmessage = ({ data }) => {
@@ -428,6 +499,7 @@ evtSource.onmessage = ({ data }) => {
     $('.show-comment-like').text('');
   });
 };
+
 $(document).ready(function () {
   $(window).scroll(function () {
     if ($(this).scrollTop() > 100) {
@@ -442,3 +514,88 @@ $(document).ready(function () {
     return false;
   });
 });
+
+$(document).ready(function () {
+  $('.emoji_act').emojioneArea({
+    emojiPlaceholder: ':smile_cat:',
+    searchPlaceholder: 'Search',
+    buttonTitle: 'Use your TAB key to insert emoji faster',
+    searchPosition: 'bottom',
+    pickerPosition: 'bottom',
+  });
+});
+
+$(document).ready(function () {
+  $('.logoNcc').click(function () {
+    location.reload(true);
+  });
+});
+
+function showNotifiCounter(numberCounter){
+  $('#noti_Counter')
+  .css({ opacity: 0 })
+  .text(numberCounter)   
+  .css({ top: '-10px' })
+  .animate({ top: '-2px', opacity: 1 }, 500);
+}
+function darkMode() {
+  var element = document.body;
+  element.classList.toggle('dark-mode');
+
+  const darkHeader = document.querySelector('.nav-header');
+  darkHeader.classList.toggle('dark-header');
+
+  const darkFlex = document.querySelector('.flex-2');
+  darkFlex.classList.toggle('dark-flex');
+
+  const dateTime = document.querySelectorAll('.date');
+  for (let i = 0; i < dateTime.length; ++i) {
+    dateTime[i].classList.toggle('dateTime');
+  }
+
+  const darklListView = document.querySelectorAll('.dark-post');
+  for (let i = 0; i < darklListView.length; ++i) {
+    darklListView[i].classList.toggle('dark-list');
+  }
+
+  const darklTotalike = document.querySelector('.container-fluid');
+  darklTotalike.classList.toggle('dark-fluid');
+
+  const darkDropDown = document.querySelectorAll('.dark-dropdown');
+  for (let i = 0; i < darkDropDown.length; ++i) {
+    darkDropDown[i].classList.toggle('dark-dropdowns');
+  }
+
+  const darkPostData = document.querySelectorAll('.post-data-container');
+  for (let i = 0; i < darkPostData.length; ++i) {
+    darkPostData[i].classList.toggle('dark-post-data-container');
+  }
+
+  const darkCmt = document.querySelectorAll('.cmt');
+  for (let i = 0; i < darkCmt.length; ++i) {
+    darkCmt[i].classList.toggle('cmt-2');
+  }
+
+  const darkLike = document.querySelectorAll('.like-like');
+  for (let i = 0; i < darkLike.length; ++i) {
+    darkLike[i].classList.toggle('like-3');
+  }
+
+  const emojiInput = document.querySelectorAll('.emojionearea-inline');
+  for (let i = 0; i < emojiInput.length; ++i) {
+    emojiInput[i].classList.toggle('emojionearea-inline-active');
+  }
+
+  const emojiEditor = document.querySelectorAll('.emojionearea-editor');
+  for (let i = 0; i < emojiEditor.length; ++i) {
+    emojiEditor[i].classList.toggle('emojionearea-editor-active');
+  }
+
+  // const emojiWrapper = document.querySelectorAll('.emojionearea-wrapper');
+  // for (let i = 0; i < emojiWrapper.length; ++i) {
+  //   emojiWrapper[i].classList.toggle('emojionearea-wrapper-active');
+  // }
+
+  const emojiWrapper = document.querySelector('.emojionearea-wrapper');
+  emojiWrapper.classList.toggle('emojionearea-wrapper-active');
+}
