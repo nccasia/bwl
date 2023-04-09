@@ -14,6 +14,7 @@ import { AppService } from './app.service';
 import { Request, Response } from 'express';
 import { AuthService } from './Authentication/auth.service';
 import { first, map, Observable, switchMap } from 'rxjs';
+import console from 'console';
 const discordTokenUrl = 'https://discord.com/api/oauth2/token';
 const discordUserUrl = 'https://discord.com/api/users/@me';
 
@@ -113,7 +114,8 @@ export class AppController {
         throw new error();
       }
     } else {
-      return res.redirect('/login');
+      const posts = await this.appService.getAll(1);
+      return res.render('index', { posts });
     }
   }
 
@@ -131,7 +133,7 @@ export class AppController {
   @Get('logout')
   logout(@Res() res: Response) {
     res.clearCookie('token');
-    res.redirect('/login');
+    res.redirect('/');
   }
 
   @Get('/getAllPaging')
