@@ -333,7 +333,7 @@ function getHtmlContent(data) {
     htmlContent += `<div class="image">`;
     if (message.links) {
       message.links.forEach((link) => {
-        htmlContent += `<img src="http://bwl.vn/images/${link}" class="img-fluid" alt="${link}">`;
+        htmlContent += `<img src="https://bwl.vn/images/${link}" class="img-fluid" alt="${link}">`;
       });
     }
     htmlContent += `</div>`;
