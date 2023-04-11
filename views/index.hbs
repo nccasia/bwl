@@ -66,7 +66,7 @@
     {{--header--}}
     <nav class='nav-header'>
       <div class='logoNcc' >
-        <img src='./assets/img/favicon.png' alt='logo' width='100%' />
+        <img src='./assets/img/favicon.png' alt='logo' width='80%' />
       </div>
       {{!-- <div class='bwl'>
         <img src='./assets/img/bwl.vn.png' alt='name' width='100%' />
@@ -128,7 +128,7 @@
             <div class='person-icon'>
               <img
                 src='./assets/img/person.png'
-                width='50'
+                width='40'
                 {{! class='img-people-avatar' }}
                 alt='avatar'
                 onClick="document.getElementById('user')"
@@ -227,13 +227,12 @@
           <div class='container-fluid dark-fluid'>
             <div class='row justify-content-evenly'>
               <!-- ================= Sidebar ================= -->
-              <div class='col-12 col-lg-3 sidebar-left'>
+              <div class='sidebar-left'>
                 <div
-                  class='d-none d-xxl-block h-100 fixed-top overflow-hidden scrollbar'
-                  style='max-width: 360px; width: 100%; z-index: 4'
+                  class='sidebar-left-content'
                 >
                   <ul
-                    class='navbar-nav mt-4 ms-3 d-flex flex-column pb-5 mb-5'
+                    class='sidebar-left-list navbar-nav mt-4 ms-3 d-flex flex-column pb-5 mb-5'
                     style='padding-top: 56px'
                   >
                   
@@ -304,8 +303,8 @@
                 </div>
               </div>
               <!-- ================= Timeline ================= -->
-              <div class='col-12 col-lg-6 pb-5'>
-               <div class='container main-content dark-main-content'>
+              <div class='content-container'>
+               <div class='main-content'>
       <div class='row row-content dark-main-content'>
         <div class='list-view'>
           <div id='infinite-scroll dark-main-content'>
@@ -490,9 +489,6 @@
       </div>
     </div>
               </div>
-        
-              <div class='col-12 col-lg-3'>
-                  
               </div>
             </div>
           </div>
