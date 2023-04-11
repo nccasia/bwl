@@ -60,8 +60,7 @@ body::-webkit-scrollbar-button {
 }
 
 .main-content {
-  margin-top: 25px;
-  margin-bottom: 30px;
+  margin: 25px 5% 30px 5%;
 }
 
 .container-fluid {
