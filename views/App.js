@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import HeaderPage from './component/Header';
 import MainContent from './features/layout';
 import './app.scss';
+import axios from './axios';
 function App() {
   return (
     <React.Fragment>
