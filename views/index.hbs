@@ -94,7 +94,7 @@
           >
         
             <div class='btnNotification  '>
-                    <div id="noti_Counter"></div> 
+                    <div id="noti_Counter"></div>
               <div class='notification flex-3 active'>
                 <i  class="notification-bell fa-solid fa-bell  "></i>
               </div>
@@ -237,8 +237,7 @@
                   >
                   
                      <h4 class='m-0 pointer text-muted'>Top BWL</h4>
-                    {{#maxPosts posts}}
-                        {{#each this}}
+                        {{#each posts}}
                             <li class="dropdown-itemrounded my-3 bg-white rounded shadow dropdown dark-dropdown">
                               <div class="post-img dark-dropdown">
                                 {{#each this.links}}
@@ -290,8 +289,6 @@
                       </li>
                       <hr class='m-0' />
                     {{/each}}
-                  {{/maxPosts}}
-                                             
                   </ul>
                   <!-- terms -->
                   <div class='p-2 mt-5'>
