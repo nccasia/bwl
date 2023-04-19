@@ -1,18 +1,16 @@
 /* eslint-disable prettier/prettier */
-import { createContext } from 'react';
 import HeaderPage from './components/Header';
 import MainContent from './features/layout';
-export const AppContext = createContext();
 import './app.scss';
-function App(props) {
-  const { data } = props;
+import { AppProvider } from './store';
+function App() {
   return (
-    <AppContext.Provider value={{ posts: data }}>
-      <React.Fragment>
+    <React.Fragment>
+      <AppProvider>
         <HeaderPage />
         <MainContent />
-      </React.Fragment>
-    </AppContext.Provider>
+      </AppProvider>
+    </React.Fragment>
   );
 }
 export default App;
