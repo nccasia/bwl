@@ -1,0 +1,11 @@
+.sidebar-item{
+  background-color: #fff;
+  padding: 5%;
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  .sidebar-item-image img{
+    width: 100%;
+  }
+}
