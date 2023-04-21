@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import ContainerItem from '../../components/ContainerItem';
+import ContainerItem from '../ContainerItem';
 import './style.scss';
 import useStore from '../../hook/useStore';
 

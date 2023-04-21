@@ -9,7 +9,6 @@
       href='https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0'
     />
   </head>
-
   <body>
     <div id='root'></div>
     {{#each posts}}
@@ -37,14 +36,21 @@
             ></div>
           {{/each}}
         {{/maxReaction}}
-        {{#each this.reactions}}{{/each}}
+        <div class='app-time' createdTimestampFormat='{{#formatDay this.createdTimestamp}}{{/formatDay}}'>
+        </div>
+        <div class = 'app-reactSum' totalReact='{{#feel this}}{{/feel}}'></div>
       </div>
     {{/each}}
+    <div class="url" url ='{{url}}' ></div>
     <script src='https://unpkg.com/react/umd/react.production.min.js'></script>
     <script
       src='https://unpkg.com/react-dom/umd/react-dom.production.min.js'
     ></script>
     <script src='bundle.js'></script>
+          <script>
+      console.log('{{url}}')
+    </script>
+      
   </body>
 
 </html>

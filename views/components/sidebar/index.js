@@ -8,7 +8,7 @@ const SideBar = () => {
   return (
     <div className="sidebar-left-content">
       <h3 className="sidebar-left-title">Top BWL</h3>
-      {value.posts.map((post) => {
+      {value.hotPost.map((post) => {
         return (
           <Fragment>
             <SideBarItem {...post} />

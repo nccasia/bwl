@@ -1,16 +1,20 @@
 /* eslint-disable prettier/prettier */
-import HeaderPage from './components/Header';
-import MainContent from './features/layout';
+import Bwl from './features/bwl';
 import './app.scss';
 import { AppProvider } from './store';
+import Login from './features/login';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
 function App() {
   return (
-    <React.Fragment>
+    <Router>
       <AppProvider>
-        <HeaderPage />
-        <MainContent />
+        <Routes>
+          <Route path="/" element={<Bwl />} />
+          <Route path="/login" element={<Login />} />
+        </Routes>
       </AppProvider>
-    </React.Fragment>
+    </Router>
   );
 }
 export default App;

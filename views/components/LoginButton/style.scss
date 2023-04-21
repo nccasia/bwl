@@ -12,12 +12,20 @@
   right: 2rem;
   padding: 5px;
   .link{
-    border-radius: 50%;
-    padding: 10px;
-    background-color: #80808030;
-    img{
-      height: 26px;
-      width: 26px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .link-image{
+      border-radius: 50%;
+      padding: 10px;
+      background-color: #80808030;
+      img{
+        height: 26px;
+        width: 26px;
+      }
+    }
+    .text-logout{
+      text-decoration: none;
     }
   }
   .text-logout{

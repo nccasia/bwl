@@ -3,7 +3,7 @@ import { useState } from 'react';
 import './style.scss';
 import UserInfo from '../userInfo';
 const ContainerItem = (props) => {
-  const { link, reactList } = props;
+  const { link, reactList, totalReact } = props;
   const [open, setOpen] = useState(false);
   const handleClick = () => {
     setOpen(!open);
@@ -38,7 +38,7 @@ const ContainerItem = (props) => {
             );
           }
         })}
-        <span>{reactList.length}</span>
+        <span>{totalReact}</span>
       </ul>
       <div className="container-item-react">
         <span className="react-like">Thích</span>
