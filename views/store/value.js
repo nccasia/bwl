@@ -62,6 +62,17 @@ const maxPosts = (inputPosts) => {
         .filter((value, index) => index < 9)
     : max;
 };
+const userIdNode = document.querySelector('.userId');
+const userAvatarNode = document.querySelector('.userAvatar');
+const userNameNode = document.querySelector('.userName');
+const userName = userNameNode.getAttribute('userName');
+const userId = userIdNode.getAttribute('userId');
+const userAvatar = userAvatarNode.getAttribute('userAvatar');
+const userProfile = {
+  userId,
+  userAvatar,
+  userName,
+};
 const hotPost = maxPosts(posts);
 const url = document.querySelector('.url');
 const discordLink = url.getAttribute('url');
@@ -69,5 +80,6 @@ const contextValue = {
   posts,
   hotPost,
   discordLink,
+  userProfile,
 };
 export default contextValue;

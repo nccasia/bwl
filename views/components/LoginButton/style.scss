@@ -2,15 +2,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  position: fixed;
-  background-color: #fff;
-  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-  border-radius: 6px;
   text-align: center;
-  padding: 0 16px;
-  top: 3.4rem;
-  right: 2rem;
-  padding: 5px;
   .link{
     display: flex;
     justify-content: center;
@@ -26,6 +18,9 @@
     }
     .text-logout{
       text-decoration: none;
+      border: none;
+      color: #000;
+      font-size: 1rem;
     }
   }
   .text-logout{
