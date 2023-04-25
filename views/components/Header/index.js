@@ -24,7 +24,13 @@ function HeaderPage() {
             className="img-people-avatar"
             alt="avatar"
           />
-          {open ? <LoginButton title="Đăng nhập" /> : <></>}
+          {open ? (
+            <div className="login-button">
+              <LoginButton title="Đăng nhập" link="/login" />
+            </div>
+          ) : (
+            <></>
+          )}
         </div>
       ) : (
         <div className="header-left">
@@ -51,7 +57,7 @@ function HeaderPage() {
                   <div className="user-name">{value.userProfile.userName}</div>
                 </div>
                 <div className="button">
-                  <LoginButton title="Đăng xuất" />
+                  <LoginButton title="Đăng xuất" link="/logout" />
                 </div>
               </div>
             ) : (

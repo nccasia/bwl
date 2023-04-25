@@ -22,7 +22,7 @@
     authorAvatar='{{this.author.avatar}}' authorName='{{this.author.username}}' totalLike='{{this.totalLike}}'
     createdTimestamp='{{this.createdTimestamp}}'>
     {{#each this.links}}
-    <div class='app-link' link='{{this}}'>
+    <div class='app-link' appLink='{{this}}'>
     </div>
     {{/each}}
     {{#maxReaction this.reactions}}

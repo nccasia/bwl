@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import * as React from 'react';
-import MainContent from '../../components/layout';
+import MainContent from '../../components/Layout';
 import Header from '../../components/Header';
 const Bwl = () => {
   return (

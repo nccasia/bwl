@@ -3,7 +3,7 @@ import './style.scss';
 const LoginButton = (props) => {
   return (
     <div className="navbar-logout" id="user">
-      <a className="link" href="./login">
+      <a className="link" href={props.link}>
         <div className="link-image">
           <img className="icon-logout" src="./assets/img/login.png" />
         </div>

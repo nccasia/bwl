@@ -1,12 +1,12 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-loss-of-precision */
 /* eslint-disable prettier/prettier */
+import axios from 'axios';
 // handle data
 const nodes = document.querySelectorAll('.app');
-const nodesLinks = document.querySelectorAll('.app-link');
 let posts = [];
 for (const node of nodes) {
-  const messageId = JSON.parse(node.getAttribute('messageId'));
+  const messageId = node.getAttribute('messageId').toString();
   const user = JSON.parse(node.getAttribute('user'));
   const authorId = node.getAttribute('authorId').toString();
   const authorAvatar = node.getAttribute('authorAvatar').toString();
@@ -20,6 +20,8 @@ for (const node of nodes) {
   const reactions = node.querySelectorAll('.app-react');
   const reactItem = node.querySelector('.app-reactSum');
   const totalReact = reactItem.getAttribute('totalReact');
+  const nodeLink = node.querySelector('.app-link');
+  const link = nodeLink.getAttribute('appLink');
   let reactList = [];
   for (const reaction of reactions) {
     const reactId = reaction.getAttribute('reactId').toString();
@@ -41,12 +43,9 @@ for (const node of nodes) {
     reactList,
     totalReact,
     createdTimestampFormat,
+    link,
   };
   posts.push(post);
-}
-for (const [index, node] of nodesLinks.entries()) {
-  const link = node.getAttribute('link');
-  posts[index].link = link;
 }
 const maxPosts = (inputPosts) => {
   const max = inputPosts.filter((post) => {
@@ -76,10 +75,30 @@ const userProfile = {
 const hotPost = maxPosts(posts);
 const url = document.querySelector('.url');
 const discordLink = url.getAttribute('url');
+var commentLists = [];
+const getComment = (messageId) => {
+  axios
+    .get(`/comments?messageId=${messageId}`)
+    .then((res) => {
+      commentLists.push(...res.data.comments);
+      console.log('commentList', commentLists);
+      console.log('comment', res);
+    })
+    .catch((err) => console.log(err));
+};
+const handleComment = (data) => {
+  axios
+    .post('/comment', { ...data })
+    .then((res) => console.log('res', res))
+    .catch((err) => console.log(err));
+};
 const contextValue = {
   posts,
   hotPost,
   discordLink,
   userProfile,
+  handleComment,
+  getComment,
+  commentLists,
 };
 export default contextValue;
