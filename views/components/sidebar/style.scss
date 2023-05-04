@@ -1,0 +1,40 @@
+.sidebar-left-content{
+  width: 100%;
+  max-width: 370px;
+  z-index: 4;
+  overflow-y: scroll;
+  height: calc(100vh - 100px) !important;
+  position: fixed;
+  .sidebar-left-title{
+    color: #6C7588;
+    font-size: 1.6rem;
+    font-weight: 600;
+    padding: 15px 0px;
+  }
+  .sidebar-left-bottom{
+    padding-top: 100px;
+    span{
+      font-size: 0.8rem;
+      color: #6C7588;
+    }
+  }
+}
+.sidebar-left-content::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	background-color: #F5F5F5;
+}
+.sidebar-left-content::-webkit-scrollbar
+{
+	width: 6px;
+	background-color: #F5F5F5;
+}
+.sidebar-left-content::-webkit-scrollbar-thumb
+{
+	background-color: #ccc;
+}
+@media (max-width: 1600px) {
+  .sidebar-left-content{
+    max-width: 360px;
+  }
+}
