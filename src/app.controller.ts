@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {
   Controller,
   Get,
@@ -120,7 +121,7 @@ export class AppController {
   }
 
   @Get('/login')
-  @Render('login')
+  @Render('index')
   root() {
     const url = `https://discord.com/api/oauth2/authorize?client_id=${
       process.env.CLIENT_ID
