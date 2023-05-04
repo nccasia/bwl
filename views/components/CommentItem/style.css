@@ -1,0 +1,65 @@
+.comment-item {
+  margin-top: 20px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  width: 100%;
+  padding: 0px 16px 16px 16px;
+}
+
+.comment-item .author-avatar {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  gap: 5px;
+}
+
+.comment-item .author-avatar img {
+  border-radius: 50%;
+  vertical-align: middle;
+  border-style: none;
+  max-width: 50px;
+  max-height: 50px;
+}
+
+.comment-item .author-avatar .author-name {
+  margin-left: 10px;
+  font-size: 1rem;
+  line-height: 1.3;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: start;
+      -ms-flex-align: start;
+          align-items: start;
+  gap: 3px;
+}
+
+.comment-item .author-avatar .author-name .name {
+  font-weight: 500;
+}
+
+.comment-item .author-avatar .author-name .comment {
+  font-size: 0.9rem;
+  line-height: 1.3;
+}
+
+.comment-item .comment-time {
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: #5b5b5b;
+}
+/*# sourceMappingURL=style.css.map */

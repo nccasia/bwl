@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
@@ -6,7 +7,7 @@ import * as hbs from 'hbs';
 import * as dayjs from 'dayjs';
 import * as cookieParser from 'cookie-parser';
 import { Reaction } from './Reaction/reaction.schema';
-var moment = require('moment');
+const moment = require('moment');
 const a = moment().format('MM DD YYYY, HH:mm:SS a');
 
 const dayMoment = a.slice(3, 5);
@@ -35,20 +36,40 @@ const formatDay = (time) => {
     return dayjs(+new Date(+time.toString())).format('DD/MM/YYYY hh:mm A');
   }
 };
-const maxReaction = (emotion : Reaction[], opts) : Reaction[]=>{
-  return emotion.length > 3 ? opts.fn(emotion.sort((a, b)=>b.count - a.count).filter((value, index)=>index < 3)) : opts.fn(emotion);
-}
+const maxReaction = (emotion: Reaction[], opts): Reaction[] => {
+  return emotion.length > 3
+    ? opts.fn(
+        emotion
+          .sort((a, b) => b.count - a.count)
+          .filter((value, index) => index < 3),
+      )
+    : opts.fn(emotion);
+};
 
-const feel = (post)=>{
-  return post.totalLike + post.reactions.reduce((sumReaction, reaction)=>{
-    return sumReaction + reaction.count;
-  }, 0);
-}
-const maxPosts = (posts, opts) =>{
+const feel = (post) => {
+  return (
+    post.totalLike +
+    post.reactions.reduce((sumReaction, reaction) => {
+      return sumReaction + reaction.count;
+    }, 0)
+  );
+};
+const maxPosts = (posts, opts) => {
   //get posts if time posts < 1 weeks
-   const maxPosts = posts.filter((posts)=> new Date((new Date().getTime()- new Date(+posts.createdTimestamp).getTime())).getDate()  <= 31)
-  return maxPosts.length > 3 ? opts.fn(maxPosts.sort((a, b)=>feel(b)- feel(a)).filter((value, index)=>index < 9 )) : opts.fn(maxPosts);
-}
+  const maxPosts = posts.filter(
+    (posts) =>
+      new Date(
+        new Date().getTime() - new Date(+posts.createdTimestamp).getTime(),
+      ).getDate() <= 31,
+  );
+  return maxPosts.length > 3
+    ? opts.fn(
+        maxPosts
+          .sort((a, b) => feel(b) - feel(a))
+          .filter((value, index) => index < 9),
+      )
+    : opts.fn(maxPosts);
+};
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
