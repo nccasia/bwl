@@ -5,7 +5,7 @@ import useStore from '../../hook/useStore';
 
 const Container = () => {
   const value = useStore();
-  console.log('value', value.posts);
+  console.log('value', value);
   return (
     <div className="container-list">
       {value.posts.map((post) => (

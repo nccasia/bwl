@@ -26,9 +26,11 @@ const ContainerItem = (props) => {
     setInput(event.target.value);
   };
   const { link, reactList, totalReact, messageId, commentPost } = props;
+  const inputRef = useRef(null);
   const [open, setOpen] = useState(false);
   const handleClick = () => {
     setOpen(!open);
+    inputRef.current.focus();
   };
   const wrapperRef = useRef(null);
   const handleClickOutside = (event) => {
@@ -42,13 +44,16 @@ const ContainerItem = (props) => {
       content: input,
       messageId: messageId,
     });
+    setInput('')
   };
+
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+  
   return (
     <div key={messageId} className="container-item">
       <UserInfo {...props} />
@@ -114,6 +119,8 @@ const ContainerItem = (props) => {
               placeholder="Thêm bình luận"
               value={input}
               onChange={handleInputChange}
+              ref={inputRef}
+              autoFocus
             />
             {!openEmoji ? (
               <FontAwesomeIcon

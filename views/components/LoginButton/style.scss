@@ -1,5 +1,5 @@
 .navbar-logout {
-  display: flex;
+  // display: flex;
   justify-content: space-between;
   align-items: center;
   text-align: center;
@@ -7,6 +7,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    // position: absolute;
+    // right: 0;
+    // top: 52px;
+    // background: #fff;
+    // padding: 5px;
+    // border-radius: 8px;
     .link-image{
       border-radius: 50%;
       padding: 10px;
