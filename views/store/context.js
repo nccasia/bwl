@@ -1,4 +1,5 @@
-/* eslint-disable prettier/prettier */
-import { createContext } from 'react';
-const AppContext = createContext();
-export default AppContext;
+import React from 'react'
+import {initState} from "./reducer";
+
+const context = React.createContext();
+export default context;

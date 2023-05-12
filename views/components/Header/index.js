@@ -1,23 +1,41 @@
 /* eslint-disable prettier/prettier */
-import { useState } from 'react';
+import React from 'react';
 import './style.scss';
 import LoginButton from '../LoginButton';
-import useStore from '../../hook/useStore';
+import Notifycation from '../Notifycation';
+import {useStore} from "../../store";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell, faMoon } from '@fortawesome/free-solid-svg-icons';
+import {getNotification} from '../../api/apiNotification';
 
-function HeaderPage() {
-  const value = useStore();
-  const [open, setOpen] = useState(false);
+function HeaderPage(props) {
+  const {state, dispatch}=useStore();
+  const [open, setOpen] = React.useState(false);
+  const [openLabel, setOpenLabel] = React.useState(0);
+  const [openNotification, setOpenNotification] = React.useState(false);
   const handleClick = () => {
     setOpen(!open);
   };
+  React.useEffect(() => {
+    if(state.posts  && state.author) {
+      state.posts.forEach(main => {
+        if(main?.author?.id === state.author.id){
+          getNotification(main?.messageId).then(data => {
+            dispatch({type:"CHANGE_NOTIFICATION", payload: data})
+          })
+        }
+      })
+    }
+  }, [state.posts, state.author]);
+  // console.log("tet: ",state.author);
+  // console.log(state.notification);
+  // console.log("test: ", state.posts);
   return (
-    <nav className="nav-header">
+    <nav className="nav-header" style={{ backgroundColor: state.background ? "#242526": "white"}}>
       <div className="logoNcc">
         <img src="./assets/img/favicon.png" alt="logo" />
       </div>
-      {value.userProfile.userId === null ? (
+      {!state.author?.id? (
         <div className="person-icon" onClick={() => handleClick()}>
           <img
             src="./assets/img/person.png"
@@ -25,8 +43,8 @@ function HeaderPage() {
             alt="avatar"
           />
           {open ? (
-            <div className="login-button">
-              <LoginButton title="Đăng nhập" link="/login" />
+            <div className="dialog-button ">
+              <LoginButton title="Đăng nhập" link="/login"/>
             </div>
           ) : (
             <></>
@@ -34,31 +52,38 @@ function HeaderPage() {
         </div>
       ) : (
         <div className="header-left">
-          <div className="icon">
-            <FontAwesomeIcon icon={faMoon} />
+          <div 
+            className="icon" 
+            style={{ backgroundColor: state.background ? "blue": "#80808030"}} 
+            onClick={() => dispatch({type:"CHANGE_BACKGROUND"})}
+          >
+              <FontAwesomeIcon icon={faMoon} style={{ color: state.background ? "white": "black"}}/>
           </div>
-          <div className="icon">
-            <FontAwesomeIcon icon={faBell} />
+          <div 
+            className="icon"
+            style={{ backgroundColor: openNotification ? "#1876f245": "#80808030"}}
+            onClick={() => {
+              setOpenNotification(!openNotification);
+              setOpenLabel(1);
+            }}
+          >
+            <FontAwesomeIcon icon={faBell} style={{ color: openNotification ? "blue": "black"}}/>
+            {openLabel === 0 && <p className="icon-notifi">{state.notification?.length}</p>}
+            {openNotification ? (
+              <div className="dialog-button">
+                <Notifycation notifications={state.notification}/>
+              </div>
+            ): null}
           </div>
           <div className="person-icon logout" onClick={() => handleClick()}>
             <img
-              src={`https://cdn.discordapp.com/avatars/${value.userProfile.userId}/${value.userProfile.userAvatar}`}
+              src={`https://cdn.discordapp.com/avatars/${state.author?.id}/${state.author?.avatar}`}
               className="img-people-avatar"
               alt="avatar"
             />
             {open ? (
-              <div className="logout-button">
-                <div className="logout-button-info">
-                  <img
-                    src={`https://cdn.discordapp.com/avatars/${value.userProfile.userId}/${value.userProfile.userAvatar}`}
-                    className="img-people-avatar"
-                    alt="avatar"
-                  />
-                  <div className="user-name">{value.userProfile.userName}</div>
-                </div>
-                <div className="button">
-                  <LoginButton title="Đăng xuất" link="/logout" />
-                </div>
+              <div className="dialog-button">
+                <LoginButton title="Đăng xuất" link="/"/>
               </div>
             ) : (
               <></>

@@ -25,62 +25,27 @@
       border-radius: 50%;
       background-color: #80808030;
       margin-right: 10px;
-      
+      position:relative;
+      .icon-notifi{
+        position:absolute;
+        top: 0;
+        right: 0;
+        color: white;
+        background-color: #3a51da;
+        border-radius: 50%;
+        padding: 3px;
+        font-size: 14px;
+      }
     }
     .person-icon{
       position: relative;
       .img-people-avatar{
         border: none;
       }
-      .logout-button{
-        box-shadow: rgba(0, 0, 0, 0.35) 0px 0px 10px;
-        position: absolute;
-        top: 60px;
-        right: 0;
-        z-index: 1999;
-        background-color: #fff;
-        padding: 20px 30px;
-        border-radius: 6px;
-        display: flex;
-        flex-direction: column;
-        justify-content: start;
-        gap: 10px;
-        .logout-button-info{
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          padding: 0px 5px;
-          .img-people-avatar{
-            width: 40px;
-            height: 40px;
-            margin-right: 10px;
-          }
-          .user-name{
-            font-weight: 600;
-            font-size: 1rem;
-          }
-        }
-        .button{
-          border-top: 3px solid #ccc;
-          padding: 10px 5px 0px 5px;
-        }
-      }
-      .logout-button::before{
-        position: absolute;
-        content: "";
-        border-width: 10px 15px;
-        border-style: solid;
-        border-color: transparent transparent white transparent;
-        position: absolute;
-        right: 3%;
-        top: -14px;
-      }
-      .login-button{
-        background-color: black;
-      }
     }
   }
   .person-icon {
+    position: relative;
     width: 40px;
     height: 40px;
     .img-people-avatar{
@@ -94,4 +59,29 @@
       cursor: pointer;
     }
   }
+}
+
+.dialog-button{
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 0px 10px;
+  position: absolute;
+  top: 60px;
+  right: 0;
+  z-index: 1999;
+  background-color: #fff;
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  gap: 10px;
+  //min-width: 210px;
+}
+.dialog-button::before{
+  position: absolute;
+  content: "";
+  border-width: 10px 15px;
+  border-style: solid;
+  border-color: transparent transparent white transparent;
+  position: absolute;
+  right: 3%;
+  top: -14px;
 }

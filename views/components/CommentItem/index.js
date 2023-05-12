@@ -1,23 +1,22 @@
 /* eslint-disable prettier/prettier */
-import useStore from '../../hook/useStore';
 import './style.scss';
+import React from 'react';
+import {formatDay} from '../../util/formatDay';
 const CommentItem = (props) => {
-  const { formatDay } = useStore();
-  const { id, name, avatar, time, content } = props;
   return (
     <div className="comment-item">
       <div className="author-avatar">
         <img
-          src={`https://cdn.discordapp.com/avatars/${id}/${avatar}`}
+          src={`https://cdn.discordapp.com/avatars/${props?.author[0].id}/${props?.author[0].avatar}`}
           className="img-people"
           alt="avatar"
         />
         <div className="author-name">
-          <p className="name">{name}</p>
-          <p className="comment">{content}</p>
+          <p className="name">{props?.author[0].username}</p>
+          <p className="comment">{props?.content}</p>
         </div>
       </div>
-      <div className="comment-time">{formatDay(time)}</div>
+      <div className="comment-time">{formatDay(props?.createdTimestamp)}</div>
     </div>
   );
 };

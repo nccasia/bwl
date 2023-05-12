@@ -12,35 +12,39 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import onClickOutside from 'react-click-outside';
 import CommentItem from '../CommentItem';
-import useStore from '../../hook/useStore';
+import {useStore} from "../../store";
+import {postLike} from "../../api/apiLike";
+import {getComment, postComment} from "../../api/apiComment";
 
 const ContainerItem = (props) => {
-  const { handleComment, userProfile } = useStore();
+  const {state, dispatch}=useStore();
+  //const { handleComment, userProfile } = useStore();
   const [openEmoji, setOpenEmoji] = useState(false);
   const [input, setInput] = useState('');
-  console.log('input', input);
+  //console.log('input', input);
   const onEmojiClick = (emojiObject) => {
     setInput(input.concat(emojiObject.native));
   };
   const handleInputChange = (event) => {
     setInput(event.target.value);
   };
-  const { link, reactList, totalReact, messageId, commentPost } = props;
+  // //const { link, reactList, totalReact, messageId, commentPost } = props;
   const [open, setOpen] = useState(false);
-  const handleClick = () => {
+  const handleClick = (index) => {
+    getComment(index).then(data => dispatch({type:"SET_COMMENTS", payload: {comments: data, messageId: index}}))
     setOpen(!open);
   };
-  const wrapperRef = useRef(null);
+   const wrapperRef = useRef(null);
   const handleClickOutside = (event) => {
     if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
       setOpenEmoji(false);
     }
   };
   const handleClickComment = () => {
-    handleComment({
-      authorId: userProfile.userId,
+    postComment({
+      authorId: state.author?.id,
       content: input,
-      messageId: messageId,
+      messageId: props?.messageId,
     });
   };
   useEffect(() => {
@@ -49,55 +53,78 @@ const ContainerItem = (props) => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+  console.log(state.notification);
   return (
-    <div key={messageId} className="container-item">
+    <div 
+      //key={messageId} 
+      className="container-item" 
+      style={{ backgroundColor: state.background ? "#242526": "white", color: props.openBackground ? "white": "#242526",}}
+    >
       <UserInfo {...props} />
       <div className="container-item-img">
-        <img src={`https://bwl.vn/images/${link}`} />
+        <img src={`https://bwl.vn/images/${props?.links[0]}`} />
       </div>
       <ul className="container-item-reactTotal">
-        {reactList.map((react) => {
-          if (react.reactId !== '') {
-            return (
-              <li className="list-inline-item list-reaction">
-                <button className="btn-reaction">
-                  {react.reactId !== '' ? (
-                    <img
-                      className="emoji"
-                      src={`https://cdn.discordapp.com/emojis/${react.reactId}.png`}
-                      alt={react.reactName}
-                    />
-                  ) : (
-                    <img
-                      className="emoji"
-                      src="./assets/img/default-react.png"
-                      alt={react.reactName}
-                    />
-                  )}
-                </button>
-              </li>
-            );
-          }
+        {props?.reactions?.map((main, index) => {
+          return (
+            <li key={index} className="list-inline-item list-reaction">
+              <button className="btn-reaction">
+                {main.id ? (
+                  <img
+                    className="emoji"
+                    src={`https://cdn.discordapp.com/emojis/${main.id}.png`}
+                    alt={main.name}
+                  />
+                ) : (
+                  <img
+                    className="emoji"
+                    src="./assets/img/person.png"
+                    alt="icon"
+                  />
+                )}
+                {main.count}
+              </button>           
+            </li>
+          );
         })}
-        <span>{totalReact}</span>
+        {props?.totalLike > 0 ? (
+          <li className="list-inline-item list-reaction">
+            <button className="btn-reaction">
+              <img
+                className="emoji"
+                src="./assets/img/default-react.png"
+                alt="icon"
+              />
+              {props?.totalLike}
+            </button>
+          </li>
+        ): null}
       </ul>
       <div className="container-item-react">
-        <span className="react-like">Thích</span>
-        <span onClick={() => handleClick()} className="react-comment">
-          Bình luận {commentPost.length > 0 ? commentPost.length : ``}
+        <span 
+          className="react-like" 
+          onClick={() => {
+            postLike(props?.messageId, state.author?.id).then(data => {
+              if(data){
+                dispatch({type: "CHANGE_LIKE", payload: {messageId: props?.messageId, like: data?.like}})
+              }
+            })
+          }}
+        >
+          Thích
+        </span>
+        <span 
+          onClick={() => handleClick(props?.messageId)} 
+          className="react-comment"
+        >
+          Bình luận {"(" + String(props?.totalComment > 0 ? props?.totalComment : 0) + ")"}
         </span>
       </div>
-      {commentPost.map((comment) => (
-        <div className="comment">
-          <CommentItem
-            avatar={comment.author[0].avatar}
-            name={comment.author[0].username}
-            id={comment.author[0].id}
-            time={comment.createdTimestamp}
-            content={comment.content}
-          />
+      {open && props?.onComment && state.comments? state.comments.map((comment, index) => (
+        <div className="comment" key={index}>
+          <CommentItem {...comment}/>
         </div>
-      ))}
+      )): null}
       {open ? (
         <div
           style={{
@@ -134,7 +161,7 @@ const ContainerItem = (props) => {
               </div>
             )}
           </div>
-          <div onClick={() => handleClickComment()}>
+          <div onClick={handleClickComment}>
             <FontAwesomeIcon className="input-button" icon={faPaperPlane} />
           </div>
         </div>

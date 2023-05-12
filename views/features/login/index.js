@@ -1,16 +1,25 @@
-/* eslint-disable prettier/prettier */
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import * as React from 'react';
-import useStore from '../../hook/useStore';
 import './style.scss';
+import {getLogin} from "../../api/apiLogin"
+
 const Login = () => {
-  const value = useStore();
+  const navigate = useNavigate();
+  const handleClick = async () => {
+    await getLogin().then(url =>{
+      //navigate([url]);
+      window.location.href = url;
+    })
+  }
   return (
     <div className="container-login">
       <div className="box-login">
         <form>
-          <Link to={value.discordLink}>
-            <button className="btn-login" type="button">
+            <button 
+              className="btn-login" 
+              type="button"
+              onClick={handleClick}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
@@ -23,7 +32,6 @@ const Login = () => {
               </svg>
               <span>Login Discord</span>
             </button>
-          </Link>
         </form>
       </div>
     </div>
