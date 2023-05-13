@@ -5,10 +5,14 @@ import SideBar from '../sidebar';
 import './style.scss';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import useStore from '../../hook/useStore';
 
 const MainContent = () => {
   const [scroll, setScroll] = React.useState(false);
   const [scrollY, setScrollY] = React.useState(0);
+  const value = useStore();
+  console.log('value122r', value);
+  console.log('value122r---', value.hotPost.commentPost);
   React.useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY >= 100) {

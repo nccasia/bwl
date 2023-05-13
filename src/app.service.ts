@@ -16,6 +16,7 @@ import { KomuUsers, KomuUsersDocument } from './Komu_users/komu_users.schema';
 
 @Injectable()
 export class AppService {
+  commentModel: any;
   constructor(
     @InjectModel(Reaction.name)
     private readonly komuReaction: Model<ReactionDocument>,
@@ -186,12 +187,13 @@ export class AppService {
       .exec();
   }
 
-  async comment({ messageId, content, authorId }) {
+  async comment({ messageId, content, authorId, commentId }) {
     const comment = new this.komuComment({
       messageId,
       authorId,
       content,
       createdTimestamp: Date.now(),
+      commentId,
     });
     const message = await this.komuMessage.find({ messageId }).exec();
 
@@ -205,12 +207,17 @@ export class AppService {
       authorId,
       content,
       createdTimestamp: Date.now(),
+      commentId,
     });
 
     await comment.save();
     await notification.save();
     this.addEvent({ data: { comment, commentAuthor, message, messageAuthor } });
     return comment;
+  }
+  async deleteComment(commentId: string) {
+    const deletedComment = await this.commentModel.findByIdAndDelete(commentId);
+    return deletedComment;
   }
 
   async getLikes(messageId: string) {
