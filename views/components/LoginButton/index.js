@@ -1,14 +1,37 @@
-/* eslint-disable prettier/prettier */
 import './style.scss';
+import React from 'react';
+import { useStore } from '../../store';
+import { getLogout } from '../../api/apiLogin';
+
 const LoginButton = (props) => {
+  const { state, dispatch } = useStore();
+  const handleOnclick = () => {
+    if (props.title === 'Đăng xuất') {
+      getLogout();
+    }
+    // if(props.title ==="Đăng nhập") {
+    // }
+  };
   return (
-    <div className="navbar-logout" id="user">
-      <a className="link" href={props.link}>
-        <div className="link-image">
-          <img className="icon-logout" src="./assets/img/login.png" />
+    <div className="container-lbutton">
+      {props.title === 'Đăng xuất' ? (
+        <div className="logout-button-info">
+          <img
+            src={`https://cdn.discordapp.com/avatars/${state.author?.id}/${state.author?.avatar}`}
+            className="img-people-avatar"
+            alt="avatar"
+          />
+          <div className="user-name">{state.author?.username}</div>
         </div>
-        <span className="text-logout">{props.title}</span>
-      </a>
+      ) : null}
+      <div className="navbar-logout" id="user" onClick={handleOnclick}>
+        <a className="link" href={props.link}>
+          <div className="link-image">
+            <img className="icon-logout" src="./assets/img/login.png" />
+          </div>
+          <span className="text-logout">{props.title}</span>
+        </a>
+      </div>
     </div>
   );
 };

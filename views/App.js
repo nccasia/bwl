@@ -1,4 +1,4 @@
-/* eslint-disable prettier/prettier */
+import React from 'react';
 import Bwl from './features/bwl';
 import './app.scss';
 import { AppProvider } from './store';
@@ -10,8 +10,8 @@ function App() {
     <Router>
       <AppProvider>
         <Routes>
-          <Route path="/" element={<Bwl />} />
-          <Route path="/login" element={<Login />} />
+          <Route exact path="/" element={<Bwl />} />
+          <Route exact path="/login" element={<Login />} />
         </Routes>
       </AppProvider>
     </Router>

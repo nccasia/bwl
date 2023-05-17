@@ -10,6 +10,7 @@ import {
   UnauthorizedException,
   Sse,
   Delete,
+  Param,
 } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { AppService } from './app.service';
@@ -21,6 +22,9 @@ const discordUserUrl = 'https://discord.com/api/users/@me';
 
 @Controller()
 export class AppController {
+  getHello(): any {
+    throw new Error('Method not implemented.');
+  }
   constructor(
     private readonly appService: AppService,
     private httpService: HttpService,
@@ -116,13 +120,17 @@ export class AppController {
       }
     } else {
       const posts = await this.appService.getAll(1);
-      console.log(posts);
+      //console.log(posts);
       return res.render('index', { posts });
     }
   }
-
+  
   @Get('/login')
   @Render('index')
+  login() {}
+
+  @Get('/api/login')
+  //@Render('index')
   root() {
     const url = `https://discord.com/api/oauth2/authorize?client_id=${
       process.env.CLIENT_ID
@@ -132,18 +140,18 @@ export class AppController {
     return { url };
   }
 
-  @Get('logout')
+  @Get('/api/logout')
   logout(@Res() res: Response) {
     res.clearCookie('token');
     res.redirect('/');
   }
 
-  @Get('/getAllPaging')
+  @Get('/api/getAllPaging')
   getAllPaging(@Query('page') page = 1) {
     return this.appService.getAll(page <= 0 ? 1 : page);
   }
 
-  @Post('/comment')
+  @Post('/api/comment')
   async postComment(@Req() req: Request, @Res() res: Response) {
     if (!req.cookies['token']) {
       throw new UnauthorizedException();
@@ -185,21 +193,15 @@ export class AppController {
         },
       });
   }
-  @Delete('/comments')
-  async deleteComment(@Req() req: Request, @Res() res: Response) {
-    const { _id } = req.query;
-    const deletedComment = await this.appService.deleteComment(_id as string);
-    return res.json({ success: true, message: "Comment deleted", deletedComment });
-  }
-  
-  @Get('/comments')
+
+  @Get('/api/comments')
   async getComments(@Req() req: Request, @Res() res: Response) {
     const { messageId } = req.query;
     const comments = await this.appService.getComments(messageId as string);
     return res.json({ comments });
   }
 
-  @Post('/like')
+  @Post('/api/like')
   async postLike(@Req() req: Request, @Res() res: Response) {
     if (!req.cookies['token']) {
       throw new UnauthorizedException();
@@ -252,14 +254,20 @@ export class AppController {
       });
   }
 
-  @Get('/likes')
+  @Get('/api/likes')
   async getLikes(@Req() req: Request, @Res() res: Response) {
     const { messageId } = req.query;
     const likes = await this.appService.getLikes(messageId as string);
     return res.json({ likes });
   }
+  
+  // @Delete('/api/comments?messageId')
+  // async deleteComment(@Param('index') index: string, @Res() res: Response) {
+  //   const deletedComment = await this.appService.deleteComment(index);
+  //   return res.json({ comment: deletedComment });
+  // }
 
-  @Get('/notifications')
+  @Get('/api/notifications')
   async getNotifications(@Req() req: Request, @Res() res: Response) {
     const { messageId } = req.query;
     const notifications = await this.appService.getNotifications(
@@ -268,3 +276,5 @@ export class AppController {
     return res.json({ notifications });
   }
 }
+
+

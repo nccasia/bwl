@@ -1,10 +1,13 @@
 /* eslint-disable prettier/prettier */
-import React from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import useStore from '../../hook/useStore';
 import './style.scss';
+import React from 'react';
+import {formatDay} from '../../util/formatDay';
+import { useStore } from '../../store';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 const CommentItem = (props) => {
+  const { state, dispatch } = useStore();
+  const {onDelete, index} = props
+  console.log("index", index)
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -14,41 +17,40 @@ const CommentItem = (props) => {
   const handleClose = () => {
     setOpen(false);
   };
-  const { formatDay } = useStore();
-  const { id, name, avatar, time, content, onDelete, } = props;
-  // console.log("cmtid",props)
-  const handleDelete = (_id) => {
-    onDelete(_id);
-  };
-  // console.log("hhh",props._id)
+
+  // const handleDeleteComment = (index) => {
+  //   // Gọi hàm onDelete và truyền các thông tin cần thiết lên payload
+  //   onDelete(index);
+  //   console.log("id", index)
+  // };
   return (
     <div className="comment-item">
       <div className="author-avatar">
         <img
-          src={`https://cdn.discordapp.com/avatars/${id}/${avatar}`}
+          src={`https://cdn.discordapp.com/avatars/${props?.author[0].id}/${props?.author[0].avatar}`}
           className="img-people"
           alt="avatar"
         />
           <div className="author-boxcontent">
             <div className="author-name">
               <div className="author-name-item">
-                <p className="name">{name}</p>
+              <p className="name">{props?.author[0].username}</p>
               </div>
-              <p className="comment">{content}</p>
+              <p className="comment" >{props?.content}</p>
             </div>
-            <p className="comment-time">{formatDay(time)}</p>
+            <div className="comment-time">{formatDay(props?.createdTimestamp)}</div>
          </div>
         <div className="delete-comment-btn">
           <div className="delete-icon"  onClick={handleClickOpen}>
             <MoreHorizIcon />
           </div>
-          {open ?(
+          {/* {open ?(
             <div className="dialog-form">
-            <p onClick={()=>handleDelete(_id)}>Xóa</p> 
+            <p onClick={()=>handleDeleteComment(index)}>Xóa</p> 
             <p>Chỉnh Sữa</p> 
            </div>
           ) 
-           : (<></>)}
+           : (<></>)} */}
        
         </div>
       </div>

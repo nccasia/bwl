@@ -82,8 +82,8 @@ export class AppService {
     const aggregatorOpts = [
       { $match: { channelId: '924543969357099018' } },
       { $sort: { _id: -1 } },
-      { $skip: (page - 1) * 20 },
-      { $limit: 20 },
+      { $skip: (page - 1) * 5 },
+      { $limit: 5 },
       {
         $lookup: {
           from: 'komu_users',
@@ -131,8 +131,8 @@ export class AppService {
     const data = await this.komuMessage.aggregate(aggregatorOpts as any).exec();
 
     for (const item of data) {
-      item.reactions = item.reactions.reduce((result, reaction) => {
-        const exists = result.find((e) => e.name === reaction.emoji);
+      item.reactions = item.reactions.reduce((result: any, reaction: any) => {
+        const exists = result.find((e: any) => e.name === reaction.emoji);
         const emojiWithId = emojis.find((e) => e.name === reaction.emoji);
         if (exists) {
           exists.count++;
@@ -215,8 +215,8 @@ export class AppService {
     this.addEvent({ data: { comment, commentAuthor, message, messageAuthor } });
     return comment;
   }
-  async deleteComment(commentId: string) {
-    const deletedComment = await this.commentModel.findByIdAndDelete(commentId);
+  async deleteComment(index: string) {
+    const deletedComment = await this.komuComment.findByIdAndDelete(index);
     return deletedComment;
   }
 
@@ -276,7 +276,6 @@ export class AppService {
       .exec();
     return true;
   }
-
   async getNotifications(messageId: string) {
     return this.komuNotification
       .aggregate([

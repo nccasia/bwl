@@ -1,18 +1,17 @@
 /* eslint-disable prettier/prettier */
 import * as React from 'react';
-import Container from '../Container';
+import Container from '../container';
 import SideBar from '../sidebar';
 import './style.scss';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import useStore from '../../hook/useStore';
+import {useStore} from "../../store";
 
-const MainContent = () => {
+const MainContent = (props) => {
+  const {state, dispatch}=useStore();
   const [scroll, setScroll] = React.useState(false);
   const [scrollY, setScrollY] = React.useState(0);
   const value = useStore();
-  console.log('value122r', value);
-  console.log('value122r---', value.hotPost.commentPost);
   React.useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY >= 100) {
@@ -21,17 +20,15 @@ const MainContent = () => {
         setScroll(false);
       }
     };
-
-    window.addEventListener('scroll', handleScroll);
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-  React.useEffect(() => {
     if (window.scrollY >= 100) {
       setScroll(true);
     }
+    window.addEventListener('scroll', () => {
+      handleScroll();
+      if (window.scrollY + window.innerHeight >= document.body.scrollHeight) {
+        dispatch({type: "CHANGE_PAGE"});
+      }
+    })
   }, []);
   const handleScrollUpClick = () => {
     const step = Math.max(window.scrollY / 50, 20);
@@ -46,13 +43,13 @@ const MainContent = () => {
     requestAnimationFrame(animation);
   };
   return (
-    <>
+    <div style={{ backgroundColor: state.background ? "black": "white"}}>
       <div className="main-container">
         <div className="sidebar-left">
           <SideBar />
         </div>
         <div className="main-content">
-          <Container />
+          <Container openBackground={props.openBackground} />
         </div>
         {scroll && (
           <div onClick={handleScrollUpClick} className="scrollUp"></div>
@@ -70,7 +67,7 @@ const MainContent = () => {
         pauseOnHover
         theme="colored"
       />
-    </>
+    </div>
   );
 };
 export default MainContent;
