@@ -41,9 +41,9 @@ export class AppService {
     return this.komuLike.find({ messageId: messageId });
   }
 
-  // async findLikeAuthorId(messageId: string): Promise<any> {
-  //   return this.komuMessage.find({ messageId: messageId });
-  // }
+  async findMessageAuthorId(authorId: string): Promise<any> {
+    return this.komuMessage.find({ authorId: authorId });
+  }
 
   async findCommentFromDiscordId(messageId: string): Promise<any> {
     return this.komuMessage.find({
@@ -65,7 +65,7 @@ export class AppService {
 
   private events = new Subject<MessageEvent>();
 
-  addEvent(event) {
+  addEvent(event: any) {
     this.events.next(event);
   }
 
@@ -77,12 +77,12 @@ export class AppService {
     return 'Hello World!';
   }
 
-  async getAll(page: number) {
+  async getAll(page: number, size: number) {
     const aggregatorOpts = [
       { $match: { channelId: '924543969357099018' } },
       { $sort: { _id: -1 } },
-      { $skip: (page - 1) * 5 },
-      { $limit: 5 },
+      { $skip: (page - 1) * size },
+      { $limit: size },
       {
         $lookup: {
           from: 'komu_users',
@@ -102,30 +102,40 @@ export class AppService {
           as: 'reactions',
         },
       },
-      {
-        $lookup: {
-          from: 'komu_bwlcomments',
-          localField: 'messageId',
-          foreignField: 'messageId',
-          as: 'comments',
-        },
-      },
+      // {
+      //   $lookup: {
+      //     from: 'komu_bwlcomments',
+      //     localField: 'messageId',
+      //     foreignField: 'messageId',
+      //     as: 'comments',
+      //   },
+      // },
+      // {
+      //   $addFields: {
+      //     commentsCount: { $size: '$comments' }
+      //   }
+      // },
+      // {
+      //   $project: {
+      //     comments: 0
+      //   }
+      // },
       {
         $lookup: {
           from: 'komu_bwllikes',
-          localField: 'authorId',
-          foreignField: 'authorId',
+          localField: 'messageId',
+          foreignField: 'messageId',
           as: 'likes',
         },
       },
-      {
-        $lookup: {
-          from: 'komu_bwlnotifications',
-          localField: 'authorId',
-          foreignField: 'authorId',
-          as: 'notifications',
-        },
-      },
+      // {
+      //   $lookup: {
+      //     from: 'komu_bwlnotifications',
+      //     localField: 'authorId',
+      //     foreignField: 'authorId',
+      //     as: 'notifications',
+      //   },
+      // },
     ];
     const data = await this.komuMessage.aggregate(aggregatorOpts as any).exec();
 
@@ -233,6 +243,26 @@ export class AppService {
       .exec();
   }
 
+  async getReactions(messageId: string) {
+    return this.komuReaction
+      .aggregate([
+        {
+          $match: {
+            messageId,
+          },
+        },
+        {
+          $lookup: {
+            from: 'komu_users',
+            localField: 'authorId',
+            foreignField: 'id',
+            as: 'author',
+          },
+        },
+      ])
+      .exec();
+  }
+
   async like({ messageId, authorId }) {
     const like = new this.komuLike({
       messageId,
@@ -269,12 +299,18 @@ export class AppService {
       .exec();
     return true;
   }
-  async getNotifications(messageId: string) {
+  async getNotifications(messageId: string, authorId: string) {
     return this.komuNotification
       .aggregate([
         {
           $match: {
             messageId,
+            authorId: { $ne: authorId },
+          },
+        },
+        {
+          $sort: {
+            _id: -1,
           },
         },
         {

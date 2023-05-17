@@ -27,4 +27,4 @@ export class Notification {
   createdTimestamp: number;
 }
 
-export const NotificationSchema = SchemaFactory.createForClass(Notification);
+export const NotificationSchema: any = SchemaFactory.createForClass(Notification);

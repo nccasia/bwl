@@ -103,6 +103,7 @@ export const emojis = [
   { id: '947200120846450779', name: 'quay_len' },
   { id: '947704397251629088', name: 'dak' },
   { id: '947781368962760735', name: 'khoc' },
+  { id: '1073509887063109643', name: 'aibietgidau' },
   { id: '948804919673110588', name: 'sparta' },
   { id: '948888274599047178', name: 'light' },
   { id: '948894246256144494', name: 'vao_gulag_nhe' },

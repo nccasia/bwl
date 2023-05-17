@@ -25,9 +25,46 @@
         border: none;
         padding: 0;
         background-color: none;
+        display: flex;
+        gap:2;
         .emoji {
           width: 18px;
           height: 18px;
+        }
+      }
+    }
+    .dialog-like {
+      position: relative;
+      display: flex;
+      .dialog-like-list{
+        background-color: #353535;
+        color: #e2e2eda3;
+        padding: 8px;
+        display: flex;
+        width: 200px;
+        height: auto;
+        border-radius: 5px;
+        position: absolute;
+        top: -30px;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 100;
+        gap: 5px;
+        .icon-like{
+          width:30px;
+          height:30px;
+        }
+        .reactions-emoji{
+          width:30px;
+          height:30px;
+          font-size: 20px;
+        }
+        p{
+          word-wrap: break-word;
+          font-size: 10px;
+          b{
+            font-size: 12px;
+          }
         }
       }
     }

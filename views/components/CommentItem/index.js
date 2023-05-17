@@ -12,11 +12,11 @@ const CommentItem = (props) => {
           alt="avatar"
         />
         <div className="author-name">
-          <p className="name">{props?.author[0].username}</p>
-          <p className="comment">{props?.content}</p>
+          <p className="name">{props?.author[0]?.username}</p>
+          <p className="comment">{props?.content ? props?.content: props?.comment?.content}</p>
         </div>
       </div>
-      <div className="comment-time">{formatDay(props?.createdTimestamp)}</div>
+      <div className="comment-time">{formatDay(props?.createdTimestamp ? props?.createdTimestamp : props?.comment?.createdTimestamp)}</div>
     </div>
   );
 };
