@@ -6,7 +6,7 @@ export const getLikes = async (index) => {
             url: `/api/likes?messageId=${index}`,
             method: "GET",
           });
-        return res.data?.notifications;
+        return res.data;
     } catch {
         return [];
     }

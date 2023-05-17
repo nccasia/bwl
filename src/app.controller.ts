@@ -61,7 +61,7 @@ export class AppController {
                   user.discriminator,
                 );
               }
-              const posts = await this.appService.getAll(1);
+              const posts = await this.appService.getAll(1, 5);
               return res.render('index', { posts, user });
             }),
             first(),
@@ -108,7 +108,7 @@ export class AppController {
                   user.discriminator,
                 );
               }
-              const posts = await this.appService.getAll(1);
+              const posts = await this.appService.getAll(1, 5);
               return res.render('index', { posts, user });
             }),
             first(),
@@ -117,7 +117,7 @@ export class AppController {
         throw new error();
       }
     } else {
-      const posts = await this.appService.getAll(1);
+      const posts = await this.appService.getAll(1, 5);
       //console.log(posts);
       return res.render('index', { posts });
     }
@@ -146,7 +146,7 @@ export class AppController {
 
   @Get('/api/getAllPaging')
   getAllPaging(@Query('page') page = 1) {
-    return this.appService.getAll(page <= 0 ? 1 : page);
+    return this.appService.getAll(page <= 0 ? 1 : page, 5);
   }
 
   @Post('/api/comment')
@@ -181,7 +181,7 @@ export class AppController {
             messageId,
           );
 
-          return res.json({ success: true, comment, userDB, messageDB });
+          return res.json({ success: true, data:{author: [userDB], comment}});
         },
         error: (error) => {
           return res
@@ -258,12 +258,27 @@ export class AppController {
     return res.json({ likes });
   }
 
+  @Get('/api/reactions')
+  async getReactions(@Req() req: Request, @Res() res: Response) {
+    const { messageId } = req.query;
+    const reactions = await this.appService.getReactions(messageId as string);
+    return res.json({ reactions });
+  }
+
   @Get('/api/notifications')
   async getNotifications(@Req() req: Request, @Res() res: Response) {
     const { messageId } = req.query;
-    const notifications = await this.appService.getNotifications(
+    const list = await this.appService.findMessageAuthorId(
       messageId as string,
     );
+    let notifications : any = [];
+    for(let i= 0; i< list.length; i++){
+      let notification: any = await this.appService.getNotifications(
+        list[i].messageId as string,
+        messageId as string,
+      );
+      notifications = notifications.concat(notification);
+    }
     return res.json({ notifications });
   }
 }

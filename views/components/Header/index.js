@@ -2,7 +2,7 @@
 import React from 'react';
 import './style.scss';
 import LoginButton from '../LoginButton';
-import Notifycation from '../Notifycation';
+import Notifycation from '../Notification';
 import {useStore} from "../../store";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell, faMoon } from '@fortawesome/free-solid-svg-icons';
@@ -17,19 +17,12 @@ function HeaderPage(props) {
     setOpen(!open);
   };
   React.useEffect(() => {
-    if(state.posts  && state.author) {
-      state.posts.forEach(main => {
-        if(main?.author?.id === state.author.id){
-          getNotification(main?.messageId).then(data => {
-            dispatch({type:"CHANGE_NOTIFICATION", payload: data})
-          })
-        }
+    if(state.author?.id) {
+      getNotification(state.author.id).then(data => {
+        dispatch({type:"CHANGE_NOTIFICATION", payload: data})
       })
     }
-  }, [state.posts, state.author]);
-  // console.log("tet: ",state.author);
-  // console.log(state.notification);
-  // console.log("test: ", state.posts);
+  }, [state.author?.id]);
   return (
     <nav className="nav-header" style={{ backgroundColor: state.background ? "#242526": "white"}}>
       <div className="logoNcc">
