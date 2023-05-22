@@ -34,25 +34,25 @@ const CommentItem = (props) => {
           <div className="author-boxcontent">
             <div className="author-name">
               <div className="author-name-item">
-              <p className="name">{props?.author[0].username}</p>
+              <p className="name">{props?.author[0]?.username}</p>
               </div>
-              <p className="comment" >{props?.content}</p>
+              <p className="comment">{props?.content ? props?.content: props?.comment?.content}</p>
             </div>
-            <div className="comment-time">{formatDay(props?.createdTimestamp)}</div>
+            <div className="comment-time">{formatDay(props?.createdTimestamp ? props?.createdTimestamp : props?.comment?.createdTimestamp)}</div>
          </div>
-        <div className="delete-comment-btn">
+        {/* <div className="delete-comment-btn">
           <div className="delete-icon"  onClick={handleClickOpen}>
             <MoreHorizIcon />
           </div>
-          {/* {open ?(
+          {open ?(
             <div className="dialog-form">
             <p onClick={()=>handleDeleteComment(index)}>Xóa</p> 
             <p>Chỉnh Sữa</p> 
            </div>
           ) 
-           : (<></>)} */}
+           : (<></>)}
        
-        </div>
+        </div> */}
       </div>
     </div>
   );

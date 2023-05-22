@@ -1,6 +1,6 @@
 .sidebar-left-content{
-  width: 100%;
-  max-width: 370px;
+  // width: 100%;
+  max-width: 450px;
   height: calc(100vh - 100px ) !important;
   position: fixed;
   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
@@ -37,8 +37,13 @@
   }
 }
 
-@media (max-width: 1600px) {
+@media (max-width: 1430px) {
   .sidebar-left-content{
-    max-width: 360px;
+    max-width: 390px;
   }
 }
+// @media (max-width: 1360px) {
+//   .sidebar-left-content{
+//     max-width: 410px;
+//   }
+// }

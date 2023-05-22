@@ -1,11 +1,11 @@
 /* eslint-disable prettier/prettier */
 import * as React from 'react';
-import Container from '../container';
 import SideBar from '../sidebar';
 import './style.scss';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {useStore} from "../../store";
+import Container from '../Container';
 
 const MainContent = (props) => {
   const {state, dispatch}=useStore();

@@ -1,17 +1,16 @@
 .main-container {
   display: flex;
   width: 100%;
-  max-width: 1200px;
+  max-width: 1400px;
   margin: auto;
   margin-top: 10px;
-  padding-top: 60px;
+  padding: 60px 30px 0 30px;
+  gap: 20px;
   .sidebar-left {
     width: 35%;
-    padding: 10px 0px 0px 30px;
   }
   .main-content {
     width: 65%;
-    padding: 10px 30px 0px 0px;
   }
   .scrollUp {
     width: 40px;
@@ -32,6 +31,9 @@
   .main-container {
     .sidebar-left {
       padding: 10px 5px 0px 25px;
+      // .sidebar-left-content{
+      //   max-width: 374px;
+      // }
     }
     .main-content {
       padding: 10px 25px 0px 5px;
