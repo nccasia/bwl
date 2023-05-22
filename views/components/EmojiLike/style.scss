@@ -1,0 +1,45 @@
+.container-item-reactTotal {
+  padding: 2%;
+  display: flex;
+  gap: 2px;
+  .list-inline-item {
+    padding: 1px;
+    cursor: pointer;
+    margin-right: 5px;
+    .btn-reaction {
+      border: none;
+      padding: 0;
+      background-color: none;
+      display: flex;
+      gap:2px;
+      .emoji {
+        width: 18px;
+        height: 18px;
+      }
+    }
+  }
+}
+.dialog-like-list{
+  padding: 8px;
+  display: flex;
+  width: 200px;
+  height: auto;
+  border-radius: 5px;
+  gap: 5px;
+  .icon-like{
+    width:30px;
+    height:30px;
+  }
+  .reactions-emoji{
+    width:30px;
+    height:30px;
+    font-size: 20px;
+  }
+  p{
+    word-wrap: break-word;
+    font-size: 10px;
+    b{
+      font-size: 12px;
+    }
+  }
+}

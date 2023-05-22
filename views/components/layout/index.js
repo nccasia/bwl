@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import * as React from 'react';
-import Container from '../container';
-import SideBar from '../sidebar';
+import Container from '../Container';
+import SideBar from '../Sidebar';
 import './style.scss';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -48,7 +48,7 @@ const MainContent = (props) => {
           <SideBar />
         </div>
         <div className="main-content">
-          <Container openBackground={props.openBackground} />
+          <Container/>
         </div>
         {scroll && (
           <div onClick={handleScrollUpClick} className="scrollUp"></div>
