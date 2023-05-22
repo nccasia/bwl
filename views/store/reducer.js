@@ -7,6 +7,7 @@ const initState={
   background: false,
   notification:[],
   page: 1,
+  runPosts: [],
 }
 
 function reducer(state, action){ 
@@ -22,8 +23,23 @@ function reducer(state, action){
       })
       return {
         ...state,
-        posts: [...state.posts,...commentList],
-        hotPosts: maxPosts([...state.posts,...action.payload]),
+        posts: state.runPosts?.length > 0 ?  state.runPosts : [...state.posts,...commentList],
+        hotPosts: state.runPosts?.length > 0 ?  maxPosts(state.runPosts) : maxPosts([...state.posts,...action.payload]),
+        runPosts: [],
+      };
+    case 'SET_POST_ONE':
+      const commentListOne = action.payload?.map(main => {
+        return {
+          ...main, 
+          ...{
+            comments: [], 
+            onLike: false,
+          }}
+      })
+      return {
+        ...state,
+        posts: commentListOne,
+        runPosts: state.posts,
       };
     case 'SET_AUTHOR':
       const authorList = state.posts?.map(main => {

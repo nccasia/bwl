@@ -41,6 +41,9 @@
             }
         }
     }
+    .list-notifi:hover{
+        background-color:#80808014;
+    }
 }
 
 .container::-webkit-scrollbar-track
@@ -50,10 +53,10 @@
 }
 .container::-webkit-scrollbar
 {
-	width: 6px;
+	width: 3px;
 	background-color: #F5F5F5;
 }
 .container::-webkit-scrollbar-thumb
 {
-	background-color: #ccc;
+	background-color: #5a5a64;
 }
