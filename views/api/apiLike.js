@@ -13,17 +13,17 @@ export const getLikes = async (index) => {
 }
 
 export const postLike = async (messageId, authorId) => {
-    try {
-        const res = await axios({
-            url: "/api/like",
-            data: {
-                messageId: messageId,
-                authorId: authorId,
-            },
-            method: "POST",
-        });
-        return res.data;
-    } catch {
-        return {};
-    }
-}
+  try {
+    const res = await axios({
+      url: '/api/like',
+      data: {
+        messageId: messageId,
+        authorId: authorId,
+      },
+      method: 'POST',
+    });
+    return res.data;
+  } catch {
+    return {};
+  }
+};

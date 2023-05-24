@@ -1,17 +1,17 @@
-import {maxPosts} from '../util/maxPosts';
+import { maxPosts } from '../util/maxPosts';
 
-const initState={
-  posts:[],
+const initState = {
+  posts: [],
   hotPosts: [],
-  author:[],
+  author: [],
   background: false,
-  notification:[],
+  notification: [],
   page: 1,
   runPosts: [],
 }
 
-function reducer(state, action){ 
-  switch(action.type){
+function reducer(state, action) {
+  switch (action.type) {
     case 'SET_POSTS':
       const commentList = action.payload?.map(main => {
         return {
@@ -85,7 +85,7 @@ function reducer(state, action){
         } else {
           return main;
         }
-      })
+      });
       return {
         ...state,
         posts: listLike,
@@ -96,8 +96,8 @@ function reducer(state, action){
         page: state.page + 1,
       };
     case 'SET_COMMENTS':
-      const listComment = state.posts.map(main =>{
-        if(main.messageId === action.payload?.messageId) {
+      const listComment = state.posts.map((main) => {
+        if (main.messageId === action.payload?.messageId) {
           return {
             ...main, 
             comments: action.payload.comments,
@@ -105,7 +105,7 @@ function reducer(state, action){
         } else {
           return main;
         }
-      })
+      });
       return {
         ...state,
         posts: listComment,
@@ -125,9 +125,22 @@ function reducer(state, action){
         ...state,
         posts: addComment,
       };
+    case 'DELETE_COMMENT':
+      const { messageId, index } = action.payload;
+      const newPosts = state.posts.map((post) => {
+        if (post.messageId === messageId) {
+          const newComments = post.comments.filter(
+            (comment) => comment.index !== index,
+          );
+          return { ...post, comments: newComments };
+        } else {
+          return post;
+        }
+      });
+      return { ...state, posts: newPosts };
     default:
-      throw new Error("Error");
+      throw new Error('Error');
   }
 }
-export {initState}
+export { initState };
 export default reducer;

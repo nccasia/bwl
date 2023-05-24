@@ -57,13 +57,13 @@ function HeaderPage(props) {
           </div>
           <div 
             className="icon"
-            style={{ backgroundColor: openNotification ? "#1876f245": "#80808030"}}
+            style={{ backgroundColor: state.background ? "#1876f245": "#80808030"}}
             onClick={() => {
               setOpenNotification(!openNotification);
               setOpenLabel(1);
             }}
           >
-            <FontAwesomeIcon icon={faBell} style={{ color: openNotification ? "blue": "black"}}/>
+            <FontAwesomeIcon icon={faBell} style={{ color: state.background ? "blue": "black"}}/>
             {openLabel === 0 && <p className="icon-notifi">{state.notification?.length}</p>}
             {openNotification ? (
               <div className="dialog-button">

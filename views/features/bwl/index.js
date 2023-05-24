@@ -16,14 +16,14 @@ const Bwl = () => {
       if(document.cookie && document.cookie.split("=")[0] === "token"){
         await getUser(document.cookie.split("=")[1]).then(data => dispatch({type:"SET_AUTHOR", payload:data}));
       }
-    }
+    };
     foo();
   }, [document.cookie, debounce]);
 
   return (
     <React.Fragment>
-      <Header/>
-      <MainContent/>
+      <Header />
+      <MainContent />
     </React.Fragment>
   );
 };

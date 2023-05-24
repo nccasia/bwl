@@ -1,16 +1,17 @@
 /* eslint-disable prettier/prettier */
 import * as React from 'react';
 import Container from '../Container';
-import SideBar from '../Sidebar';
 import './style.scss';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {useStore} from "../../store";
+import SideBar from '../sidebar';
 
 const MainContent = (props) => {
   const {state, dispatch}=useStore();
   const [scroll, setScroll] = React.useState(false);
   const [scrollY, setScrollY] = React.useState(0);
+  const value = useStore();
   React.useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY >= 100) {
@@ -48,7 +49,7 @@ const MainContent = (props) => {
           <SideBar />
         </div>
         <div className="main-content">
-          <Container/>
+          <Container />
         </div>
         {scroll && (
           <div onClick={handleScrollUpClick} className="scrollUp"></div>

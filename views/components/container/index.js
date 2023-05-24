@@ -6,6 +6,7 @@ import React from 'react';
 
 const Container = (props) => {
   const {state, dispatch}=useStore();
+  console.log(state, "state")
   return (
     <div className="container-list">
       {state.posts?.map((post, index) => (

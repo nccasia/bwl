@@ -9,6 +9,8 @@ import {
   Post,
   UnauthorizedException,
   Sse,
+  Delete,
+  Param,
 } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { AppService } from './app.service';
@@ -180,11 +182,12 @@ export class AppController {
       )
       .subscribe({
         next: async (user) => {
-          const { content, messageId, authorId } = req.body;
+          const { content, messageId, authorId,commentId } = req.body;
           const comment = await this.appService.comment({
             content,
             messageId,
             authorId,
+            commentId,
           });
           const userDB = await this.appService.findCommentMessageFromDiscordId(
             user.id,
@@ -269,6 +272,12 @@ export class AppController {
     const likes = await this.appService.getLikes(messageId as string);
     return res.json({ likes });
   }
+  
+  // @Delete('/api/comments?messageId')
+  // async deleteComment(@Param('index') index: string, @Res() res: Response) {
+  //   const deletedComment = await this.appService.deleteComment(index);
+  //   return res.json({ comment: deletedComment });
+  // }
 
   @Get('/api/reactions')
   async getReactions(@Req() req: Request, @Res() res: Response) {

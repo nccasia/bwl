@@ -16,6 +16,7 @@ import { KomuUsers, KomuUsersDocument } from './Komu_users/komu_users.schema';
 
 @Injectable()
 export class AppService {
+  commentModel: any;
   constructor(
     @InjectModel(Reaction.name)
     private readonly komuReaction: Model<ReactionDocument>,
@@ -140,7 +141,7 @@ export class AppService {
     const data = await this.komuMessage.aggregate(aggregatorOpts as any).exec();
 
     for (const item of data) {
-      item.reactions = item.reactions.reduce((result:any, reaction: any) => {
+      item.reactions = item.reactions.reduce((result: any, reaction: any) => {
         const exists = result.find((e: any) => e.name === reaction.emoji);
         const emojiWithId = emojis.find((e) => e.name === reaction.emoji);
         if (exists) {
@@ -196,12 +197,13 @@ export class AppService {
       .exec();
   }
 
-  async comment({ messageId, content, authorId }) {
+  async comment({ messageId, content, authorId, commentId }) {
     const comment = new this.komuComment({
       messageId,
       authorId,
       content,
       createdTimestamp: Date.now(),
+      commentId,
     });
     const message = await this.komuMessage.find({ messageId }).exec();
 
@@ -215,12 +217,17 @@ export class AppService {
       authorId,
       content,
       createdTimestamp: Date.now(),
+      commentId,
     });
 
     await comment.save();
     await notification.save();
     this.addEvent({ data: { comment, commentAuthor, message, messageAuthor } });
     return comment;
+  }
+  async deleteComment(index: string) {
+    const deletedComment = await this.komuComment.findByIdAndDelete(index);
+    return deletedComment;
   }
 
   async getLikes(messageId: string) {
