@@ -2,7 +2,6 @@ import React from 'react';
 import MainContent from '../../components/Layout';
 import Header from '../../components/Header';
 import {getAll} from '../../api/apiPosts';
-import {getNotification} from '../../api/apiNotification';
 import {getUser} from '../../api/apiUser';
 import {useStore} from "../../store";
 import {useDataDebouncer} from '../../util/useDebounce';

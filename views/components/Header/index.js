@@ -2,28 +2,39 @@
 import React from 'react';
 import './style.scss';
 import LoginButton from '../LoginButton';
-import Notifycation from '../Notification';
+import Notification from '../Notification';
 import {useStore} from "../../store";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell, faMoon } from '@fortawesome/free-solid-svg-icons';
-import {getNotification} from '../../api/apiNotification';
+import {getNotification, getNotificationSize} from '../../api/apiNotification';
 import { Link } from "react-router-dom";
 
 function HeaderPage(props) {
   const {state, dispatch}=useStore();
   const [open, setOpen] = React.useState(false);
-  const [openLabel, setOpenLabel] = React.useState(0);
+  const [openLabel, setOpenLabel] = React.useState(true);
   const [openNotification, setOpenNotification] = React.useState(false);
   const handleClick = () => {
     setOpen(!open);
   };
+  const [size, setSize] = React.useState(0);
   React.useEffect(() => {
     if(state.author?.id) {
-      getNotification(state.author.id).then(data => {
-        dispatch({type:"CHANGE_NOTIFICATION", payload: data})
+      getNotificationSize(state.author.id).then(data => {
+        setSize(data?.size);
       })
     }
   }, [state.author?.id]);
+
+  const handleNotification = async () =>{
+    setOpenNotification(true);
+    if(state.author?.id) {
+      await getNotification({messageId: state.author.id, onLabel: true}).then(data => {
+        dispatch({type:"CHANGE_NOTIFICATION", payload: data?.notifications})
+      })
+    }
+  }
+
   return (
     <nav className="nav-header" style={{ backgroundColor: state.background ? "#242526": "white"}}>
       <Link to="/">
@@ -55,21 +66,23 @@ function HeaderPage(props) {
           >
               <FontAwesomeIcon icon={faMoon} style={{ color: state.background ? "white": "black"}}/>
           </div>
-          <div 
-            className="icon"
-            style={{ backgroundColor: openNotification ? "#1876f245": "#80808030"}}
-            onClick={() => {
-              setOpenNotification(!openNotification);
-              setOpenLabel(1);
-            }}
-          >
-            <FontAwesomeIcon icon={faBell} style={{ color: openNotification ? "blue": "black"}}/>
-            {openLabel === 0 && <p className="icon-notifi">{state.notification?.length}</p>}
+          <div>
+            <div 
+              className="icon"
+              style={{ backgroundColor: openNotification ? "#1876f245": "#80808030"}}
+              onClick={handleNotification}
+            >
+              <FontAwesomeIcon 
+                icon={faBell} 
+                style={{ color: openNotification ? "blue": "black"}}
+              />
+              {size !== 0 && openLabel && <p className="icon-notifi">{size}</p>}
+            </div>
             {openNotification ? (
-              <div className="dialog-button">
-                <Notifycation notifications={state.notification}/>
-              </div>
-            ): null}
+                <div className="dialog-button">
+                  <Notification setOpen={setOpenNotification} setLabel={setOpenLabel}/>
+                </div>
+              ): null}
           </div>
           <div className="person-icon logout" onClick={() => handleClick()}>
             <img

@@ -9,6 +9,8 @@ import {
   Post,
   UnauthorizedException,
   Sse,
+  Delete,
+  Put,
 } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { AppService } from './app.service';
@@ -181,7 +183,7 @@ export class AppController {
       .subscribe({
         next: async (user) => {
           const { content, messageId, authorId } = req.body;
-          const comment = await this.appService.comment({
+          const comment: any = await this.appService.comment({
             content,
             messageId,
             authorId,
@@ -192,8 +194,7 @@ export class AppController {
           const messageDB = await this.appService.findCommentFromDiscordId(
             messageId,
           );
-
-          return res.json({ success: true, data:{author: [userDB], comment}});
+          return res.json({ ...comment.toObject(), author: [userDB] });
         },
         error: (error) => {
           return res
@@ -208,6 +209,20 @@ export class AppController {
     const { messageId } = req.query;
     const comments = await this.appService.getComments(messageId as string);
     return res.json({ comments });
+  }
+
+  @Delete('/api/comments')
+  async deleteComment(@Req() req: Request, @Res() res: Response) {
+    const { id, messageId } = req.query;
+    const deleteComment = await this.appService.deleteComment(id as string, messageId as string);
+    return res.json(deleteComment ? { message: true } : { message: false });
+  }
+
+  @Post('/api/comment/edit')
+  async postEditComment(@Req() req: Request, @Res() res: Response) {
+    const { id, content } = req.body;
+    const editComment = await this.appService.editComment(id as string, content as string);
+    return res.json(editComment);
   }
 
   @Post('/api/like')
@@ -245,7 +260,6 @@ export class AppController {
               messageId,
               authorId,
             });
-            // return res.json({ success: true, like });
             return res.json({ success: true, like, usernameDB, messageLikeDB });
           } else if (userDB) {
             const dislike = await this.appService.unlike({
@@ -279,19 +293,54 @@ export class AppController {
 
   @Get('/api/notifications')
   async getNotifications(@Req() req: Request, @Res() res: Response) {
-    const { messageId } = req.query;
+    const { messageId, onLabel } = req.query;
     const list = await this.appService.findMessageAuthorId(
       messageId as string,
     );
+    const onLabel1 = onLabel==="true" ? true: false;
     let notifications : any = [];
     for(let i= 0; i< list.length; i++){
       let notification: any = await this.appService.getNotifications(
         list[i].messageId as string,
         messageId as string,
+        onLabel1 as boolean,
       );
       notifications = notifications.concat(notification);
     }
     return res.json({ notifications });
+  }
+
+  @Get('/api/notifications/size')
+  async getNotificationsSize(@Req() req: Request, @Res() res: Response) {
+    const { messageId } = req.query;
+    const list = await this.appService.findMessageAuthorId(
+      messageId as string,
+    );
+    const onLabel = true;
+    let notifications : any = [];
+    for(let i= 0; i< list.length; i++){
+      let notification: any = await this.appService.getNotifications(
+        list[i].messageId as string,
+        messageId as string,
+        onLabel as boolean,
+      );
+      notifications = notifications.concat(notification);
+    }
+    const size = notifications?.length;
+    return res.json({ size });
+  }
+
+  @Post('/api/notifications/size')
+  async postNotificationsSize(@Req() req: Request, @Res() res: Response) {
+    const { messageId } = req.body;
+    const list = await this.appService.findMessageAuthorId(
+      messageId as string,
+    );
+    const promises = list.map((item: any) =>
+      this.appService.postNotification(item.messageId as string)
+    );
+    await Promise.all(promises);
+    return res.json(true);
   }
 }
 

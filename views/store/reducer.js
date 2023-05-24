@@ -74,6 +74,11 @@ function reducer(state, action){
         ...state,
         notification: action.payload,
       };
+    case 'CHANGE_NOTIFICATION_ALL':
+      return {
+        ...state,
+        notification: [...state.notification, ...action.payload],
+      };
     case 'CHANGE_LIKE':
       const listLike = state.posts.map(main =>{
         if(main.messageId === action.payload?.messageId) {
@@ -124,6 +129,44 @@ function reducer(state, action){
       return {
         ...state,
         posts: addComment,
+      };
+    case 'DELETE_COMMENT':
+      const deleteComment = state.posts.map(main =>{
+        if(main.messageId === action.payload?.messageId) {
+          return {
+            ...main,
+            totalComment: main?.totalComment -1, 
+            comments: main?.comments?.filter(item => item?._id !==action.payload?.id),
+          }
+        } else {
+          return main;
+        }
+      })
+      return {
+        ...state,
+        posts: deleteComment,
+      };
+    case 'EDIT_COMMENT':
+      const editComment = state.posts.map(main =>{
+        if(main.messageId === action.payload?.messageId) {
+          const editcomment1 =main?.comments?.map(item => {
+            if(item._id === action.payload?.id) {
+              return {...item, content:action.payload?.input}
+            } else {
+              return item;
+            }
+          });
+          return {
+            ...main,
+            comments: editcomment1,
+          }
+        } else {
+          return main;
+        }
+      })
+      return {
+        ...state,
+        posts: editComment,
       };
     default:
       throw new Error("Error");

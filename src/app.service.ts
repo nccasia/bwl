@@ -185,6 +185,11 @@ export class AppService {
           },
         },
         {
+          $sort: {
+            _id: -1,
+          },
+        },
+        {
           $lookup: {
             from: 'komu_users',
             localField: 'authorId',
@@ -221,6 +226,23 @@ export class AppService {
     await notification.save();
     this.addEvent({ data: { comment, commentAuthor, message, messageAuthor } });
     return comment;
+  }
+
+  async deleteComment(id: string, messageId: string) {
+    const comment = await this.komuComment.findOneAndDelete({
+      _id: id,
+      authorId: messageId,
+    }).exec();
+    return comment;
+  }
+
+  async editComment(_id: string, newContent: string) {
+    const updatedComment = await this.komuComment.findByIdAndUpdate(
+      _id,
+      { content: newContent },
+      { new: true }
+    ).exec();
+    return updatedComment;
   }
 
   async getLikes(messageId: string) {
@@ -278,10 +300,11 @@ export class AppService {
       .exec();
 
     const likeAuthor = await this.komuUser.findOne({ id: authorId }).exec();
-
-    const notification = new this.komuNotification({
+    const onLike = true;
+    const notification =  new this.komuNotification({
       messageId,
       authorId,
+      onLike,
       createTimestamp: Date.now(),
     });
 
@@ -298,14 +321,24 @@ export class AppService {
         authorId,
       })
       .exec();
+    const onLike = false;
+    const notification =  new this.komuNotification({
+      messageId,
+      authorId,
+      onLike,
+      createTimestamp: Date.now(),
+    });
+    await notification.save();
     return true;
   }
-  async getNotifications(messageId: string, authorId: string) {
+
+  async getNotifications(messageId: string, authorId: string, onLabel:boolean) {
     return this.komuNotification
       .aggregate([
         {
           $match: {
             messageId,
+            onLabel,
             authorId: { $ne: authorId },
           },
         },
@@ -406,5 +439,13 @@ export class AppService {
         .exec();
     }
     return data;
+  }
+
+  async postNotification(messageId: string) {
+    const notification: any = await this.komuNotification.updateMany(
+      { messageId: messageId, onLabel: true },
+      { $set: { onLabel: false } }
+    ).exec();
+    return notification;
   }
 }

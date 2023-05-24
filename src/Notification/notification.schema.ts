@@ -23,8 +23,14 @@ export class Notification {
   @Prop()
   count: number;
 
-  @Prop()
+  @Prop({ default: Date.now() })
   createdTimestamp: number;
+
+  @Prop()
+  onLike: boolean;
+
+  @Prop({ default: true })
+  onLabel: boolean;
 }
 
 export const NotificationSchema: any = SchemaFactory.createForClass(Notification);
