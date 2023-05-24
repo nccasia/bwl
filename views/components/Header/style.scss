@@ -86,3 +86,9 @@
   right: 3%;
   top: -14px;
 }
+
+@media (max-width: 768px) {
+  .nav-header{
+    padding: 5px 16px;
+  }
+}

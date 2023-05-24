@@ -13,86 +13,6 @@
       width: 100%;
     }
   }
-  .container-item-reactTotal {
-    padding: 2% 5%;
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    align-items: center;
-    .list-inline-item {
-      padding: 1px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      .btn-reaction {
-        border: none;
-        padding: 0;
-        background-color: none;
-        display: flex;
-        align-items: center;
-        gap:3px;
-        .emoji {
-          width: 16px;
-          height: 16px;
-        }
-        .emoji-like {
-          font-size: 20px;
-        }
-        p{
-          font-size: 13px;
-        }
-      }
-    }
-    .dialog-like {
-      position: relative;
-      display: flex;
-      gap: 3px;
-      .dialog-like-list{
-        background-color: #353535;
-        color: #e2e2eda3;
-        padding: 8px;
-        display: flex;
-        width: 200px;
-        height: auto;
-        border-radius: 5px;
-        position: absolute;
-        top: -30px;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        z-index: 100;
-        align-items: center;
-        gap: 5px;
-        .icon-like{
-          font-size: 24px;
-        }
-        .reactions-emoji{
-          width:30px;
-          height:30px;
-          font-size: 20px;
-          border-radius: 8px;
-        }
-        p{
-          word-wrap: break-word;
-          font-size: 10px;
-          b{
-            font-size: 12px;
-          }
-        }
-      }
-    }
-    .comment-icon{
-      display: flex;
-      gap: 3px;
-      align-items: center;
-      span{
-        font-size: 13.5px;
-      }
-      .icon-cmt{
-        font-size: 18px;
-        color: #3d3b3b;
-      }
-    }
-  }
   .container-item-react {
     display: flex;
     align-items: center;
@@ -267,5 +187,10 @@
 @media (min-width: 1400px) {
   .container-item {
     padding: 3%;
+  }
+}
+@media (max-width: 768px) {
+  .container-item {
+    padding: 0 10px;
   }
 }

@@ -7,6 +7,7 @@ import {useStore} from "../../store";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell, faMoon } from '@fortawesome/free-solid-svg-icons';
 import {getNotification} from '../../api/apiNotification';
+import { Link } from "react-router-dom";
 
 function HeaderPage(props) {
   const {state, dispatch}=useStore();
@@ -25,9 +26,11 @@ function HeaderPage(props) {
   }, [state.author?.id]);
   return (
     <nav className="nav-header" style={{ backgroundColor: state.background ? "#242526": "white"}}>
-      <div className="logoNcc">
-        <img src="./assets/img/favicon.png" alt="logo" />
-      </div>
+      <Link to="/">
+        <div className="logoNcc">
+          <img src="./assets/img/favicon.png" alt="logo" />
+        </div>
+      </Link>
       {!state.author?.id? (
         <div className="person-icon" onClick={() => handleClick()}>
           <img

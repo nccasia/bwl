@@ -250,12 +250,13 @@ export class AppService {
       .exec();
   }
 
-  async getReactions(messageId: string) {
+  async getReactions(messageId: string, emoji: string) {
     return this.komuReaction
       .aggregate([
         {
           $match: {
             messageId,
+            emoji
           },
         },
         {
@@ -338,5 +339,79 @@ export class AppService {
         },
       ])
       .exec();
+  }
+
+  async getPostsOne(messageId: string) {
+    const aggregatorOpts = [
+      {  
+        $match: { 
+          messageId,
+        } 
+      },
+      {
+        $lookup: {
+          from: 'komu_users',
+          localField: 'authorId',
+          foreignField: 'id',
+          as: 'author',
+        },
+      },
+      {
+        $unwind: '$author',
+      },
+      {
+        $lookup: {
+          from: 'komu_bwlreactions',
+          localField: 'messageId',
+          foreignField: 'messageId',
+          as: 'reactions',
+        },
+      },
+      {
+        $lookup: {
+          from: 'komu_bwllikes',
+          localField: 'messageId',
+          foreignField: 'messageId',
+          as: 'likes',
+        },
+      },
+    ];
+    const data = await this.komuMessage.aggregate(aggregatorOpts as any).exec();
+
+    for (const item of data) {
+      item.reactions = item.reactions.reduce((result:any, reaction: any) => {
+        const exists = result.find((e: any) => e.name === reaction.emoji);
+        const emojiWithId = emojis.find((e) => e.name === reaction.emoji);
+        if (exists) {
+          exists.count++;
+        } else {
+          result.push({
+            ...reaction,
+            name: reaction.emoji,
+            count: 1,
+            ...(emojiWithId ? { id: emojiWithId.id } : {}),
+          });
+        }
+        return result;
+      }, []);
+      item.totalComment = await this.komuComment
+        .count({
+          messageId: item.messageId,
+        })
+        .exec();
+
+      item.totalLike = await this.komuLike
+        .count({
+          messageId: item.messageId,
+        })
+        .exec();
+
+      item.totalNotification = await this.komuNotification
+        .count({
+          messageId: item.messageId,
+        })
+        .exec();
+    }
+    return data;
   }
 }

@@ -17,6 +17,7 @@ import { AppService } from './app.service';
 import { Request, Response } from 'express';
 import { AuthService } from './Authentication/auth.service';
 import { first, map, Observable, switchMap } from 'rxjs';
+
 const discordTokenUrl = 'https://discord.com/api/oauth2/token';
 const discordUserUrl = 'https://discord.com/api/users/@me';
 
@@ -128,6 +129,17 @@ export class AppController {
   @Get('/login')
   @Render('index')
   login() {}
+
+  @Get('/posts')
+  @Render('index')
+  posts(@Query('messageId') messageId: string) {}
+
+  @Get('/api/posts')
+  async getPostsOne(@Req() req: Request, @Res() res: Response) {
+    const { messageId } = req.query;
+    const posts = await this.appService.getPostsOne(messageId as string);
+    return res.json(posts);
+  }
 
   @Get('/api/login')
   //@Render('index')
@@ -269,8 +281,8 @@ export class AppController {
 
   @Get('/api/reactions')
   async getReactions(@Req() req: Request, @Res() res: Response) {
-    const { messageId } = req.query;
-    const reactions = await this.appService.getReactions(messageId as string);
+    const { messageId, emoji } = req.query;
+    const reactions = await this.appService.getReactions(messageId as string, emoji as string);
     return res.json({ reactions });
   }
 

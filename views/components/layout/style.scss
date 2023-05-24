@@ -51,3 +51,11 @@
     }
   }
 }
+@media (max-width: 768px) {
+  .main-container {
+    padding: 0;
+    .main-content {
+      padding: 70px 5% 0px;
+    }
+  }
+}

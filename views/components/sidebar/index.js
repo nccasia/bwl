@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import SideBarItem from '../../components/SidebarItem';
+import SideBarItem from '../SidebarItem';
 import './style.scss';
 import {useStore} from "../../store";
 import React from 'react';

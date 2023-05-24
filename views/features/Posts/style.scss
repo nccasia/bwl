@@ -1,0 +1,9 @@
+.container-post{
+    padding: 80px 15%;
+}
+
+@media (max-width: 768px){
+    .container-post{
+        padding: 80px 16px;
+    }
+}

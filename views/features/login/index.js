@@ -14,7 +14,7 @@ const Login = () => {
   return (
     <div className="container-login">
       <div className="box-login">
-        <h1>BWL</h1>
+        <h1> Welcome to <br/> <span>BWL</span></h1>
         <form>
           <button className="btn-login" type="button" onClick={handleClick}>
             <svg

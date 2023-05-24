@@ -152,4 +152,5 @@ export const emojis = [
   { id: '1047825323414278145', name: 'ai_biet' },
   { id: '1083333736168431646', name: 'may_lua_bo_may' },
   { id: '1083634025282940928', name: 'cuoi_ha_hong_len_troi' },
+  { id: '1062928084015267931', name: 'done' },
 ];
