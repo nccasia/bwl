@@ -27,17 +27,17 @@
       display: flex;
       cursor: pointer;
       padding: 20px;
-        &:hover {
-          background-color: #ccc;
+      &:hover {
+        background-color: #ccc;
+      }
+      .react-like-icon {
+        display: flex;
+        align-items: center;
+        gap: 2px;
+        .like_icon {
+          font-size: 20px;
         }
-        .react-like-icon{
-          display: flex;
-          align-items: center;
-          gap: 2px;
-          .like_icon{
-            font-size: 20px;
-          }
-        }
+      }
     }
     .react-comment {
       flex: 1;
@@ -47,7 +47,7 @@
       padding: 20px;
       cursor: pointer;
       gap: 5px;
-      .icon-cmt{
+      .icon-cmt {
         font-size: 14px;
         color: #3d3b3b;
       }
@@ -56,20 +56,17 @@
       }
     }
   }
-  .comment{
-  width: 100%;
-  border-bottom: 1px solid #ccc;
+  .comment {
+    width: 100%;
+    border-bottom: 1px solid #ccc;
   }
-  .comment:last-child{
+  .comment:last-child {
     border-bottom: none !important;
   }
-  .show{
+  .show {
     margin-top: 15px;
     cursor: pointer;
     font-size: 13px;
-    &:hover{
-      border-bottom: 1px solid #000;
-    }
   }
   .container-item-reactInfo {
     display: flex;
@@ -98,7 +95,8 @@
     position: relative;
     border-radius: 7px;
     background: var(--c-background);
-    box-shadow: inset 0 0 0 1px var(--border, var(--c-border)), 0px 1px 3px var(--shadow, var(--c-shadow));
+    box-shadow: inset 0 0 0 1px var(--border, var(--c-border)),
+      0px 1px 3px var(--shadow, var(--c-shadow));
     transition: box-shadow 0.25s;
     &:hover {
       --border: var(--c-border-hover);
@@ -152,36 +150,35 @@
         right: 0;
       }
     }
-    .container-item-icon{
+    .container-item-icon {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      .container-item-emoji{
+      .container-item-emoji {
         width: 100%;
-        .emoji-box{
+        .emoji-box {
           position: absolute;
           top: 40px;
           right: 0;
         }
-        
-        .input-icon{
+
+        .input-icon {
           padding: 5px 16px 5px 18px;
           color: #ccc;
+          cursor: pointer;
         }
-      } 
+      }
       .input-button {
         padding: 8px;
         // color: #89CFF0;
         cursor: pointer;
         font-size: 40px;
       }
-      .disabled{
+      .disabled {
         color: #cdcaca;
         pointer-events: none;
       }
     }
-    
-    
   }
 }
 @media (min-width: 1400px) {

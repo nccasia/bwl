@@ -62,12 +62,12 @@ function HeaderPage(props) {
           </div>
           <div 
             className="icon"
-            style={{ backgroundColor: openNotification ? "#1876f245": "#80808030"}}
+            style={{ backgroundColor: state.background ? "#1876f245": "#80808030"}}
             onClick={handleNotification}
           >
             <FontAwesomeIcon 
               icon={faBell} 
-              style={{ color: openNotification ? "blue": "black"}}
+              style={{ color: state.background ? "blue": "black"}}
             />
             {size !== 0 && openLabel && <p className="icon-notifi">{size}</p>}
             {openNotification ? (

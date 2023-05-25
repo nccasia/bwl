@@ -143,6 +143,7 @@ function reducer(state, action) {
         if(main.messageId === action.payload?.messageId) {
           return {
             ...main, 
+            totalComment: main?.totalComment +1, 
             comments: [...main.comments, ...([action.payload.comments])],
           }
         } else {

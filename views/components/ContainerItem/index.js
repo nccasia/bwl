@@ -10,15 +10,10 @@ import  Comment from "../Comment";
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faFaceSmile,
-  faXmark,
-  faMessage,
-} from '@fortawesome/free-solid-svg-icons';
+import {faMessage} from '@fortawesome/free-solid-svg-icons';
 
 const ContainerItem = (props) => {
   const {state, dispatch}=useStore();
-  // const inputRef = useRef(null);
   const [open, setOpen] = React.useState(false);
   const handleClick = (index) => {
     getComment(index).then((data) =>
@@ -28,9 +23,6 @@ const ContainerItem = (props) => {
       }),
     );
     setOpen(!open);
-    // if (inputRef.current) {
-    //   inputRef.current.focus();
-    // }
   };
 
   const handleClickLike = async() => {
