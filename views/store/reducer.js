@@ -8,6 +8,11 @@ const initState = {
   notification: [],
   page: 1,
   runPosts: [],
+  pageNotification: 1,
+  lengthNotication:0,
+  size: 5,
+  loadingNotifi: false,
+  loadingPost: false,
 }
 
 function reducer(state, action) {
@@ -24,8 +29,14 @@ function reducer(state, action) {
       return {
         ...state,
         posts: state.runPosts?.length > 0 ?  state.runPosts : [...state.posts,...commentList],
-        hotPosts: state.runPosts?.length > 0 ?  maxPosts(state.runPosts) : maxPosts([...state.posts,...action.payload]),
+        hotPosts: state.runPosts?.length > 0 ?  maxPosts(state.runPosts) : maxPosts([...state.posts,...commentList]),
         runPosts: [],
+        loadingPost: false,
+      };
+    case 'CHANGE_LOADING_POST':
+      return {
+        ...state,
+        loadingPost: true,
       };
     case 'SET_POST_ONE':
       const commentListOne = action.payload?.map(main => {
@@ -69,10 +80,21 @@ function reducer(state, action) {
         ...state,
         background: !state.background,
       };
-    case 'CHANGE_NOTIFICATION':
+    case 'CHANGE_LOADING_NOTIFICATION':
       return {
         ...state,
-        notification: action.payload,
+        loadingNotifi: true,
+      };
+    case 'SET_LENGTH_NOTIFICATION':
+      return {
+        ...state,
+        lengthNotication: action.payload,
+      };
+    case 'CHANGE_NOTIFICATION_ALL':
+      return {
+        ...state,
+        notification: [...state.notification, ...action.payload],
+        loadingNotifi: false,
       };
     case 'CHANGE_LIKE':
       const listLike = state.posts.map(main =>{
@@ -95,6 +117,12 @@ function reducer(state, action) {
         ...state,
         page: state.page + 1,
       };
+    case 'CHANGE_PAGE_NOTIFICATION':
+      const numberNotifi = Math.ceil(state.lengthNotication / state.size);
+      return {
+        ...state,
+        pageNotification: numberNotifi > state.pageNotification && state.pageNotification >0 ? state.pageNotification + 1 : -1,
+      };
     case 'SET_COMMENTS':
       const listComment = state.posts.map((main) => {
         if (main.messageId === action.payload?.messageId) {
@@ -115,6 +143,7 @@ function reducer(state, action) {
         if(main.messageId === action.payload?.messageId) {
           return {
             ...main, 
+            totalComment: main?.totalComment +1, 
             comments: [...main.comments, ...([action.payload.comments])],
           }
         } else {
@@ -126,18 +155,43 @@ function reducer(state, action) {
         posts: addComment,
       };
     case 'DELETE_COMMENT':
-      const { messageId, index } = action.payload;
-      const newPosts = state.posts.map((post) => {
-        if (post.messageId === messageId) {
-          const newComments = post.comments.filter(
-            (comment) => comment.index !== index,
-          );
-          return { ...post, comments: newComments };
+      const deleteComment = state.posts.map(main =>{
+        if(main.messageId === action.payload?.messageId) {
+          return {
+            ...main,
+            totalComment: main?.totalComment -1, 
+            comments: main?.comments?.filter(item => item?._id !==action.payload?.id),
+          }
         } else {
-          return post;
+          return main;
         }
-      });
-      return { ...state, posts: newPosts };
+      })
+      return {
+        ...state,
+        posts: deleteComment,
+      };
+    case 'EDIT_COMMENT':
+      const editComment = state.posts.map(main =>{
+        if(main.messageId === action.payload?.messageId) {
+          const editcomment1 =main?.comments?.map(item => {
+            if(item._id === action.payload?.id) {
+              return {...item, content:action.payload?.input}
+            } else {
+              return item;
+            }
+          });
+          return {
+            ...main,
+            comments: editcomment1,
+          }
+        } else {
+          return main;
+        }
+      })
+      return {
+        ...state,
+        posts: editComment,
+      };
     default:
       throw new Error('Error');
   }

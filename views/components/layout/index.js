@@ -6,12 +6,13 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {useStore} from "../../store";
 import SideBar from '../sidebar';
+import {useDataDebouncer} from '../../util/useDebounce';
 
 const MainContent = (props) => {
   const {state, dispatch}=useStore();
   const [scroll, setScroll] = React.useState(false);
   const [scrollY, setScrollY] = React.useState(0);
-  const value = useStore();
+  const debounce = useDataDebouncer(state.page, 500);
   React.useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY >= 100) {

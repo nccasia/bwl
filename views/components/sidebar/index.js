@@ -7,11 +7,13 @@ import {maxPosts} from '../../util/maxPosts';
 
 const SideBar = (props) => {
   const {state, dispatch}=useStore();
+  const sortedPosts = state.hotPosts?.sort((a, b) => b.totalLike - a.totalLike);
+  
   return (
     <div className="sidebar-left-content" style={{ backgroundColor: state.background ? "#242526": "white", color: state.background ? "white": "#242526",}}>
       <h3 className="sidebar-left-title">Top BWL</h3>
       <div className="sidebar-center">
-        {state?.hotPosts ? state?.hotPosts.map((post, index) => {
+        {sortedPosts ? sortedPosts.map((post, index) => {
           return (
             <React.Fragment key={index}>
               <SideBarItem {...post}/>

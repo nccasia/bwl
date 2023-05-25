@@ -186,6 +186,11 @@ export class AppService {
           },
         },
         {
+          $sort: {
+            _id: -1,
+          },
+        },
+        {
           $lookup: {
             from: 'komu_users',
             localField: 'authorId',
@@ -197,13 +202,12 @@ export class AppService {
       .exec();
   }
 
-  async comment({ messageId, content, authorId, commentId }) {
+  async comment({ messageId, content, authorId}) {
     const comment = new this.komuComment({
       messageId,
       authorId,
       content,
       createdTimestamp: Date.now(),
-      commentId,
     });
     const message = await this.komuMessage.find({ messageId }).exec();
 
@@ -217,7 +221,6 @@ export class AppService {
       authorId,
       content,
       createdTimestamp: Date.now(),
-      commentId,
     });
 
     await comment.save();
@@ -225,9 +228,22 @@ export class AppService {
     this.addEvent({ data: { comment, commentAuthor, message, messageAuthor } });
     return comment;
   }
-  async deleteComment(index: string) {
-    const deletedComment = await this.komuComment.findByIdAndDelete(index);
-    return deletedComment;
+
+  async deleteComment(id: string, messageId: string) {
+    const comment = await this.komuComment.findOneAndDelete({
+      _id: id,
+      authorId: messageId,
+    }).exec();
+    return comment;
+  }
+
+  async editComment(_id: string, newContent: string) {
+    const updatedComment = await this.komuComment.findByIdAndUpdate(
+      _id,
+      { content: newContent },
+      { new: true }
+    ).exec();
+    return updatedComment;
   }
 
   async getLikes(messageId: string) {
@@ -285,10 +301,11 @@ export class AppService {
       .exec();
 
     const likeAuthor = await this.komuUser.findOne({ id: authorId }).exec();
-
-    const notification = new this.komuNotification({
+    const onLike = true;
+    const notification =  new this.komuNotification({
       messageId,
       authorId,
+      onLike,
       createTimestamp: Date.now(),
     });
 
@@ -305,9 +322,18 @@ export class AppService {
         authorId,
       })
       .exec();
+    const onLike = false;
+    const notification =  new this.komuNotification({
+      messageId,
+      authorId,
+      onLike,
+      createTimestamp: Date.now(),
+    });
+    await notification.save();
     return true;
   }
-  async getNotifications(messageId: string, authorId: string) {
+
+  async getNotifications(messageId: string, authorId: string, page: number, size: number) {
     return this.komuNotification
       .aggregate([
         {
@@ -316,11 +342,9 @@ export class AppService {
             authorId: { $ne: authorId },
           },
         },
-        {
-          $sort: {
-            _id: -1,
-          },
-        },
+        {$sort: {_id: -1} },
+        { $skip: (page - 1) * size },
+        { $limit: size },
         {
           $lookup: {
             from: 'komu_users',
@@ -335,6 +359,19 @@ export class AppService {
             localField: 'messageId',
             foreignField: 'messageId',
             as: 'message',
+          },
+        },
+      ])
+      .exec();
+  }
+
+  async getNotificationsSize(messageId: string, authorId: string) {
+    return this.komuNotification
+      .aggregate([
+        {
+          $match: {
+            messageId,
+            authorId: { $ne: authorId },
           },
         },
       ])
@@ -413,5 +450,13 @@ export class AppService {
         .exec();
     }
     return data;
+  }
+
+  async postNotification(messageId: string) {
+    const notification: any = await this.komuNotification.updateMany(
+      { messageId: messageId, onLabel: true },
+      { $set: { onLabel: false } }
+    ).exec();
+    return notification;
   }
 }

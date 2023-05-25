@@ -165,6 +165,7 @@ const EmojiLike = (props) => {
                   gap: 5,
                   alignItems: 'center',
                   padding: '8px',
+                  cursor: 'pointer'
                 }}
               >
                 <img
@@ -175,7 +176,6 @@ const EmojiLike = (props) => {
                     width: '30px',
                     height: '30px',
                     borderRadius: '8px',
-                    cursor: 'pointer'
                   }}
                 />
                 <p>
