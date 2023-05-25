@@ -33,7 +33,7 @@
         gap: 3px;
         border-radius: 10px;
         padding: 10px;
-        background: #EBEDF0;
+        background: #ebedf0;
         max-width: 500px;
         .name {
           font-weight: 500;
@@ -50,43 +50,42 @@
         color: #5b5b5b;
       }
     }
-    
-    &:hover .delete-comment-btn{
-    display: block;
-    cursor: pointer;
+
+    &:hover .delete-comment-btn {
+      display: block;
+      cursor: pointer;
     }
-    .delete-comment-btn{
+    .delete-comment-btn {
       display: none;
       position: relative;
-      .dialog-form{
+      .dialog-form {
         background-color: #fff;
         box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
         position: absolute;
         padding: 10px 20px;
         border-radius: 6px;
         width: 200px;
-        p{
+        p {
           width: 100%;
           display: flex;
           flex-direction: column;
           gap: 5px;
           padding: 10px;
         }
-        p:hover{
-          background-color: #EBEDF0;
+        p:hover {
+          background-color: #ebedf0;
         }
-        &::before{
+        &::before {
           position: absolute;
-          content: "";
+          content: '';
           border-width: 10px 15px;
           border-style: solid;
           border-color: transparent transparent white transparent;
           position: absolute;
-          left:0 ;
+          left: 0;
           top: -14px;
         }
       }
     }
   }
-
 }

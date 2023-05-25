@@ -7,7 +7,6 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 const CommentItem = (props) => {
   const { state, dispatch } = useStore();
   const {onDelete, index} = props
-  console.log("index", index)
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -17,12 +16,6 @@ const CommentItem = (props) => {
   const handleClose = () => {
     setOpen(false);
   };
-
-  // const handleDeleteComment = (index) => {
-  //   // Gọi hàm onDelete và truyền các thông tin cần thiết lên payload
-  //   onDelete(index);
-  //   console.log("id", index)
-  // };
   return (
     <div className="comment-item">
       <div className="author-avatar">
@@ -40,7 +33,7 @@ const CommentItem = (props) => {
             </div>
             <div className="comment-time">{formatDay(props?.createdTimestamp ? props?.createdTimestamp : props?.comment?.createdTimestamp)}</div>
          </div>
-        {/* <div className="delete-comment-btn">
+        <div className="delete-comment-btn">
           <div className="delete-icon"  onClick={handleClickOpen}>
             <MoreHorizIcon />
           </div>
@@ -52,7 +45,7 @@ const CommentItem = (props) => {
           ) 
            : (<></>)}
        
-        </div> */}
+        </div>
       </div>
     </div>
   );
