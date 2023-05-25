@@ -10,7 +10,7 @@ import {
   UnauthorizedException,
   Sse,
   Delete,
-  Param,
+  Put,
 } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { AppService } from './app.service';
@@ -182,12 +182,11 @@ export class AppController {
       )
       .subscribe({
         next: async (user) => {
-          const { content, messageId, authorId,commentId } = req.body;
-          const comment = await this.appService.comment({
+          const { content, messageId, authorId } = req.body;
+          const comment: any = await this.appService.comment({
             content,
             messageId,
             authorId,
-            commentId,
           });
           const userDB = await this.appService.findCommentMessageFromDiscordId(
             user.id,
@@ -195,8 +194,7 @@ export class AppController {
           const messageDB = await this.appService.findCommentFromDiscordId(
             messageId,
           );
-
-          return res.json({ success: true, data:{author: [userDB], comment}});
+          return res.json({ ...comment.toObject(), author: [userDB] });
         },
         error: (error) => {
           return res
@@ -211,6 +209,20 @@ export class AppController {
     const { messageId } = req.query;
     const comments = await this.appService.getComments(messageId as string);
     return res.json({ comments });
+  }
+
+  @Delete('/api/comments')
+  async deleteComment(@Req() req: Request, @Res() res: Response) {
+    const { id, messageId } = req.query;
+    const deleteComment = await this.appService.deleteComment(id as string, messageId as string);
+    return res.json(deleteComment ? { message: true } : { message: false });
+  }
+
+  @Post('/api/comment/edit')
+  async postEditComment(@Req() req: Request, @Res() res: Response) {
+    const { id, content } = req.body;
+    const editComment = await this.appService.editComment(id as string, content as string);
+    return res.json(editComment);
   }
 
   @Post('/api/like')
@@ -248,7 +260,6 @@ export class AppController {
               messageId,
               authorId,
             });
-            // return res.json({ success: true, like });
             return res.json({ success: true, like, usernameDB, messageLikeDB });
           } else if (userDB) {
             const dislike = await this.appService.unlike({
@@ -273,12 +284,6 @@ export class AppController {
     return res.json({ likes });
   }
   
-  // @Delete('/api/comments?messageId')
-  // async deleteComment(@Param('index') index: string, @Res() res: Response) {
-  //   const deletedComment = await this.appService.deleteComment(index);
-  //   return res.json({ comment: deletedComment });
-  // }
-
   @Get('/api/reactions')
   async getReactions(@Req() req: Request, @Res() res: Response) {
     const { messageId, emoji } = req.query;
@@ -288,7 +293,7 @@ export class AppController {
 
   @Get('/api/notifications')
   async getNotifications(@Req() req: Request, @Res() res: Response) {
-    const { messageId } = req.query;
+    const { messageId, page } = req.query;
     const list = await this.appService.findMessageAuthorId(
       messageId as string,
     );
@@ -297,10 +302,44 @@ export class AppController {
       let notification: any = await this.appService.getNotifications(
         list[i].messageId as string,
         messageId as string,
+        Number(page) as number,
+        5,
       );
       notifications = notifications.concat(notification);
     }
     return res.json({ notifications });
+  }
+
+  @Get('/api/notifications/size')
+  async getNotificationsSize(@Req() req: Request, @Res() res: Response) {
+    const { messageId } = req.query;
+    const list = await this.appService.findMessageAuthorId(
+      messageId as string,
+    );
+    let length =0;
+    let size =0;
+    for(let i= 0; i< list.length; i++){
+      let notification: any = await this.appService.getNotificationsSize(
+        list[i].messageId as string,
+        messageId as string,
+      );
+      length = length + notification?.length;
+      size = size + notification?.filter((item: any) => item?.onLabel === true).length
+    }
+    return res.json({ size, length });
+  }
+
+  @Post('/api/notifications/size')
+  async postNotificationsSize(@Req() req: Request, @Res() res: Response) {
+    const { messageId } = req.body;
+    const list = await this.appService.findMessageAuthorId(
+      messageId as string,
+    );
+    const promises = list.map((item: any) =>
+      this.appService.postNotification(item.messageId as string)
+    );
+    await Promise.all(promises);
+    return res.json(true);
   }
 }
 

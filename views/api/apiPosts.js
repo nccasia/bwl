@@ -1,12 +1,13 @@
 import axios from 'axios';
 
-export const getAll = async (index) => {
+export const getAll = async (index, dispatch) => {
     try {
+        dispatch({type:"CHANGE_LOADING_POST"})
         const res = await axios({
             url: `/api/getAllPaging?page=${index}`,
             method: "GET",
           });
-        return res.data;
+        dispatch({type:"SET_POSTS", payload: res.data})
     } catch {
         return [];
     }

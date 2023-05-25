@@ -1,55 +1,43 @@
 import React from 'react';
 import './style.scss';
-import {changeTime}  from '../../util/changeTime';
-import { Link } from "react-router-dom";
+import {postNotification } from '../../api/apiNotification';
+import {useStore} from "../../store";
+import NotificationList  from "../NotificationList";
 
 const Notification = (props) => {
+  const {state, dispatch}=useStore();
+  const spanRef = React.useRef(null);
+  React.useEffect(() => {
+    const scrollElement = spanRef.current;
+    const handleScroll = () => {
+      if (scrollElement.scrollTop + scrollElement.clientHeight >= scrollElement.scrollHeight - 10) {
+        dispatch({type: "CHANGE_PAGE_NOTIFICATION"});
+      }
+    };
+    scrollElement.addEventListener('scroll', handleScroll);
+    document.addEventListener('click', handleOutsideClick);
+    return () => {
+      document.removeEventListener('click', handleOutsideClick);
+      scrollElement.addEventListener('scroll', handleScroll);
+    };
+  }, []);
+
+  const handleOutsideClick = async (event) => {
+    if (spanRef.current && !spanRef.current.contains(event.target)) {
+      await props?.setOpen(false);
+      await props?.setLabel(false);
+      if(state.author?.id) {
+        postNotification(state.author?.id);
+      }
+    }
+  };
   return (
-    <div className="container">
+    <div 
+      className="container" 
+      ref={spanRef}
+    >
       <h1 className="title-notifi"><b>Thông báo</b></h1>
-      {props.notifications ? props.notifications.map((main, index) => {
-        return (
-          <Link to={`/posts?messageId=${main?.messageId}`} key={index}>
-            <div>
-              {main.content ? (
-                  <div className="list-notifi">
-                    <img 
-                      className="list-notifi-image"
-                      src={`https://cdn.discordapp.com/avatars/${main?.author[0]?.id}/${main?.author[0]?.avatar}`} 
-                      alt="avatar" 
-                    />
-                    <span>
-                      <p>
-                        <b>{main?.author[0]?.username}</b>
-                        {" đã bình luận bài viết của bạn có nội dung:"}
-                      </p>
-                      <p>{main?.content}</p>
-                      <p className="time-notifi">{changeTime(main?.createdTimestamp)}</p>
-                    </span>
-                    
-                  </div>
-                )
-              : (
-                  <div className="list-notifi">
-                    <img 
-                      className="list-notifi-image"
-                      alt="avatar"
-                      src={`https://cdn.discordapp.com/avatars/${main?.author[0]?.id}/${main?.author[0]?.avatar}`} 
-                    />
-                    <span>
-                      <p>
-                        <b>{main?.author[0]?.username} </b>
-                        {" đã thích bài viết của bạn."}
-                      </p>
-                      <p className="time-notifi">{changeTime(main?.message[0]?.createdTimestamp.$numberDecimal)}</p>
-                    </span>
-                  </div>
-                )
-              }
-            </div>
-          </Link>
-        )
-      }): null}
+      <NotificationList />
     </div>
   );
 };

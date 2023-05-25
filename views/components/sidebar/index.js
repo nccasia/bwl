@@ -7,7 +7,6 @@ import {maxPosts} from '../../util/maxPosts';
 
 const SideBar = (props) => {
   const {state, dispatch}=useStore();
-  console.log("tt",state?.posts);
   return (
     <div className="sidebar-left-content" style={{ backgroundColor: state.background ? "#242526": "white", color: state.background ? "white": "#242526",}}>
       <h3 className="sidebar-left-title">Top BWL</h3>

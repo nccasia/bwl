@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const getUser = async (index) => {
+export const getUser = async (index, dispatch) => {
   try {
     const res = await axios({
       url: 'https://discord.com/api/users/@me',
@@ -9,7 +9,7 @@ export const getUser = async (index) => {
         Authorization: `Bearer ${index}`,
       },
     });
-    return res.data;
+    dispatch({type:"SET_AUTHOR", payload: res?.data})
   } catch {
     return [];
   }
