@@ -283,7 +283,7 @@ export class AppController {
     const likes = await this.appService.getLikes(messageId as string);
     return res.json({ likes });
   }
-
+  
   @Get('/api/reactions')
   async getReactions(@Req() req: Request, @Res() res: Response) {
     const { messageId, emoji } = req.query;
@@ -293,17 +293,17 @@ export class AppController {
 
   @Get('/api/notifications')
   async getNotifications(@Req() req: Request, @Res() res: Response) {
-    const { messageId, onLabel } = req.query;
+    const { messageId, page } = req.query;
     const list = await this.appService.findMessageAuthorId(
       messageId as string,
     );
-    const onLabel1 = onLabel==="true" ? true: false;
     let notifications : any = [];
     for(let i= 0; i< list.length; i++){
       let notification: any = await this.appService.getNotifications(
         list[i].messageId as string,
         messageId as string,
-        onLabel1 as boolean,
+        Number(page) as number,
+        5,
       );
       notifications = notifications.concat(notification);
     }
@@ -316,18 +316,17 @@ export class AppController {
     const list = await this.appService.findMessageAuthorId(
       messageId as string,
     );
-    const onLabel = true;
-    let notifications : any = [];
+    let length =0;
+    let size =0;
     for(let i= 0; i< list.length; i++){
-      let notification: any = await this.appService.getNotifications(
+      let notification: any = await this.appService.getNotificationsSize(
         list[i].messageId as string,
         messageId as string,
-        onLabel as boolean,
       );
-      notifications = notifications.concat(notification);
+      length = length + notification?.length;
+      size = size + notification?.filter((item: any) => item?.onLabel === true).length
     }
-    const size = notifications?.length;
-    return res.json({ size });
+    return res.json({ size, length });
   }
 
   @Post('/api/notifications/size')

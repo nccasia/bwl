@@ -3,50 +3,11 @@
     width:300px;
     font-size: 16px;
     padding: 20px 10px;
-    overflow-y: auto;
+    overflow-y: scroll;
     .title-notifi{
         font-size: 20px;
         font-weight:500;
         margin-bottom: 10px;
-    }
-    .list-notifi{
-        display: flex;
-        padding: 10px;
-        gap: 10px;
-        //align-items: center;
-        .list-notifi-image{
-            width: 35px;
-            height:35px;
-            border-radius: 50%;
-        }
-        span{
-            gap: 5px;
-            display: flex;
-            flex-direction: column;
-            .time-notifi{
-                font-size: 11px;
-                color: #1876f2;
-            }
-            p{
-                font-size: 12px;
-                color:rgb(53, 53, 53);
-                line-height: 16px;
-                width:200px;
-                word-wrap: break-word;
-                b{
-                    font-weight:800;
-                    font-size: 14px;
-                    color:black;
-                }
-            }
-        }
-    }
-    .list-notifi:hover{
-        background-color:#80808014;
-    }
-    .button-notifi{
-        width: 100%;
-        margin: 10px 0;
     }
 }
 

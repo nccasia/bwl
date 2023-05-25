@@ -7,13 +7,30 @@ import {postLike} from "../../api/apiLike";
 import { toast } from 'react-toastify';
 import EmojiLike from '../EmojiLike';
 import  Comment from "../Comment";
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
+import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faFaceSmile,
+  faXmark,
+  faMessage,
+} from '@fortawesome/free-solid-svg-icons';
 
 const ContainerItem = (props) => {
   const {state, dispatch}=useStore();
+  // const inputRef = useRef(null);
   const [open, setOpen] = React.useState(false);
   const handleClick = (index) => {
-    getComment(index).then(data => dispatch({type:"SET_COMMENTS", payload: {comments: data, messageId: index}}))
+    getComment(index).then((data) =>
+      dispatch({
+        type: 'SET_COMMENTS',
+        payload: { comments: data, messageId: index },
+      }),
+    );
     setOpen(!open);
+    // if (inputRef.current) {
+    //   inputRef.current.focus();
+    // }
   };
 
   const handleClickLike = async() => {
@@ -45,19 +62,41 @@ const ContainerItem = (props) => {
       <div className="container-item-img">
         <img src={`https://bwl.vn/images/${props?.links[0]}`} />
       </div>
-      <EmojiLike reactions={props?.reactions} totalLike={props?.totalLike} messageId={props?.messageId}/>
+      <EmojiLike reactions={props?.reactions} totalLike={props?.totalLike} totalComment={props?.totalComment} messageId={props?.messageId}/>
       <div className="container-item-react">
-        <span 
-          className="react-like" 
-          onClick={handleClickLike}
-        >
-          {props?.onLike ? "Bỏ Thích": "Thích"}
+        <span className="react-like" onClick={handleClickLike}>
+          {props?.onLike ? (
+            <div
+              className="react-like-icon"
+              style={{ color: state.background ? 'white' : '' }}
+            >
+              <ThumbDownAltIcon
+                className="like_icon"
+                style={{ color: state.background ? 'white' : '' }}
+              />
+              <span>Bỏ Thích</span>
+            </div>
+          ) : (
+            <div
+              className="react-like-icon"
+              style={{ color: state.background ? 'white' : '' }}
+            >
+              <ThumbUpAltIcon className="like_icon" />
+              <span>Thích</span>
+            </div>
+          )}
         </span>
-        <span 
-          onClick={() => handleClick(props?.messageId)} 
+        <span
+          onClick={() => handleClick(props?.messageId)}
           className="react-comment"
+          style={{ color: state.background ? 'white' : '' }}
         >
-          Bình luận {"(" + String(props?.totalComment > 0 ? props?.totalComment : 0) + ")"}
+          <FontAwesomeIcon
+            className="icon-cmt"
+            style={{ color: state.background ? 'white' : '' }}
+            icon={faMessage}
+          />
+          <span>Bình luận </span>
         </span>
       </div>
       {open && (

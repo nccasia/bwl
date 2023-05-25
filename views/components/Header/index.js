@@ -20,19 +20,13 @@ function HeaderPage(props) {
   const [size, setSize] = React.useState(0);
   React.useEffect(() => {
     if(state.author?.id) {
-      getNotificationSize(state.author.id).then(data => {
+      getNotificationSize(state.author.id, dispatch).then(data => {
         setSize(data?.size);
       })
     }
   }, [state.author?.id]);
-
   const handleNotification = async () =>{
     setOpenNotification(true);
-    if(state.author?.id) {
-      await getNotification({messageId: state.author.id, onLabel: true}).then(data => {
-        dispatch({type:"CHANGE_NOTIFICATION", payload: data?.notifications})
-      })
-    }
   }
 
   return (
@@ -66,23 +60,21 @@ function HeaderPage(props) {
           >
               <FontAwesomeIcon icon={faMoon} style={{ color: state.background ? "white": "black"}}/>
           </div>
-          <div>
-            <div 
-              className="icon"
-              style={{ backgroundColor: openNotification ? "#1876f245": "#80808030"}}
-              onClick={handleNotification}
-            >
-              <FontAwesomeIcon 
-                icon={faBell} 
-                style={{ color: openNotification ? "blue": "black"}}
-              />
-              {size !== 0 && openLabel && <p className="icon-notifi">{size}</p>}
-            </div>
+          <div 
+            className="icon"
+            style={{ backgroundColor: openNotification ? "#1876f245": "#80808030"}}
+            onClick={handleNotification}
+          >
+            <FontAwesomeIcon 
+              icon={faBell} 
+              style={{ color: openNotification ? "blue": "black"}}
+            />
+            {size !== 0 && openLabel && <p className="icon-notifi">{size}</p>}
             {openNotification ? (
-                <div className="dialog-button">
-                  <Notification setOpen={setOpenNotification} setLabel={setOpenLabel}/>
-                </div>
-              ): null}
+              <div className="dialog-button">
+                <Notification setOpen={setOpenNotification} setLabel={setOpenLabel}/>
+              </div>
+            ): null}
           </div>
           <div className="person-icon logout" onClick={() => handleClick()}>
             <img

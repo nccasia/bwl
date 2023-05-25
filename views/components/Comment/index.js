@@ -1,5 +1,5 @@
 import './style.scss';
-import React from 'react';
+import React, { useState } from 'react';
 import CommentItem from '../CommentItem';
 import { toast } from 'react-toastify';
 import {useStore} from "../../store";
@@ -35,19 +35,19 @@ function Comment(props) {
     };
 
     return (
-        <div className="container-comment">
-            {props?.comments ?  props?.comments.map((comment, index) => (
-                <div className="comment" key={index}>
-                    <CommentItem {...comment}/>
-                </div>
-            )): null}
-            <CommentInput 
-              handleClickComment={handleClickComment}
-              input={input}
-              setInput={setInput}
-            />
-        </div>
-    )
+      <div className="container-comment">
+          {props?.comments ?  props?.comments.map((comment, index) => (
+              <div className="comment" key={index}>
+                  <CommentItem {...comment}/>
+              </div>
+          )): null}
+          <CommentInput 
+            handleClickComment={handleClickComment}
+            input={input}
+            setInput={setInput}
+          />
+      </div>
+  );
 }
 
 export default Comment;

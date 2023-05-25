@@ -1,16 +1,73 @@
+// .comment-item {
+//   //margin-top: 20px;
+//   display: flex;
+//   justify-content: space-between;
+//   width: 100%;
+//   padding: 20px 16px 16px 16px;
+//   position:relative;
+//   .author-avatar {
+//     display: flex;
+//     gap: 5px;
+//     width: 100%;
+//     img {
+//       border-radius: 50%;
+//       vertical-align: middle;
+//       border-style: none;
+//       max-width: 45px;
+//       max-height: 45px;
+//     }
+//     .header-name{
+//       display: flex;
+//       align-items: center;
+//       gap: 3px;
+//       p{
+//         font-size: 10px;
+//         color: gray;
+//         b{
+//           font-size: 16px;
+//           color: black;
+//         }
+//       }
+//     }
+//     .comment {
+//       font-size: 0.9rem;
+//       line-height: 1.3;
+//       word-break: break-all;
+//     }
+//   }
+//   .comment-time {
+//     font-size: 0.7rem;
+//     font-weight: 400;
+//     color: #5b5b5b;
+//   }
+//   .comment-button{
+//     display: none;
+//   }
+// }
+
+// .comment-item:hover {
+//   background-color: rgb(247, 246, 246);
+//   .comment-button{
+//     display: flex;
+//     position:absolute;
+//     z-index: 300;
+//     top: -10px;
+//     right: 5px;
+//   }
+// }
+
 .comment-item {
-  //margin-top: 20px;
+  margin-top: 20px;
   display: flex;
   justify-content: space-between;
   width: 100%;
-  padding: 20px 16px 16px 16px;
-  position:relative;
+  padding: 0px 16px 16px 16px;
   .author-avatar {
     display: flex;
     justify-content: center;
-    align-items: center;
-    gap: 5px;
-    width: 100%;
+    // align-items: center;
+    // gap: 5px;
+    position: relative;
     img {
       border-radius: 50%;
       vertical-align: middle;
@@ -18,52 +75,76 @@
       max-width: 50px;
       max-height: 50px;
     }
-    .author-name {
-      margin-left: 10px;
-      font-size: 1rem;
-      line-height: 1.3;
+    .author-boxcontent {
+      gap: 5px;
       display: flex;
       flex-direction: column;
-      align-items: start;
-      gap: 5px;
-      width: 100%;
-      .header-name{
+      align-items: center;
+      justify-content: center;
+      .author-name {
+        margin-left: 10px;
+        font-size: 1rem;
+        line-height: 1.3;
         display: flex;
-        align-items: center;
+        flex-direction: column;
+        align-items: start;
         gap: 3px;
-        p{
-          font-size: 10px;
-          color: gray;
-          b{
-            font-size: 16px;
-            color: black;
-          }
+        border-radius: 10px;
+        padding: 10px;
+        background: #EBEDF0;
+        max-width: 500px;
+        .name {
+          font-weight: 500;
+        }
+        .comment {
+          font-size: 0.9rem;
+          line-height: 1.3;
+          overflow-wrap: break-word;
         }
       }
-      .comment {
-        font-size: 0.9rem;
-        line-height: 1.3;
-        word-break: break-all;
+      .comment-time {
+        font-size: 7px;
+        font-weight: 400;
+        color: #5b5b5b;
+      }
+    }
+    
+    &:hover .delete-comment-btn{
+    display: block;
+    cursor: pointer;
+    }
+    .delete-comment-btn{
+      display: none;
+      position: relative;
+      .dialog-form{
+        background-color: #fff;
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        position: absolute;
+        padding: 10px 20px;
+        border-radius: 6px;
+        width: 200px;
+        p{
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+          padding: 10px;
+        }
+        p:hover{
+          background-color: #EBEDF0;
+        }
+        &::before{
+          position: absolute;
+          content: "";
+          border-width: 10px 15px;
+          border-style: solid;
+          border-color: transparent transparent white transparent;
+          position: absolute;
+          left:0 ;
+          top: -14px;
+        }
       }
     }
   }
-  .comment-time {
-    font-size: 0.7rem;
-    font-weight: 400;
-    color: #5b5b5b;
-  }
-  .comment-button{
-    display: none;
-  }
-}
 
-.comment-item:hover {
-  background-color: rgb(247, 246, 246);
-  .comment-button{
-    display: flex;
-    position:absolute;
-    z-index: 300;
-    top: -10px;
-    right: 5px;
-  }
 }

@@ -5,6 +5,7 @@ import {deleteComment} from "../../api/apiComment";
 import {useStore} from "../../store";
 import CommentInput from "../CommentInput";
 import {editComment} from "../../api/apiComment"
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 const CommentItem = (props) => {
   const {state, dispatch}=useStore();
@@ -17,7 +18,7 @@ const CommentItem = (props) => {
       })
     }
   }
-
+  const [open, setOpen] =React.useState(false);
   const [openEdit, setOpenEdit] =React.useState(false);
   const [input, setInput] = React.useState('');
   const [openButton, setOpenButton] =React.useState(false);
@@ -31,7 +32,7 @@ const CommentItem = (props) => {
       id: props?._id, 
       content: input,
     }).then(data => {
-      if(data){
+      if(data?.message){
         dispatch({
           type: "EDIT_COMMENT", 
           payload: {
@@ -53,7 +54,7 @@ const CommentItem = (props) => {
           className="img-people"
           alt="avatar"
         />
-        <div className="author-name">
+        {/* <div className="author-name">
           <div className="header-name">
             <p><b>{props?.author[0]?.username}</b></p>
             <p>{formatDay(props?.createdTimestamp ? props?.createdTimestamp : props?.comment?.createdTimestamp)}</p>
@@ -73,8 +74,40 @@ const CommentItem = (props) => {
           <button onClick={() => setOpenEdit(!openEdit)}>Edit</button>
           <button onClick={handleDelete}>Delete</button>
         </div>
-      )}
-    </div>
+      )} */}
+          <div className="author-boxcontent">
+            <div className="author-name">
+              <div className="author-name-item">
+              <p className="name">{props?.author[0]?.username}</p>
+              </div>
+              {!openEdit && <p className="comment">{props?.content}</p>}
+              {openEdit && 
+                <CommentInput 
+                  handleClickComment={handleClickComment}
+                  input={input}
+                  setInput={setInput} 
+                />
+              }
+            </div>
+            <div className="comment-time">{formatDay(props?.createdTimestamp ? props?.createdTimestamp : props?.comment?.createdTimestamp)}</div>
+         </div>
+        {state.author?.id && props?.authorId === state.author?.id && (
+          <div className="delete-comment-btn">
+            <div className="delete-icon"  onClick={()=> setOpen(true)}>
+              <MoreHorizIcon />
+            </div>
+            {open ?(
+              <div className="dialog-form">
+              <p onClick={handleDelete}>Xóa</p> 
+              <p onClick={() => setOpenEdit(!openEdit)}>Chỉnh Sữa</p> 
+            </div>
+            ) 
+            : (<></>)}
+        
+          </div>
+        )}
+        </div>
+      </div>
   );
 };
 export default CommentItem;

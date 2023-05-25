@@ -142,6 +142,15 @@ export const emojis = [
   { id: '960783467904401418', name: 'emoji_140' },
   { id: '960783551794663434', name: 'emoji_141' },
   { id: '964053330622021673', name: 'lodo' },
-
+  { id: '986943316119683113', name: '123zo' },
   { id: '974272253007118356', name: 'ahaha' },
+  { id: '992332890572587088', name: 'huhuhu' },
+  { id: '925249328375791626', name: 'doan_dai_hiep' },
+  { id: '1077087118750396416', name: 'be_cuong' },
+  { id: '1031402735595175966', name: 'ao_that_day' },
+  { id: '1032913543076515860', name: 'vaicabiu' },
+  { id: '1047825323414278145', name: 'ai_biet' },
+  { id: '1083333736168431646', name: 'may_lua_bo_may' },
+  { id: '1083634025282940928', name: 'cuoi_ha_hong_len_troi' },
+  { id: '1062928084015267931', name: 'done' },
 ];

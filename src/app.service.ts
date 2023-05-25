@@ -16,6 +16,7 @@ import { KomuUsers, KomuUsersDocument } from './Komu_users/komu_users.schema';
 
 @Injectable()
 export class AppService {
+  commentModel: any;
   constructor(
     @InjectModel(Reaction.name)
     private readonly komuReaction: Model<ReactionDocument>,
@@ -140,7 +141,7 @@ export class AppService {
     const data = await this.komuMessage.aggregate(aggregatorOpts as any).exec();
 
     for (const item of data) {
-      item.reactions = item.reactions.reduce((result:any, reaction: any) => {
+      item.reactions = item.reactions.reduce((result: any, reaction: any) => {
         const exists = result.find((e: any) => e.name === reaction.emoji);
         const emojiWithId = emojis.find((e) => e.name === reaction.emoji);
         if (exists) {
@@ -201,7 +202,7 @@ export class AppService {
       .exec();
   }
 
-  async comment({ messageId, content, authorId }) {
+  async comment({ messageId, content, authorId}) {
     const comment = new this.komuComment({
       messageId,
       authorId,
@@ -332,21 +333,18 @@ export class AppService {
     return true;
   }
 
-  async getNotifications(messageId: string, authorId: string, onLabel:boolean) {
+  async getNotifications(messageId: string, authorId: string, page: number, size: number) {
     return this.komuNotification
       .aggregate([
         {
           $match: {
             messageId,
-            onLabel,
             authorId: { $ne: authorId },
           },
         },
-        {
-          $sort: {
-            _id: -1,
-          },
-        },
+        {$sort: {_id: -1} },
+        { $skip: (page - 1) * size },
+        { $limit: size },
         {
           $lookup: {
             from: 'komu_users',
@@ -361,6 +359,19 @@ export class AppService {
             localField: 'messageId',
             foreignField: 'messageId',
             as: 'message',
+          },
+        },
+      ])
+      .exec();
+  }
+
+  async getNotificationsSize(messageId: string, authorId: string) {
+    return this.komuNotification
+      .aggregate([
+        {
+          $match: {
+            messageId,
+            authorId: { $ne: authorId },
           },
         },
       ])

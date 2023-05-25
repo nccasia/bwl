@@ -1,17 +1,22 @@
-import {maxPosts} from '../util/maxPosts';
+import { maxPosts } from '../util/maxPosts';
 
-const initState={
-  posts:[],
+const initState = {
+  posts: [],
   hotPosts: [],
-  author:[],
+  author: [],
   background: false,
-  notification:[],
+  notification: [],
   page: 1,
   runPosts: [],
+  pageNotification: 1,
+  lengthNotication:0,
+  size: 5,
+  loadingNotifi: false,
+  loadingPost: false,
 }
 
-function reducer(state, action){ 
-  switch(action.type){
+function reducer(state, action) {
+  switch (action.type) {
     case 'SET_POSTS':
       const commentList = action.payload?.map(main => {
         return {
@@ -24,8 +29,14 @@ function reducer(state, action){
       return {
         ...state,
         posts: state.runPosts?.length > 0 ?  state.runPosts : [...state.posts,...commentList],
-        hotPosts: state.runPosts?.length > 0 ?  maxPosts(state.runPosts) : maxPosts([...state.posts,...action.payload]),
+        hotPosts: state.runPosts?.length > 0 ?  maxPosts(state.runPosts) : maxPosts([...state.posts,...commentList]),
         runPosts: [],
+        loadingPost: false,
+      };
+    case 'CHANGE_LOADING_POST':
+      return {
+        ...state,
+        loadingPost: true,
       };
     case 'SET_POST_ONE':
       const commentListOne = action.payload?.map(main => {
@@ -69,15 +80,21 @@ function reducer(state, action){
         ...state,
         background: !state.background,
       };
-    case 'CHANGE_NOTIFICATION':
+    case 'CHANGE_LOADING_NOTIFICATION':
       return {
         ...state,
-        notification: action.payload,
+        loadingNotifi: true,
+      };
+    case 'SET_LENGTH_NOTIFICATION':
+      return {
+        ...state,
+        lengthNotication: action.payload,
       };
     case 'CHANGE_NOTIFICATION_ALL':
       return {
         ...state,
         notification: [...state.notification, ...action.payload],
+        loadingNotifi: false,
       };
     case 'CHANGE_LIKE':
       const listLike = state.posts.map(main =>{
@@ -90,7 +107,7 @@ function reducer(state, action){
         } else {
           return main;
         }
-      })
+      });
       return {
         ...state,
         posts: listLike,
@@ -100,9 +117,15 @@ function reducer(state, action){
         ...state,
         page: state.page + 1,
       };
+    case 'CHANGE_PAGE_NOTIFICATION':
+      const numberNotifi = Math.ceil(state.lengthNotication / state.size);
+      return {
+        ...state,
+        pageNotification: numberNotifi > state.pageNotification && state.pageNotification >0 ? state.pageNotification + 1 : -1,
+      };
     case 'SET_COMMENTS':
-      const listComment = state.posts.map(main =>{
-        if(main.messageId === action.payload?.messageId) {
+      const listComment = state.posts.map((main) => {
+        if (main.messageId === action.payload?.messageId) {
           return {
             ...main, 
             comments: action.payload.comments,
@@ -110,7 +133,7 @@ function reducer(state, action){
         } else {
           return main;
         }
-      })
+      });
       return {
         ...state,
         posts: listComment,
@@ -169,8 +192,8 @@ function reducer(state, action){
         posts: editComment,
       };
     default:
-      throw new Error("Error");
+      throw new Error('Error');
   }
 }
-export {initState}
+export { initState };
 export default reducer;

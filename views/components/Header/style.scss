@@ -26,6 +26,7 @@
       background-color: #80808030;
       margin-right: 10px;
       position:relative;
+      cursor: pointer;
       .icon-notifi{
         position:absolute;
         top: 0;
@@ -84,4 +85,10 @@
   position: absolute;
   right: 3%;
   top: -14px;
+}
+
+@media (max-width: 768px) {
+  .nav-header{
+    padding: 5px 16px;
+  }
 }
