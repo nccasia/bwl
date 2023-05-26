@@ -7,32 +7,38 @@ const initState = {
   background: false,
   notification: [],
   page: 1,
-  runPosts: [],
   pageNotification: 1,
   lengthNotication:0,
   size: 5,
   loadingNotifi: false,
   loadingPost: false,
+  loadingHotPost: false,
+  lengthPosts: 0,
+  changePage: false,
 }
 
 function reducer(state, action) {
   switch (action.type) {
     case 'SET_POSTS':
-      const commentList = action.payload?.map(main => {
+      const commentList = action.payload?.posts.map(main => {
         return {
           ...main, 
           ...{
             comments: [], 
-            onLike: false,
           }}
       })
       return {
         ...state,
-        posts: state.runPosts?.length > 0 ?  state.runPosts : [...state.posts,...commentList],
-        hotPosts: state.runPosts?.length > 0 ?  maxPosts(state.runPosts) : maxPosts([...state.posts,...commentList]),
-        runPosts: [],
+        posts: state.changePage ? commentList : [...state.posts,...commentList],
         loadingPost: false,
+        lengthPosts: action.payload?.size,
       };
+      case 'SET_POSTS_NULL':
+        return {
+          ...state,
+          posts: [],
+          changePage: true,
+        };
     case 'CHANGE_LOADING_POST':
       return {
         ...state,
@@ -42,38 +48,29 @@ function reducer(state, action) {
       const commentListOne = action.payload?.map(main => {
         return {
           ...main, 
-          ...{
-            comments: [], 
-            onLike: false,
-          }}
-      })
-      return {
-        ...state,
-        posts: commentListOne,
-        runPosts: state.posts,
-      };
-    case 'SET_AUTHOR':
-      const authorList = state.posts?.map(main => {
-        const authorTest = main?.likes?.filter(item => item?.authorId === action.payload?.id)
-        if(authorTest?.length >0) {
-          return {
-            ...main, 
-            ...{
-                onLike: true,
-              }
-            }
-        } else {
-          return {
-            ...main, 
-            ...{
-              onLike: false,
-            }}
+          ...{ comments: []}
         }
       })
       return {
         ...state,
+        posts: commentListOne,
+        page: 1,
+      };
+    case 'SET_HOTPOSTS':
+      return {
+        ...state,
+        hotPosts: action.payload,
+        loadingHotPost: false,
+      };
+    case 'CHANGE_LOADING_HOTPOST':
+      return {
+        ...state,
+        loadingHotPost: true,
+      };
+    case 'SET_AUTHOR':
+      return {
+        ...state,
         author: action.payload,
-        posts: authorList,
       };
     case 'CHANGE_BACKGROUND':
       return {
@@ -96,12 +93,18 @@ function reducer(state, action) {
         notification: [...state.notification, ...action.payload],
         loadingNotifi: false,
       };
+    case 'SET_NOTIFICATION':
+      return {
+        ...state,
+        notification: [],
+        pageNotification: 1,
+      };
     case 'CHANGE_LIKE':
       const listLike = state.posts.map(main =>{
         if(main.messageId === action.payload?.messageId) {
           return {
             ...main, 
-            onLike: !main?.onLike,
+            likes: !main?.likes,
             totalLike: action.payload?.like ? Number(main.totalLike) + 1 : Number(main.totalLike) - 1
           }
         } else {
@@ -113,9 +116,10 @@ function reducer(state, action) {
         posts: listLike,
       };
     case 'CHANGE_PAGE':
+      const numberPosts = Math.ceil(state.lengthPosts / state.size);
       return {
         ...state,
-        page: state.page + 1,
+        page: numberPosts > state.page && state.page >0 ? state.page + 1 : -1,
       };
     case 'CHANGE_PAGE_NOTIFICATION':
       const numberNotifi = Math.ceil(state.lengthNotication / state.size);

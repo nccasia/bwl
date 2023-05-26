@@ -4,16 +4,19 @@ import './style.scss';
 import {useStore} from "../../store";
 import React from 'react';
 import {maxPosts} from '../../util/maxPosts';
+import {getHotPosts} from "../../api/apiPosts";
+import CircularProgress from '@mui/material/CircularProgress';
 
 const SideBar = (props) => {
   const {state, dispatch}=useStore();
-  const sortedPosts = state.hotPosts?.sort((a, b) => b.totalLike - a.totalLike);
-  
+  React.useEffect(() => {
+    getHotPosts(dispatch);
+  }, []);
   return (
     <div className="sidebar-left-content" style={{ backgroundColor: state.background ? "#242526": "white", color: state.background ? "white": "#242526",}}>
       <h3 className="sidebar-left-title">Top BWL</h3>
       <div className="sidebar-center">
-        {sortedPosts ? sortedPosts.map((post, index) => {
+        {state?.hotPosts ? state?.hotPosts.map((post, index) => {
           return (
             <React.Fragment key={index}>
               <SideBarItem {...post}/>
@@ -21,6 +24,11 @@ const SideBar = (props) => {
             </React.Fragment>
           );
         }): null}
+        {state.loadingHotPost && (
+          <div className="sidebar-progress">
+            <CircularProgress/>
+          </div>
+        )}
       </div>
       <div className="sidebar-left-bottom">
         <span>

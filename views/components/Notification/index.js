@@ -27,7 +27,7 @@ const Notification = (props) => {
       await props?.setOpen(false);
       await props?.setLabel(false);
       if(state.author?.id) {
-        postNotification(state.author?.id);
+        postNotification(state.author?.id, dispatch);
       }
     }
   };

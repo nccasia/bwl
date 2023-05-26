@@ -4,7 +4,7 @@ export const getAll = async (index, dispatch) => {
     try {
         dispatch({type:"CHANGE_LOADING_POST"})
         const res = await axios({
-            url: `/api/getAllPaging?page=${index}`,
+            url: index.messageId ? `/api/getAllPaging?page=${index.page}&messageId=${index.messageId}` : `/api/getAllPaging?page=${index.page}`,
             method: "GET",
           });
         dispatch({type:"SET_POSTS", payload: res.data})
@@ -24,3 +24,17 @@ export const getOne = async (index) => {
         return [];
     }
 }
+
+export const getHotPosts = async (dispatch) => {
+    try {
+        dispatch({type:"CHANGE_LOADING_HOTPOST"})
+        const res = await axios({
+            url: "/api/hotposts",
+            method: "GET",
+          });
+        dispatch({type:"SET_HOTPOSTS", payload: res.data?.hotposts})
+    } catch {
+        return [];
+    }
+}
+
