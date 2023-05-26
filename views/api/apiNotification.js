@@ -27,7 +27,7 @@ export const getNotificationSize = async (index, dispatch) => {
     }
 }
 
-export const postNotification = async (messageId) => {
+export const postNotification = async (messageId, dispatch) => {
     try {
         const res = await axios({
             url: "/api/notifications/size",
@@ -36,7 +36,7 @@ export const postNotification = async (messageId) => {
             },
             method: "POST",
         });
-        return res.data;
+        dispatch({type: "SET_NOTIFICATION"});
     } catch {
         return {};
     }

@@ -27,11 +27,23 @@ const ContainerItem = (props) => {
 
   const handleClickLike = async() => {
     if(state.author?.id){
-      postLike(props?.messageId, state.author?.id).then(data => {
-        if(data){
-          dispatch({type: "CHANGE_LIKE", payload: {messageId: props?.messageId, like: data?.like}})
-        }
-      })
+      if(props?.authorId !== state.author?.id) {
+        postLike(props?.messageId, state.author?.id).then(data => {
+          if(data){
+            dispatch({type: "CHANGE_LIKE", payload: {messageId: props?.messageId, like: data?.like}})
+          }
+        })
+      } else {
+        toast.warning('Ha ha, không được đâu!', {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
     } else {
       toast.warning('Bạn cần đăng nhập để like!', {
         position: "bottom-right",
@@ -57,7 +69,7 @@ const ContainerItem = (props) => {
       <EmojiLike reactions={props?.reactions} totalLike={props?.totalLike} totalComment={props?.totalComment} messageId={props?.messageId}/>
       <div className="container-item-react">
         <span className="react-like" onClick={handleClickLike}>
-          {props?.onLike ? (
+          {props?.likes ? (
             <div
               className="react-like-icon"
               style={{ color: state.background ? 'white' : '' }}

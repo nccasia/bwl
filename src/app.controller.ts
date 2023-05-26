@@ -64,7 +64,7 @@ export class AppController {
                   user.discriminator,
                 );
               }
-              const posts = await this.appService.getAll(1, 5);
+              const posts = await this.appService.getAll(1, 5, null);
               return res.render('index', { posts, user });
             }),
             first(),
@@ -111,7 +111,7 @@ export class AppController {
                   user.discriminator,
                 );
               }
-              const posts = await this.appService.getAll(1, 5);
+              const posts = await this.appService.getAll(1, 5, null);
               return res.render('index', { posts, user });
             }),
             first(),
@@ -120,7 +120,7 @@ export class AppController {
         throw new error();
       }
     } else {
-      const posts = await this.appService.getAll(1, 5);
+      const posts = await this.appService.getAll(1, 5, null);
       //console.log(posts);
       return res.render('index', { posts });
     }
@@ -159,8 +159,11 @@ export class AppController {
   }
 
   @Get('/api/getAllPaging')
-  getAllPaging(@Query('page') page = 1) {
-    return this.appService.getAll(page <= 0 ? 1 : page, 5);
+  async getAllPaging(@Req() req: Request, @Res() res: Response) {
+    //const { page, messageId } = req.query;
+    const posts= await this.appService.getAll(Number(req.query?.page), 5, String(req.query?.messageId)? String(req.query?.messageId) : null);
+    const size= await this.appService.findLengthMessage();
+    return res.json({posts, size})
   }
 
   @Post('/api/comment')
@@ -340,6 +343,12 @@ export class AppController {
     );
     await Promise.all(promises);
     return res.json(true);
+  }
+
+  @Get('/api/hotposts')
+  async getHotPosts(@Req() req: Request, @Res() res: Response) {
+    const hotposts = await this.appService.getHotPosts();
+    return res.json({ hotposts });
   }
 }
 

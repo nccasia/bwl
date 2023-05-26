@@ -15,10 +15,10 @@ const Posts = () => {
 
   React.useEffect(() => {
     const foo = async () =>{
-      await getOne(messageId).then(data => dispatch({type:"SET_POST_ONE", payload:data}));
       if(document.cookie && document.cookie.split("=")[0] === "token"){
         await getUser(document.cookie.split("=")[1]).then(data => dispatch({type:"SET_AUTHOR", payload:data}));
       }
+      await getOne(messageId).then(data => dispatch({type:"SET_POST_ONE", payload:data}));
     }
     foo();
   }, [document.cookie, messageId]);
