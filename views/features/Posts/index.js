@@ -3,7 +3,7 @@ import Header from '../../components/Header';
 import {useStore} from "../../store";
 import {getUser} from '../../api/apiUser';
 import {getOne} from '../../api/apiPosts';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Container from '../../components/Container';
 import "./style.scss";
 
@@ -15,17 +15,21 @@ const Posts = () => {
 
   React.useEffect(() => {
     const foo = async () =>{
-      if(document.cookie && document.cookie.split("=")[0] === "token"){
-        await getUser(document.cookie.split("=")[1]).then(data => dispatch({type:"SET_AUTHOR", payload:data}));
-      }
       await getOne(messageId).then(data => dispatch({type:"SET_POST_ONE", payload:data}));
     }
     foo();
-  }, [document.cookie, messageId]);
+  }, [messageId]);
+
+  const navigate = useNavigate();
+  const handleChangePage = async (index) => {
+    await dispatch({type: "SET_POSTS_NULL"});
+    navigate("/");
+  }
 
   return (
     <React.Fragment>
       <Header/>
+      <h1  style={{marginTop: "80px"}} onClick={handleChangePage}>Trang chủ</h1>
       <div className="container-post">
         <Container/>
       </div>

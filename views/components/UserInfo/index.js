@@ -21,7 +21,7 @@ const UserInfo = (props) => {
         <p
           className="userInfo-time"
           style={{ color: state.background ? 'white' : '' }}>
-          {formatDay(props?.createdTimestamp?.$numberDecimal)}
+          {formatDay(props?.createdTimestamp?.$numberDecimal || props?.createdTimestamp)}
         </p>
       </div>
     </div>

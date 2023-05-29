@@ -23,7 +23,7 @@ export class Notification {
   @Prop()
   count: number;
 
-  @Prop({ default: Date.now() })
+  @Prop()
   createdTimestamp: number;
 
   @Prop()

@@ -38,6 +38,7 @@ function reducer(state, action) {
           ...state,
           posts: [],
           changePage: true,
+          page: 1,
         };
     case 'CHANGE_LOADING_POST':
       return {
@@ -119,13 +120,15 @@ function reducer(state, action) {
       const numberPosts = Math.ceil(state.lengthPosts / state.size);
       return {
         ...state,
-        page: numberPosts > state.page && state.page >0 ? state.page + 1 : -1,
+        loadingPost: numberPosts > action.payload && action.payload >0 ? true : false,
+        page: numberPosts > action.payload && action.payload >0 ? action.payload + 1 : -1,
       };
     case 'CHANGE_PAGE_NOTIFICATION':
       const numberNotifi = Math.ceil(state.lengthNotication / state.size);
       return {
         ...state,
-        pageNotification: numberNotifi > state.pageNotification && state.pageNotification >0 ? state.pageNotification + 1 : -1,
+        loadingNotifi: numberNotifi > action.payload && action.payload >0 ? true : false,
+        pageNotification: numberNotifi > action.payload && action.payload >0 ? action.payload + 1 : -1,
       };
     case 'SET_COMMENTS':
       const listComment = state.posts.map((main) => {
