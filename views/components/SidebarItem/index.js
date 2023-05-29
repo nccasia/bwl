@@ -15,7 +15,7 @@ const SideBarItem = (props) => {
     <div 
       className="sidebar-item"
       onClick={() => handleChangePage(props?.messageId)} 
-      style={{ backgroundColor: state.background ? "#242526": "white", color: state.background ? "white": "#242526",}}
+      style={{ backgroundColor: state.background ? "#242526": "white", color: "#6C7588"}}
     >
       <div className="sidebar-item-image">
         <img src={`https://bwl.vn/images/${props?.links[0]}`} />

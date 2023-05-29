@@ -59,7 +59,7 @@ const MainContent = (props) => {
     requestAnimationFrame(animation);
   };
   return (
-    <div style={{ backgroundColor: state.background ? "black": "white"}}>
+    <div style={{ backgroundColor: state.background ? "black": "#f5f5f500"}}>
       <div className="main-container">
         <div className="sidebar-left">
           <SideBar />

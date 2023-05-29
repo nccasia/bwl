@@ -7,11 +7,6 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 const NotificationList = (props) => {
   const {state, dispatch}=useStore();
-  // React.useEffect(() => {
-  //   if(state.author?.id && state.pageNotification > 0) {
-  //     getNotification({messageId: state.author.id, page: state.pageNotification}, dispatch)
-  //   }
-  // }, [state.pageNotification]);
   const navigate = useNavigate();
   const handleChangePage = async (index) => {
     await dispatch({type: "SET_POSTS_NULL"});
@@ -28,7 +23,7 @@ const NotificationList = (props) => {
             className="notification-list"
           >
             {main.content ? (
-                <div className="list-notifi" style={{backgroundColor: main?.onLabel ? "gray": "white"}}>
+                <div className="list-notifi">
                   <img 
                     className="list-notifi-image"
                     src={`https://cdn.discordapp.com/avatars/${main?.author[0]?.id}/${main?.author[0]?.avatar}`} 
@@ -36,7 +31,7 @@ const NotificationList = (props) => {
                   />
                   <span>
                     <p>
-                      <b>{main?.author[0]?.username}</b>
+                      <b style={{ color: state.background ? "#c0c0cd" : "black"}}>{main?.author[0]?.username}</b>
                       {" đã bình luận bài viết của bạn có nội dung:"}
                     </p>
                     <p>{main?.content}</p>
@@ -54,7 +49,7 @@ const NotificationList = (props) => {
                   />
                   <span>
                     <p>
-                      <b>{main?.author[0]?.username} </b>
+                      <b style={{ color: state.background ? "#c0c0cd" : "black"}}>{main?.author[0]?.username} </b>
                       {main?.onLike ? " đã thích bài viết của bạn." : " đã bỏ thích bài viết của bạn."}
                     </p>
                     <p className="time-notifi">{changeTime(main?.createdTimestamp)}</p>

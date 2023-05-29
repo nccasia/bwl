@@ -141,9 +141,7 @@ const EmojiLike = (props) => {
                   ) : (
                     <p>{main?.name}</p>
                   )}
-                  <span style={{ color: state.background ? 'white' : '' }}>
-                    {main.count}
-                  </span>
+                  {main.count}
                 </div>
               </li>
             </Tooltip>
@@ -168,15 +166,9 @@ const EmojiLike = (props) => {
                   cursor: 'pointer'
                 }}
               >
-                <img
-                  src="./assets/img/default-react.png"
-                  alt="icon-like"
-                  className="icon-like"
-                  style={{
-                    width: '30px',
-                    height: '30px',
-                    borderRadius: '8px',
-                  }}
+                <ThumbUpOffAltIcon
+                  style={{ color: state.background ? '#6C7588' : 'black' }}
+                  className="emoji-like"
                 />
                 <p>
                   <b>Like:</b>
@@ -202,10 +194,9 @@ const EmojiLike = (props) => {
             <li className="list-inline-item list-reaction ">
               <div className="btn-reaction">
                 <ThumbUpOffAltIcon
-                  style={{ color: state.background ? 'white' : '' }}
                   className="emoji-like"
                 />
-                <span style={{ color: state.background ? 'white' : '' }}>
+                <span>
                   {props?.totalLike}
                 </span>
               </div>
@@ -216,12 +207,10 @@ const EmojiLike = (props) => {
 
       <div
         className="comment-icon"
-        style={{ color: state.background ? 'white' : '' }}
       >
         <span>{String(props?.totalComment > 0 ? props?.totalComment : 0)}</span>
         <ChatBubbleOutlineIcon
           className="icon-cmt"
-          style={{ color: state.background ? 'white' : '' }}
         />
       </div>
     </ul>

@@ -1,6 +1,7 @@
 .container-lbutton {
   padding: 20px 30px;
   min-width:210px;
+  color:#6C7588;
   .logout-button-info{
     display: flex;
     justify-content: center;
@@ -39,12 +40,12 @@
       .text-logout{
         text-decoration: none;
         border: none;
-        color: #000;
         font-size: 1rem;
       }
     }
     .text-logout{
       margin-left: 10px;
+      color:#6C7588;
     }
   }
 }
