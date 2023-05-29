@@ -125,10 +125,12 @@ export class AppService {
       .exec();
 
     const commentAuthor = await this.komuUser.findOne({ id: authorId }).exec();
+    const createdTimestamp = new Date().getTime();
     const notification = new this.komuNotification({
       messageId,
       authorId,
       content,
+      createdTimestamp,
     });
 
     await comment.save();
@@ -210,10 +212,12 @@ export class AppService {
 
     const likeAuthor = await this.komuUser.findOne({ id: authorId }).exec();
     const onLike = true;
+    const createdTimestamp = new Date().getTime();
     const notification =  new this.komuNotification({
       messageId,
       authorId,
       onLike,
+      createdTimestamp,
     });
 
     await like.save();
@@ -230,10 +234,12 @@ export class AppService {
       })
       .exec();
     const onLike = false;
+    const createdTimestamp = new Date().getTime();
     const notification =  new this.komuNotification({
       messageId,
       authorId,
       onLike,
+      createdTimestamp,
     });
     await notification.save();
     return true;
