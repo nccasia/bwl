@@ -5,7 +5,7 @@ import LoginButton from '../LoginButton';
 import Notification from '../Notification';
 import {useStore} from "../../store";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBell, faMoon } from '@fortawesome/free-solid-svg-icons';
+import { faBell, faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
 import {getNotification, getNotificationSize} from '../../api/apiNotification';
 import { Link } from "react-router-dom";
 
@@ -16,6 +16,7 @@ function HeaderPage(props) {
   const [openNotification, setOpenNotification] = React.useState(false);
   const handleClick = () => {
     setOpen(!open);
+    setOpenNotification(false);
   };
   const [size, setSize] = React.useState(0);
   React.useEffect(() => {
@@ -27,6 +28,7 @@ function HeaderPage(props) {
   }, [state.author?.id]);
   const handleNotification = async () =>{
     setOpenNotification(true);
+    setOpen(false);
   }
 
   return (
@@ -55,24 +57,28 @@ function HeaderPage(props) {
         <div className="header-left">
           <div 
             className="icon" 
-            style={{ backgroundColor: state.background ? "blue": "#80808030"}} 
+            style={{ backgroundColor: state.background ? "#1876f245": "#80808030"}} 
             onClick={() => dispatch({type:"CHANGE_BACKGROUND"})}
           >
-              <FontAwesomeIcon icon={faMoon} style={{ color: state.background ? "white": "black"}}/>
+            {state.background ? 
+              <FontAwesomeIcon icon={faSun} style={{ color: "white"}}/>
+            : 
+              <FontAwesomeIcon icon={faMoon} style={{ color: "#6C7588"}}/>
+            }
           </div>
           <div 
             className="icon"
-            style={{ backgroundColor: state.background ? "#1876f245": "#80808030"}}
+            style={{ backgroundColor: openNotification ? "#1876f245": "#80808030"}}
             onClick={handleNotification}
           >
             <FontAwesomeIcon 
               icon={faBell} 
-              style={{ color: state.background ? "blue": "black"}}
+              style={{ color: openNotification ? "white": "#6C7588"}}
             />
             {size !== 0 && openLabel && <p className="icon-notifi">{size}</p>}
             {openNotification ? (
-              <div className="dialog-button">
-                <Notification setOpen={setOpenNotification} setLabel={setOpenLabel}/>
+              <div className={state.background ? 'dialog-button-dark' : 'dialog-button-light'}>
+                <Notification setOpenNotification={setOpenNotification} setLabel={setOpenLabel}/>
               </div>
             ): null}
           </div>
@@ -83,7 +89,10 @@ function HeaderPage(props) {
               alt="avatar"
             />
             {open ? (
-              <div className="dialog-button">
+              <div 
+                className={state.background ? 'dialog-button-dark' : 'dialog-button-light'}
+                style={{ backgroundColor: state.background ? "#242526": "white"}} 
+              >
                 <LoginButton title="Đăng xuất" link="/"/>
               </div>
             ) : (

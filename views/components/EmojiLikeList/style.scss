@@ -1,3 +1,11 @@
+.header-all {
+  padding: 15px;
+  font-weight: 500;
+  border-bottom: 1px solid #80808014;
+  font-size: 17px;
+  color: #6C7588;
+}
+
 .box-reaction {
   flex-grow: 1;
   display: flex;
@@ -13,10 +21,10 @@
       min-width: 30px;
       .button-emoji {
         display: flex;
-        gap: 2px;
+        gap: 5px;
         align-items: center;
         font-size: 16px;
-        color: black;
+        color: #6C7588;
         .emoji {
           width: 25px;
           height: 25px;
@@ -30,12 +38,13 @@
     padding: 10px 8px;
     overflow-y: auto;
     border-left: 1px solid #80808014;
+    color: #6C7588;
     .list-reaction-user {
       display: flex;
       align-items: center;
       gap: 5px;
       padding: 5px;
-      border-bottom: 1px solid #b1afaf3d;
+      border-bottom: 1px solid #80808014;
       margin-bottom: 5px;
       img {
         width: 35px;

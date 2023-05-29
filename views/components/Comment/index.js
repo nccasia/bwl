@@ -47,7 +47,6 @@ function Comment(props) {
       });
     }
   };
-
   return (
     <div className="container-comment">
       {props?.comments

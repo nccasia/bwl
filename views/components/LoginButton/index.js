@@ -9,8 +9,6 @@ const LoginButton = (props) => {
     if (props.title === 'Đăng xuất') {
       getLogout();
     }
-    // if(props.title ==="Đăng nhập") {
-    // }
   };
   return (
     <div className="container-lbutton">
@@ -26,7 +24,7 @@ const LoginButton = (props) => {
       ) : null}
       <div className="navbar-logout" id="user" onClick={handleOnclick}>
         <a className="link" href={props.link}>
-          <div className="link-image">
+          <div className="link-image" style={{ backgroundColor: state.background ? "#6C7588": "#80808030"}}>
             <img className="icon-logout" src="./assets/img/login.png" />
           </div>
           <span className="text-logout">{props.title}</span>

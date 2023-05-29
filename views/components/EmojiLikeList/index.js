@@ -4,6 +4,7 @@ import { Dialog, Tabs, Tab, Box, Typography } from '@mui/material';
 import { getLikes } from '../../api/apiLike';
 import { getReactions } from '../../api/apiReactions';
 import { useStore } from '../../store';
+import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 
 const EmojiLikeList = (props) => {
   const { state, dispatch } = useStore();
@@ -46,75 +47,81 @@ const EmojiLikeList = (props) => {
       open={props.open !== '' ? true : false}
       onClose={() => props.setOpen('')}
     >
-      <h1
-        style={{
-          padding: '15px',
-          fontWeight: 500,
-          borderBottom: '1px solid #ccc',
-          fontSize: '17px',
-        }}
-      >
-        Tất cả
-      </h1>
-      <Box className="box-reaction">
-        <Tabs
-          orientation="vertical"
-          variant="scrollable"
-          value={props.open}
-          onChange={handleChange}
-          className="tabs-reaction"
-        >
-          {props?.totalLike > 0 && (
-            <Tab
-              value="like-icon-x"
-              onClick={handleClickGetLike}
-              className="btn-reaction"
-              label={
-                <div className="button-emoji">
-                  <img
-                    className="emoji"
-                    src="./assets/img/default-react.png"
-                    alt="icon"
-                  />
-                  {props?.totalLike}
-                </div>
-              }
-            />
-          )}
-          {props?.reactions
-            ? props?.reactions?.map((main, index) => {
-                return (
-                  <Tab
-                    key={index}
-                    value={main.emoji}
-                    className="btn-reaction"
-                    onClick={() =>
-                      handleClickGetReactions({ emoji: main.emoji })
-                    }
-                    label={
-                      <div className="button-emoji">
-                        {main.id ? (
-                          <img
-                            className="emoji"
-                            src={`https://cdn.discordapp.com/emojis/${main.id}.png`}
-                            alt={main.name}
-                          />
-                        ) : (
-                          <p className="emoji">{main?.name}</p>
-                        )}
-                        {main.count}
+      <div style={{ backgroundColor: state.background ? "#242526": "white"}}>
+        <h1 className="header-all">
+          Tất cả
+        </h1>
+        <Box className="box-reaction">
+          <Tabs
+            orientation="vertical"
+            variant="scrollable"
+            value={props.open}
+            onChange={handleChange}
+            className="tabs-reaction"
+          >
+            {props?.totalLike > 0 && (
+              <Tab
+                value="like-icon-x"
+                onClick={handleClickGetLike}
+                className="btn-reaction"
+                label={
+                  <div className="button-emoji">
+                    <ThumbUpOffAltIcon
+                      style={{ color: "#6C7588"}}
+                      className="emoji"
+                    />
+                    {props?.totalLike}
+                  </div>
+                }
+              />
+            )}
+            {props?.reactions
+              ? props?.reactions?.map((main, index) => {
+                  return (
+                    <Tab
+                      key={index}
+                      value={main.emoji}
+                      className="btn-reaction"
+                      onClick={() =>
+                        handleClickGetReactions({ emoji: main.emoji })
+                      }
+                      label={
+                        <div className="button-emoji">
+                          {main.id ? (
+                            <img
+                              className="emoji"
+                              src={`https://cdn.discordapp.com/emojis/${main.id}.png`}
+                              alt={main.name}
+                            />
+                          ) : (
+                            <p className="emoji">{main?.name}</p>
+                          )}
+                          {main.count}
+                        </div>
+                      }
+                    />
+                  );
+                })
+              : null}
+            <Tab value="" />
+          </Tabs>
+          <div className="list-reaction">
+            {props.open !== 'like-icon-x' && listReactions && props.open
+              ? listReactions?.map((main, index) => {
+                  if (props.open === main?.emoji) {
+                    return (
+                      <div key={index} className="list-reaction-user">
+                        <img
+                          src={`https://cdn.discordapp.com/avatars/${main?.author[0]?.id}/${main?.author[0]?.avatar}`}
+                        />
+                        <p>{main?.author[0]?.username}</p>
                       </div>
-                    }
-                  />
-                );
-              })
-            : null}
-          <Tab value="" />
-        </Tabs>
-        <div className="list-reaction">
-          {props.open !== 'like-icon-x' && listReactions && props.open
-            ? listReactions?.map((main, index) => {
-                if (props.open === main?.emoji) {
+                    );
+                  }
+                })
+              : null}
+            {props.open === 'like-icon-x' && like
+              ? like?.map((main, index) => {
                   return (
                     <div key={index} className="list-reaction-user">
                       <img
@@ -123,23 +130,11 @@ const EmojiLikeList = (props) => {
                       <p>{main?.author[0]?.username}</p>
                     </div>
                   );
-                }
-              })
-            : null}
-          {props.open === 'like-icon-x' && like
-            ? like?.map((main, index) => {
-                return (
-                  <div key={index} className="list-reaction-user">
-                    <img
-                      src={`https://cdn.discordapp.com/avatars/${main?.author[0]?.id}/${main?.author[0]?.avatar}`}
-                    />
-                    <p>{main?.author[0]?.username}</p>
-                  </div>
-                );
-              })
-            : null}
-        </div>
-      </Box>
+                })
+              : null}
+          </div>
+        </Box>  
+      </div>
     </Dialog>
   );
 };

@@ -30,7 +30,7 @@ const Notification = (props) => {
 
   const handleOutsideClick = async (event) => {
     if (spanRef.current && !spanRef.current.contains(event.target)) {
-      await props?.setOpen(false);
+      await props?.setOpenNotification(false);
       await props?.setLabel(false);
       if(state.author?.id) {
         postNotification(state.author?.id, dispatch);
@@ -41,6 +41,7 @@ const Notification = (props) => {
     <div 
       className="container" 
       ref={spanRef}
+      style={{ backgroundColor: state.background ? "#242526": "white", color: "#6C7588"}}
     >
       <h1 className="title-notifi"><b>Thông báo</b></h1>
       <NotificationList />

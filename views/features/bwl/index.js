@@ -7,9 +7,9 @@ import {useStore} from "../../store";
 const Bwl = () => {
   const {state, dispatch}=useStore();
   React.useEffect(() => {
-    const foo = async () =>{
+    const foo = () =>{
       if(document.cookie && document.cookie.split("=")[0] === "token"){
-        await getUser(document.cookie.split("=")[1], dispatch);
+        getUser(document.cookie.split("=")[1], dispatch);
       }
     };
     foo();

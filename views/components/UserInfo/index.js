@@ -12,15 +12,10 @@ const UserInfo = (props) => {
         />
       </div>
       <div className="userInfo-item-userInfo">
-        <p
-          className="userInfo-name"
-          style={{ color: state.background ? 'white' : '' }}
-        >
+        <p className="userInfo-name">
           {props?.author?.username}
         </p>
-        <p
-          className="userInfo-time"
-          style={{ color: state.background ? 'white' : '' }}>
+        <p className="userInfo-time">
           {formatDay(props?.createdTimestamp?.$numberDecimal || props?.createdTimestamp)}
         </p>
       </div>
