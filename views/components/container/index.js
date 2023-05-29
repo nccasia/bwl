@@ -10,13 +10,13 @@ const Container = (props) => {
   const { state, dispatch } = useStore();
   React.useEffect(() => {
     const foo = async (index) => {
-      await getAll({page:state.page, messageId: index}, dispatch);
+      await getAll({ page: state.page, messageId: index }, dispatch);
     };
-    if( state.page > 0) {
-      if (!document.cookie && document.cookie.split("=")[0] !== "token") {
+    if (state.page > 0) {
+      if (!document.cookie && document.cookie.split('=')[0] !== 'token') {
         foo(null);
-      }else {
-        if(state?.author?.id) {
+      } else {
+        if (state?.author?.id) {
           foo(state?.author?.id);
         }
       }

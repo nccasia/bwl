@@ -19,21 +19,23 @@
     bottom: 50px;
     right: 50px;
     text-indent: -9999px;
-    background: url(http://seenual.com/wp-content/uploads/2016/03/icon_top.png) no-repeat;
+    background: url(http://seenual.com/wp-content/uploads/2016/03/icon_top.png)
+      no-repeat;
     animation: fadeIn 0.5s ease-in;
   }
 }
 @keyframes fadeIn {
-  0% {opacity: 0.1}
-  100% {opacity: 0.5}
-} 
+  0% {
+    opacity: 0.1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
 @media (max-width: 1440px) {
   .main-container {
     .sidebar-left {
-      padding: 10px 5px 0px 25px;
-      // .sidebar-left-content{
-      //   max-width: 374px;
-      // }
+      padding: 10px 5px 0px 25px
     }
     .main-content {
       padding: 10px 25px 0px 5px;

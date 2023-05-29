@@ -4,12 +4,12 @@ import Container from '../Container';
 import './style.scss';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {useStore} from "../../store";
+import { useStore } from '../../store';
 import SideBar from '../sidebar';
-import {useDataDebouncer} from '../../util/useDebounce';
+import { useDataDebouncer } from '../../util/useDebounce';
 
 const MainContent = (props) => {
-  const {state, dispatch}=useStore();
+  const { state, dispatch } = useStore();
   const [scroll, setScroll] = React.useState(false);
   const [scrollY, setScrollY] = React.useState(0);
   const debounce = useDataDebouncer(state.page, 500);
@@ -27,9 +27,9 @@ const MainContent = (props) => {
     window.addEventListener('scroll', () => {
       handleScroll();
       if (window.scrollY + window.innerHeight >= document.body.scrollHeight) {
-        dispatch({type: "CHANGE_PAGE"});
+        dispatch({ type: 'CHANGE_PAGE' });
       }
-    })
+    });
   }, []);
   const handleScrollUpClick = () => {
     const step = Math.max(window.scrollY / 50, 20);
@@ -44,7 +44,7 @@ const MainContent = (props) => {
     requestAnimationFrame(animation);
   };
   return (
-    <div style={{ backgroundColor: state.background ? "black": "white"}}>
+    <div style={{ backgroundColor: state.background ? 'black' : 'white' }}>
       <div className="main-container">
         <div className="sidebar-left">
           <SideBar />

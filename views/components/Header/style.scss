@@ -1,4 +1,4 @@
-.nav-header{
+.nav-header {
   align-items: center;
   display: flex;
   justify-content: space-between;
@@ -12,11 +12,11 @@
   left: 0;
   right: 0;
   z-index: 9998;
-  .header-left{
+  .header-left {
     display: flex;
     justify-content: center;
     align-items: center;
-    .icon{
+    .icon {
       width: 40px;
       height: 40px;
       display: flex;
@@ -25,10 +25,10 @@
       border-radius: 50%;
       background-color: #80808030;
       margin-right: 10px;
-      position:relative;
+      position: relative;
       cursor: pointer;
-      .icon-notifi{
-        position:absolute;
+      .icon-notifi {
+        position: absolute;
         top: 0;
         right: 0;
         color: white;
@@ -38,9 +38,9 @@
         font-size: 10px;
       }
     }
-    .person-icon{
+    .person-icon {
       position: relative;
-      .img-people-avatar{
+      .img-people-avatar {
         border: none;
       }
     }
@@ -49,7 +49,7 @@
     position: relative;
     width: 40px;
     height: 40px;
-    .img-people-avatar{
+    .img-people-avatar {
       border-radius: 50%;
       border: 2px solid #65676b;
       width: 100%;
@@ -62,7 +62,7 @@
   }
 }
 
-.dialog-button{
+.dialog-button {
   box-shadow: rgba(0, 0, 0, 0.35) 0px 0px 10px;
   position: absolute;
   top: 60px;
@@ -76,9 +76,9 @@
   gap: 10px;
   //min-width: 210px;
 }
-.dialog-button::before{
+.dialog-button::before {
   position: absolute;
-  content: "";
+  content: '';
   border-width: 10px 15px;
   border-style: solid;
   border-color: transparent transparent white transparent;
@@ -88,7 +88,7 @@
 }
 
 @media (max-width: 768px) {
-  .nav-header{
+  .nav-header {
     padding: 5px 16px;
   }
 }

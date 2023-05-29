@@ -83,7 +83,7 @@ const EmojiLike = (props) => {
                     gap: 5,
                     alignItems: 'center',
                     padding: '8px',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
                   }}
                 >
                   <div>
@@ -103,7 +103,7 @@ const EmojiLike = (props) => {
                     ) : (
                       <p
                         className="reactions-emoji"
-                        style={{ fontSize: "20px" }}
+                        style={{ fontSize: '20px' }}
                       >
                         {changeReactions(reactions)?.main?.name}
                       </p>
@@ -165,10 +165,12 @@ const EmojiLike = (props) => {
                   gap: 5,
                   alignItems: 'center',
                   padding: '8px',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
                 }}
               >
-                <img
+              <ThumbUpOffAltIcon className="icon-like"/>
+              
+                {/* <img
                   src="./assets/img/default-react.png"
                   alt="icon-like"
                   className="icon-like"
@@ -177,7 +179,7 @@ const EmojiLike = (props) => {
                     height: '30px',
                     borderRadius: '8px',
                   }}
-                />
+                /> */}
                 <p>
                   <b>Like:</b>
                   {' đã được tương tác bởi: '}
