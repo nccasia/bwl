@@ -46,7 +46,7 @@ function HeaderPage(props) {
             alt="avatar"
           />
           {open ? (
-            <div className="dialog-button ">
+            <div className="dialog-button-light">
               <LoginButton title="Đăng nhập" link="/login"/>
             </div>
           ) : (
