@@ -47,17 +47,19 @@ function Comment(props) {
       });
     }
   };
+
+  const sortedComments = props?.comments ? [...props.comments].reverse() : [];
   return (
     <div className="container-comment">
-      {props?.comments
-        ? props?.comments
-            .slice(0, visibleCommentCount)
-            .map((comment, index) => (
-              <div className="comment" key={index}>
-                <CommentItem {...comment} />
-              </div>
-            ))
-        : null}
+      {sortedComments
+          ? sortedComments
+              .slice(0, visibleCommentCount)
+              .map((comment, index) => (
+                <div className="comment" key={index}>
+                  <CommentItem {...comment} />
+                </div>
+              ))
+          : null}
       {props?.comments.length > 3 && (
         <b onClick={showMore ? handleShowLess : handleShowMore}>
           {showMore ? (

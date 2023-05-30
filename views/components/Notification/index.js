@@ -7,7 +7,7 @@ import {useDataDebouncer} from '../../util/useDebounce';
 import {getNotification} from '../../api/apiNotification';
 
 const Notification = (props) => {
-  const {state, dispatch}=useStore();
+  const { state, dispatch } = useStore();
   const spanRef = React.useRef(null);
   const debounce = useDataDebouncer(state.pageNotification, 500)
   React.useEffect(() => {
@@ -32,7 +32,7 @@ const Notification = (props) => {
     if (spanRef.current && !spanRef.current.contains(event.target)) {
       await props?.setOpenNotification(false);
       await props?.setLabel(false);
-      if(state.author?.id) {
+      if (state.author?.id) {
         postNotification(state.author?.id, dispatch);
       }
     }
