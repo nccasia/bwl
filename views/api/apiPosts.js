@@ -16,7 +16,7 @@ export const getAll = async (index, dispatch) => {
 export const getOne = async (index) => {
     try {
         const res = await axios({
-            url: `/api/posts?messageId=${index}`,
+            url: index.id ? `/api/posts?messageId=${index.messageId}&id=${index.id}` : `/api/posts?messageId=${index.messageId}`,
             method: "GET",
           });
         return res.data;

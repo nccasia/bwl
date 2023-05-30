@@ -136,8 +136,7 @@ export class AppController {
 
   @Get('/api/posts')
   async getPostsOne(@Req() req: Request, @Res() res: Response) {
-    const { messageId } = req.query;
-    const posts = await this.appService.getPostsOne(messageId as string);
+    const posts = await this.appService.getPostsOne(req.query?.messageId as string, String(req.query?.id)? String(req.query?.id) : null);
     return res.json(posts);
   }
 

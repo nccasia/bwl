@@ -16,13 +16,17 @@ const Posts = () => {
 
   React.useEffect(() => {
     const foo = async () =>{
-      if(document.cookie && document.cookie.split("=")[0] === "token"){
+      if(!state.author?.id && document.cookie && document.cookie.split("=")[0] === "token"){
         await getUser(document.cookie.split("=")[1], dispatch);
       }
-      await getOne(messageId).then(data => dispatch({type:"SET_POST_ONE", payload:data}));
+      if(state.author?.id){
+        await getOne({messageId: messageId, id: state.author?.id}).then(data => dispatch({type:"SET_POST_ONE", payload:data}));
+      } else {
+        await getOne({messageId: messageId, id: null}).then(data => dispatch({type:"SET_POST_ONE", payload:data}));
+      }
     }
     foo();
-  }, [messageId, document.cookie]);
+  }, [messageId, document.cookie, state.author?.id]);
 
   const navigate = useNavigate();
   const handleChangePage = async (index) => {
