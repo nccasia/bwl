@@ -1,9 +1,21 @@
+.home-posts{
+    padding: 80px 0px 0px 20px;
+    display: flex;
+    align-items: center;
+    color: #6C7588;
+    cursor: pointer;
+}
+
+.home-posts:hover {
+    color: blue;
+    text-decoration: underline;
+}
 .container-post{
-    padding: 80px 15%;
+    padding: 0px 20% 50px 20% ;
 }
 
 @media (max-width: 768px){
     .container-post{
-        padding: 80px 16px;
+        padding: 20px 16px;
     }
 }

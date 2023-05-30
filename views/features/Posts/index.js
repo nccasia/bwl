@@ -6,6 +6,7 @@ import {getOne} from '../../api/apiPosts';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Container from '../../components/Container';
 import "./style.scss";
+import HomeIcon from '@mui/icons-material/Home';
 
 const Posts = () => {
   const {state, dispatch}=useStore();
@@ -15,10 +16,17 @@ const Posts = () => {
 
   React.useEffect(() => {
     const foo = async () =>{
-      await getOne(messageId).then(data => dispatch({type:"SET_POST_ONE", payload:data}));
+      if(!state.author?.id && document.cookie && document.cookie.split("=")[0] === "token"){
+        await getUser(document.cookie.split("=")[1], dispatch);
+      }
+      if(state.author?.id){
+        await getOne({messageId: messageId, id: state.author?.id}).then(data => dispatch({type:"SET_POST_ONE", payload:data}));
+      } else {
+        await getOne({messageId: messageId, id: null}).then(data => dispatch({type:"SET_POST_ONE", payload:data}));
+      }
     }
     foo();
-  }, [messageId]);
+  }, [messageId, document.cookie, state.author?.id]);
 
   const navigate = useNavigate();
   const handleChangePage = async (index) => {
@@ -29,8 +37,18 @@ const Posts = () => {
   return (
     <React.Fragment>
       <Header/>
-      <h1  style={{marginTop: "80px"}} onClick={handleChangePage}>Trang chủ</h1>
-      <div className="container-post">
+      <h1 
+        className="home-posts"
+        onClick={handleChangePage}
+        style={{ backgroundColor: state.background ? "black": "#f5f5f500"}}
+      >
+        <HomeIcon />
+        Trang chủ
+      </h1>
+      <div 
+        className="container-post"
+        style={{ backgroundColor: state.background ? "black": "#f5f5f500"}}
+      >
         <Container/>
       </div>
     </React.Fragment>

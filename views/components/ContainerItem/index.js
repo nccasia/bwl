@@ -61,12 +61,9 @@ const ContainerItem = (props) => {
   };
 
   return (
-    <div
-      className="container-item"
-      style={{
-        backgroundColor: state.background ? '#242526' : 'white',
-        color: props.openBackground ? 'white' : '#242526',
-      }}
+    <div 
+      className="container-item" 
+      style={{ backgroundColor: state.background ? "#242526": "white", color: "#6C7588"}}
     >
       <UserInfo {...props} />
       <div className="container-item-img">
@@ -83,18 +80,15 @@ const ContainerItem = (props) => {
           {props?.likes ? (
             <div
               className="react-like-icon"
-              style={{ color: state.background ? 'white' : '' }}
             >
               <ThumbDownAltIcon
                 className="like_icon"
-                style={{ color: state.background ? 'white' : '' }}
               />
               <span>Bỏ Thích</span>
             </div>
           ) : (
             <div
               className="react-like-icon"
-              style={{ color: state.background ? 'white' : '' }}
             >
               <ThumbUpAltIcon className="like_icon" />
               <span>Thích</span>
@@ -104,11 +98,9 @@ const ContainerItem = (props) => {
         <span
           onClick={() => handleClick(props?.messageId)}
           className="react-comment"
-          style={{ color: state.background ? 'white' : '' }}
         >
           <FontAwesomeIcon
             className="icon-cmt"
-            style={{ color: state.background ? 'white' : '' }}
             icon={faMessage}
           />
           <span>Bình luận </span>

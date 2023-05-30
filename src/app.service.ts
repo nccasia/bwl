@@ -290,13 +290,14 @@ export class AppService {
       .exec();
   }
 
-  async getPostsOne(messageId: string) {
+  async getPostsOne(messageId: string, authorId: string | null) {
     const aggregatorOpts = [
-      {  
-        $match: { 
-          messageId,
+      { $match: { 
+          channelId: '924543969357099018',
+          messageId, 
         } 
       },
+      { $sort: { _id: -1 } },
       {
         $lookup: {
           from: 'komu_users',
@@ -310,10 +311,10 @@ export class AppService {
       },
       {
         $lookup: {
-          from: 'komu_bwlreactions',
+          from: 'komu_bwlcomments',
           localField: 'messageId',
           foreignField: 'messageId',
-          as: 'reactions',
+          as: 'comments',
         },
       },
       {
@@ -324,13 +325,29 @@ export class AppService {
           as: 'likes',
         },
       },
+      {
+        $lookup: {
+          from: 'komu_bwlreactions',
+          localField: 'messageId',
+          foreignField: 'messageId',
+          as: 'reactions',
+        },
+      },
+      {
+        $addFields: {
+          totalComment: { $size: "$comments" },
+          totalLike: { $size: "$likes" },
+        }
+      },      
+      {
+        $unset: authorId ? ['comments'] : ['comments', 'likes'],
+      },
     ];
-    const data = await this.komuMessage.aggregate(aggregatorOpts as any).exec();
-
-    for (const item of data) {
-      item.reactions = item.reactions.reduce((result:any, reaction: any) => {
+    let data = await this.komuMessage.aggregate(aggregatorOpts as any).exec();
+    data.forEach((item : any) => {
+      item.reactions = item.reactions?.reduce((result: any, reaction: any) => {
         const exists = result.find((e: any) => e.name === reaction.emoji);
-        const emojiWithId = emojis.find((e) => e.name === reaction.emoji);
+        const emojiWithId = emojis.find((e: any) => e.name === reaction.emoji);
         if (exists) {
           exists.count++;
         } else {
@@ -343,24 +360,8 @@ export class AppService {
         }
         return result;
       }, []);
-      item.totalComment = await this.komuComment
-        .count({
-          messageId: item.messageId,
-        })
-        .exec();
-
-      item.totalLike = await this.komuLike
-        .count({
-          messageId: item.messageId,
-        })
-        .exec();
-
-      item.totalNotification = await this.komuNotification
-        .count({
-          messageId: item.messageId,
-        })
-        .exec();
-    }
+      item.likes = item.likes?.filter((e: any) => e.authorId === authorId).length >0 ? true : false;
+    })
     return data;
   }
 
