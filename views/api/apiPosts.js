@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const getAll = async (index, dispatch) => {
     try {
-        dispatch({type:"CHANGE_LOADING_POST"})
+        dispatch({type:"CHANGE_LOADING_POST"});
         const res = await axios({
             url: index.messageId ? `/api/getAllPaging?page=${index.page}&messageId=${index.messageId}` : `/api/getAllPaging?page=${index.page}`,
             method: "GET",

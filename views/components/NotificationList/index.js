@@ -1,21 +1,17 @@
 import React from 'react';
 import './style.scss';
-import { changeTime } from '../../util/changeTime';
-import { useNavigate } from 'react-router-dom';
-import { getNotification } from '../../api/apiNotification';
-import { useStore } from '../../store';
+import {changeTime}  from '../../util/changeTime';
+import { useNavigate } from "react-router-dom";
+import {useStore} from "../../store";
 import CircularProgress from '@mui/material/CircularProgress';
 
 const NotificationList = (props) => {
-  const { state, dispatch } = useStore();
-  React.useEffect(() => {
-    if (state.author?.id && state.pageNotification > 0) {
-      getNotification(
-        { messageId: state.author.id, page: state.pageNotification },
-        dispatch,
-      );
-    }
-  }, [state.pageNotification]);
+  const {state, dispatch}=useStore();
+  // React.useEffect(() => {
+  //   if(state.author?.id && state.pageNotification > 0) {
+  //     getNotification({messageId: state.author.id, page: state.pageNotification}, dispatch)
+  //   }
+  // }, [state.pageNotification]);
   const navigate = useNavigate();
   const handleChangePage = async (index) => {
     await dispatch({ type: 'SET_POSTS_NULL' });

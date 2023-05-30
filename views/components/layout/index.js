@@ -6,13 +6,15 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useStore } from '../../store';
 import SideBar from '../sidebar';
-import { useDataDebouncer } from '../../util/useDebounce';
+import {useDataDebouncer} from '../../util/useDebounce';
+import { getAll } from '../../api/apiPosts';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const MainContent = (props) => {
   const { state, dispatch } = useStore();
   const [scroll, setScroll] = React.useState(false);
   const [scrollY, setScrollY] = React.useState(0);
-  const debounce = useDataDebouncer(state.page, 500);
+  const debounce = useDataDebouncer(state.page, 500)
   React.useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY >= 100) {
@@ -26,11 +28,24 @@ const MainContent = (props) => {
     }
     window.addEventListener('scroll', () => {
       handleScroll();
-      if (window.scrollY + window.innerHeight >= document.body.scrollHeight) {
-        dispatch({ type: 'CHANGE_PAGE' });
+      if (window.scrollY + window.innerHeight >= document.body.scrollHeight && state.page !== -1) {
+        dispatch({type: "CHANGE_PAGE", payload: debounce});
       }
-    });
-  }, []);
+    })
+    const foo = async (index) => {
+      await getAll({page:state.page, messageId: index}, dispatch);
+    };
+    if( state.page > 0) {
+      if (!document.cookie && document.cookie.split("=")[0] !== "token") {
+        foo(null);
+      }else {
+        if(state?.author?.id) {
+          foo(state?.author?.id);
+        }
+      }
+    }
+  }, [debounce, state?.author?.id]);
+
   const handleScrollUpClick = () => {
     const step = Math.max(window.scrollY / 50, 20);
     const animation = () => {
@@ -51,6 +66,11 @@ const MainContent = (props) => {
         </div>
         <div className="main-content">
           <Container />
+          {state.loadingPost && (
+            <div className="notifi-progress">
+              <CircularProgress />
+            </div>
+          )}
         </div>
         {scroll && (
           <div onClick={handleScrollUpClick} className="scrollUp"></div>
