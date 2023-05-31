@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import Bwl from './features/Bwl';
 import './app.scss';

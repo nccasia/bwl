@@ -1,19 +1,20 @@
+/* eslint-disable prettier/prettier */
 import './style.scss';
 import React from 'react';
-import onClickOutside from 'react-click-outside';
+//import onClickOutside from 'react-click-outside';
 import data from '@emoji-mart/data';
 import Picker from '@emoji-mart/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faFaceSmile,
   faXmark,
-  faPaperPlane,
+  //faPaperPlane,
 } from '@fortawesome/free-solid-svg-icons';
 import SendIcon from '@mui/icons-material/Send';
-import { useStore } from '../../store';
+//import { useStore } from '../../store';
 
 function CommentInput(props) {
-  const { state, dispatch } = useStore();
+  //const { state, dispatch } = useStore();
   const [openEmoji, setOpenEmoji] = React.useState(false);
   const onEmojiClick = (emojiObject) => {
     props?.setInput(props?.input.concat(emojiObject.native));

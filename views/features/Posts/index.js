@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import * as React from 'react';
 import Header from '../../components/Header';
 import {useStore} from "../../store";
@@ -29,7 +30,7 @@ const Posts = () => {
   }, [messageId, document.cookie, state.author?.id]);
 
   const navigate = useNavigate();
-  const handleChangePage = async (index) => {
+  const handleChangePage = async () => {
     await dispatch({type: "SET_POSTS_NULL"});
     navigate("/");
   }

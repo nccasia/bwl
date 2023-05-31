@@ -1,4 +1,4 @@
-import { maxPosts } from '../util/maxPosts';
+/* eslint-disable prettier/prettier */
 
 const initState = {
   posts: [],

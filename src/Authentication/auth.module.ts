@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Module } from '@nestjs/common';
 import { KomuUsersModule } from '../Komu_users/komu_users.module';
 import { KomuUsersService } from '../Komu_users/komu_users.service';

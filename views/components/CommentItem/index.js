@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import './style.scss';
 import React from 'react';
 import { formatDay } from '../../util/formatDay';
@@ -26,7 +27,7 @@ const CommentItem = (props) => {
   const [open, setOpen] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
   const [input, setInput] = React.useState('');
-  const [openButton, setOpenButton] = React.useState(false);
+  //const [openButton, setOpenButton] = React.useState(false);
   React.useEffect(() => {
     if (props?.content) {
       setInput(props?.content);

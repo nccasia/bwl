@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import './style.scss';
 import UserInfo from '../userInfo';
 import React from 'react';

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import Moment from 'moment';
 
 export const changeTime = (time) => {

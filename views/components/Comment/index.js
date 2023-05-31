@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import './style.scss';
 import React, { useState } from 'react';
 import CommentItem from '../CommentItem';

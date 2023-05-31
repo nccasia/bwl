@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -36,35 +37,35 @@ export class AppService {
     authorId: string,
     messageId: string,
   ): Promise<any> {
-    return this.komuLike.findOne({ authorId: authorId, messageId: messageId });
+    return await this.komuLike.findOne({ authorId: authorId, messageId: messageId });
   }
   async findLikeMessageFromDiscordId(messageId: string): Promise<any> {
-    return this.komuLike.find({ messageId: messageId });
+    return await this.komuLike.find({ messageId: messageId });
   }
 
   async findMessageAuthorId(authorId: string): Promise<any> {
-    return this.komuMessage.find({ 
+    return await this.komuMessage.find({ 
       authorId: authorId,
       channelId: '924543969357099018',
     });
   }
 
   async findCommentFromDiscordId(messageId: string): Promise<any> {
-    return this.komuMessage.find({
+    return await this.komuMessage.find({
       messageId: messageId,
     });
   }
   async findCommentMessageFromDiscordId(id: string): Promise<any> {
-    return this.komuUser.findOne({ id: id });
+    return await this.komuUser.findOne({ id: id });
   }
 
   async findLikeId(messageId: string): Promise<any> {
-    return this.komuMessage.find({
+    return await this.komuMessage.find({
       messageId: messageId,
     });
   }
   async findLikeMessageId(id: string): Promise<any> {
-    return this.komuMessage.findOne({ id: id });
+    return await this.komuMessage.findOne({ id: id });
   }
 
   async findLengthMessage(): Promise<any> {
@@ -87,7 +88,7 @@ export class AppService {
   }
 
   async getComments(messageId: string) {
-    return this.komuComment
+    return await this.komuComment
       .aggregate([
         {
           $match: {
@@ -157,7 +158,7 @@ export class AppService {
   }
 
   async getLikes(messageId: string) {
-    return this.komuLike
+    return await this.komuLike
       .aggregate([
         {
           $match: {
@@ -227,7 +228,7 @@ export class AppService {
   }
 
   async unlike({ messageId, authorId }) {
-    const dislike = await this.komuLike
+    await this.komuLike
       .remove({
         messageId,
         authorId,
@@ -246,7 +247,7 @@ export class AppService {
   }
 
   async getNotifications(messageId: string, authorId: string, page: number, size: number) {
-    return this.komuNotification
+    return await this.komuNotification
       .aggregate([
         {
           $match: {
@@ -343,6 +344,7 @@ export class AppService {
         $unset: authorId ? ['comments'] : ['comments', 'likes'],
       },
     ];
+    // eslint-disable-next-line prefer-const
     let data = await this.komuMessage.aggregate(aggregatorOpts as any).exec();
     data.forEach((item : any) => {
       item.reactions = item.reactions?.reduce((result: any, reaction: any) => {
@@ -485,6 +487,7 @@ export class AppService {
         $unset: authorId ? ['comments'] : ['comments', 'likes'],
       },
     ];
+    // eslint-disable-next-line prefer-const
     let data = await this.komuMessage.aggregate(aggregatorOpts as any).exec();
     data.forEach((item : any) => {
       item.reactions = item.reactions?.reduce((result: any, reaction: any) => {

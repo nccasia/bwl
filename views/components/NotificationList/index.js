@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import './style.scss';
 import {changeTime}  from '../../util/changeTime';

@@ -10,7 +10,6 @@ import {
   UnauthorizedException,
   Sse,
   Delete,
-  Put,
 } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { AppService } from './app.service';
@@ -24,7 +23,8 @@ const discordUserUrl = 'https://discord.com/api/users/@me';
 @Controller()
 export class AppController {
   getHello(): any {
-    throw new Error('Method not implemented.');
+    //throw new Error('Method not implemented.');
+    return 'Hello World!';
   }
   constructor(
     private readonly appService: AppService,
@@ -128,11 +128,13 @@ export class AppController {
   
   @Get('/login')
   @Render('index')
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   login() {}
 
   @Get('/posts')
   @Render('index')
-  posts(@Query('messageId') messageId: string) {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
+  posts() {}
 
   @Get('/api/posts')
   async getPostsOne(@Req() req: Request, @Res() res: Response) {
@@ -159,7 +161,6 @@ export class AppController {
 
   @Get('/api/getAllPaging')
   async getAllPaging(@Req() req: Request, @Res() res: Response) {
-    //const { page, messageId } = req.query;
     const posts= await this.appService.getAll(Number(req.query?.page), 5, String(req.query?.messageId)? String(req.query?.messageId) : null);
     const size= await this.appService.findLengthMessage();
     return res.json({posts, size})
@@ -192,9 +193,6 @@ export class AppController {
           });
           const userDB = await this.appService.findCommentMessageFromDiscordId(
             user.id,
-          );
-          const messageDB = await this.appService.findCommentFromDiscordId(
-            messageId,
           );
           return res.json({ ...comment.toObject(), author: [userDB] });
         },
@@ -301,6 +299,7 @@ export class AppController {
     );
     let notifications : any = [];
     for(let i= 0; i< list.length; i++){
+      // eslint-disable-next-line prefer-const
       let notification: any = await this.appService.getNotifications(
         list[i].messageId as string,
         messageId as string,
@@ -321,6 +320,7 @@ export class AppController {
     let length =0;
     let size =0;
     for(let i= 0; i< list.length; i++){
+      // eslint-disable-next-line prefer-const
       let notification: any = await this.appService.getNotificationsSize(
         list[i].messageId as string,
         messageId as string,
