@@ -3,12 +3,11 @@ import SideBarItem from '../SidebarItem';
 import './style.scss';
 import { useStore } from '../../store';
 import React from 'react';
-import { maxPosts } from '../../util/maxPosts';
-import { getHotPosts } from '../../api/apiPosts';
+import {getHotPosts} from "../../api/apiPosts";
 import CircularProgress from '@mui/material/CircularProgress';
 
-const SideBar = (props) => {
-  const { state, dispatch } = useStore();
+const SideBar = () => {
+  const {state, dispatch}=useStore();
   React.useEffect(() => {
     getHotPosts(dispatch);
   }, []);

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 export const maxPosts = (inputPosts) => {
   const max = inputPosts.filter((post) => {
     const postDate = new Date(+post?.createdTimestamp?.$numberDecimal);

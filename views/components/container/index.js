@@ -1,9 +1,10 @@
+/* eslint-disable prettier/prettier */
 import ContainerItem from '../ContainerItem';
 import './style.scss';
 import { useStore } from '../../store';
 import React from 'react';
 
-const Container = (props) => {
+const Container = () => {
   const { state, dispatch } = useStore();
   return (
     <div className="container-list">

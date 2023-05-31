@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import dayjs from 'dayjs';
 
 export const formatDay = (time) => {

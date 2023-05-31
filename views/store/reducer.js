@@ -1,4 +1,4 @@
-import { maxPosts } from '../util/maxPosts';
+/* eslint-disable prettier/prettier */
 
 const initState = {
   posts: [],
@@ -9,6 +9,7 @@ const initState = {
   page: 1,
   pageNotification: 1,
   lengthNotication:0,
+  sizeNotifi: 0,
   size: 5,
   loadingNotifi: false,
   loadingPost: false,
@@ -19,6 +20,64 @@ const initState = {
 
 function reducer(state, action) {
   switch (action.type) {
+    case 'SET_SSE':
+        const ssePosts = state.posts.map(main =>{
+          if(action.payload?.like){
+            if(main.messageId === action.payload?.messageId) {
+              return {
+                ...main, 
+                totalLike: action.payload?.like === "true" ? main.totalLike + 1 : main.totalLike -1,
+              }
+            } else {
+              return main;
+            }
+          } else{
+            if(action.payload?.comment){
+              if(main.messageId === action.payload?.messageId) {
+                return {
+                  ...main, 
+                  totalComment: action.payload?.comment === "add" 
+                                ? 
+                                  main.totalComment + 1 
+                                : 
+                                  action.payload?.comment === "delete" 
+                                ?  
+                                  main.totalComment - 1
+                                :
+                                  main.totalComment,
+                  comments: action.payload?.comment === "add" 
+                            ? 
+                              [...[action.payload], ...main?.comments] 
+                            : 
+                              action.payload?.comment === "delete" 
+                            ?                              
+                              main?.comments?.filter(item => item?._id !==action.payload?.id)
+                            : 
+                              action.payload?.comment === "edit" 
+                            ? 
+                              main?.comments.map(item => {
+                                if(item._id === action.payload?.id) {
+                                  return {...item, content:action.payload?.input}
+                                } else {
+                                  return item;
+                                }
+                              })
+                            :
+                              main?.comments,
+                }
+              } else {
+                return main;
+              }
+            } else{
+              return main;
+            }
+          }
+        });
+      return {
+        ...state,
+        posts: ssePosts,
+        sizeNotifi: action.payload?.authorNotifi === state.author?.id  ? state.sizeNotifi + 1 : state.sizeNotifi,
+      };
     case 'SET_POSTS':
       const commentList = action.payload?.posts.map(main => {
         return {
@@ -33,13 +92,13 @@ function reducer(state, action) {
         loadingPost: false,
         lengthPosts: action.payload?.size,
       };
-      case 'SET_POSTS_NULL':
-        return {
-          ...state,
-          posts: [],
-          changePage: true,
-          page: 1,
-        };
+    case 'SET_POSTS_NULL':
+      return {
+        ...state,
+        posts: [],
+        changePage: true,
+        page: 1,
+      };
     case 'CHANGE_LOADING_POST':
       return {
         ...state,
@@ -78,6 +137,11 @@ function reducer(state, action) {
         ...state,
         background: !state.background,
       };
+    case 'SET_SIZE_NOTIFICATION':
+      return {
+        ...state,
+        sizeNotifi: action.payload,
+      };
     case 'CHANGE_LOADING_NOTIFICATION':
       return {
         ...state,
@@ -99,14 +163,14 @@ function reducer(state, action) {
         ...state,
         notification: [],
         pageNotification: 1,
+        sizeNotifi: 0,
       };
     case 'CHANGE_LIKE':
       const listLike = state.posts.map(main =>{
-        if(main.messageId === action.payload?.messageId) {
+        if(main.messageId === action.payload) {
           return {
             ...main, 
             likes: !main?.likes,
-            totalLike: action.payload?.like ? Number(main.totalLike) + 1 : Number(main.totalLike) - 1
           }
         } else {
           return main;
@@ -144,60 +208,6 @@ function reducer(state, action) {
       return {
         ...state,
         posts: listComment,
-      };
-    case 'ADD_COMMENTS':
-      const addComment = state.posts.map(main =>{
-        if(main.messageId === action.payload?.messageId) {
-          return {
-            ...main, 
-            totalComment: main?.totalComment +1, 
-            comments: [...main.comments, ...([action.payload.comments])],
-          }
-        } else {
-          return main;
-        }
-      })
-      return {
-        ...state,
-        posts: addComment,
-      };
-    case 'DELETE_COMMENT':
-      const deleteComment = state.posts.map(main =>{
-        if(main.messageId === action.payload?.messageId) {
-          return {
-            ...main,
-            totalComment: main?.totalComment -1, 
-            comments: main?.comments?.filter(item => item?._id !==action.payload?.id),
-          }
-        } else {
-          return main;
-        }
-      })
-      return {
-        ...state,
-        posts: deleteComment,
-      };
-    case 'EDIT_COMMENT':
-      const editComment = state.posts.map(main =>{
-        if(main.messageId === action.payload?.messageId) {
-          const editcomment1 =main?.comments?.map(item => {
-            if(item._id === action.payload?.id) {
-              return {...item, content:action.payload?.input}
-            } else {
-              return item;
-            }
-          });
-          return {
-            ...main,
-            comments: editcomment1,
-          }
-        } else {
-          return main;
-        }
-      })
-      return {
-        ...state,
-        posts: editComment,
       };
     default:
       throw new Error('Error');

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import './style.scss';
 import React, { useState } from 'react';
 import CommentItem from '../CommentItem';
@@ -26,15 +27,8 @@ function Comment(props) {
         authorId: state.author?.id,
         content: input,
         messageId: props?.messageId,
-      }).then((data) => {
-        if (data) {
-          dispatch({
-            type: 'ADD_COMMENTS',
-            payload: { messageId: props?.messageId, comments: data },
-          });
-          setInput('');
-        }
-      });
+      })
+      setInput('');
     } else {
       toast.warning('Bạn cần đăng nhập để bình luận!', {
         position: 'bottom-right',

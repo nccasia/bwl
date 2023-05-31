@@ -1,13 +1,11 @@
-import { useNavigate } from 'react-router-dom';
+/* eslint-disable prettier/prettier */
 import * as React from 'react';
 import './style.scss';
 import { getLogin } from '../../api/apiLogin';
 
 const Login = () => {
-  const navigate = useNavigate();
   const handleClick = async () => {
     await getLogin().then((url) => {
-      //navigate([url]);
       window.location.href = url;
     });
   };

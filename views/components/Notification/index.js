@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import './style.scss';
 import {postNotification } from '../../api/apiNotification';
@@ -31,7 +32,6 @@ const Notification = (props) => {
   const handleOutsideClick = async (event) => {
     if (spanRef.current && !spanRef.current.contains(event.target)) {
       await props?.setOpenNotification(false);
-      await props?.setLabel(false);
       if (state.author?.id) {
         postNotification(state.author?.id, dispatch);
       }

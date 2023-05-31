@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import './style.scss';
 import UserInfo from '../userInfo';
 import React from 'react';
@@ -30,10 +31,7 @@ const ContainerItem = (props) => {
       if (props?.authorId !== state.author?.id) {
         postLike(props?.messageId, state.author?.id).then((data) => {
           if (data) {
-            dispatch({
-              type: 'CHANGE_LIKE',
-              payload: { messageId: props?.messageId, like: data?.like },
-            });
+            dispatch({type: 'CHANGE_LIKE', payload: props?.messageId});
           }
         });
       } else {

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import './style.scss';
 import React from 'react';
 import { getLikes } from '../../api/apiLike';
@@ -13,7 +14,7 @@ const EmojiLike = (props) => {
   const [openLike, setOpenLike] = React.useState(false);
   const [reactions, setReactions] = React.useState([]);
   const [openReactions, setOpenReactions] = React.useState('');
-  const [reactions1, setReactions1] = React.useState([]);
+  //const [reactions1, setReactions1] = React.useState([]);
 
   const handleClickGetLike = async () => {
     await getLikes(props?.messageId).then((item) => {

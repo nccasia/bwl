@@ -1,5 +1,4 @@
 /* eslint-disable prettier/prettier */
-import AppContext from './context';
 import React, {useReducer} from 'react'
 import context from "./context";
 import reducer, {initState} from "./reducer";

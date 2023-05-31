@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import * as React from 'react';
 import Header from '../../components/Header';
 import {useStore} from "../../store";
@@ -7,6 +8,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Container from '../../components/Container';
 import "./style.scss";
 import HomeIcon from '@mui/icons-material/Home';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Posts = () => {
   const {state, dispatch}=useStore();
@@ -28,8 +31,16 @@ const Posts = () => {
     foo();
   }, [messageId, document.cookie, state.author?.id]);
 
+  React.useEffect(() => {
+    const evtSource = new EventSource('/api/sse');
+    evtSource.onmessage = (event) => {
+      const message = JSON.parse(event.data);
+      dispatch({type: 'SET_SSE', payload: message});
+    };    
+  }, []);
+
   const navigate = useNavigate();
-  const handleChangePage = async (index) => {
+  const handleChangePage = async () => {
     await dispatch({type: "SET_POSTS_NULL"});
     navigate("/");
   }
@@ -51,6 +62,18 @@ const Posts = () => {
       >
         <Container/>
       </div>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={3000}
+        hideProgressBar
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable={false}
+        pauseOnHover
+        theme="colored"
+      />
     </React.Fragment>
   );
 };

@@ -1,6 +1,7 @@
+/* eslint-disable prettier/prettier */
 import './style.scss';
 import React from 'react';
-import { Dialog, Tabs, Tab, Box, Typography } from '@mui/material';
+import { Dialog, Tabs, Tab, Box} from '@mui/material';
 import { getLikes } from '../../api/apiLike';
 import { getReactions } from '../../api/apiReactions';
 import { useStore } from '../../store';

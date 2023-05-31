@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import './style.scss';
 import { changeTime } from '../../util/changeTime';
@@ -5,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useStore } from '../../store';
 import CircularProgress from '@mui/material/CircularProgress';
 
-const NotificationList = (props) => {
+const NotificationList = () => {
   const { state, dispatch } = useStore();
   const navigate = useNavigate();
   const handleChangePage = async (index) => {

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 export const emojis = [
   { id: '921336543979905045', name: 'ech_toang' },
   { id: '921336544835567626', name: 'vai' },

@@ -6,10 +6,10 @@ import Notification from '../Notification';
 import { useStore } from '../../store';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell, faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
-import {getNotification, getNotificationSize} from '../../api/apiNotification';
+import {getNotificationSize} from '../../api/apiNotification';
 import { Link } from "react-router-dom";
 
-function HeaderPage(props) {
+function HeaderPage() {
   const { state, dispatch } = useStore();
   const [open, setOpen] = React.useState(false);
   const [openLabel, setOpenLabel] = React.useState(true);
@@ -18,11 +18,10 @@ function HeaderPage(props) {
     setOpen(!open);
     setOpenNotification(false);
   };
-  const [size, setSize] = React.useState(0);
   React.useEffect(() => {
     if (state.author?.id) {
       getNotificationSize(state.author.id, dispatch).then((data) => {
-        setSize(data?.size);
+        dispatch({type:"SET_SIZE_NOTIFICATION", payload: data?.size});
       });
     }
   }, [state.author?.id]);
@@ -78,10 +77,10 @@ function HeaderPage(props) {
               icon={faBell} 
               style={{ color: openNotification ? "white": "#6C7588"}}
             />
-            {size !== 0 && openLabel && <p className="icon-notifi">{size}</p>}
+            {state.sizeNotifi !== 0 && <p className="icon-notifi">{state.sizeNotifi}</p>}
             {openNotification ? (
               <div className={state.background ? 'dialog-button-dark dialog-button-dark_notifi' : 'dialog-button-light dialog-button-light_notifi'}>
-                <Notification setOpenNotification={setOpenNotification} setLabel={setOpenLabel}/>
+                <Notification setOpenNotification={setOpenNotification}/>
               </div>
             ) : null}
           </div>

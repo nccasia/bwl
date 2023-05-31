@@ -1,4 +1,5 @@
-import * as hbs from 'hbs';
+/* eslint-disable prettier/prettier */
+//import * as hbs from 'hbs';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';

@@ -10,8 +10,8 @@ import {useDataDebouncer} from '../../util/useDebounce';
 import { getAll } from '../../api/apiPosts';
 import CircularProgress from '@mui/material/CircularProgress';
 
-const MainContent = (props) => {
-  const { state, dispatch } = useStore();
+const MainContent = () => {
+  const {state, dispatch}=useStore();
   const [scroll, setScroll] = React.useState(false);
   const [scrollY, setScrollY] = React.useState(0);
   const debounce = useDataDebouncer(state.page, 500)
