@@ -4,7 +4,7 @@ import Container from '../Container';
 import './style.scss';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {useStore} from "../../store";
+import { useStore } from '../../store';
 import SideBar from '../sidebar';
 import {useDataDebouncer} from '../../util/useDebounce';
 import { getAll } from '../../api/apiPosts';

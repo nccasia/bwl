@@ -1,52 +1,56 @@
 .notification-list {
-    position:relative;
-    .list-notifi{
-        display: flex;
-        padding: 15px 10px 10px 10px;
-        justify-content: space-around;
-        gap: 10px;
-        border-top: 1px solid #80808026;
-        .list-notifi-image{
-            width: 35px;
-            height:35px;
-            border-radius: 50%;
+  position: relative;
+  .list-notifi {
+    display: flex;
+    padding: 15px 10px 10px 10px;
+    justify-content: space-around;
+    gap: 10px;
+    border-top: 1px solid #80808026;
+    .list-notifi-image {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+    }
+    .notifi-list-image{
+      width: 50px;
+      height: 50px;
+      border-radius: 8px;
+    }
+    span {
+      gap: 5px;
+      display: flex;
+      flex-direction: column;
+      .time-notifi {
+        font-size: 11px;
+        color: #1876f2;
+      }
+      p {
+        font-size: 12px;
+        line-height: 16px;
+        width: 200px;
+        word-wrap: break-word;
+        b {
+          font-weight: 800;
+          font-size: 14px;
         }
-        span{
-            gap: 5px;
-            display: flex;
-            flex-direction: column;
-            .time-notifi{
-                font-size: 11px;
-                color: #1876f2;
-            }
-            p{
-                font-size: 12px;
-                line-height: 16px;
-                width:200px;
-                word-wrap: break-word;
-                b{
-                    font-weight:800;
-                    font-size: 14px;
-                }
-            }
-        }
+      }
     }
-    .list-notifi:hover{
-        background-color:#80808014;
-    }
-    .new-notifi {
-        position: absolute;
-        top: -8px;
-        right: 5px;
-        padding: 3px 5px;
-        background-color: red;
-        color: white;
-        font-size: 10px;
-        border-radius: 8px;
-    }
+  }
+  .list-notifi:hover {
+    background-color: #80808014;
+  }
+  .new-notifi {
+    position: absolute;
+    top: -8px;
+    right: 5px;
+    padding: 3px 5px;
+    background-color: red;
+    color: white;
+    font-size: 10px;
+    border-radius: 8px;
+  }
 }
 
-.notifi-progress{
-    text-align: center;
+.notifi-progress {
+  text-align: center;
 }
-

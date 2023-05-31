@@ -84,7 +84,7 @@ const EmojiLike = (props) => {
                     gap: 5,
                     alignItems: 'center',
                     padding: '8px',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
                   }}
                 >
                   <div>
@@ -104,7 +104,7 @@ const EmojiLike = (props) => {
                     ) : (
                       <p
                         className="reactions-emoji"
-                        style={{ fontSize: "20px" }}
+                        style={{ fontSize: '20px' }}
                       >
                         {changeReactions(reactions)?.main?.name}
                       </p>
@@ -164,7 +164,7 @@ const EmojiLike = (props) => {
                   gap: 5,
                   alignItems: 'center',
                   padding: '8px',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
                 }}
               >
                 <ThumbUpOffAltIcon

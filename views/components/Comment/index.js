@@ -27,15 +27,8 @@ function Comment(props) {
         authorId: state.author?.id,
         content: input,
         messageId: props?.messageId,
-      }).then((data) => {
-        if (data) {
-          dispatch({
-            type: 'ADD_COMMENTS',
-            payload: { messageId: props?.messageId, comments: data },
-          });
-          setInput('');
-        }
-      });
+      })
+      setInput('');
     } else {
       toast.warning('Bạn cần đăng nhập để bình luận!', {
         position: 'bottom-right',
@@ -48,17 +41,19 @@ function Comment(props) {
       });
     }
   };
+
+  const sortedComments = props?.comments ? [...props.comments].reverse() : [];
   return (
     <div className="container-comment">
-      {props?.comments
-        ? props?.comments
-            .slice(0, visibleCommentCount)
-            .map((comment, index) => (
-              <div className="comment" key={index}>
-                <CommentItem {...comment} />
-              </div>
-            ))
-        : null}
+      {sortedComments
+          ? sortedComments
+              .slice(0, visibleCommentCount)
+              .map((comment, index) => (
+                <div className="comment" key={index}>
+                  <CommentItem {...comment} />
+                </div>
+              ))
+          : null}
       {props?.comments.length > 3 && (
         <b onClick={showMore ? handleShowLess : handleShowMore}>
           {showMore ? (

@@ -3,6 +3,7 @@
     display: flex;
     align-items: center;
     color: #6C7588;
+    cursor: pointer;
 }
 
 .home-posts:hover {
@@ -15,6 +16,6 @@
 
 @media (max-width: 768px){
     .container-post{
-        padding: 80px 16px;
+        padding: 20px 16px;
     }
 }

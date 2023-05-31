@@ -32,7 +32,7 @@ export class AppController {
     private authService: AuthService,
   ) {}
 
-  @Sse('/sse')
+  @Sse('/api/sse')
   sse(): Observable<MessageEvent> {
     return this.appService.sendEvents();
   }
@@ -184,17 +184,14 @@ export class AppController {
         first(),
       )
       .subscribe({
-        next: async (user) => {
+        next: async () => {
           const { content, messageId, authorId } = req.body;
-          const comment: any = await this.appService.comment({
+          await this.appService.comment({
             content,
             messageId,
             authorId,
           });
-          const userDB = await this.appService.findCommentMessageFromDiscordId(
-            user.id,
-          );
-          return res.json({ ...comment.toObject(), author: [userDB] });
+          return res.json(true);
         },
         error: (error) => {
           return res
@@ -221,8 +218,8 @@ export class AppController {
   @Post('/api/comment/edit')
   async postEditComment(@Req() req: Request, @Res() res: Response) {
     const { id, content } = req.body;
-    const editComment = await this.appService.editComment(id as string, content as string);
-    return res.json(editComment);
+    await this.appService.editComment(id as string, content as string);
+    return res.json(true);
   }
 
   @Post('/api/like')

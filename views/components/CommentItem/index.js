@@ -12,22 +12,13 @@ const CommentItem = (props) => {
   const { state, dispatch } = useStore();
   const handleDelete = async () => {
     if (state.author?.id) {
-      deleteComment({ id: props?._id, messageId: state.author?.id }).then(
-        (data) => {
-          if (data) {
-            dispatch({
-              type: 'DELETE_COMMENT',
-              payload: { messageId: props?.messageId, id: props?._id },
-            });
-          }
-        },
-      );
+      deleteComment({ id: props?._id, messageId: state.author?.id })
     }
   };
   const [open, setOpen] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
   const [input, setInput] = React.useState('');
-  //const [openButton, setOpenButton] = React.useState(false);
+  
   React.useEffect(() => {
     if (props?.content) {
       setInput(props?.content);
@@ -37,24 +28,13 @@ const CommentItem = (props) => {
     await editComment({
       id: props?._id,
       content: input,
-    }).then((data) => {
-      if (data?.message) {
-        dispatch({
-          type: 'EDIT_COMMENT',
-          payload: {
-            messageId: props?.messageId,
-            input: input,
-            id: props?._id,
-          },
-        });
-      }
-      setOpenEdit(false);
-    });
+    })
+    setOpenEdit(false);
   };
 
   return (
     <div className="comment-item">
-      <div className="author-avatar" onMouseOut={() => setOpenButton(false)}>
+      <div className="author-avatar">
         <img
           src={`https://cdn.discordapp.com/avatars/${props?.author[0].id}/${props?.author[0].avatar}`}
           className="img-people"
