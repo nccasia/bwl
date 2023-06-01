@@ -150,6 +150,7 @@ export class AppService {
       messageId: deleteComment?.messageId,
       authorId: messageId,
       onComment,
+      content: deleteComment?.content,
       createdTimestamp,
     });
     await notification.save();
@@ -170,6 +171,7 @@ export class AppService {
       messageId: updatedComment?.messageId,
       authorId: updatedComment?.authorId,
       onComment,
+      content: updatedComment?.content + " => " + newContent,
       createdTimestamp,
     });
     await notification.save();
@@ -261,18 +263,45 @@ export class AppService {
     return true;
   }
 
-  async getNotifications(messageId: string, authorId: string, page: number, size: number) {
+  async getNotifications(authorId: string, page: number, size: number) {
+    const messageIds = await this.komuMessage
+      .aggregate([
+        {
+          $match: {
+            authorId: authorId
+          }
+        },
+        {
+          $project: {
+            messageId: 1
+          }
+        }
+      ])
+      .exec();
+  
+    const messageIdsArray = messageIds.map((message: any) => message.messageId);
+  
     return await this.komuNotification
       .aggregate([
         {
           $match: {
-            messageId,
+            messageId: {
+              $in: messageIdsArray
+            },
             authorId: { $ne: authorId },
-          },
+          }
         },
         {$sort: {_id: -1} },
         { $skip: (page - 1) * size },
         { $limit: size },
+        {
+          $lookup: {
+            from: 'komu_bwls',
+            localField: 'messageId',
+            foreignField: 'messageId',
+            as: 'message'
+          }
+        },
         {
           $lookup: {
             from: 'komu_users',
@@ -281,17 +310,17 @@ export class AppService {
             as: 'author',
           },
         },
-        {
-          $lookup: {
-            from: 'komu_bwls',
-            localField: 'messageId',
-            foreignField: 'messageId',
-            as: 'message',
-          },
-        },
       ])
       .exec();
   }
+  
+  
+  
+  
+
+  
+  
+  
 
   async getNotificationsSize(messageId: string, authorId: string) {
     return this.komuNotification
