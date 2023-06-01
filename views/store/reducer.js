@@ -27,6 +27,7 @@ function reducer(state, action) {
               return {
                 ...main, 
                 totalLike: action.payload?.like === "true" ? main.totalLike + 1 : main.totalLike -1,
+                likes: action.payload?.authorNotifi2 === state.author?.id ? action.payload?.like === "true" ? true : false : main.likes,
               }
             } else {
               return main;
@@ -76,7 +77,7 @@ function reducer(state, action) {
       return {
         ...state,
         posts: ssePosts,
-        sizeNotifi: action.payload?.authorNotifi === state.author?.id  ? state.sizeNotifi + 1 : state.sizeNotifi,
+        sizeNotifi: action.payload?.authorNotifi === state.author?.id && action.payload?.authorNotifi2 !== state.author?.id  ? state.sizeNotifi + 1 : state.sizeNotifi,
       };
     case 'SET_POSTS':
       const commentList = action.payload?.posts.map(main => {
@@ -164,21 +165,6 @@ function reducer(state, action) {
         notification: [],
         pageNotification: 1,
         sizeNotifi: 0,
-      };
-    case 'CHANGE_LIKE':
-      const listLike = state.posts.map(main =>{
-        if(main.messageId === action.payload) {
-          return {
-            ...main, 
-            likes: !main?.likes,
-          }
-        } else {
-          return main;
-        }
-      });
-      return {
-        ...state,
-        posts: listLike,
       };
     case 'CHANGE_PAGE':
       const numberPosts = Math.ceil(state.lengthPosts / state.size);

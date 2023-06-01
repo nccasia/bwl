@@ -29,11 +29,7 @@ const ContainerItem = (props) => {
   const handleClickLike = async () => {
     if (state.author?.id) {
       if (props?.authorId !== state.author?.id) {
-        postLike(props?.messageId, state.author?.id).then((data) => {
-          if (data) {
-            dispatch({type: 'CHANGE_LIKE', payload: props?.messageId});
-          }
-        });
+        postLike(props?.messageId, state.author?.id);
       } else {
         toast.warning('Ha ha, không được đâu!', {
           position: 'bottom-right',

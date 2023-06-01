@@ -196,7 +196,7 @@ export class AppController {
         error: (error) => {
           return res
             .status(401)
-            .json({ success: false, error: error.response.data.message });
+            .json({ success: false, error: error.response });
         },
       });
   }
@@ -269,7 +269,7 @@ export class AppController {
         error: (error) => {
           return res
             .status(401)
-            .json({ success: false, error: error.response.data.message });
+            .json({ success: false, error: error.response});
         },
       });
   }
