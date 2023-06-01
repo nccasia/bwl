@@ -16,6 +16,7 @@ const initState = {
   loadingHotPost: false,
   lengthPosts: 0,
   changePage: false,
+  onEdit: false,
 }
 
 function reducer(state, action) {
@@ -57,7 +58,7 @@ function reducer(state, action) {
                             ? 
                               main?.comments.map(item => {
                                 if(item._id === action.payload?.id) {
-                                  return {...item, content:action.payload?.input}
+                                  return {...item, content:action.payload?.input, onEdit: true}
                                 } else {
                                   return item;
                                 }

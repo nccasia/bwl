@@ -12,13 +12,14 @@ const CommentItem = (props) => {
   const { state, dispatch } = useStore();
   const handleDelete = async () => {
     if (state.author?.id) {
-      deleteComment({ id: props?._id, messageId: state.author?.id })
+      deleteComment({ id: props?._id, messageId: state.author?.id });
     }
   };
   const [open, setOpen] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
+  const [edit, setEdit] = React.useState(false);
   const [input, setInput] = React.useState('');
-  
+
   React.useEffect(() => {
     if (props?.content) {
       setInput(props?.content);
@@ -28,8 +29,9 @@ const CommentItem = (props) => {
     await editComment({
       id: props?._id,
       content: input,
-    })
+    });
     setOpenEdit(false);
+    setEdit(true);
   };
 
   return (
@@ -54,12 +56,15 @@ const CommentItem = (props) => {
               />
             )}
           </div>
-          <div className="comment-time">
-            {formatDay(
-              props?.createdTimestamp
-                ? props?.createdTimestamp
-                : props?.comment?.createdTimestamp,
-            )}
+          <div style={{display: "flex", alignItems: "center", gap: "5px"}}>
+            <div className="comment-time">
+              {formatDay(
+                props?.createdTimestamp
+                  ? props?.createdTimestamp
+                  : props?.comment?.createdTimestamp,
+              )}
+            </div>
+            {props.onEdit && <p style={{fontSize: "7px"}}>đã chỉnh sữa</p>}
           </div>
         </div>
         {state.author?.id && props?.authorId === state.author?.id && (

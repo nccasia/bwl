@@ -21,6 +21,9 @@ export class Comment {
   // @Prop()
   // authorAvatar: string;
 
+  // @Prop({ default: false })
+  // onEdit: boolean;
+
   @Prop()
   count: number;
 
