@@ -20,7 +20,7 @@ export class Comment {
 
   // @Prop()
   // authorAvatar: string;
-
+  
   @Prop()
   count: number;
 
