@@ -196,7 +196,7 @@ export class AppController {
         error: (error) => {
           return res
             .status(401)
-            .json({ success: false, error: error.response.data.message });
+            .json({ success: false, error: error.response });
         },
       });
   }
@@ -219,7 +219,6 @@ export class AppController {
   async postEditComment(@Req() req: Request, @Res() res: Response) {
     const { id, content } = req.body;
     await this.appService.editComment(id as string, content as string);
-    // const onEdit = true;
     return res.json(true);
   }
 
@@ -270,7 +269,7 @@ export class AppController {
         error: (error) => {
           return res
             .status(401)
-            .json({ success: false, error: error.response.data.message });
+            .json({ success: false, error: error.response});
         },
       });
   }

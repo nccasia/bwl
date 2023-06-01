@@ -30,6 +30,9 @@ export class Notification {
   @Prop()
   onLike: boolean;
 
+  @Prop()
+  onComment: string;
+
   @Prop({ default: true })
   onLabel: boolean;
 }

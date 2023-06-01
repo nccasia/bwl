@@ -40,7 +40,7 @@ const NotificationList = () => {
                         >
                           {main?.author[0]?.username}
                         </b>
-                        {' đã bình luận bài viết của bạn có nội dung:'}
+                        {' đã' + main?.onComment +' bình luận bài viết của bạn có nội dung:'}
                       </p>
                       <p>{main?.content}</p>
                       <p className="time-notifi">
