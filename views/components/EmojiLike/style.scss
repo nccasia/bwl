@@ -1,0 +1,51 @@
+.container-item-reactTotal {
+  padding: 2% 5%;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: center;
+  .dialog-like {
+    position: relative;
+    display: flex;
+    gap: 3px;
+    align-items: center;
+    width: 400px;
+    .list-inline-item {
+      padding: 1px;
+      cursor: pointer;
+      .btn-reaction {
+        border: none;
+        padding: 0;
+        background-color: none;
+        display: flex;
+        align-items: center;
+        gap: 2px;
+        .emoji-like {
+          font-size: 20px;
+        }
+        .emoji {
+          height: 15px;
+        }
+        .icon-like{
+          font-size: 25px;
+          color: #fff;
+        }
+        span {
+          font-size: 13.5px;
+        }
+      }
+    }
+  }
+  .comment-icon {
+    display: flex;
+    gap: 3px;
+    align-items: center;
+    span {
+      font-size: 13.5px;
+    }
+    .icon-cmt {
+      font-size: 18px;
+      color: #6C7588
+    }
+  }
+}

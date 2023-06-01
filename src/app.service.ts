@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -16,6 +17,7 @@ import { KomuUsers, KomuUsersDocument } from './Komu_users/komu_users.schema';
 
 @Injectable()
 export class AppService {
+  commentModel: any;
   constructor(
     @InjectModel(Reaction.name)
     private readonly komuReaction: Model<ReactionDocument>,
@@ -35,37 +37,45 @@ export class AppService {
     authorId: string,
     messageId: string,
   ): Promise<any> {
-    return this.komuLike.findOne({ authorId: authorId, messageId: messageId });
+    return await this.komuLike.findOne({ authorId: authorId, messageId: messageId });
   }
   async findLikeMessageFromDiscordId(messageId: string): Promise<any> {
-    return this.komuLike.find({ messageId: messageId });
+    return await this.komuLike.find({ messageId: messageId });
   }
 
-  // async findLikeAuthorId(messageId: string): Promise<any> {
-  //   return this.komuMessage.find({ messageId: messageId });
-  // }
+  async findMessageAuthorId(authorId: string): Promise<any> {
+    return await this.komuMessage.find({ 
+      authorId: authorId,
+      channelId: '924543969357099018',
+    });
+  }
 
   async findCommentFromDiscordId(messageId: string): Promise<any> {
-    return this.komuMessage.find({
+    return await this.komuMessage.find({
       messageId: messageId,
     });
   }
   async findCommentMessageFromDiscordId(id: string): Promise<any> {
-    return this.komuUser.findOne({ id: id });
+    return await this.komuUser.findOne({ id: id });
   }
 
   async findLikeId(messageId: string): Promise<any> {
-    return this.komuMessage.find({
+    return await this.komuMessage.find({
       messageId: messageId,
     });
   }
   async findLikeMessageId(id: string): Promise<any> {
-    return this.komuUser.findOne({ id: id });
+    return await this.komuMessage.findOne({ id: id });
+  }
+
+  async findLengthMessage(): Promise<any> {
+    const count = await this.komuMessage.countDocuments({ channelId: '924543969357099018' }).exec();
+    return count;
   }
 
   private events = new Subject<MessageEvent>();
 
-  addEvent(event) {
+  addEvent(event: any) {
     this.events.next(event);
   }
 
@@ -77,97 +87,98 @@ export class AppService {
     return 'Hello World!';
   }
 
-  async getAll(page: number) {
-    const aggregatorOpts = [
-      { $match: { channelId: '924543969357099018' } },
-      { $sort: { _id: -1 } },
-      { $skip: (page - 1) * 20 },
-      { $limit: 20 },
-      {
-        $lookup: {
-          from: 'komu_users',
-          localField: 'authorId',
-          foreignField: 'id',
-          as: 'author',
+  async getComments(messageId: string) {
+    return await this.komuComment
+      .aggregate([
+        {
+          $match: {
+            messageId,
+          },
         },
-      },
-      {
-        $unwind: '$author',
-      },
-      {
-        $lookup: {
-          from: 'komu_bwlreactions',
-          localField: 'messageId',
-          foreignField: 'messageId',
-          as: 'reactions',
+        {
+          $sort: {
+            _id: -1,
+          },
         },
-      },
-      {
-        $lookup: {
-          from: 'komu_bwlcomments',
-          localField: 'messageId',
-          foreignField: 'messageId',
-          as: 'comments',
+        {
+          $lookup: {
+            from: 'komu_users',
+            localField: 'authorId',
+            foreignField: 'id',
+            as: 'author',
+          },
         },
-      },
-      {
-        $lookup: {
-          from: 'komu_bwllikes',
-          localField: 'authorId',
-          foreignField: 'authorId',
-          as: 'likes',
-        },
-      },
-      {
-        $lookup: {
-          from: 'komu_bwlnotifications',
-          localField: 'authorId',
-          foreignField: 'authorId',
-          as: 'notifications',
-        },
-      },
-    ];
-    const data = await this.komuMessage.aggregate(aggregatorOpts as any).exec();
-
-    for (const item of data) {
-      item.reactions = item.reactions.reduce((result, reaction) => {
-        const exists = result.find((e) => e.name === reaction.emoji);
-        const emojiWithId = emojis.find((e) => e.name === reaction.emoji);
-        if (exists) {
-          exists.count++;
-        } else {
-          result.push({
-            ...reaction,
-            name: reaction.emoji,
-            count: 1,
-            ...(emojiWithId ? { id: emojiWithId.id } : {}),
-          });
-        }
-        return result;
-      }, []);
-      item.totalComment = await this.komuComment
-        .count({
-          messageId: item.messageId,
-        })
-        .exec();
-
-      item.totalLike = await this.komuLike
-        .count({
-          messageId: item.messageId,
-        })
-        .exec();
-
-      item.totalNotification = await this.komuNotification
-        .count({
-          messageId: item.messageId,
-        })
-        .exec();
-    }
-    return data;
+      ])
+      .exec();
   }
 
-  async getComments(messageId: string) {
-    return this.komuComment
+  async comment({ messageId, content, authorId}) {
+    const comments: any = new this.komuComment({
+      messageId,
+      authorId,
+      content,
+      createdTimestamp: Date.now(),
+    });
+    const commentAuthor = await this.komuUser.findOne({ id: authorId }).exec();
+    const createdTimestamp = new Date().getTime();
+    const onComment = " thêm ";
+    const notification = new this.komuNotification({
+      messageId,
+      authorId,
+      content,
+      onComment,
+      createdTimestamp,
+    });
+
+    await comments.save();
+    await notification.save();
+    const message = await this.komuMessage.find({ messageId }).exec();
+    this.addEvent({ data: { ...comments.toObject(), comment: "add", author: [commentAuthor], authorNotifi: message[0]?.authorId, authorNotifi2: authorId} });
+    return true;
+  }
+
+  async deleteComment(id: string, messageId: string) {
+    const deleteComment = await this.komuComment.findOneAndDelete({
+      _id: id,
+      authorId: messageId,
+    }).exec();
+    
+    const message = await this.komuMessage.find({ messageId: deleteComment?.messageId }).exec();
+    const createdTimestamp = new Date().getTime();
+    const onComment = " xóa ";
+    const notification = new this.komuNotification({
+      messageId: deleteComment?.messageId,
+      authorId: messageId,
+      onComment,
+      createdTimestamp,
+    });
+    await notification.save();
+    this.addEvent({ data: { comment: "delete", id, messageId: deleteComment?.messageId , authorNotifi: message[0]?.authorId, authorNotifi2: messageId} });
+    return true;
+  }
+
+  async editComment(_id: string, newContent: string) {
+    const updatedComment = await this.komuComment.findByIdAndUpdate(
+      _id,
+      { content: newContent },
+      { new: true }
+    ).exec();
+    const message = await this.komuMessage.find({ messageId: updatedComment?.messageId }).exec();
+    const createdTimestamp = new Date().getTime();
+    const onComment = " sửa ";
+    const notification = new this.komuNotification({
+      messageId: updatedComment?.messageId,
+      authorId: updatedComment?.authorId,
+      onComment,
+      createdTimestamp,
+    });
+    await notification.save();
+    this.addEvent({ data: { comment: "edit", id: _id, input: newContent, messageId: updatedComment?.messageId , authorNotifi: message[0]?.authorId, authorNotifi2: updatedComment?.authorId} });
+    return true;
+  }
+
+  async getLikes(messageId: string) {
+    return await this.komuLike
       .aggregate([
         {
           $match: {
@@ -186,39 +197,13 @@ export class AppService {
       .exec();
   }
 
-  async comment({ messageId, content, authorId }) {
-    const comment = new this.komuComment({
-      messageId,
-      authorId,
-      content,
-      createdTimestamp: Date.now(),
-    });
-    const message = await this.komuMessage.find({ messageId }).exec();
-
-    const messageAuthor = await this.komuUser
-      .findOne({ id: message[0].authorId })
-      .exec();
-
-    const commentAuthor = await this.komuUser.findOne({ id: authorId }).exec();
-    const notification = new this.komuNotification({
-      messageId,
-      authorId,
-      content,
-      createdTimestamp: Date.now(),
-    });
-
-    await comment.save();
-    await notification.save();
-    this.addEvent({ data: { comment, commentAuthor, message, messageAuthor } });
-    return comment;
-  }
-
-  async getLikes(messageId: string) {
-    return this.komuLike
+  async getReactions(messageId: string, emoji: string) {
+    return this.komuReaction
       .aggregate([
         {
           $match: {
             messageId,
+            emoji
           },
         },
         {
@@ -239,45 +224,55 @@ export class AppService {
       authorId,
       createdTimestamp: Date.now(),
     });
-
-    const message = await this.komuMessage.find({ messageId }).exec();
-
-    const messageAuthor = await this.komuUser
-      .findOne({ id: message[0].authorId })
-      .exec();
-
-    const likeAuthor = await this.komuUser.findOne({ id: authorId }).exec();
-
-    const notification = new this.komuNotification({
+    const onLike = true;
+    const createdTimestamp = new Date().getTime();
+    const notification =  new this.komuNotification({
       messageId,
       authorId,
-      createTimestamp: Date.now(),
+      onLike,
+      createdTimestamp,
     });
 
     await like.save();
+    const message = await this.komuMessage.find({ messageId }).exec();
     await notification.save();
-    this.addEvent({ data: { like, likeAuthor, message, messageAuthor } });
+    this.addEvent({ data: { like: "true", messageId, authorNotifi: message[0]?.authorId, authorNotifi2: authorId} });
     return like;
   }
 
   async unlike({ messageId, authorId }) {
-    const dislike = await this.komuLike
-      .remove({
+    await this.komuLike
+      .deleteOne({
         messageId,
         authorId,
       })
       .exec();
+    const onLike = false;
+    const createdTimestamp = new Date().getTime();
+    const notification =  new this.komuNotification({
+      messageId,
+      authorId,
+      onLike,
+      createdTimestamp,
+    });
+    const message = await this.komuMessage.find({ messageId }).exec();
+    await notification.save();
+    this.addEvent({ data: { like: "false", messageId, authorNotifi: message[0]?.authorId, authorNotifi2: authorId} });
     return true;
   }
 
-  async getNotifications(messageId: string) {
-    return this.komuNotification
+  async getNotifications(messageId: string, authorId: string, page: number, size: number) {
+    return await this.komuNotification
       .aggregate([
         {
           $match: {
             messageId,
+            authorId: { $ne: authorId },
           },
         },
+        {$sort: {_id: -1} },
+        { $skip: (page - 1) * size },
+        { $limit: size },
         {
           $lookup: {
             from: 'komu_users',
@@ -296,5 +291,237 @@ export class AppService {
         },
       ])
       .exec();
+  }
+
+  async getNotificationsSize(messageId: string, authorId: string) {
+    return this.komuNotification
+      .aggregate([
+        {
+          $match: {
+            messageId,
+            authorId: { $ne: authorId },
+          },
+        },
+      ])
+      .exec();
+  }
+
+  async getPostsOne(messageId: string, authorId: string | null) {
+    const aggregatorOpts = [
+      { $match: { 
+          channelId: '924543969357099018',
+          messageId, 
+        } 
+      },
+      { $sort: { _id: -1 } },
+      {
+        $lookup: {
+          from: 'komu_users',
+          localField: 'authorId',
+          foreignField: 'id',
+          as: 'author',
+        },
+      },
+      {
+        $unwind: '$author',
+      },
+      {
+        $lookup: {
+          from: 'komu_bwlcomments',
+          localField: 'messageId',
+          foreignField: 'messageId',
+          as: 'comments',
+        },
+      },
+      {
+        $lookup: {
+          from: 'komu_bwllikes',
+          localField: 'messageId',
+          foreignField: 'messageId',
+          as: 'likes',
+        },
+      },
+      {
+        $lookup: {
+          from: 'komu_bwlreactions',
+          localField: 'messageId',
+          foreignField: 'messageId',
+          as: 'reactions',
+        },
+      },
+      {
+        $addFields: {
+          totalComment: { $size: "$comments" },
+          totalLike: { $size: "$likes" },
+        }
+      },      
+      {
+        $unset: authorId ? ['comments'] : ['comments', 'likes'],
+      },
+    ];
+    // eslint-disable-next-line prefer-const
+    let data = await this.komuMessage.aggregate(aggregatorOpts as any).exec();
+    data.forEach((item : any) => {
+      item.reactions = item.reactions?.reduce((result: any, reaction: any) => {
+        const exists = result.find((e: any) => e.name === reaction.emoji);
+        const emojiWithId = emojis.find((e: any) => e.name === reaction.emoji);
+        if (exists) {
+          exists.count++;
+        } else {
+          result.push({
+            ...reaction,
+            name: reaction.emoji,
+            count: 1,
+            ...(emojiWithId ? { id: emojiWithId.id } : {}),
+          });
+        }
+        return result;
+      }, []);
+      item.likes = item.likes?.filter((e: any) => e.authorId === authorId).length >0 ? true : false;
+    })
+    return data;
+  }
+
+  async postNotification(messageId: string) {
+    const notification: any = await this.komuNotification.updateMany(
+      { messageId: messageId, onLabel: true },
+      { $set: { onLabel: false } }
+    ).exec();
+    return notification;
+  }
+
+  async getHotPosts() {
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+    const now = new Date();
+    const aggregatorOpts = [
+      {
+        $match: {
+          channelId: '924543969357099018',
+          createdTimestamp: { $gte: sevenDaysAgo.getTime(), $lte: now.getTime() },
+        },
+      },
+      {
+        $lookup: {
+          from: 'komu_users',
+          localField: 'authorId',
+          foreignField: 'id',
+          as: 'author',
+        },
+      },
+      {
+        $unwind: '$author',
+      },
+      {
+        $lookup: {
+          from: 'komu_bwlcomments',
+          localField: 'messageId',
+          foreignField: 'messageId',
+          as: 'comments',
+        },
+      },
+      {
+        $lookup: {
+          from: 'komu_bwllikes',
+          localField: 'messageId',
+          foreignField: 'messageId',
+          as: 'likes',
+        },
+      },
+      {
+        $addFields: {
+          totalComment: { $size: '$comments' },
+          totalLike: { $size: '$likes' },
+        },
+      },
+      {
+        $sort: {
+          totalLike: -1,
+          totalComment: -1,
+        },
+      },
+      {
+        $limit: 10,
+      },
+      {
+        $unset: ['comments', 'likes']
+      },
+    ]; 
+    const data = await this.komuMessage.aggregate(aggregatorOpts as any).exec();
+    return data;
+  }  
+
+  async getAll(page: number, size: number, authorId: string | null) {
+    const aggregatorOpts = [
+      { $match: { channelId: '924543969357099018' } },
+      { $sort: { _id: -1 } },
+      { $skip: (page - 1) * size },
+      { $limit: size },
+      {
+        $lookup: {
+          from: 'komu_users',
+          localField: 'authorId',
+          foreignField: 'id',
+          as: 'author',
+        },
+      },
+      {
+        $unwind: '$author',
+      },
+      {
+        $lookup: {
+          from: 'komu_bwlcomments',
+          localField: 'messageId',
+          foreignField: 'messageId',
+          as: 'comments',
+        },
+      },
+      {
+        $lookup: {
+          from: 'komu_bwllikes',
+          localField: 'messageId',
+          foreignField: 'messageId',
+          as: 'likes',
+        },
+      },
+      {
+        $lookup: {
+          from: 'komu_bwlreactions',
+          localField: 'messageId',
+          foreignField: 'messageId',
+          as: 'reactions',
+        },
+      },
+      {
+        $addFields: {
+          totalComment: { $size: "$comments" },
+          totalLike: { $size: "$likes" },
+        }
+      },      
+      {
+        $unset: authorId ? ['comments'] : ['comments', 'likes'],
+      },
+    ];
+    // eslint-disable-next-line prefer-const
+    let data = await this.komuMessage.aggregate(aggregatorOpts as any).exec();
+    data.forEach((item : any) => {
+      item.reactions = item.reactions?.reduce((result: any, reaction: any) => {
+        const exists = result.find((e: any) => e.name === reaction.emoji);
+        const emojiWithId = emojis.find((e: any) => e.name === reaction.emoji);
+        if (exists) {
+          exists.count++;
+        } else {
+          result.push({
+            ...reaction,
+            name: reaction.emoji,
+            count: 1,
+            ...(emojiWithId ? { id: emojiWithId.id } : {}),
+          });
+        }
+        return result;
+      }, []);
+      item.likes = item.likes?.filter((e: any) => e.authorId === authorId).length >0 ? true : false;
+    })
+    return data;
   }
 }

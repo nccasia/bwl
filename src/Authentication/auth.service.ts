@@ -1,7 +1,8 @@
+/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { KomuUsers, KomuUsersDocument } from 'src/Komu_users/komu_users.schema';
-import { KomuUsersService } from 'src/Komu_users/komu_users.service';
+import { KomuUsers, KomuUsersDocument } from '../Komu_users/komu_users.schema';
+import { KomuUsersService } from '../Komu_users/komu_users.service';
 import { Model } from 'mongoose';
 
 @Injectable()

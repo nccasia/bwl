@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
 
@@ -25,6 +26,15 @@ export class Notification {
 
   @Prop()
   createdTimestamp: number;
+
+  @Prop()
+  onLike: boolean;
+
+  @Prop()
+  onComment: string;
+
+  @Prop({ default: true })
+  onLabel: boolean;
 }
 
-export const NotificationSchema = SchemaFactory.createForClass(Notification);
+export const NotificationSchema: any = SchemaFactory.createForClass(Notification);

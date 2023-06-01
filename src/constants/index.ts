@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 export const emojis = [
   { id: '921336543979905045', name: 'ech_toang' },
   { id: '921336544835567626', name: 'vai' },
@@ -103,6 +104,7 @@ export const emojis = [
   { id: '947200120846450779', name: 'quay_len' },
   { id: '947704397251629088', name: 'dak' },
   { id: '947781368962760735', name: 'khoc' },
+  { id: '1073509887063109643', name: 'aibietgidau' },
   { id: '948804919673110588', name: 'sparta' },
   { id: '948888274599047178', name: 'light' },
   { id: '948894246256144494', name: 'vao_gulag_nhe' },
@@ -141,4 +143,16 @@ export const emojis = [
   { id: '960783467904401418', name: 'emoji_140' },
   { id: '960783551794663434', name: 'emoji_141' },
   { id: '964053330622021673', name: 'lodo' },
+  { id: '986943316119683113', name: '123zo' },
+  { id: '974272253007118356', name: 'ahaha' },
+  { id: '992332890572587088', name: 'huhuhu' },
+  { id: '925249328375791626', name: 'doan_dai_hiep' },
+  { id: '1077087118750396416', name: 'be_cuong' },
+  { id: '1031402735595175966', name: 'ao_that_day' },
+  { id: '1032913543076515860', name: 'vaicabiu' },
+  { id: '1047825323414278145', name: 'ai_biet' },
+  { id: '1083333736168431646', name: 'may_lua_bo_may' },
+  { id: '1083634025282940928', name: 'cuoi_ha_hong_len_troi' },
+  { id: '1062928084015267931', name: 'done' },
+  { id: '1107981556766740540', name: 'good_boy_hn1' },
 ];

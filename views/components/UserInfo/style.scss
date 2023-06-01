@@ -1,0 +1,25 @@
+.userInfo-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  .userInfo-item-UserAvatar img {
+    border-radius: 50%;
+    vertical-align: middle;
+    border-style: none;
+    max-width: 50px;
+    max-height: 50px;
+  };
+  .userInfo-item-userInfo {
+    margin-left: 10px;
+    .userInfo-name {
+      font-weight: 500;
+      font-size: 1rem;
+      line-height: 1.3;
+    };
+    .userInfo-time{
+      font-size: 0.8rem;
+      line-height: 1.3;
+    }
+  }
+}

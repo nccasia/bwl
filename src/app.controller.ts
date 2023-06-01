@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {
   Controller,
   Get,
@@ -8,24 +9,30 @@ import {
   Post,
   UnauthorizedException,
   Sse,
+  Delete,
 } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { AppService } from './app.service';
 import { Request, Response } from 'express';
 import { AuthService } from './Authentication/auth.service';
 import { first, map, Observable, switchMap } from 'rxjs';
+
 const discordTokenUrl = 'https://discord.com/api/oauth2/token';
 const discordUserUrl = 'https://discord.com/api/users/@me';
 
 @Controller()
 export class AppController {
+  getHello(): any {
+    //throw new Error('Method not implemented.');
+    return 'Hello World!';
+  }
   constructor(
     private readonly appService: AppService,
     private httpService: HttpService,
     private authService: AuthService,
   ) {}
 
-  @Sse('/sse')
+  @Sse('/api/sse')
   sse(): Observable<MessageEvent> {
     return this.appService.sendEvents();
   }
@@ -57,7 +64,7 @@ export class AppController {
                   user.discriminator,
                 );
               }
-              const posts = await this.appService.getAll(1);
+              const posts = await this.appService.getAll(1, 5, null);
               return res.render('index', { posts, user });
             }),
             first(),
@@ -104,7 +111,7 @@ export class AppController {
                   user.discriminator,
                 );
               }
-              const posts = await this.appService.getAll(1);
+              const posts = await this.appService.getAll(1, 5, null);
               return res.render('index', { posts, user });
             }),
             first(),
@@ -113,14 +120,30 @@ export class AppController {
         throw new error();
       }
     } else {
-      const posts = await this.appService.getAll(1);
-      console.log(posts);
+      const posts = await this.appService.getAll(1, 5, null);
+      //console.log(posts);
       return res.render('index', { posts });
     }
   }
-
+  
   @Get('/login')
-  @Render('login')
+  @Render('index')
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  login() {}
+
+  @Get('/posts')
+  @Render('index')
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
+  posts() {}
+
+  @Get('/api/posts')
+  async getPostsOne(@Req() req: Request, @Res() res: Response) {
+    const posts = await this.appService.getPostsOne(req.query?.messageId as string, String(req.query?.id)? String(req.query?.id) : null);
+    return res.json(posts);
+  }
+
+  @Get('/api/login')
+  //@Render('index')
   root() {
     const url = `https://discord.com/api/oauth2/authorize?client_id=${
       process.env.CLIENT_ID
@@ -130,18 +153,20 @@ export class AppController {
     return { url };
   }
 
-  @Get('logout')
+  @Get('/api/logout')
   logout(@Res() res: Response) {
     res.clearCookie('token');
     res.redirect('/');
   }
 
-  @Get('/getAllPaging')
-  getAllPaging(@Query('page') page = 1) {
-    return this.appService.getAll(page <= 0 ? 1 : page);
+  @Get('/api/getAllPaging')
+  async getAllPaging(@Req() req: Request, @Res() res: Response) {
+    const posts= await this.appService.getAll(Number(req.query?.page), 5, String(req.query?.messageId)? String(req.query?.messageId) : null);
+    const size= await this.appService.findLengthMessage();
+    return res.json({posts, size})
   }
 
-  @Post('/comment')
+  @Post('/api/comment')
   async postComment(@Req() req: Request, @Res() res: Response) {
     if (!req.cookies['token']) {
       throw new UnauthorizedException();
@@ -159,38 +184,45 @@ export class AppController {
         first(),
       )
       .subscribe({
-        next: async (user) => {
+        next: async () => {
           const { content, messageId, authorId } = req.body;
-          const comment = await this.appService.comment({
+          await this.appService.comment({
             content,
             messageId,
             authorId,
           });
-          const userDB = await this.appService.findCommentMessageFromDiscordId(
-            user.id,
-          );
-          const messageDB = await this.appService.findCommentFromDiscordId(
-            messageId,
-          );
-
-          return res.json({ success: true, comment, userDB, messageDB });
+          return res.json(true);
         },
         error: (error) => {
           return res
             .status(401)
-            .json({ success: false, error: error.response.data.message });
+            .json({ success: false, error: error.response });
         },
       });
   }
 
-  @Get('/comments')
+  @Get('/api/comments')
   async getComments(@Req() req: Request, @Res() res: Response) {
     const { messageId } = req.query;
     const comments = await this.appService.getComments(messageId as string);
     return res.json({ comments });
   }
 
-  @Post('/like')
+  @Delete('/api/comments')
+  async deleteComment(@Req() req: Request, @Res() res: Response) {
+    const { id, messageId } = req.query;
+    const deleteComment = await this.appService.deleteComment(id as string, messageId as string);
+    return res.json(deleteComment ? { message: true } : { message: false });
+  }
+
+  @Post('/api/comment/edit')
+  async postEditComment(@Req() req: Request, @Res() res: Response) {
+    const { id, content } = req.body;
+    await this.appService.editComment(id as string, content as string);
+    return res.json(true);
+  }
+
+  @Post('/api/like')
   async postLike(@Req() req: Request, @Res() res: Response) {
     if (!req.cookies['token']) {
       throw new UnauthorizedException();
@@ -225,7 +257,6 @@ export class AppController {
               messageId,
               authorId,
             });
-            // return res.json({ success: true, like });
             return res.json({ success: true, like, usernameDB, messageLikeDB });
           } else if (userDB) {
             const dislike = await this.appService.unlike({
@@ -238,24 +269,83 @@ export class AppController {
         error: (error) => {
           return res
             .status(401)
-            .json({ success: false, error: error.response.data.message });
+            .json({ success: false, error: error.response});
         },
       });
   }
 
-  @Get('/likes')
+  @Get('/api/likes')
   async getLikes(@Req() req: Request, @Res() res: Response) {
     const { messageId } = req.query;
     const likes = await this.appService.getLikes(messageId as string);
     return res.json({ likes });
   }
+  
+  @Get('/api/reactions')
+  async getReactions(@Req() req: Request, @Res() res: Response) {
+    const { messageId, emoji } = req.query;
+    const reactions = await this.appService.getReactions(messageId as string, emoji as string);
+    return res.json({ reactions });
+  }
 
-  @Get('/notifications')
+  @Get('/api/notifications')
   async getNotifications(@Req() req: Request, @Res() res: Response) {
-    const { messageId } = req.query;
-    const notifications = await this.appService.getNotifications(
+    const { messageId, page } = req.query;
+    const list = await this.appService.findMessageAuthorId(
       messageId as string,
     );
+    let notifications : any = [];
+    for(let i= 0; i< list.length; i++){
+      // eslint-disable-next-line prefer-const
+      let notification: any = await this.appService.getNotifications(
+        list[i].messageId as string,
+        messageId as string,
+        Number(page) as number,
+        5,
+      );
+      notifications = notifications.concat(notification);
+    }
     return res.json({ notifications });
   }
+
+  @Get('/api/notifications/size')
+  async getNotificationsSize(@Req() req: Request, @Res() res: Response) {
+    const { messageId } = req.query;
+    const list = await this.appService.findMessageAuthorId(
+      messageId as string,
+    );
+    let length =0;
+    let size =0;
+    for(let i= 0; i< list.length; i++){
+      // eslint-disable-next-line prefer-const
+      let notification: any = await this.appService.getNotificationsSize(
+        list[i].messageId as string,
+        messageId as string,
+      );
+      length = length + notification?.length;
+      size = size + notification?.filter((item: any) => item?.onLabel === true).length
+    }
+    return res.json({ size, length });
+  }
+
+  @Post('/api/notifications/size')
+  async postNotificationsSize(@Req() req: Request, @Res() res: Response) {
+    const { messageId } = req.body;
+    const list = await this.appService.findMessageAuthorId(
+      messageId as string,
+    );
+    const promises = list.map((item: any) =>
+      this.appService.postNotification(item.messageId as string)
+    );
+    await Promise.all(promises);
+    return res.json(true);
+  }
+
+  @Get('/api/hotposts')
+  async getHotPosts(@Req() req: Request, @Res() res: Response) {
+    const hotposts = await this.appService.getHotPosts();
+    return res.json({ hotposts });
+  }
 }
+
+

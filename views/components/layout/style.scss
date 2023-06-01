@@ -1,0 +1,67 @@
+.main-container {
+  display: flex;
+  width: 100%;
+  max-width: 1400px;
+  margin: auto;
+  margin-top: 10px;
+  padding: 60px 30px 0 30px;
+  gap: 20px;
+  .sidebar-left {
+    width: 35%;
+  }
+  .main-content {
+    width: 65%;
+    .notifi-progress{
+      text-align: center;
+      height: 100px;
+    }
+  }
+  .scrollUp {
+    width: 40px;
+    height: 40px;
+    position: fixed;
+    bottom: 50px;
+    right: 50px;
+    text-indent: -9999px;
+    background: url(http://seenual.com/wp-content/uploads/2016/03/icon_top.png)
+      no-repeat;
+    animation: fadeIn 0.5s ease-in;
+  }
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 0.1;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+@media (max-width: 1440px) {
+  .main-container {
+    .sidebar-left {
+      padding: 10px 5px 0px 25px
+    }
+    .main-content {
+      padding: 10px 25px 0px 5px;
+    }
+  }
+}
+@media (max-width: 1240px) {
+  .main-container {
+    .sidebar-left {
+      display: none;
+    }
+    .main-content {
+      width: 100%;
+      padding: 10px 5% 0px;
+    }
+  }
+}
+@media (max-width: 768px) {
+  .main-container {
+    padding: 0;
+    .main-content {
+      padding: 70px 5% 0px;
+    }
+  }
+}
