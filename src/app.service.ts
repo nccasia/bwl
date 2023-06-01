@@ -242,7 +242,7 @@ export class AppService {
 
   async unlike({ messageId, authorId }) {
     await this.komuLike
-      .remove({
+      .deleteOne({
         messageId,
         authorId,
       })
