@@ -39,7 +39,7 @@ const SideBar = () => {
       </div>
       <div className="sidebar-left-bottom">
         <span>
-          Privacy • Terms • Advertising • Ad Choices • Cookies • Flexbook © 2021
+          
         </span>
       </div>
     </div>
