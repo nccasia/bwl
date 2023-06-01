@@ -121,17 +121,19 @@ export class AppService {
     });
     const commentAuthor = await this.komuUser.findOne({ id: authorId }).exec();
     const createdTimestamp = new Date().getTime();
+    const onComment = " thêm ";
     const notification = new this.komuNotification({
       messageId,
       authorId,
       content,
+      onComment,
       createdTimestamp,
     });
 
     await comments.save();
     await notification.save();
     const message = await this.komuMessage.find({ messageId }).exec();
-    this.addEvent({ data: { ...comments.toObject(), comment: "add", author: [commentAuthor], authorNotifi: message[0]?.authorId} });
+    this.addEvent({ data: { ...comments.toObject(), comment: "add", author: [commentAuthor], authorNotifi: message[0]?.authorId, authorNotifi2: authorId} });
     return true;
   }
 
@@ -140,8 +142,18 @@ export class AppService {
       _id: id,
       authorId: messageId,
     }).exec();
+    
     const message = await this.komuMessage.find({ messageId: deleteComment?.messageId }).exec();
-    this.addEvent({ data: { comment: "delete", id, messageId: deleteComment?.messageId , authorNotifi: message[0]?.authorId} });
+    const createdTimestamp = new Date().getTime();
+    const onComment = " xóa ";
+    const notification = new this.komuNotification({
+      messageId: deleteComment?.messageId,
+      authorId: messageId,
+      onComment,
+      createdTimestamp,
+    });
+    await notification.save();
+    this.addEvent({ data: { comment: "delete", id, messageId: deleteComment?.messageId , authorNotifi: message[0]?.authorId, authorNotifi2: messageId} });
     return true;
   }
 
@@ -152,7 +164,16 @@ export class AppService {
       { new: true }
     ).exec();
     const message = await this.komuMessage.find({ messageId: updatedComment?.messageId }).exec();
-    this.addEvent({ data: { comment: "edit", id: _id, input: newContent, messageId: updatedComment?.messageId , authorNotifi: message[0]?.authorId} });
+    const createdTimestamp = new Date().getTime();
+    const onComment = " sửa ";
+    const notification = new this.komuNotification({
+      messageId: updatedComment?.messageId,
+      authorId: updatedComment?.authorId,
+      onComment,
+      createdTimestamp,
+    });
+    await notification.save();
+    this.addEvent({ data: { comment: "edit", id: _id, input: newContent, messageId: updatedComment?.messageId , authorNotifi: message[0]?.authorId, authorNotifi2: updatedComment?.authorId} });
     return true;
   }
 
@@ -215,7 +236,7 @@ export class AppService {
     await like.save();
     const message = await this.komuMessage.find({ messageId }).exec();
     await notification.save();
-    this.addEvent({ data: { like: "true", messageId, authorNotifi: message[0]?.authorId} });
+    this.addEvent({ data: { like: "true", messageId, authorNotifi: message[0]?.authorId, authorNotifi2: authorId} });
     return like;
   }
 
@@ -236,7 +257,7 @@ export class AppService {
     });
     const message = await this.komuMessage.find({ messageId }).exec();
     await notification.save();
-    this.addEvent({ data: { like: "false", messageId, authorNotifi: message[0]?.authorId} });
+    this.addEvent({ data: { like: "false", messageId, authorNotifi: message[0]?.authorId, authorNotifi2: authorId} });
     return true;
   }
 
