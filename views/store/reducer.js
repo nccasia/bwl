@@ -65,7 +65,8 @@ function reducer(state, action) {
                           return {
                             ...item,
                             content: action.payload?.input,
-                            onEdit: true,
+                            onEdit: action.payload?.onEdit,
+                            createdTimestamp: action.payload?.createdTimestamp,
                           };
                         } else {
                           return item;
@@ -84,11 +85,8 @@ function reducer(state, action) {
       return {
         ...state,
         posts: ssePosts,
-        sizeNotifi:
-          action.payload?.authorNotifi === state.author?.id &&
-          action.payload?.authorNotifi2 !== state.author?.id
-            ? state.sizeNotifi + 1
-            : state.sizeNotifi,
+        sizeNotifi: action.payload?.authorNotifi === state.author?.id && action.payload?.authorNotifi2 !== state.author?.id  ? state.sizeNotifi + 1 : state.sizeNotifi,
+        notification: action.payload?.authorNotifi === state.author?.id && action.payload?.authorNotifi2 !== state.author?.id  ? [...[action.payload?.notification], ...state.notification] : state.notification,
       };
     case 'SET_POSTS':
       const commentList = action.payload?.posts.map((main) => {
@@ -96,9 +94,10 @@ function reducer(state, action) {
           ...main,
           ...{
             comments: [],
-          },
-        };
-      });
+            pageComment: 1,
+          }
+        }
+      })
       return {
         ...state,
         posts: state.changePage
@@ -107,12 +106,11 @@ function reducer(state, action) {
         loadingPost: false,
         lengthPosts: action.payload?.size,
       };
-    case 'SET_POSTS_NULL':
+    case 'SET_POSTS_PAGE':
       return {
         ...state,
+        changePage: action.payload,
         posts: [],
-        changePage: true,
-        page: 1,
       };
     case 'CHANGE_LOADING_POST':
       return {
@@ -206,9 +204,10 @@ function reducer(state, action) {
       const listComment = state.posts.map((main) => {
         if (main.messageId === action.payload?.messageId) {
           return {
-            ...main,
-            comments: action.payload.comments,
-          };
+            ...main, 
+            comments: action.payload?.comments,
+            pageComment: 1,
+          }
         } else {
           return main;
         }
@@ -217,6 +216,22 @@ function reducer(state, action) {
         ...state,
         posts: listComment,
       };
+      case 'SET_COMMENTS_PAGE':
+        const listCommentPage = state.posts.map((main) => {
+          if (main.messageId === action.payload?.messageId) {
+            return {
+              ...main, 
+              comments: [...main.comments,...action.payload.comments],
+              pageComment: main.pageComment + 1,
+            }
+          } else {
+            return main;
+          }
+        });
+        return {
+          ...state,
+          posts: listCommentPage,
+        };
     default:
       throw new Error('Error');
   }

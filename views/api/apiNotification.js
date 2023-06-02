@@ -30,7 +30,7 @@ export const getNotificationSize = async (index, dispatch) => {
 
 export const postNotification = async (messageId, dispatch) => {
     try {
-        const res = await axios({
+        await axios({
             url: "/api/notifications/size",
             data: {
                 messageId: messageId,

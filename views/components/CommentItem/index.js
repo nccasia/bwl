@@ -25,10 +25,13 @@ const CommentItem = (props) => {
     }
   }, [props?.content]);
   const handleClickComment = async () => {
-    await editComment({
-      id: props?._id,
-      content: input,
-    });
+    if(state.author?.id){
+      await editComment({
+        id: props?._id,
+        content: input,
+        messageId: state.author?.id,
+      })
+    }
     setOpenEdit(false);
   };
 
@@ -44,6 +47,7 @@ const CommentItem = (props) => {
   const handleContainerMouseLeave = () => {
     setOpen(false);
   };
+
   return (
     <div className="comment-item">
       <div className="author-avatar">

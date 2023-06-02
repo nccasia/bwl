@@ -15,14 +15,11 @@ export class Comment {
   @Prop()
   content: string;
 
-  // @Prop()
-  // authorUser: string;
-
-  // @Prop()
-  // authorAvatar: string;
-  
   @Prop()
   count: number;
+
+  @Prop()
+  onEdit: boolean;
 
   @Prop()
   createdTimestamp: number;
