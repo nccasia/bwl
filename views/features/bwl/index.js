@@ -17,15 +17,6 @@ const Bwl = () => {
     foo();
   }, [document.cookie]);
 
-  console.log(state.changePage)
-  React.useEffect(() => {
-    const evtSource = new EventSource('/api/sse');
-    evtSource.onmessage = (event) => {
-      const message = JSON.parse(event.data);
-      dispatch({type: 'SET_SSE', payload: message});
-    };    
-  }, []);
-
   return (
     <React.Fragment>
       <Header />

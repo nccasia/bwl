@@ -56,6 +56,8 @@ const ContainerItem = (props) => {
     }
   };
 
+  console.log(props?.totalLike);
+
   return (
     <div 
       className="container-item" 
