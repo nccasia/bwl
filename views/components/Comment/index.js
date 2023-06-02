@@ -42,7 +42,7 @@ function Comment(props) {
     }
   };
 
-  const sortedComments = props?.comments ? [...props.comments].reverse() : [];
+  const sortedComments = props?.comments.sort((a, b) => b.createdTimestamp - a.createdTimestamp);
   return (
     <div className="container-comment">
       {sortedComments
