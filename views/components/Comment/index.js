@@ -11,17 +11,6 @@ import { getComment } from '../../api/apiComment';
 function Comment(props) {
   const { state, dispatch } = useStore();
   const [input, setInput] = React.useState('');
-  const [showMore, setShowMore] = useState(false);
-  const [visibleCommentCount, setVisibleCommentCount] = React.useState(3);
-  const handleShowMore = () => {
-    setShowMore(true);
-    setVisibleCommentCount(props?.comments.length);
-  };
-
-  const handleShowLess = () => {
-    setShowMore(false);
-    setVisibleCommentCount(3);
-  };
   const handleClickComment = async () => {
     if (state.author?.id) {
       await postComment({

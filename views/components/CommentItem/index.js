@@ -12,13 +12,13 @@ const CommentItem = (props) => {
   const { state, dispatch } = useStore();
   const handleDelete = async () => {
     if (state.author?.id) {
-      deleteComment({ id: props?._id, messageId: state.author?.id })
+      deleteComment({ id: props?._id, messageId: state.author?.id });
     }
   };
   const [open, setOpen] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
   const [input, setInput] = React.useState('');
-  
+
   React.useEffect(() => {
     if (props?.content) {
       setInput(props?.content);
@@ -33,6 +33,19 @@ const CommentItem = (props) => {
       })
     }
     setOpenEdit(false);
+  };
+
+  const handledit = () => {
+    setOpenEdit(!openEdit)
+    setOpen(false)
+  }
+
+  const handleMoreIconClick = () => {
+    setOpen(!open);
+  };
+
+  const handleContainerMouseLeave = () => {
+    setOpen(false);
   };
 
   return (
@@ -57,23 +70,27 @@ const CommentItem = (props) => {
               />
             )}
           </div>
-          <div className="comment-time">
-            {formatDay(
-              props?.createdTimestamp
-                ? props?.createdTimestamp
-                : props?.comment?.createdTimestamp,
-            )}
+          <div style={{display: "flex", alignItems: "center", gap: "5px"}}>
+            <div className="comment-time">
+              {formatDay(
+                props?.createdTimestamp
+                  ? props?.createdTimestamp
+                  : props?.comment?.createdTimestamp,
+              )}
+            </div>
+            {props?.onEdit && <p style={{fontSize: "7px"}}>đã chỉnh sữa</p>}
           </div>
         </div>
         {state.author?.id && props?.authorId === state.author?.id && (
-          <div className="delete-comment-btn">
-            <div className="delete-icon" onClick={() => setOpen(true)}>
+          <div className="delete-comment-btn"
+            onMouseLeave={handleContainerMouseLeave}>
+            <div className="delete-icon" onClick={handleMoreIconClick}>
               <MoreHorizIcon />
             </div>
             {open ? (
               <div className="dialog-form">
                 <p onClick={handleDelete}>Xóa</p>
-                <p onClick={() => setOpenEdit(!openEdit)}>Chỉnh Sữa</p>
+                <p onClick={handledit}>Chỉnh Sữa</p>
               </div>
             ) : (
               <></>

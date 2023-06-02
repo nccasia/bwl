@@ -8,7 +8,7 @@ const initState = {
   notification: [],
   page: 1,
   pageNotification: 1,
-  lengthNotication:0,
+  lengthNotication: 0,
   sizeNotifi: 0,
   size: 5,
   loadingNotifi: false,
@@ -16,64 +16,72 @@ const initState = {
   loadingHotPost: false,
   lengthPosts: 0,
   changePage: false,
-}
+  onEdit: false,
+};
 
 function reducer(state, action) {
   switch (action.type) {
     case 'SET_SSE':
-        const ssePosts = state.posts.map(main =>{
-          if(action.payload?.like){
-            if(main.messageId === action.payload?.messageId) {
+      const ssePosts = state.posts.map((main) => {
+        if (action.payload?.like) {
+          if (main.messageId === action.payload?.messageId) {
+            return {
+              ...main,
+              totalLike:
+                action.payload?.like === 'true'
+                  ? main.totalLike + 1
+                  : main.totalLike - 1,
+              likes:
+                action.payload?.authorNotifi2 === state.author?.id
+                  ? action.payload?.like === 'true'
+                    ? true
+                    : false
+                  : main.likes,
+            };
+          } else {
+            return main;
+          }
+        } else {
+          if (action.payload?.comment) {
+            if (main.messageId === action.payload?.messageId) {
               return {
-                ...main, 
-                totalLike: action.payload?.like === "true" ? main.totalLike + 1 : main.totalLike -1,
-                likes: action.payload?.authorNotifi2 === state.author?.id ? action.payload?.like === "true" ? true : false : main.likes,
-              }
+                ...main,
+                totalComment:
+                  action.payload?.comment === 'add'
+                    ? main.totalComment + 1
+                    : action.payload?.comment === 'delete'
+                    ? main.totalComment - 1
+                    : main.totalComment,
+                comments:
+                  action.payload?.comment === 'add'
+                    ? [...[action.payload], ...main?.comments]
+                    : action.payload?.comment === 'delete'
+                    ? main?.comments?.filter(
+                        (item) => item?._id !== action.payload?.id,
+                      )
+                    : action.payload?.comment === 'edit'
+                    ? main?.comments.map((item) => {
+                        if (item._id === action.payload?.id) {
+                          return {
+                            ...item,
+                            content: action.payload?.input,
+                            onEdit: action.payload?.onEdit,
+                            createdTimestamp: action.payload?.createdTimestamp,
+                          };
+                        } else {
+                          return item;
+                        }
+                      })
+                    : main?.comments,
+              };
             } else {
               return main;
             }
-          } else{
-            if(action.payload?.comment){
-              if(main.messageId === action.payload?.messageId) {
-                return {
-                  ...main, 
-                  totalComment: action.payload?.comment === "add" 
-                                ? 
-                                  main.totalComment + 1 
-                                : 
-                                  action.payload?.comment === "delete" 
-                                ?  
-                                  main.totalComment - 1
-                                :
-                                  main.totalComment,
-                  comments: action.payload?.comment === "add" 
-                            ? 
-                              [...[action.payload], ...main?.comments] 
-                            : 
-                              action.payload?.comment === "delete" 
-                            ?                              
-                              main?.comments?.filter(item => item?._id !==action.payload?.id)
-                            : 
-                              action.payload?.comment === "edit" 
-                            ? 
-                              main?.comments.map(item => {
-                                if(item._id === action.payload?.id) {
-                                  return {...item, content:action.payload?.input}
-                                } else {
-                                  return item;
-                                }
-                              })
-                            :
-                              main?.comments,
-                }
-              } else {
-                return main;
-              }
-            } else{
-              return main;
-            }
+          } else {
+            return main;
           }
-        });
+        }
+      });
       return {
         ...state,
         posts: ssePosts,
@@ -81,9 +89,9 @@ function reducer(state, action) {
         notification: action.payload?.authorNotifi === state.author?.id && action.payload?.authorNotifi2 !== state.author?.id  ? [...[action.payload?.notification], ...state.notification] : state.notification,
       };
     case 'SET_POSTS':
-      const commentList = action.payload?.posts.map(main => {
+      const commentList = action.payload?.posts.map((main) => {
         return {
-          ...main, 
+          ...main,
           ...{
             comments: [],
             pageComment: 1,
@@ -92,16 +100,17 @@ function reducer(state, action) {
       })
       return {
         ...state,
-        posts: state.changePage ? commentList : [...state.posts,...commentList],
+        posts: state.changePage
+          ? commentList
+          : [...state.posts, ...commentList],
         loadingPost: false,
         lengthPosts: action.payload?.size,
       };
-    case 'SET_POSTS_NULL':
+    case 'SET_POSTS_PAGE':
       return {
         ...state,
+        changePage: action.payload,
         posts: [],
-        changePage: true,
-        page: 1,
       };
     case 'CHANGE_LOADING_POST':
       return {
@@ -109,12 +118,12 @@ function reducer(state, action) {
         loadingPost: true,
       };
     case 'SET_POST_ONE':
-      const commentListOne = action.payload?.map(main => {
+      const commentListOne = action.payload?.map((main) => {
         return {
-          ...main, 
-          ...{ comments: []}
-        }
-      })
+          ...main,
+          ...{ comments: [] },
+        };
+      });
       return {
         ...state,
         posts: commentListOne,
@@ -173,15 +182,23 @@ function reducer(state, action) {
       const numberPosts = Math.ceil(state.lengthPosts / state.size);
       return {
         ...state,
-        loadingPost: numberPosts > action.payload && action.payload >0 ? true : false,
-        page: numberPosts > action.payload && action.payload >0 ? action.payload + 1 : -1,
+        loadingPost:
+          numberPosts > action.payload && action.payload > 0 ? true : false,
+        page:
+          numberPosts > action.payload && action.payload > 0
+            ? action.payload + 1
+            : -1,
       };
     case 'CHANGE_PAGE_NOTIFICATION':
       const numberNotifi = Math.ceil(state.lengthNotication / state.size);
       return {
         ...state,
-        loadingNotifi: numberNotifi > action.payload && action.payload >0 ? true : false,
-        pageNotification: numberNotifi > action.payload && action.payload >0 ? action.payload + 1 : -1,
+        loadingNotifi:
+          numberNotifi > action.payload && action.payload > 0 ? true : false,
+        pageNotification:
+          numberNotifi > action.payload && action.payload > 0
+            ? action.payload + 1
+            : -1,
       };
     case 'SET_COMMENTS':
       const listComment = state.posts.map((main) => {

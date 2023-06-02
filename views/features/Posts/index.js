@@ -19,6 +19,7 @@ const Posts = () => {
 
   React.useEffect(() => {
     const foo = async () =>{
+      await dispatch({type: "SET_POSTS_PAGE", payload: true});
       if(!state.author?.id && document.cookie && document.cookie.split("=")[0] === "token"){
         await getUser(document.cookie.split("=")[1], dispatch);
       }
@@ -41,7 +42,6 @@ const Posts = () => {
 
   const navigate = useNavigate();
   const handleChangePage = async () => {
-    await dispatch({type: "SET_POSTS_NULL"});
     navigate("/");
   }
 

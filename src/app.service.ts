@@ -116,6 +116,7 @@ export class AppService {
       authorId,
       content,
       createdTimestamp: Date.now(),
+      onEdit: false
     });
     const createdTimestamp = new Date().getTime();
     const onComment = " thêm ";
@@ -173,12 +174,12 @@ export class AppService {
 
   async editComment(_id: string, newContent: string,  messageId: string) {
     const oldComment : any= await this.komuComment.find({ _id: _id }).exec();
+    const createdTimestamp = new Date().getTime();
     const updatedComment = await this.komuComment.findByIdAndUpdate(
       _id,
-      { content: newContent },
+      { content: newContent, onEdit: true, createdTimestamp },
       { new: true }
     ).exec();
-    const createdTimestamp = new Date().getTime();
     const onComment = " sửa ";
     const notification = new this.komuNotification({
       messageId: updatedComment?.messageId,
@@ -197,6 +198,8 @@ export class AppService {
       messageId: updatedComment?.messageId , 
       authorNotifi: message[0]?.authorId, 
       authorNotifi2: updatedComment?.authorId,
+      createdTimestamp,
+      onEdit: true,
       notification: {...notification.toObject(), ...{message: message}, ...{author: author} },
     } });
     return true;
