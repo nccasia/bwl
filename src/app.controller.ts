@@ -292,21 +292,12 @@ export class AppController {
   @Get('/api/notifications')
   async getNotifications(@Req() req: Request, @Res() res: Response) {
     const { messageId, page } = req.query;
-    const list = await this.appService.findMessageAuthorId(
+    const notifications: any = await this.appService.getNotifications(
       messageId as string,
+      Number(page) as number,
+      5,
     );
-    let notifications : any = [];
-    for(let i= 0; i< list.length; i++){
-      // eslint-disable-next-line prefer-const
-      let notification: any = await this.appService.getNotifications(
-        list[i].messageId as string,
-        messageId as string,
-        Number(page) as number,
-        5,
-      );
-      notifications = notifications.concat(notification);
-    }
-    return res.json({ notifications });
+    return res.json({notifications});
   }
 
   @Get('/api/notifications/size')
@@ -318,8 +309,7 @@ export class AppController {
     let length =0;
     let size =0;
     for(let i= 0; i< list.length; i++){
-      // eslint-disable-next-line prefer-const
-      let notification: any = await this.appService.getNotificationsSize(
+      const notification= await this.appService.getNotificationsSize(
         list[i].messageId as string,
         messageId as string,
       );

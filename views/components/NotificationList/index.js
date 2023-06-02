@@ -24,7 +24,7 @@ const NotificationList = () => {
                 onClick={() => handleChangePage(main?.messageId)}
                 className="notification-list"
               >
-                {main.content ? (
+                {main?.onComment ? (
                   <div className="list-notifi">
                     <img
                       className="list-notifi-image"
