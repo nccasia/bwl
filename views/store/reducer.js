@@ -78,14 +78,17 @@ function reducer(state, action) {
         ...state,
         posts: ssePosts,
         sizeNotifi: action.payload?.authorNotifi === state.author?.id && action.payload?.authorNotifi2 !== state.author?.id  ? state.sizeNotifi + 1 : state.sizeNotifi,
+        notification: action.payload?.authorNotifi === state.author?.id && action.payload?.authorNotifi2 !== state.author?.id  ? [...[action.payload?.notification], ...state.notification] : state.notification,
       };
     case 'SET_POSTS':
       const commentList = action.payload?.posts.map(main => {
         return {
           ...main, 
           ...{
-            comments: [], 
-          }}
+            comments: [],
+            pageComment: 1,
+          }
+        }
       })
       return {
         ...state,
@@ -185,7 +188,8 @@ function reducer(state, action) {
         if (main.messageId === action.payload?.messageId) {
           return {
             ...main, 
-            comments: action.payload.comments,
+            comments: action.payload?.comments,
+            pageComment: 1,
           }
         } else {
           return main;
@@ -195,6 +199,22 @@ function reducer(state, action) {
         ...state,
         posts: listComment,
       };
+      case 'SET_COMMENTS_PAGE':
+        const listCommentPage = state.posts.map((main) => {
+          if (main.messageId === action.payload?.messageId) {
+            return {
+              ...main, 
+              comments: [...main.comments,...action.payload.comments],
+              pageComment: main.pageComment + 1,
+            }
+          } else {
+            return main;
+          }
+        });
+        return {
+          ...state,
+          posts: listCommentPage,
+        };
     default:
       throw new Error('Error');
   }

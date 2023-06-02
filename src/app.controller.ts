@@ -203,8 +203,8 @@ export class AppController {
 
   @Get('/api/comments')
   async getComments(@Req() req: Request, @Res() res: Response) {
-    const { messageId } = req.query;
-    const comments = await this.appService.getComments(messageId as string);
+    const { messageId, page } = req.query;
+    const comments = await this.appService.getComments(messageId as string, Number(page), 5);
     return res.json({ comments });
   }
 
@@ -217,8 +217,8 @@ export class AppController {
 
   @Post('/api/comment/edit')
   async postEditComment(@Req() req: Request, @Res() res: Response) {
-    const { id, content } = req.body;
-    await this.appService.editComment(id as string, content as string);
+    const { id, content,  messageId } = req.body;
+    await this.appService.editComment(id as string, content as string,  messageId as string);
     return res.json(true);
   }
 

@@ -14,7 +14,7 @@ const MainContent = () => {
   const {state, dispatch}=useStore();
   const [scroll, setScroll] = React.useState(false);
   const [scrollY, setScrollY] = React.useState(0);
-  const debounce = useDataDebouncer(state.page, 500)
+  const debounce = useDataDebouncer(state.page, 100)
   React.useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY >= 100) {

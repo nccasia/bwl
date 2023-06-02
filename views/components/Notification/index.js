@@ -10,7 +10,7 @@ import {getNotification} from '../../api/apiNotification';
 const Notification = (props) => {
   const { state, dispatch } = useStore();
   const spanRef = React.useRef(null);
-  const debounce = useDataDebouncer(state.pageNotification, 500)
+  const debounce = useDataDebouncer(state.pageNotification, 300)
   React.useEffect(() => {
     const scrollElement = spanRef.current;
     const handleScroll = () => {
