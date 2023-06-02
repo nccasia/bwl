@@ -219,7 +219,8 @@ export class AppController {
   async postEditComment(@Req() req: Request, @Res() res: Response) {
     const { id, content } = req.body;
     await this.appService.editComment(id as string, content as string);
-    return res.json(true);
+    const onEdit = true
+    return res.json({onEdit});
   }
 
   @Post('/api/like')

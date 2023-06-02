@@ -17,7 +17,6 @@ const CommentItem = (props) => {
   };
   const [open, setOpen] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
-  const [edit, setEdit] = React.useState(false);
   const [input, setInput] = React.useState('');
 
   React.useEffect(() => {
@@ -31,9 +30,20 @@ const CommentItem = (props) => {
       content: input,
     });
     setOpenEdit(false);
-    setEdit(true);
   };
 
+  const handledit = () => {
+    setOpenEdit(!openEdit)
+    setOpen(false)
+  }
+
+  const handleMoreIconClick = () => {
+    setOpen(!open);
+  };
+
+  const handleContainerMouseLeave = () => {
+    setOpen(false);
+  };
   return (
     <div className="comment-item">
       <div className="author-avatar">
@@ -64,18 +74,19 @@ const CommentItem = (props) => {
                   : props?.comment?.createdTimestamp,
               )}
             </div>
-            {props.onEdit && <p style={{fontSize: "7px"}}>đã chỉnh sữa</p>}
+            {props?.onEdit && <p style={{fontSize: "7px"}}>đã chỉnh sữa</p>}
           </div>
         </div>
         {state.author?.id && props?.authorId === state.author?.id && (
-          <div className="delete-comment-btn">
-            <div className="delete-icon" onClick={() => setOpen(true)}>
+          <div className="delete-comment-btn"
+            onMouseLeave={handleContainerMouseLeave}>
+            <div className="delete-icon" onClick={handleMoreIconClick}>
               <MoreHorizIcon />
             </div>
             {open ? (
               <div className="dialog-form">
                 <p onClick={handleDelete}>Xóa</p>
-                <p onClick={() => setOpenEdit(!openEdit)}>Chỉnh Sữa</p>
+                <p onClick={handledit}>Chỉnh Sữa</p>
               </div>
             ) : (
               <></>

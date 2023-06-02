@@ -118,6 +118,7 @@ export class AppService {
       authorId,
       content,
       createdTimestamp: Date.now(),
+      onEdit: false
     });
     const commentAuthor = await this.komuUser.findOne({ id: authorId }).exec();
     const createdTimestamp = new Date().getTime();
@@ -160,7 +161,7 @@ export class AppService {
   async editComment(_id: string, newContent: string) {
     const updatedComment = await this.komuComment.findByIdAndUpdate(
       _id,
-      { content: newContent },
+      { content: newContent, onEdit: true },
       { new: true }
     ).exec();
     const message = await this.komuMessage.find({ messageId: updatedComment?.messageId }).exec();
