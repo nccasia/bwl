@@ -9,19 +9,13 @@ const Bwl = () => {
   const {state, dispatch}=useStore();
   React.useEffect(() => {
     const foo = async() =>{
+      await dispatch({type: "SET_POSTS_PAGE", payload: false});
       if(document.cookie && document.cookie.split("=")[0] === "token"){
-        getUser(document.cookie.split("=")[1], dispatch);
+        await getUser(document.cookie.split("=")[1], dispatch);
       }
     };
     foo();
   }, [document.cookie]);
-  React.useEffect(() => {
-    const evtSource = new EventSource('/api/sse');
-    evtSource.onmessage = (event) => {
-      const message = JSON.parse(event.data);
-      dispatch({type: 'SET_SSE', payload: message});
-    };    
-  }, []);
 
   return (
     <React.Fragment>

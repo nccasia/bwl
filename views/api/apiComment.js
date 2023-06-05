@@ -4,7 +4,7 @@ import axios from 'axios';
 export const getComment = async (index) => {
   try {
     const res = await axios({
-      url: `/api/comments?messageId=${index}`,
+      url: `/api/comments?messageId=${index?.messageId}&page=${index?.page}`,
       method: 'GET',
     });
     return res.data?.comments;

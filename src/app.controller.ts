@@ -203,8 +203,8 @@ export class AppController {
 
   @Get('/api/comments')
   async getComments(@Req() req: Request, @Res() res: Response) {
-    const { messageId } = req.query;
-    const comments = await this.appService.getComments(messageId as string);
+    const { messageId, page } = req.query;
+    const comments = await this.appService.getComments(messageId as string, Number(page), 5);
     return res.json({ comments });
   }
 
@@ -217,8 +217,8 @@ export class AppController {
 
   @Post('/api/comment/edit')
   async postEditComment(@Req() req: Request, @Res() res: Response) {
-    const { id, content } = req.body;
-    await this.appService.editComment(id as string, content as string);
+    const { id, content,  messageId } = req.body;
+    await this.appService.editComment(id as string, content as string,  messageId as string);
     return res.json(true);
   }
 
@@ -291,21 +291,12 @@ export class AppController {
   @Get('/api/notifications')
   async getNotifications(@Req() req: Request, @Res() res: Response) {
     const { messageId, page } = req.query;
-    const list = await this.appService.findMessageAuthorId(
+    const notifications: any = await this.appService.getNotifications(
       messageId as string,
+      Number(page) as number,
+      5,
     );
-    let notifications : any = [];
-    for(let i= 0; i< list.length; i++){
-      // eslint-disable-next-line prefer-const
-      let notification: any = await this.appService.getNotifications(
-        list[i].messageId as string,
-        messageId as string,
-        Number(page) as number,
-        5,
-      );
-      notifications = notifications.concat(notification);
-    }
-    return res.json({ notifications });
+    return res.json({notifications});
   }
 
   @Get('/api/notifications/size')
@@ -317,8 +308,7 @@ export class AppController {
     let length =0;
     let size =0;
     for(let i= 0; i< list.length; i++){
-      // eslint-disable-next-line prefer-const
-      let notification: any = await this.appService.getNotificationsSize(
+      const notification= await this.appService.getNotificationsSize(
         list[i].messageId as string,
         messageId as string,
       );

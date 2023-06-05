@@ -10,7 +10,6 @@ const NotificationList = () => {
   const { state, dispatch } = useStore();
   const navigate = useNavigate();
   const handleChangePage = async (index) => {
-    await dispatch({ type: 'SET_POSTS_NULL' });
     navigate(`/posts?messageId=${index}`);
   };
 
@@ -24,7 +23,7 @@ const NotificationList = () => {
                 onClick={() => handleChangePage(main?.messageId)}
                 className="notification-list"
               >
-                {main.content ? (
+                {main?.onComment ? (
                   <div className="list-notifi">
                     <img
                       className="list-notifi-image"

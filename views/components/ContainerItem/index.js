@@ -16,14 +16,16 @@ import { faMessage } from '@fortawesome/free-solid-svg-icons';
 const ContainerItem = (props) => {
   const { state, dispatch } = useStore();
   const [open, setOpen] = React.useState(false);
-  const handleClick = (index) => {
-    getComment(index).then((data) =>
-      dispatch({
-        type: 'SET_COMMENTS',
-        payload: { comments: data, messageId: index },
-      }),
-    );
+  const handleClick = async(index) => {
     setOpen(!open);
+    if(open === false){
+      getComment({messageId: index, page: 1}).then((data) =>
+        dispatch({
+          type: 'SET_COMMENTS',
+          payload: { comments: data, messageId: index },
+        }),
+      );
+    }
   };
 
   const handleClickLike = async () => {
@@ -53,6 +55,8 @@ const ContainerItem = (props) => {
       });
     }
   };
+
+  console.log(props?.totalLike);
 
   return (
     <div 
@@ -101,7 +105,7 @@ const ContainerItem = (props) => {
         </span>
       </div>
       {open && (
-        <Comment comments={props?.comments} messageId={props?.messageId} />
+        <Comment {...props} />
       )}
     </div>
   );

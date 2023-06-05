@@ -19,6 +19,7 @@ const Posts = () => {
 
   React.useEffect(() => {
     const foo = async () =>{
+      dispatch({type: "SET_POSTS_PAGE", payload: true});
       if(!state.author?.id && document.cookie && document.cookie.split("=")[0] === "token"){
         await getUser(document.cookie.split("=")[1], dispatch);
       }
@@ -31,17 +32,8 @@ const Posts = () => {
     foo();
   }, [messageId, document.cookie, state.author?.id]);
 
-  React.useEffect(() => {
-    const evtSource = new EventSource('/api/sse');
-    evtSource.onmessage = (event) => {
-      const message = JSON.parse(event.data);
-      dispatch({type: 'SET_SSE', payload: message});
-    };    
-  }, []);
-
   const navigate = useNavigate();
   const handleChangePage = async () => {
-    await dispatch({type: "SET_POSTS_NULL"});
     navigate("/");
   }
 
