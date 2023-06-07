@@ -39,3 +39,15 @@ export const getHotPosts = async (dispatch) => {
     }
 }
 
+export const deletePost = async (index) => {
+    try {
+        const res = await axios({
+            url: `/api/posts?id=${index.id}&messageId=${index.messageId}`,
+            method: "DELETE",
+          });
+        return res.data;
+    } catch {
+        return false;
+    }
+}
+

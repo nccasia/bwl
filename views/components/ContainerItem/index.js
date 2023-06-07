@@ -12,6 +12,7 @@ import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMessage } from '@fortawesome/free-solid-svg-icons';
+import {deletePost} from "../../api/apiPosts";
 
 const ContainerItem = (props) => {
   const { state, dispatch } = useStore();
@@ -56,14 +57,17 @@ const ContainerItem = (props) => {
     }
   };
 
-  console.log(props?.totalLike);
-
   return (
     <div 
       className="container-item" 
       style={{ backgroundColor: state.background ? "#242526": "white", color: "#6C7588"}}
     >
       <UserInfo {...props} />
+
+      {state.author?.id && state.author?.id === props?.authorId && (
+        <button onClick={()=>deletePost({id: props?._id, messageId: state.author?.id})}>Delete</button>
+      )}
+
       <div className="container-item-img">
         <img src={`https://bwl.vn/images/${props?.links[0]}`} />
       </div>

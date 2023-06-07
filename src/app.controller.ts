@@ -142,8 +142,14 @@ export class AppController {
     return res.json(posts);
   }
 
+  @Delete('/api/posts')
+  async deletePost(@Req() req: Request, @Res() res: Response) {
+    const { id, messageId } = req.query;
+    const deletePost = await this.appService.deletePost(id as string, messageId as string);
+    return res.json({ message: deletePost ?  true : false});
+  }
+
   @Get('/api/login')
-  //@Render('index')
   root() {
     const url = `https://discord.com/api/oauth2/authorize?client_id=${
       process.env.CLIENT_ID
