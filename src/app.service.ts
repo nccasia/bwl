@@ -10,6 +10,7 @@ import { Like, LikeDocument } from './Like/like.schema';
 import { Notification, NotificationDocument} from './Notification/notification.schema';
 import { Observable, Subject } from 'rxjs';
 import { KomuUsers, KomuUsersDocument } from './Komu_users/komu_users.schema';
+import {channel} from "./Channel"
 
 @Injectable()
 export class AppService {
@@ -33,11 +34,11 @@ export class AppService {
 
   private checkForChanges() {
     const checkChanges = async () => {
-      const currentTime = new Date().getTime()-5000;
+      const currentTime = new Date().getTime() - 2500;
       const aggregatorOpts = [
         { 
           $match: {
-            channelId: '924543969357099018', 
+            channelId: channel, 
             createdTimestamp: { $gte: currentTime },
           } 
         },
@@ -50,16 +51,13 @@ export class AppService {
           list = list.concat(test);
           console.log(list);
         }
-        this.addEvent({ data: {list, posts: true } });
+        this.addEvent({ data: {list, posts: "add" } });
       }
     };
     setInterval(checkChanges, 5000);
   }
 
-  async findLikeFromDiscordId(
-    authorId: string,
-    messageId: string,
-  ): Promise<any> {
+  async findLikeFromDiscordId( authorId: string,messageId: string): Promise<any> {
     return await this.komuLike.findOne({ authorId: authorId, messageId: messageId });
   }
   async findLikeMessageFromDiscordId(messageId: string): Promise<any> {
@@ -68,7 +66,7 @@ export class AppService {
   async findMessageAuthorId(authorId: string): Promise<any> {
     return await this.komuMessage.find({ 
       authorId: authorId,
-      channelId: '924543969357099018',
+      channelId: channel,
     });
   }
   async findCommentFromDiscordId(messageId: string): Promise<any> {
@@ -88,7 +86,7 @@ export class AppService {
     return await this.komuMessage.findOne({ id: id });
   }
   async findLengthMessage(): Promise<any> {
-    const count = await this.komuMessage.countDocuments({ channelId: '924543969357099018' }).exec();
+    const count = await this.komuMessage.countDocuments({ channelId: channel }).exec();
     return count;
   }
 
@@ -317,7 +315,8 @@ export class AppService {
       .aggregate([
         {
           $match: {
-            authorId: authorId
+            authorId: authorId,
+            channelId: channel,
           }
         },
         {
@@ -377,7 +376,7 @@ export class AppService {
   async getPostsOne(messageId: string, authorId: string | null) {
     const aggregatorOpts = [
       { $match: { 
-          channelId: '924543969357099018',
+          channelId: channel,
           messageId, 
         } 
       },
@@ -463,7 +462,7 @@ export class AppService {
     const aggregatorOpts = [
       {
         $match: {
-          channelId: '924543969357099018',
+          channelId: channel,
           createdTimestamp: { $gte: sevenDaysAgo.getTime(), $lte: now.getTime() },
         },
       },
@@ -518,7 +517,7 @@ export class AppService {
   }  
   async getAll(page: number, size: number, authorId: string | null) {
     const aggregatorOpts = [
-      { $match: { channelId: '924543969357099018' } },
+      { $match: { channelId: channel } },
       { $sort: { _id: -1 } },
       { $skip: (page - 1) * size },
       { $limit: size },
@@ -588,5 +587,18 @@ export class AppService {
       item.likes = item.likes?.filter((e: any) => e.authorId === authorId).length >0 ? true : false;
     })
     return data;
+  }
+
+  async deletePost(id: string, messageId: string) {
+    await this.komuMessage.findOneAndDelete({
+      _id: id,
+      authorId: messageId,
+    }).exec();
+
+    this.addEvent({ data: { 
+      posts: "delete", 
+      id, 
+    } });
+    return true;
   }
 }

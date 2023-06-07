@@ -84,9 +84,22 @@ function reducer(state, action) {
       });
       return {
         ...state,
-        posts: action.payload?.posts ? [...action.payload?.list,...state.posts] : ssePosts,
+        posts: action.payload?.posts ==="add" ? 
+                [...action.payload?.list,...state.posts] 
+              : 
+                action.payload?.posts ==="delete" ? 
+                state.posts.filter(item => item?._id !== action.payload?.id)
+              :
+                ssePosts,
         sizeNotifi: action.payload?.authorNotifi === state.author?.id && action.payload?.authorNotifi2 !== state.author?.id  ? state.sizeNotifi + 1 : state.sizeNotifi,
         notification: action.payload?.authorNotifi === state.author?.id && action.payload?.authorNotifi2 !== state.author?.id  ? [...[action.payload?.notification], ...state.notification] : state.notification,
+        hotPosts: action.payload?.posts ==="delete" ? 
+                    state.hotPosts.filter(item => item?._id !== action.payload?.id) 
+                  : 
+                    state.hotPosts?.length <10 && action.payload?.posts ==="add" ?
+                    [...state.hotPosts, ...action.payload?.list] 
+                  :
+                    state.hotPosts,
       };
     case 'SET_POSTS':
       const commentList = action.payload?.posts.map((main) => {
@@ -184,9 +197,9 @@ function reducer(state, action) {
       return {
         ...state,
         loadingPost:
-          numberPosts > action.payload && action.payload > 0 ? true : false,
+          numberPosts > action.payload && action.payload > 0 && state.page > 0 ? true : false,
         page:
-          numberPosts > action.payload && action.payload > 0
+          numberPosts > action.payload && action.payload  > 0 && state.page > 0
             ? action.payload + 1
             : -1,
       };
@@ -195,9 +208,9 @@ function reducer(state, action) {
       return {
         ...state,
         loadingNotifi:
-          numberNotifi > action.payload && action.payload > 0 ? true : false,
+          numberNotifi > action.payload && action.payload > 0 && state.pageNotification > 0 ? true : false,
         pageNotification:
-          numberNotifi > action.payload && action.payload > 0
+          numberNotifi > action.payload && action.payload > 0 && state.pageNotification > 0
             ? action.payload + 1
             : -1,
       };
