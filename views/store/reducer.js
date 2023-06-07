@@ -84,7 +84,7 @@ function reducer(state, action) {
       });
       return {
         ...state,
-        posts: ssePosts,
+        posts: action.payload?.posts ? [...action.payload?.list,...state.posts] : ssePosts,
         sizeNotifi: action.payload?.authorNotifi === state.author?.id && action.payload?.authorNotifi2 !== state.author?.id  ? state.sizeNotifi + 1 : state.sizeNotifi,
         notification: action.payload?.authorNotifi === state.author?.id && action.payload?.authorNotifi2 !== state.author?.id  ? [...[action.payload?.notification], ...state.notification] : state.notification,
       };
