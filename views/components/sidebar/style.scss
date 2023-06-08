@@ -46,8 +46,18 @@
     max-width: 390px;
   }
 }
-// @media (max-width: 1360px) {
-//   .sidebar-left-content{
-//     max-width: 410px;
-//   }
-// }
+@media (max-width: 1240px) {
+  .sidebar-left-content{
+    max-width: 400px;
+    height: calc(100vh - 60px) !important;
+    .sidebar-center{
+      height: calc(100vh - 160px) !important;
+    }
+  }
+}
+@media (max-width: 768px) {
+  .sidebar-left-content{
+    max-width: 100%;
+    margin: 0 15px 0 0;
+  }
+}

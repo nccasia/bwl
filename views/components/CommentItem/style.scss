@@ -69,15 +69,15 @@
         border-radius: 6px;
         width: 200px;
         z-index: 999;
-        p {
+        .content {
           width: 100%;
           display: flex;
           flex-direction: column;
           gap: 5px;
           padding: 10px;
-        }
-        p:hover {
-          background-color: #ebedf0;
+          &:hover {
+            background-color: #ebedf0;
+          }
         }
         &::before {
           position: absolute;
@@ -122,8 +122,23 @@
       gap: 0px;
       .author-boxcontent{
         .author-name{
-          max-width: 235px;
+          max-width: 215px;
           margin-left: 5px;
+        }
+      }
+      .delete-comment-btn{
+        .dialog-form{
+          width: 120px;
+          position: absolute;
+          left: -95px;
+          &::before{
+            position: absolute;
+            content: '';
+            left: 92px;
+          }
+          .content{
+            font-size: 11px;
+          }
         }
       }
     }

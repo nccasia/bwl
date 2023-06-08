@@ -57,6 +57,15 @@
     padding: 0 20px;
     .box-login {
       width: 100%;
+      .btn-login {
+        width: 100%;
+      }
+      h1{
+        font-size: 22px;
+        span{
+          font-size: 30px;
+        }
+      }
     }
   }
 }
