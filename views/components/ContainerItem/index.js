@@ -12,15 +12,14 @@ import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMessage } from '@fortawesome/free-solid-svg-icons';
-import {deletePost} from "../../api/apiPosts";
 
 const ContainerItem = (props) => {
   const { state, dispatch } = useStore();
   const [open, setOpen] = React.useState(false);
-  const handleClick = async(index) => {
+  const handleClick = async (index) => {
     setOpen(!open);
-    if(open === false){
-      getComment({messageId: index, page: 1}).then((data) =>
+    if (open === false) {
+      getComment({ messageId: index, page: 1 }).then((data) =>
         dispatch({
           type: 'SET_COMMENTS',
           payload: { comments: data, messageId: index },
@@ -58,16 +57,14 @@ const ContainerItem = (props) => {
   };
 
   return (
-    <div 
-      className="container-item" 
-      style={{ backgroundColor: state.background ? "#242526": "white", color: "#6C7588"}}
+    <div
+      className="container-item"
+      style={{
+        backgroundColor: state.background ? '#242526' : 'white',
+        color: '#6C7588',
+      }}
     >
       <UserInfo {...props} />
-
-      {state.author?.id && state.author?.id === props?.authorId && (
-        <button onClick={()=>deletePost({id: props?._id, messageId: state.author?.id})}>Delete</button>
-      )}
-
       <div className="container-item-img">
         <img src={`https://bwl.vn/images/${props?.links[0]}`} />
       </div>
@@ -80,18 +77,12 @@ const ContainerItem = (props) => {
       <div className="container-item-react">
         <span className="react-like" onClick={handleClickLike}>
           {props?.likes ? (
-            <div
-              className="react-like-icon"
-            >
-              <ThumbDownAltIcon
-                className="like_icon"
-              />
+            <div className="react-like-icon">
+              <ThumbDownAltIcon className="like_icon" />
               <span>Bỏ Thích</span>
             </div>
           ) : (
-            <div
-              className="react-like-icon"
-            >
+            <div className="react-like-icon">
               <ThumbUpAltIcon className="like_icon" />
               <span>Thích</span>
             </div>
@@ -101,16 +92,11 @@ const ContainerItem = (props) => {
           onClick={() => handleClick(props?.messageId)}
           className="react-comment"
         >
-          <FontAwesomeIcon
-            className="icon-cmt"
-            icon={faMessage}
-          />
+          <FontAwesomeIcon className="icon-cmt" icon={faMessage} />
           <span>Bình luận </span>
         </span>
       </div>
-      {open && (
-        <Comment {...props} />
-      )}
+      {open && <Comment {...props} />}
     </div>
   );
 };
