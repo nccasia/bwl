@@ -4,6 +4,8 @@ import { formatDay } from '../../util/formatDay';
 import React, { useState } from 'react';
 import { useStore } from '../../store';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import { deletePost } from '../../api/apiPosts';
+import DelPost from '../deletepost';
 
 const UserInfo = (props) => {
   const { state, dispatch } = useStore();
@@ -33,7 +35,7 @@ const UserInfo = (props) => {
             {formatDay(props?.createdTimestamp?.$numberDecimal || props?.createdTimestamp)}
           </p>
         </div>
-        {state.author?.id && props?.authorId === state.author?.id && (
+        {state.author?.id && state.author?.id === props?.authorId && (
           <div className="delete-post-btn"
             onMouseLeave={handleContainerMouseLeave}>
             <div className="delete-icon" onClick={handleMoreIconClick}>
@@ -41,7 +43,7 @@ const UserInfo = (props) => {
             </div>
             {open ? (
               <div className="dialog-form">
-                <p onClick>Xóa</p>
+                <DelPost id={props?._id} messageId={state.author?.id} />
               </div>
             ) : (
               <></>

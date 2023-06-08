@@ -11,11 +11,6 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 const CommentItem = (props) => {
   const { state, dispatch } = useStore();
-  // const handleDelete = async () => {
-  //   if (state.author?.id) {
-  //     deleteComment({ id: props?._id, messageId: state.author?.id });
-  //   }
-  // };
   const [open, setOpen] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
   const [input, setInput] = React.useState('');
@@ -90,7 +85,6 @@ const CommentItem = (props) => {
             </div>
             {open ? (
               <div className="dialog-form">
-                {/* <p onClick={handleDelete}>Xóa</p> */}
                 <div className="content">
                   <Delcomment id= {props?._id} messageId= {state.author?.id} />
                 </div>

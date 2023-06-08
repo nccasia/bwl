@@ -12,7 +12,6 @@ import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMessage } from '@fortawesome/free-solid-svg-icons';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 const ContainerItem = (props) => {
   const { state, dispatch } = useStore();
