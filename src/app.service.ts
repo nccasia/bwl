@@ -10,7 +10,8 @@ import { Like, LikeDocument } from './Like/like.schema';
 import { Notification, NotificationDocument} from './Notification/notification.schema';
 import { Observable, Subject } from 'rxjs';
 import { KomuUsers, KomuUsersDocument } from './Komu_users/komu_users.schema';
-import {channel} from "./Channel"
+import {channel, guild} from "./Channel"
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class AppService {
@@ -48,8 +49,7 @@ export class AppService {
       if (newRecord?.length > 0) {
         for (const item of newRecord) {
           const test= await this.getPostsOne(item.messageId, null);
-          list = list.concat(test);
-          console.log(list);
+          list = [...list,...test];
         }
         this.addEvent({ data: {list, posts: "add" } });
       }
@@ -601,4 +601,29 @@ export class AppService {
     } });
     return true;
   }
+  async isMessageIdExists(messageId: string): Promise<boolean> {
+    const count = await this.komuMessage.countDocuments({ messageId });
+    return count > 0;
+  }
+  async addPost(authorId: string, links: string) {
+    let messageId: string;
+    let isMessageIdExists1: boolean;
+
+    do {
+      messageId = uuidv4();
+      isMessageIdExists1 = await this.isMessageIdExists(messageId);
+    } while (isMessageIdExists1);
+
+    const addPost =  new this.komuMessage({
+      links:[links],
+      channelId:channel,
+      guildId: guild,
+      createdTimestamp: new Date().getTime(),
+      authorId:authorId,
+      messageId,
+    });
+    await addPost.save();
+    return addPost;
+  }
 }
+

@@ -9,6 +9,7 @@ import SideBar from '../sidebar';
 import {useDataDebouncer} from '../../util/useDebounce';
 import { getAll } from '../../api/apiPosts';
 import CircularProgress from '@mui/material/CircularProgress';
+import  UploadPost from "../UploadPost";
 
 const MainContent = () => {
   const {state, dispatch}=useStore();
@@ -65,6 +66,7 @@ const MainContent = () => {
           <SideBar />
         </div>
         <div className="main-content">
+          {state.author?.id && <UploadPost/>}
           <Container />
           {state.loadingPost && (
             <div className="notifi-progress">
