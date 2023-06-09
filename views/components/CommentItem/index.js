@@ -6,7 +6,7 @@ import { deleteComment } from '../../api/apiComment';
 import { useStore } from '../../store';
 import CommentInput from '../CommentInput';
 import { editComment } from '../../api/apiComment';
-import Delcomment from '../delcomment';
+import Delcomment from '../Delcomment';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 const CommentItem = (props) => {

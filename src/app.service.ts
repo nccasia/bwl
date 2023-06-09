@@ -10,7 +10,8 @@ import { Like, LikeDocument } from './Like/like.schema';
 import { Notification, NotificationDocument} from './Notification/notification.schema';
 import { Observable, Subject } from 'rxjs';
 import { KomuUsers, KomuUsersDocument } from './Komu_users/komu_users.schema';
-import {channel} from "./Channel"
+import {channel, guild} from "./Channel"
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class AppService {
@@ -34,7 +35,7 @@ export class AppService {
 
   private checkForChanges() {
     const checkChanges = async () => {
-      const currentTime = new Date().getTime() - 2500;
+      const currentTime = new Date().getTime() - 5000;
       const aggregatorOpts = [
         { 
           $match: {
@@ -48,8 +49,7 @@ export class AppService {
       if (newRecord?.length > 0) {
         for (const item of newRecord) {
           const test= await this.getPostsOne(item.messageId, null);
-          list = list.concat(test);
-          console.log(list);
+          list = [...list,...test];
         }
         this.addEvent({ data: {list, posts: "add" } });
       }
@@ -590,7 +590,7 @@ export class AppService {
   }
 
   async deletePost(id: string, messageId: string) {
-    await this.komuMessage.findOneAndDelete({
+    const deletePost = await this.komuMessage.findOneAndDelete({
       _id: id,
       authorId: messageId,
     }).exec();
@@ -599,6 +599,39 @@ export class AppService {
       posts: "delete", 
       id, 
     } });
-    return true;
+    return deletePost;
+  }
+
+  async editPost(id: string, messageId: string) {
+    const editPost = await this.komuMessage.find({
+      _id: id,
+      authorId: messageId,
+    }).exec();
+    return editPost;
+  }
+  async isMessageIdExists(messageId: string): Promise<boolean> {
+    const count = await this.komuMessage.countDocuments({ messageId });
+    return count > 0;
+  }
+  async addPost(authorId: string, links: string) {
+    let messageId: string;
+    let isMessageIdExists1: boolean;
+
+    do {
+      messageId = uuidv4();
+      isMessageIdExists1 = await this.isMessageIdExists(messageId);
+    } while (isMessageIdExists1);
+
+    const addPost =  new this.komuMessage({
+      links:[links],
+      channelId:channel,
+      guildId: guild,
+      createdTimestamp: new Date().getTime(),
+      authorId:authorId,
+      messageId,
+    });
+    await addPost.save();
+    return addPost;
   }
 }
+

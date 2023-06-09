@@ -10,12 +10,18 @@ import {
   UnauthorizedException,
   Sse,
   Delete,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import { AppService } from './app.service';
 import { Request, Response } from 'express';
 import { AuthService } from './Authentication/auth.service';
 import { first, map, Observable, switchMap } from 'rxjs';
+import { FileInterceptor } from '@nestjs/platform-express';
+import {multerOptions} from "./Util"
+import * as fs from 'fs';
+import path from 'path';
 
 const discordTokenUrl = 'https://discord.com/api/oauth2/token';
 const discordUserUrl = 'https://discord.com/api/users/@me';
@@ -146,6 +152,10 @@ export class AppController {
   async deletePost(@Req() req: Request, @Res() res: Response) {
     const { id, messageId } = req.query;
     const deletePost = await this.appService.deletePost(id as string, messageId as string);
+    if(deletePost){
+      const filePath= `./public/images/${deletePost?.links[0]}`;
+      fs.unlinkSync(filePath);
+    }
     return res.json({ message: deletePost ?  true : false});
   }
 
@@ -342,6 +352,36 @@ export class AppController {
     const hotposts = await this.appService.getHotPosts();
     return res.json({ hotposts });
   }
+
+  @Post('/api/upload')
+  @UseInterceptors(FileInterceptor('image', multerOptions))
+  async uploadFile(@UploadedFile() file: Express.Multer.File, @Req() req: Request, @Res() res: Response) {
+    const { id } = req.query;
+    const destinationPath = `./public/images/${file.filename}`;
+    const destinationDir = './public/images';
+    if (!fs.existsSync(destinationDir)) {
+      fs.mkdirSync(destinationDir);
+    }
+    fs.copyFileSync(file.path, destinationPath);
+    const upload = await this.appService.addPost(String(id), file.filename);
+    return res.json({ message:  upload ? 'File uploaded successfully' : 'Server error'});
+  }
+
+  @Post('/api/edit/post')
+  @UseInterceptors(FileInterceptor('image', multerOptions))
+  async editPost(@UploadedFile() file: Express.Multer.File, @Req() req: Request, @Res() res: Response) {
+    const { id, messageId } = req.query;
+    const editPost:any = await this.appService.editPost(id as string, messageId as string);
+    if (editPost && editPost?.length === 1) {
+      const filePath= `./public/images/${editPost[0]?.links[0]}`;
+      fs.unlinkSync(filePath);
+      fs.copyFileSync(file.path, filePath);
+      fs.unlinkSync(file.path);
+    }
+    return res.json({ message:editPost ?  true : false});
+  }
+
+
 }
 
 

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -9,6 +10,7 @@ import { toast } from 'react-toastify';
 import { useStore } from '../../store';
 import './style.scss';
 import { deletePost } from '../../api/apiPosts';
+import UploadDialog  from "../UploadDialog";
 
 const DelPost = (props) => {
   const { state, dispatch } = useStore();
@@ -28,6 +30,7 @@ const DelPost = (props) => {
     });
   };
   const [open, setOpen] = React.useState(false);
+  const [openEdit, setOpenEdit] = React.useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -40,8 +43,12 @@ const DelPost = (props) => {
   return (
     <div>
       <div className="button" onClick={handleClickOpen}>
-        Xóa
+        Delete
       </div>
+      <div className="button" onClick={()=>setOpenEdit(true)}>
+        Edit
+      </div>
+      <UploadDialog open={openEdit} setOpen={setOpenEdit} type="edit" link={props?.link} id={props?.id}/>
       <Dialog
         open={open}
         onClose={handleClose}

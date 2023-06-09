@@ -4,8 +4,7 @@ import { formatDay } from '../../util/formatDay';
 import React, { useState } from 'react';
 import { useStore } from '../../store';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import { deletePost } from '../../api/apiPosts';
-import DelPost from '../deletepost';
+import DelPost from '../Deletepost';
 
 const UserInfo = (props) => {
   const { state, dispatch } = useStore();
@@ -43,7 +42,7 @@ const UserInfo = (props) => {
             </div>
             {open ? (
               <div className="dialog-form">
-                <DelPost id={props?._id} messageId={state.author?.id} />
+                <DelPost id={props?._id} messageId={state.author?.id} link={props?.links[0]}/>
               </div>
             ) : (
               <></>
