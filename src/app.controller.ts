@@ -21,6 +21,7 @@ import { first, map, Observable, switchMap } from 'rxjs';
 import { FileInterceptor } from '@nestjs/platform-express';
 import {multerOptions} from "./Util"
 import * as fs from 'fs';
+import path from 'path';
 
 const discordTokenUrl = 'https://discord.com/api/oauth2/token';
 const discordUserUrl = 'https://discord.com/api/users/@me';
@@ -151,6 +152,10 @@ export class AppController {
   async deletePost(@Req() req: Request, @Res() res: Response) {
     const { id, messageId } = req.query;
     const deletePost = await this.appService.deletePost(id as string, messageId as string);
+    if(deletePost){
+      const filePath= `./public/images/${deletePost?.links[0]}`;
+      fs.unlinkSync(filePath);
+    }
     return res.json({ message: deletePost ?  true : false});
   }
 
@@ -352,8 +357,8 @@ export class AppController {
   @UseInterceptors(FileInterceptor('image', multerOptions))
   async uploadFile(@UploadedFile() file: Express.Multer.File, @Req() req: Request, @Res() res: Response) {
     const { id } = req.query;
-    const destinationPath = `./images/${file.filename}`;
-    const destinationDir = './images';
+    const destinationPath = `./public/images/${file.filename}`;
+    const destinationDir = './public/images';
     if (!fs.existsSync(destinationDir)) {
       fs.mkdirSync(destinationDir);
     }
@@ -361,6 +366,22 @@ export class AppController {
     const upload = await this.appService.addPost(String(id), file.filename);
     return res.json({ message:  upload ? 'File uploaded successfully' : 'Server error'});
   }
+
+  @Post('/api/edit/post')
+  @UseInterceptors(FileInterceptor('image', multerOptions))
+  async editPost(@UploadedFile() file: Express.Multer.File, @Req() req: Request, @Res() res: Response) {
+    const { id, messageId } = req.query;
+    const editPost:any = await this.appService.editPost(id as string, messageId as string);
+    if (editPost && editPost?.length === 1) {
+      const filePath= `./public/images/${editPost[0]?.links[0]}`;
+      fs.unlinkSync(filePath);
+      fs.copyFileSync(file.path, filePath);
+      fs.unlinkSync(file.path);
+    }
+    return res.json({ message:editPost ?  true : false});
+  }
+
+
 }
 
 

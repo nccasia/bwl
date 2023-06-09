@@ -66,3 +66,19 @@ export const addPost = async (index) => {
         return false;
     }
 }
+
+export const editPost = async (index) => {
+    try {
+        const res = await axios({
+            url: `/api/edit/post?id=${index.id}&messageId=${index.messageId}`,
+            method: "POST",
+            data: index?.formData,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+          });
+        return res.data;
+    } catch {
+        return false;
+    }
+}

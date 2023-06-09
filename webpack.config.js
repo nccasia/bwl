@@ -1,4 +1,5 @@
 const path = require('path');
+const Dotenv = require('dotenv-webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   entry: './views/index.js',
@@ -34,6 +35,12 @@ module.exports = {
           },
         ],
       },
+      {
+        test: /\.env$/,
+        use: {
+          loader: 'dotenv-webpack',
+        },
+      },
     ],
   },
   plugins: [
@@ -41,6 +48,7 @@ module.exports = {
       template: './views/index.hbs',
       filename: 'index.hbs',
     }),
+    new Dotenv(),
   ],
   devServer: {
     static: {
@@ -48,5 +56,4 @@ module.exports = {
     },
     hot: true,
   },
-  mode: 'development',
 };

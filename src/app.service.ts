@@ -35,7 +35,7 @@ export class AppService {
 
   private checkForChanges() {
     const checkChanges = async () => {
-      const currentTime = new Date().getTime() - 2500;
+      const currentTime = new Date().getTime() - 5000;
       const aggregatorOpts = [
         { 
           $match: {
@@ -590,7 +590,7 @@ export class AppService {
   }
 
   async deletePost(id: string, messageId: string) {
-    await this.komuMessage.findOneAndDelete({
+    const deletePost = await this.komuMessage.findOneAndDelete({
       _id: id,
       authorId: messageId,
     }).exec();
@@ -599,7 +599,15 @@ export class AppService {
       posts: "delete", 
       id, 
     } });
-    return true;
+    return deletePost;
+  }
+
+  async editPost(id: string, messageId: string) {
+    const editPost = await this.komuMessage.find({
+      _id: id,
+      authorId: messageId,
+    }).exec();
+    return editPost;
   }
   async isMessageIdExists(messageId: string): Promise<boolean> {
     const count = await this.komuMessage.countDocuments({ messageId });
