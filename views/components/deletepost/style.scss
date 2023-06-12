@@ -1,8 +1,16 @@
-.button {
-    text-align: center;
-    &:hover{
-        background-color: #ebedf0;
-    }
+.button-dialog{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  .button {
+    width: 100%;
+      // text-align: center;
+      padding: 1px;
+      &:hover{
+          background-color: #ebedf0;
+      }
+  }
 }
 .content {
     display: flex;
