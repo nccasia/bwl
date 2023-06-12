@@ -191,8 +191,8 @@ function UploadDialog(props){
             onClose={handleOpen} 
             open={props?.open}
             className="upload-dialog"
-        >
-            <div className="upload-dialog-div">
+        >  
+        <div className="upload-dialog-div">
                 <h1>{props?.type==="add" ? "New Post":"Edit Post"}</h1>
                 <p onClick={handleOpen}>
                     <ClearIcon sx={{fontSize: "20px"}}/>
