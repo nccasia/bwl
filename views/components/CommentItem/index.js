@@ -6,15 +6,11 @@ import { deleteComment } from '../../api/apiComment';
 import { useStore } from '../../store';
 import CommentInput from '../CommentInput';
 import { editComment } from '../../api/apiComment';
+import Delcomment from '../Delcomment';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 
 const CommentItem = (props) => {
   const { state, dispatch } = useStore();
-  const handleDelete = async () => {
-    if (state.author?.id) {
-      deleteComment({ id: props?._id, messageId: state.author?.id });
-    }
-  };
   const [open, setOpen] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
   const [input, setInput] = React.useState('');
@@ -89,8 +85,10 @@ const CommentItem = (props) => {
             </div>
             {open ? (
               <div className="dialog-form">
-                <p onClick={handleDelete}>Xóa</p>
-                <p onClick={handledit}>Chỉnh Sữa</p>
+                <div className="content">
+                  <Delcomment id= {props?._id} messageId= {state.author?.id} />
+                </div>
+                <div className="content" onClick={handledit}>Chỉnh Sữa</div>
               </div>
             ) : (
               <></>

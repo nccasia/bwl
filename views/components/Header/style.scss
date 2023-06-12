@@ -13,6 +13,23 @@
   left: 0;
   right: 0;
   z-index: 9998;
+  .nav-header-icon{
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    .nav-header-menu{
+      display: none;
+      .sidebar_mobile{
+        position: absolute;
+        bottom: 0px;
+      }
+      .menu_icon{
+        cursor: pointer;
+        font-size: 25px;
+        color: #a1a1b6;
+      }
+    }
+  }
   .header-left {
     display: flex;
     justify-content: center;
@@ -119,6 +136,15 @@
 .dialog-button-dark_notifi::before,.dialog-button-light_notifi::before{
   position: absolute;
   right: 24%;
+}
+@media (max-width: 1240px) {
+  .nav-header{
+    .nav-header-icon{
+      .nav-header-menu{
+        display: block;
+      }
+    }
+  }
 }
 @media (max-width: 768px) {
   .nav-header {

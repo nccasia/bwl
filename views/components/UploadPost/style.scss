@@ -1,0 +1,30 @@
+.conatner-upload{
+    width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+    padding: 20px 10px;
+    background-color: white;
+    border-radius: 10px;
+    .upload-box{
+        display: flex;
+        width: 100%;
+        gap: 10px;
+        img{
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+        }
+        p{
+            width: 90%;
+            border-radius: 30px;
+            border: 1px solid #8080805c;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            font-size: 14px;
+            color: rgb(108, 117, 136);
+        }
+    }
+}
+

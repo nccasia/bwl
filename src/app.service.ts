@@ -7,13 +7,11 @@ import { emojis } from './constants';
 import { Message, MessageDocument } from './Message/message.schema';
 import { Comment, CommentDocument } from './Comment/comment.schema';
 import { Like, LikeDocument } from './Like/like.schema';
-import {
-  Notification,
-  NotificationDocument,
-} from './Notification/notification.schema';
-
+import { Notification, NotificationDocument} from './Notification/notification.schema';
 import { Observable, Subject } from 'rxjs';
 import { KomuUsers, KomuUsersDocument } from './Komu_users/komu_users.schema';
+import {channel, guild} from "./Channel"
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class AppService {
@@ -31,25 +29,46 @@ export class AppService {
     private readonly komuNotification: Model<NotificationDocument>,
     @InjectModel(KomuUsers.name)
     private readonly komuUser: Model<KomuUsersDocument>,
-  ) {}
+  ) {
+    this.checkForChanges();
+  }
 
-  async findLikeFromDiscordId(
-    authorId: string,
-    messageId: string,
-  ): Promise<any> {
+  private checkForChanges() {
+    const checkChanges = async () => {
+      const currentTime = new Date().getTime() - 5000;
+      const aggregatorOpts = [
+        { 
+          $match: {
+            channelId: channel, 
+            createdTimestamp: { $gte: currentTime },
+          } 
+        },
+      ]
+      const newRecord= await this.komuMessage.aggregate(aggregatorOpts as any).exec();
+      let list : any =[];
+      if (newRecord?.length > 0) {
+        for (const item of newRecord) {
+          const test= await this.getPostsOne(item.messageId, null);
+          list = [...list,...test];
+        }
+        this.addEvent({ data: {list, posts: "add" } });
+      }
+    };
+    setInterval(checkChanges, 5000);
+  }
+
+  async findLikeFromDiscordId( authorId: string,messageId: string): Promise<any> {
     return await this.komuLike.findOne({ authorId: authorId, messageId: messageId });
   }
   async findLikeMessageFromDiscordId(messageId: string): Promise<any> {
     return await this.komuLike.find({ messageId: messageId });
   }
-
   async findMessageAuthorId(authorId: string): Promise<any> {
     return await this.komuMessage.find({ 
       authorId: authorId,
-      channelId: '924543969357099018',
+      channelId: channel,
     });
   }
-
   async findCommentFromDiscordId(messageId: string): Promise<any> {
     return await this.komuMessage.find({
       messageId: messageId,
@@ -58,7 +77,6 @@ export class AppService {
   async findCommentMessageFromDiscordId(id: string): Promise<any> {
     return await this.komuUser.findOne({ id: id });
   }
-
   async findLikeId(messageId: string): Promise<any> {
     return await this.komuMessage.find({
       messageId: messageId,
@@ -67,9 +85,8 @@ export class AppService {
   async findLikeMessageId(id: string): Promise<any> {
     return await this.komuMessage.findOne({ id: id });
   }
-
   async findLengthMessage(): Promise<any> {
-    const count = await this.komuMessage.countDocuments({ channelId: '924543969357099018' }).exec();
+    const count = await this.komuMessage.countDocuments({ channelId: channel }).exec();
     return count;
   }
 
@@ -78,11 +95,9 @@ export class AppService {
   addEvent(event: any) {
     this.events.next(event);
   }
-
   sendEvents(): Observable<MessageEvent> {
     return this.events.asObservable();
   }
-
   getHello(): string {
     return 'Hello World!';
   }
@@ -109,7 +124,6 @@ export class AppService {
       ])
       .exec();
   }
-
   async comment({ messageId, content, authorId}) {
     const comments: any = new this.komuComment({
       messageId,
@@ -142,7 +156,6 @@ export class AppService {
     } });
     return true;
   }
-
   async deleteComment(id: string, messageId: string) {
     const deleteComment = await this.komuComment.findOneAndDelete({
       _id: id,
@@ -171,7 +184,6 @@ export class AppService {
     } });
     return true;
   }
-
   async editComment(_id: string, newContent: string,  messageId: string) {
     const oldComment : any= await this.komuComment.find({ _id: _id }).exec();
     const createdTimestamp = new Date().getTime();
@@ -204,7 +216,6 @@ export class AppService {
     } });
     return true;
   }
-
   async getLikes(messageId: string) {
     return await this.komuLike
       .aggregate([
@@ -224,7 +235,6 @@ export class AppService {
       ])
       .exec();
   }
-
   async getReactions(messageId: string, emoji: string) {
     return this.komuReaction
       .aggregate([
@@ -245,7 +255,6 @@ export class AppService {
       ])
       .exec();
   }
-
   async like({ messageId, authorId }) {
     const like = new this.komuLike({
       messageId,
@@ -274,7 +283,6 @@ export class AppService {
     } });
     return like;
   }
-
   async unlike({ messageId, authorId }) {
     await this.komuLike
       .deleteOne({
@@ -302,13 +310,13 @@ export class AppService {
     } });
     return true;
   }
-
   async getNotifications(authorId: string, page: number, size: number) {
     const messageIds = await this.komuMessage
       .aggregate([
         {
           $match: {
-            authorId: authorId
+            authorId: authorId,
+            channelId: channel,
           }
         },
         {
@@ -353,7 +361,6 @@ export class AppService {
       ])
       .exec();
   }
-
   async getNotificationsSize(messageId: string, authorId: string) {
     return this.komuNotification
       .aggregate([
@@ -366,11 +373,10 @@ export class AppService {
       ])
       .exec();
   }
-
   async getPostsOne(messageId: string, authorId: string | null) {
     const aggregatorOpts = [
       { $match: { 
-          channelId: '924543969357099018',
+          channelId: channel,
           messageId, 
         } 
       },
@@ -442,7 +448,6 @@ export class AppService {
     })
     return data;
   }
-
   async postNotification(messageId: string) {
     const notification: any = await this.komuNotification.updateMany(
       { messageId: messageId, onLabel: true },
@@ -450,7 +455,6 @@ export class AppService {
     ).exec();
     return notification;
   }
-
   async getHotPosts() {
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
@@ -458,7 +462,7 @@ export class AppService {
     const aggregatorOpts = [
       {
         $match: {
-          channelId: '924543969357099018',
+          channelId: channel,
           createdTimestamp: { $gte: sevenDaysAgo.getTime(), $lte: now.getTime() },
         },
       },
@@ -511,10 +515,9 @@ export class AppService {
     const data = await this.komuMessage.aggregate(aggregatorOpts as any).exec();
     return data;
   }  
-
   async getAll(page: number, size: number, authorId: string | null) {
     const aggregatorOpts = [
-      { $match: { channelId: '924543969357099018' } },
+      { $match: { channelId: channel } },
       { $sort: { _id: -1 } },
       { $skip: (page - 1) * size },
       { $limit: size },
@@ -585,4 +588,50 @@ export class AppService {
     })
     return data;
   }
+
+  async deletePost(id: string, messageId: string) {
+    const deletePost = await this.komuMessage.findOneAndDelete({
+      _id: id,
+      authorId: messageId,
+    }).exec();
+
+    this.addEvent({ data: { 
+      posts: "delete", 
+      id, 
+    } });
+    return deletePost;
+  }
+
+  async editPost(id: string, messageId: string) {
+    const editPost = await this.komuMessage.find({
+      _id: id,
+      authorId: messageId,
+    }).exec();
+    return editPost;
+  }
+  async isMessageIdExists(messageId: string): Promise<boolean> {
+    const count = await this.komuMessage.countDocuments({ messageId });
+    return count > 0;
+  }
+  async addPost(authorId: string, links: string) {
+    let messageId: string;
+    let isMessageIdExists1: boolean;
+
+    do {
+      messageId = uuidv4();
+      isMessageIdExists1 = await this.isMessageIdExists(messageId);
+    } while (isMessageIdExists1);
+
+    const addPost =  new this.komuMessage({
+      links:[links],
+      channelId:channel,
+      guildId: guild,
+      createdTimestamp: new Date().getTime(),
+      authorId:authorId,
+      messageId,
+    });
+    await addPost.save();
+    return addPost;
+  }
 }
+
