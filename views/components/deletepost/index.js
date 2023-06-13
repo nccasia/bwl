@@ -14,7 +14,7 @@ import UploadDialog  from "../UploadDialog";
 
 const DelPost = (props) => {
   const { state, dispatch } = useStore();
-  const handleDelete = async (id) => {
+  const handleDelete = async () => {
     if (state.author?.id) {
       deletePost({ id: props?.id, messageId: state.author?.id });
     }
@@ -44,13 +44,13 @@ const DelPost = (props) => {
     <div>
       <div className="button-dialog">
       <div className="button" onClick={handleClickOpen}>
-        Xóa
+        Delete
       </div>
       <div className="button" onClick={()=>setOpenEdit(true)}>
-        Sữa
+        Edit
       </div>
       </div>
-      <UploadDialog open={openEdit} setOpen={setOpenEdit} type="edit" link={props?.link} id={props?.id}/>
+      <UploadDialog open={openEdit} setOpen={setOpenEdit} type="edit" link={props?.link} id={props?.id} source={props?.source}/>
       <Dialog
         open={open}
         onClose={handleClose}

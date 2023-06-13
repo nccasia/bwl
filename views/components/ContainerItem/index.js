@@ -66,7 +66,7 @@ const ContainerItem = (props) => {
     >
       <UserInfo {...props} />
       <div className="container-item-img">
-        <img src={`https://bwl.vn/images/${props?.links[0]}`} />
+        <img src={props?.source ? `https://bwl.vn/assets/images/${props?.links[0]}` : `https://bwl.vn/images/${props?.links[0]}`} />
       </div>
       <EmojiLike
         reactions={props?.reactions}

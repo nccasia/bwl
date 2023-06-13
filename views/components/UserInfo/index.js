@@ -42,7 +42,7 @@ const UserInfo = (props) => {
             </div>
             {open ? (
               <div className="dialog-form">
-                <DelPost id={props?._id} messageId={state.author?.id} link={props?.links[0]}/>
+                <DelPost id={props?._id} messageId={state.author?.id} link={props?.links[0]} source={props?.source}/>
               </div>
             ) : (
               <></>

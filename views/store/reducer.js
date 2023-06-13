@@ -78,7 +78,18 @@ function reducer(state, action) {
               return main;
             }
           } else {
-            return main;
+            if (action.payload?.posts ==="edit") {
+              if (main._id === action.payload?.id) {
+                return {
+                  ...main,
+                  links: [action.payload?.link],
+                };
+              } else {
+                return main;
+              }
+            } else {
+              return main;
+            }
           }
         }
       });
