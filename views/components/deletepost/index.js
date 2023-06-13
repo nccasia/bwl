@@ -5,12 +5,12 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
-import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import { toast } from 'react-toastify';
 import { useStore } from '../../store';
 import './style.scss';
 import { deletePost } from '../../api/apiPosts';
-import UploadDialog  from "../UploadDialog";
+import UploadDialog from '../UploadDialog';
 
 const DelPost = (props) => {
   const { state, dispatch } = useStore();
@@ -43,14 +43,21 @@ const DelPost = (props) => {
   return (
     <div>
       <div className="button-dialog">
-      <div className="button" onClick={handleClickOpen}>
-        Delete
+        <div className="button" onClick={() => setOpenEdit(true)}>
+          Edit
+        </div>
+        <div className="button" onClick={handleClickOpen}>
+          Delete
+        </div>
       </div>
-      <div className="button" onClick={()=>setOpenEdit(true)}>
-        Edit
-      </div>
-      </div>
-      <UploadDialog open={openEdit} setOpen={setOpenEdit} type="edit" link={props?.link} id={props?.id} source={props?.source}/>
+      <UploadDialog
+        open={openEdit}
+        setOpen={setOpenEdit}
+        type="edit"
+        link={props?.link}
+        id={props?.id}
+        source={props?.source}
+      />
       <Dialog
         open={open}
         onClose={handleClose}
@@ -71,15 +78,15 @@ const DelPost = (props) => {
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             <div className="content">
-              <h1>Xóa bài đăng?</h1>
-              <p>Bạn có chắc muốn xóa bài đăng này không?</p>
+              <h1>Delete post?</h1>
+              <p>Are you sure you want to delete this post?</p>
             </div>
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Thoát</Button>
+          <Button onClick={handleClose}>Cancel</Button>
           <Button onClick={() => handleDelete(props.id)} autoFocus>
-            Xóa
+            Delete
           </Button>
         </DialogActions>
       </Dialog>

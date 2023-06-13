@@ -79,12 +79,12 @@ const ContainerItem = (props) => {
           {props?.likes ? (
             <div className="react-like-icon">
               <ThumbDownAltIcon className="like_icon" />
-              <span>Bỏ Thích</span>
+              <span>Dislike</span>
             </div>
           ) : (
             <div className="react-like-icon">
               <ThumbUpAltIcon className="like_icon" />
-              <span>Thích</span>
+              <span>Like</span>
             </div>
           )}
         </span>
@@ -93,7 +93,7 @@ const ContainerItem = (props) => {
           className="react-comment"
         >
           <FontAwesomeIcon className="icon-cmt" icon={faMessage} />
-          <span>Bình luận </span>
+          <span>Comment </span>
         </span>
       </div>
       {open && <Comment {...props} />}

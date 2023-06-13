@@ -38,7 +38,7 @@
       position: absolute;
       padding: 10px 20px;
       border-radius: 6px;
-      width: 85px;
+      width: 100px;
       z-index: 999;
       &::before {
         position: absolute;
@@ -57,13 +57,13 @@
   .userInfo-item {
     .delete-post-btn {
       .dialog-form {
-        width: 80px;
+        width: 90px;
         position: absolute;
-        left: -20px;
+        left: -30px;
         &::before {
           position: absolute;
           content: '';
-          left: 20px;
+          left: 30px;
         }
         .content {
           font-size: 11px;

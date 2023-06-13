@@ -1,12 +1,22 @@
-.sidebar-item{
+.sidebar-item {
   background-color: #fff;
   padding: 5%;
-  box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   cursor: pointer;
-  .sidebar-item-image img{
+  .sidebar-item-image img {
     width: 100%;
+  }
+}
+@media (max-width: 768px) {
+  .sidebar-item {
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    .sidebar-item-image {
+      width: 100%;
+    }
   }
 }
