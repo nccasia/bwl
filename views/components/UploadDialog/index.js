@@ -98,6 +98,8 @@ function UploadDialog(props){
                         props?.setOpen(false);
                     }
                 });
+                setOpenImage(false);
+                setImage("");
             }
             if(props?.type==="edit"){
                 await editPost({formData: data, messageId: state.author?.id, id: props?.id}).then(data => {
@@ -126,15 +128,12 @@ function UploadDialog(props){
                 progress: undefined,
             });
         }
-        setOpenImage(false);
-        setImage("");
     }
-    
     React.useEffect(() => {
         document.addEventListener('paste', handlePaste);
         const foo = async() => {
             if(props?.type==="edit"){
-                const img = `${process.env.REDIRECT_URI}/images/${props?.link}`
+                const img = props?.source ? `https://bwl.vn/assets/images/${props?.link}` : `https://bwl.vn/images/${props?.link}`
                 setImage(img);
                 if(checkURLStartsWithHTTP(img)){
                     const isValidURL = await isValidImageURL(img);
@@ -148,7 +147,7 @@ function UploadDialog(props){
         return () => {
           document.removeEventListener('paste', handlePaste);
         };
-    }, []);
+    }, [props?.type]);
 
     const convertImageUrlToFormData = async (imageUrl) => {
         return new Promise((resolve, reject) => {
@@ -183,7 +182,10 @@ function UploadDialog(props){
 
     const handleOpen =()=>{
         props?.setOpen(false)
-        setImage("");
+        if(props?.type!=="edit"){
+            setImage("");
+            setOpenImage(false);
+        }
     }
 
     return(
@@ -248,6 +250,7 @@ function UploadDialog(props){
             <button 
                 onClick={handleUpdate}
                 className="upload-button"
+                style={(image && openImage) ? {backgroundColor: "#00bbff", color: "#f8f8f8"} : {backgroundColor: "white", color: "rgb(108, 117, 136)"}}
             >
                 {props?.type==="add" ? "Create":"Update"}
             </button>

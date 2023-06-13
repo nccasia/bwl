@@ -14,7 +14,7 @@ import UploadDialog from '../UploadDialog';
 
 const DelPost = (props) => {
   const { state, dispatch } = useStore();
-  const handleDelete = async (id) => {
+  const handleDelete = async () => {
     if (state.author?.id) {
       deletePost({ id: props?.id, messageId: state.author?.id });
     }

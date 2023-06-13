@@ -609,6 +609,18 @@ export class AppService {
     }).exec();
     return editPost;
   }
+  async updatePost(id: string, link: string) {
+    const updatePost = await this.komuMessage.findByIdAndUpdate({
+      _id: id,
+      links: [link], 
+    }).exec();
+    this.addEvent({ data: { 
+      id,
+      posts: "edit", 
+      link: link, 
+    } });
+    return updatePost;
+  }
   async isMessageIdExists(messageId: string): Promise<boolean> {
     const count = await this.komuMessage.countDocuments({ messageId });
     return count > 0;
@@ -629,6 +641,7 @@ export class AppService {
       createdTimestamp: new Date().getTime(),
       authorId:authorId,
       messageId,
+      source: true,
     });
     await addPost.save();
     return addPost;

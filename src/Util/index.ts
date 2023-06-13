@@ -6,7 +6,7 @@ import { MulterModuleOptions } from '@nestjs/platform-express';
 
 export const multerOptions: MulterModuleOptions = {
     storage: diskStorage({
-      destination: './public/images',
+      destination: './public/assets/images',
       filename: (req: any, file: any, callback: any) => {
         const newFileName = uuidv4() + extname(file.originalname);
         callback(null, newFileName);

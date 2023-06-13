@@ -18,7 +18,7 @@ const SideBarItem = (props) => {
       style={{ backgroundColor: state.background ? "#242526": "white", color: "#6C7588"}}
     >
       <div className="sidebar-item-image">
-        <img src={`https://bwl.vn/images/${props?.links[0]}`} />
+        <img src={props?.source ? `https://bwl.vn/assets/images/${props?.links[0]}` : `https://bwl.vn/images/${props?.links[0]}`} />
       </div>
       <UserInfo {...props} />
     </div>
