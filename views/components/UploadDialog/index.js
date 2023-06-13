@@ -98,8 +98,6 @@ function UploadDialog(props){
                         props?.setOpen(false);
                     }
                 });
-                setOpenImage(false);
-                setImage("");
             }
             if(props?.type==="edit"){
                 await editPost({formData: data, messageId: state.author?.id, id: props?.id}).then(data => {
@@ -128,6 +126,8 @@ function UploadDialog(props){
                 progress: undefined,
             });
         }
+        setOpenImage(false);
+        setImage("");
     }
     React.useEffect(() => {
         document.addEventListener('paste', handlePaste);
@@ -142,12 +142,16 @@ function UploadDialog(props){
                     }
                 }
             }
+            if(props?.type==="add"){
+                setImage("");
+                setOpenImage(false);
+            }
         }
         foo();
         return () => {
           document.removeEventListener('paste', handlePaste);
         };
-    }, [props?.type]);
+    }, [props?.type, props?.open]);
 
     const convertImageUrlToFormData = async (imageUrl) => {
         return new Promise((resolve, reject) => {
@@ -182,10 +186,8 @@ function UploadDialog(props){
 
     const handleOpen =()=>{
         props?.setOpen(false)
-        if(props?.type!=="edit"){
-            setImage("");
-            setOpenImage(false);
-        }
+        setImage("");
+        setOpenImage(false);
     }
 
     return(
@@ -212,13 +214,13 @@ function UploadDialog(props){
                 </div>
                 <InputLabel htmlFor="file-upload">
                     <Input
-                    id="file-upload"
-                    type="file"
-                    inputProps={{
-                        style: { display: "none", margin: 0 },
-                        accept: "image/*",
-                        onChange: handleUpload,
-                    }}
+                        id="file-upload"
+                        type="file"
+                        inputProps={{
+                            style: { display: "none", margin: 0 },
+                            accept: "image/*",
+                            onChange: handleUpload,
+                        }}
                     />
                     <Tooltip title="Upload image">
                         <Button component="span">
