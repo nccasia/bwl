@@ -42,11 +42,13 @@ const DelPost = (props) => {
 
   return (
     <div>
+      <div className="button-dialog">
       <div className="button" onClick={handleClickOpen}>
         Delete
       </div>
       <div className="button" onClick={()=>setOpenEdit(true)}>
         Edit
+      </div>
       </div>
       <UploadDialog open={openEdit} setOpen={setOpenEdit} type="edit" link={props?.link} id={props?.id} source={props?.source}/>
       <Dialog
