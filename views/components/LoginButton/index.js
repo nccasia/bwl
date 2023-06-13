@@ -7,13 +7,13 @@ import { getLogout } from '../../api/apiLogin';
 const LoginButton = (props) => {
   const { state, dispatch } = useStore();
   const handleOnclick = () => {
-    if (props.title === 'Đăng xuất') {
+    if (props.title === 'Logout') {
       getLogout();
     }
   };
   return (
     <div className="container-lbutton">
-      {props.title === 'Đăng xuất' ? (
+      {props.title === 'Logout' ? (
         <div className="logout-button-info">
           <img
             src={`https://cdn.discordapp.com/avatars/${state.author?.id}/${state.author?.avatar}`}
