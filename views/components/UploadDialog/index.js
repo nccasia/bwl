@@ -196,66 +196,81 @@ function UploadDialog(props){
             open={props?.open}
             className="upload-dialog"
         >  
-        <div className="upload-dialog-div">
-                <h1>{props?.type==="add" ? "New Post":"Edit Post"}</h1>
-                <p onClick={handleOpen}>
-                    <ClearIcon sx={{fontSize: "20px"}}/>
-                </p>
-            </div>
-            <div className="upload-dialog-div">
-                <div className="upload-dialog-div-user">
-                    {state.author?.id && (
-                        <img
-                            src={`https://cdn.discordapp.com/avatars/${state.author?.id}/${state.author?.avatar}`}
-                            alt="avatar"
-                        />
-                    )}
-                    <p>{state.author?.username}</p>
+            <div
+                style={{
+                    backgroundColor: state.background ? '#242526' : 'white',
+                    color: '#6C7588',
+                }}
+            >
+                <div className="upload-dialog-div">
+                    <h1>{props?.type==="add" ? "New Post":"Edit Post"}</h1>
+                    <p onClick={handleOpen}>
+                        <ClearIcon sx={{fontSize: "20px"}}/>
+                    </p>
                 </div>
-                <InputLabel htmlFor="file-upload">
-                    <Input
-                        id="file-upload"
-                        type="file"
-                        inputProps={{
-                            style: { display: "none", margin: 0 },
-                            accept: "image/*",
-                            onChange: handleUpload,
+                <div className="upload-dialog-div">
+                    <div className="upload-dialog-div-user">
+                        {state.author?.id && (
+                            <img
+                                src={`https://cdn.discordapp.com/avatars/${state.author?.id}/${state.author?.avatar}`}
+                                alt="avatar"
+                            />
+                        )}
+                        <p>{state.author?.username}</p>
+                    </div>
+                    <InputLabel htmlFor="file-upload">
+                        <Input
+                            id="file-upload"
+                            type="file"
+                            inputProps={{
+                                style: { display: "none", margin: 0 },
+                                accept: "image/*",
+                                onChange: handleUpload,
+                            }}
+                        />
+                        <Tooltip title="Upload image">
+                            <Button component="span">
+                                <PhotoCameraIcon sx={{fontSize: "20px"}}/>
+                            </Button>
+                        </Tooltip>
+                    </InputLabel>
+                </div>
+                {!openImage && (
+                    <textarea 
+                        type="text"
+                        placeholder="Paste image or provide link..." 
+                        value={image} 
+                        onChange={handleChange}
+                        className="upload-input"
+                        style={{
+                            backgroundColor: state.background ? '#242526' : 'white',
+                            color: '#6C7588',
                         }}
                     />
-                    <Tooltip title="Upload image">
-                        <Button component="span">
-                            <PhotoCameraIcon sx={{fontSize: "20px"}}/>
-                        </Button>
-                    </Tooltip>
-                </InputLabel>
-            </div>
-            {!openImage && (
-                <textarea 
-                    type="text"
-                    placeholder="Paste image or provide link..." 
-                    value={image} 
-                    onChange={handleChange}
-                    className="upload-input"
-                />
-            )}
-            <div className="upload-div-image">
-                {image && openImage && (
-                    <button 
-                        onClick={handleDelete}
-                        className="upload-delete-image"
-                    >
-                        <ClearIcon sx={{fontSize: "17px"}}/>
-                    </button >
                 )}
-                {image && openImage && <img src={image} alt="Preview" className="upload-image"/>}
+                <div className="upload-div-image">
+                    {image && openImage && (
+                        <button 
+                            onClick={handleDelete}
+                            className="upload-delete-image"
+                            style={{
+                                backgroundColor: state.background ? '#242526' : 'white',
+                                color: '#6C7588',
+                            }}
+                        >
+                            <ClearIcon sx={{fontSize: "17px"}}/>
+                        </button >
+                    )}
+                    {image && openImage && <img src={image} alt="Preview" className="upload-image"/>}
+                </div>
+                <button 
+                    onClick={handleUpdate}
+                    className="upload-button"
+                    style={(image && openImage) ? {backgroundColor: "#00bbff", color: "#f8f8f8"} : {backgroundColor: state.background ? "#0000000a" : "white", color: "rgb(108, 117, 136)"}}
+                >
+                    {props?.type==="add" ? "Create":"Update"}
+                </button>
             </div>
-            <button 
-                onClick={handleUpdate}
-                className="upload-button"
-                style={(image && openImage) ? {backgroundColor: "#00bbff", color: "#f8f8f8"} : {backgroundColor: "white", color: "rgb(108, 117, 136)"}}
-            >
-                {props?.type==="add" ? "Create":"Update"}
-            </button>
         </Dialog>
     )
 }

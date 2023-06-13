@@ -9,7 +9,13 @@ function UploadPost() {
     const [open, setOpen] = React.useState(false);
 
     return(
-        <div className="conatner-upload">
+        <div 
+            className="conatner-upload"
+            style={{
+                backgroundColor: state.background ? '#242526' : 'white',
+                color: '#6C7588',
+            }}
+        >
             <div className="upload-box">
                 {state.author?.id && (
                     <img

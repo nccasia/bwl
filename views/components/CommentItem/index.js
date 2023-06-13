@@ -52,7 +52,13 @@ const CommentItem = (props) => {
           alt="avatar"
         />
         <div className="author-boxcontent">
-          <div className="author-name">
+          <div    
+            className="author-name"
+            style={{
+              backgroundColor: state.background ? '#242526f7' : '#ebedf0',
+              color: '#6C7588',
+            }}
+          >
             <div className="author-name-item">
               <p className="name">{props?.author[0]?.username}</p>
             </div>
@@ -85,7 +91,7 @@ const CommentItem = (props) => {
               <MoreHorizIcon />
             </div>
             {open ? (
-              <div className="dialog-form">
+              <div className={state.background ? "dialog-form-dark" : "dialog-form-light"}>
                 <div className="content" onClick={handledit}>
                   Edit
                 </div>

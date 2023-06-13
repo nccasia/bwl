@@ -49,23 +49,30 @@ const Delcomment = (props)  => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
-            <RemoveCircleOutlineIcon sx={{ color: "#f8bb86", fontSize: "85px" }} />
+        <div 
+          style={{
+            backgroundColor: state.background ? '#242526' : 'white',
+            color: '#6C7588',
+          }}
+        >
+          <div style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
+              <RemoveCircleOutlineIcon sx={{ color: "#f8bb86", fontSize: "85px" }} />
+          </div>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              <div className="content">
+              <h1>Delete comment?</h1>
+              <p>Are you sure you want to delete this comment?</p>
+              </div>
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} >Cancel</Button>
+            <Button onClick={()=>handleDelete(props.id)}  autoFocus>
+              Delete
+            </Button>
+          </DialogActions>
         </div>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            <div className="content">
-            <h1>Delete comment?</h1>
-            <p>Are you sure you want to delete this comment?</p>
-            </div>
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} >Cancel</Button>
-          <Button onClick={()=>handleDelete(props.id)}  autoFocus>
-            Delete
-          </Button>
-        </DialogActions>
       </Dialog>
     </div>
   );
