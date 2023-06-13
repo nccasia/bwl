@@ -2,6 +2,10 @@
   padding: 20px 30px;
   min-width:210px;
   color:#6C7588;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   .logout-button-info{
     display: flex;
     justify-content: center;

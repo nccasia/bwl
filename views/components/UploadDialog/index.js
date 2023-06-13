@@ -86,7 +86,7 @@ function UploadDialog(props){
             if(props?.type==="add"){
                 await addPost({formData: data, id: state.author?.id}).then(data => {
                     if(data){
-                        toast.success('Ok!', {
+                        toast.success('Success!', {
                             position: 'bottom-right',
                             autoClose: 2000,
                             hideProgressBar: false,
@@ -104,7 +104,7 @@ function UploadDialog(props){
             if(props?.type==="edit"){
                 await editPost({formData: data, messageId: state.author?.id, id: props?.id}).then(data => {
                     if(data){
-                        toast.success('Ok!', {
+                        toast.success('Success!', {
                             position: 'bottom-right',
                             autoClose: 2000,
                             hideProgressBar: false,

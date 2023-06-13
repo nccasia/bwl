@@ -62,7 +62,7 @@ function HeaderPage() {
           />
           {open ? (
             <div className="dialog-button-light">
-              <LoginButton title="Đăng nhập" link="/login" />
+              <LoginButton title="Login" link="/login" />
             </div>
           ) : (
             <></>
@@ -126,7 +126,7 @@ function HeaderPage() {
                   backgroundColor: state.background ? '#242526' : 'white',
                 }}
               >
-                <LoginButton title="Đăng xuất" link="/" />
+                <LoginButton title="Logout" link="/" />
               </div>
             ) : (
               <></>
