@@ -377,13 +377,10 @@ export class AppController {
       if(editPost[0]?.source){
         const filePath= `./public/assets/images/${editPost[0]?.links[0]}`;
         fs.unlinkSync(filePath);
-        fs.copyFileSync(file.path, filePath);
-        fs.unlinkSync(file.path);
-      } else{
-        const destinationPath = `./public/assets/images/${file.filename}`;
-        fs.copyFileSync(file.path, destinationPath);
-        await this.appService.updatePost(id as string, file.filename as string)
-      }
+      } 
+      const destinationPath = `./public/assets/images/${file.filename}`;
+      fs.copyFileSync(file.path, destinationPath);
+      await this.appService.updatePost(id as string, file.filename as string)
     }
     return res.json({ message:editPost ?  true : false});
   }
