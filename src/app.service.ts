@@ -610,10 +610,10 @@ export class AppService {
     return editPost;
   }
   async updatePost(id: string, link: string) {
-    const updatePost = await this.komuMessage.findByIdAndUpdate({
-      _id: id,
-      links: [link], 
-    }).exec();
+    const updatePost = await this.komuMessage.findByIdAndUpdate(
+      {_id: id},
+      {links: [link], source: true}, 
+    ).exec();
     this.addEvent({ data: { 
       id,
       posts: "edit", 
