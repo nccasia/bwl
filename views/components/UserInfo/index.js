@@ -17,7 +17,6 @@ const UserInfo = (props) => {
   const handleContainerMouseLeave = () => {
     setOpen(false);
   };
-
   return (
     <div className="userInfo-item">
       <div className="userInfo-item-UserAvatar">

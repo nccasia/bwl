@@ -56,6 +56,7 @@ const DelPost = (props) => {
         type="edit"
         link={props?.link}
         id={props?.id}
+        source={props?.source}
       />
       <Dialog
         open={open}
