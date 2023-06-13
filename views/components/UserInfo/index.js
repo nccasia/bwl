@@ -40,7 +40,9 @@ const UserInfo = (props) => {
               <MoreHorizIcon />
             </div>
             {open ? (
-              <div className="dialog-form">
+              <div 
+                className={state.background ? "dialog-form-dark" : "dialog-form-light"}
+              >
                 <DelPost id={props?._id} messageId={state.author?.id} link={props?.links[0]} source={props?.source}/>
               </div>
             ) : (
