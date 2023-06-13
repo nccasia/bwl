@@ -5,14 +5,14 @@
         color: rgb(108, 117, 136);
         display: flex;
         justify-content:space-between;
-        align-items:center;
-        width: 350px;
+        align-items:center;;
         padding: 10px 10px;
         border-bottom: none;
         p{
             border-radius: 50%;
             border: 1px solid #8080805c;
             padding: 2px;
+            cursor: pointer;
         }
         .upload-dialog-div-user{
             display: flex;
@@ -39,7 +39,7 @@
     word-wrap: break-word;
     margin: 0 10px;
     width: 330px;
-    height:300px;
+    height:200px;
 }
 
 .upload-input:focus {
@@ -47,28 +47,40 @@
 }
 .upload-div-image{
     position:relative;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
     .upload-delete-image{
         position:absolute;
         z-index: 500;
-        top: -10px;
+        top: -5px;
         right: 5px;
         float: right;
         border-radius: 50%;
         border: 1px solid #8080805c;
         padding: 2px;
         color: rgb(108, 117, 136);
+        cursor: pointer;
     }
     .upload-image{
-        margin: 0 10px;
-        width: 330px;
-        height:300px;
+        width: 400px;
+        // height:300px;
     }
 }
 
 .upload-button{
     margin: 10px;
-    color: rgb(108, 117, 136);
+    font-weight: 700;
     border: 1px solid #8080805c;
     background-color:rgba(245, 245, 245, 0);
     border-radius: 10px;
+    cursor: pointer;
+}
+
+@media (max-width: 500px){
+    .upload-div-image{
+        .upload-image{
+            width: 300px;
+        }
+    } 
 }

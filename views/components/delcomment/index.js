@@ -41,7 +41,7 @@ const Delcomment = (props)  => {
   return (
     <div>
       <div  onClick={handleClickOpen}>
-        Xóa
+        Delete
       </div>
       <Dialog
         open={open}
@@ -55,15 +55,15 @@ const Delcomment = (props)  => {
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
             <div className="content">
-            <h1>Xóa bình luận?</h1>
-            <p>Bạn có chắc muốn xóa bình luận này không?</p>
+            <h1>Delete comment?</h1>
+            <p>Are you sure you want to delete this comment?</p>
             </div>
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose} >Thoát</Button>
+          <Button onClick={handleClose} >Cancel</Button>
           <Button onClick={()=>handleDelete(props.id)}  autoFocus>
-            Xóa
+            Delete
           </Button>
         </DialogActions>
       </Dialog>

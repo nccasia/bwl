@@ -2,12 +2,11 @@
 import './style.scss';
 import React from 'react';
 import { formatDay } from '../../util/formatDay';
-import { deleteComment } from '../../api/apiComment';
 import { useStore } from '../../store';
 import CommentInput from '../CommentInput';
 import { editComment } from '../../api/apiComment';
-import Delcomment from '../Delcomment';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import Delcomment from '../delcomment';
 
 const CommentItem = (props) => {
   const { state, dispatch } = useStore();
@@ -21,20 +20,20 @@ const CommentItem = (props) => {
     }
   }, [props?.content]);
   const handleClickComment = async () => {
-    if(state.author?.id){
+    if (state.author?.id) {
       await editComment({
         id: props?._id,
         content: input,
         messageId: state.author?.id,
-      })
+      });
     }
     setOpenEdit(false);
   };
 
   const handledit = () => {
-    setOpenEdit(!openEdit)
-    setOpen(false)
-  }
+    setOpenEdit(!openEdit);
+    setOpen(false);
+  };
 
   const handleMoreIconClick = () => {
     setOpen(!open);
@@ -66,7 +65,7 @@ const CommentItem = (props) => {
               />
             )}
           </div>
-          <div style={{display: "flex", alignItems: "center", gap: "5px"}}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
             <div className="comment-time">
               {formatDay(
                 props?.createdTimestamp
@@ -74,21 +73,25 @@ const CommentItem = (props) => {
                   : props?.comment?.createdTimestamp,
               )}
             </div>
-            {props?.onEdit && <p style={{fontSize: "7px"}}>đã chỉnh sữa</p>}
+            {props?.onEdit && <p style={{ fontSize: '7px' }}>đã chỉnh sữa</p>}
           </div>
         </div>
         {state.author?.id && props?.authorId === state.author?.id && (
-          <div className="delete-comment-btn"
-            onMouseLeave={handleContainerMouseLeave}>
+          <div
+            className="delete-comment-btn"
+            onMouseLeave={handleContainerMouseLeave}
+          >
             <div className="delete-icon" onClick={handleMoreIconClick}>
               <MoreHorizIcon />
             </div>
             {open ? (
               <div className="dialog-form">
-                <div className="content">
-                  <Delcomment id= {props?._id} messageId= {state.author?.id} />
+                <div className="content" onClick={handledit}>
+                  Edit
                 </div>
-                <div className="content" onClick={handledit}>Chỉnh Sữa</div>
+                <div className="content">
+                  <Delcomment id={props?._id} messageId={state.author?.id} />
+                </div>
               </div>
             ) : (
               <></>
