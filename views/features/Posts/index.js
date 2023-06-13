@@ -46,7 +46,7 @@ const Posts = () => {
         style={{ backgroundColor: state.background ? "black": "#f5f5f500"}}
       >
         <HomeIcon />
-        Trang chủ
+        Home
       </h1>
       <div 
         className="container-post"
