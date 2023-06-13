@@ -129,12 +129,11 @@ function UploadDialog(props){
         setOpenImage(false);
         setImage("");
     }
-    
     React.useEffect(() => {
         document.addEventListener('paste', handlePaste);
         const foo = async() => {
             if(props?.type==="edit"){
-                const img = `${process.env.REDIRECT_URI}/images/${props?.link}`
+                const img = props?.source ? `https://bwl.vn/assets/images/${props?.link}` : `https://bwl.vn/images/${props?.link}`
                 setImage(img);
                 if(checkURLStartsWithHTTP(img)){
                     const isValidURL = await isValidImageURL(img);

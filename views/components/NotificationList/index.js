@@ -46,8 +46,8 @@ const NotificationList = () => {
                         {changeTime(main?.createdTimestamp)}
                       </p>
                     </span>
-                    <img
-                      src={`https://bwl.vn/images/${main?.message[0]?.links[0]}`}
+                    <img 
+                      src={props?.source ? `https://bwl.vn/assets/images/${props?.links[0]}` : `https://bwl.vn/images/${props?.links[0]}`} 
                       className="notifi-list-image"
                     />
                   </div>

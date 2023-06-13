@@ -7,6 +7,7 @@ import {
   Render,
   Req,
   Post,
+  Param,
   UnauthorizedException,
   Sse,
   Delete,
@@ -152,8 +153,8 @@ export class AppController {
   async deletePost(@Req() req: Request, @Res() res: Response) {
     const { id, messageId } = req.query;
     const deletePost = await this.appService.deletePost(id as string, messageId as string);
-    if(deletePost){
-      const filePath= `./public/images/${deletePost?.links[0]}`;
+    if(deletePost && deletePost.source){
+      const filePath= `./public/assets/images/${deletePost?.links[0]}`;
       fs.unlinkSync(filePath);
     }
     return res.json({ message: deletePost ?  true : false});
@@ -357,8 +358,8 @@ export class AppController {
   @UseInterceptors(FileInterceptor('image', multerOptions))
   async uploadFile(@UploadedFile() file: Express.Multer.File, @Req() req: Request, @Res() res: Response) {
     const { id } = req.query;
-    const destinationPath = `./public/images/${file.filename}`;
-    const destinationDir = './public/images';
+    const destinationPath = `./public/assets/images/${file.filename}`;
+    const destinationDir = './public/assets/images';
     if (!fs.existsSync(destinationDir)) {
       fs.mkdirSync(destinationDir);
     }
@@ -373,10 +374,16 @@ export class AppController {
     const { id, messageId } = req.query;
     const editPost:any = await this.appService.editPost(id as string, messageId as string);
     if (editPost && editPost?.length === 1) {
-      const filePath= `./public/images/${editPost[0]?.links[0]}`;
-      fs.unlinkSync(filePath);
-      fs.copyFileSync(file.path, filePath);
-      fs.unlinkSync(file.path);
+      if(editPost[0]?.source){
+        const filePath= `./public/assets/images/${editPost[0]?.links[0]}`;
+        fs.unlinkSync(filePath);
+        fs.copyFileSync(file.path, filePath);
+        fs.unlinkSync(file.path);
+      } else{
+        const destinationPath = `./public/assets/images/${file.filename}`;
+        fs.copyFileSync(file.path, destinationPath);
+        await this.appService.updatePost(id as string, file.filename as string)
+      }
     }
     return res.json({ message:editPost ?  true : false});
   }
