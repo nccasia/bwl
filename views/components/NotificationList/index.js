@@ -76,7 +76,7 @@ const NotificationList = () => {
                       </p>
                     </span>
                     <img
-                      src={`https://bwl.vn/images/${main?.message[0]?.links[0]}`}
+                      src={main?.message[0]?.source ? `https://bwl.vn/assets/images/${main?.message[0]?.links[0]}` : `https://bwl.vn/images/${main?.message[0]?.links[0]}`}
                       className="notifi-list-image"
                     />
                   </div>
