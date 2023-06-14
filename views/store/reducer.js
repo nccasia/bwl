@@ -96,7 +96,17 @@ function reducer(state, action) {
       return {
         ...state,
         posts: action.payload?.posts ==="add" ? 
-                [...action.payload?.list,...state.posts] 
+                [...action.payload?.list.map((main) => {
+                    return {
+                      ...main,
+                      ...{
+                        comments: [],
+                        pageComment: 1,
+                      }
+                    }
+                  }),
+                  ...state.posts
+                ] 
               : 
                 action.payload?.posts ==="delete" ? 
                 state.posts.filter(item => item?._id !== action.payload?.id)

@@ -7,8 +7,8 @@ export const getEmojis = async(token) => {
     });
     if (response.ok) {
       const emojis = await response.json();
-      console.log(emojis);
+      //console.log(emojis);
     } else {
-      console.error('Failed to retrieve emojis:', response.status, response.statusText);
+      //console.error('Failed to retrieve emojis:', response.status, response.statusText);
     }
   }

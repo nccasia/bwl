@@ -41,10 +41,7 @@ function Comment(props) {
         }),
       );
     }
-  }
-
-  //console.log("hello: ", state.posts);
-  
+  }  
 
   return (
     <div className="container-comment">
