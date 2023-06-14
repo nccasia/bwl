@@ -9,7 +9,7 @@ import { faBell, faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
 import { getNotificationSize } from '../../api/apiNotification';
 import { Link } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
-import SideBar from '../sidebar';
+import SideBar from '../Sidebar';
 
 function HeaderPage() {
   const { state, dispatch } = useStore();

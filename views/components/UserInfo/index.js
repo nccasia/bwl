@@ -17,7 +17,6 @@ const UserInfo = (props) => {
   const handleContainerMouseLeave = () => {
     setOpen(false);
   };
-
   return (
     <div className="userInfo-item">
       <div className="userInfo-item-UserAvatar">
@@ -41,7 +40,9 @@ const UserInfo = (props) => {
               <MoreHorizIcon />
             </div>
             {open ? (
-              <div className="dialog-form">
+              <div 
+                className={state.background ? "dialog-form-dark" : "dialog-form-light"}
+              >
                 <DelPost id={props?._id} messageId={state.author?.id} link={props?.links[0]} source={props?.source}/>
               </div>
             ) : (

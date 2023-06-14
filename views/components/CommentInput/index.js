@@ -11,10 +11,10 @@ import {
   //faPaperPlane,
 } from '@fortawesome/free-solid-svg-icons';
 import SendIcon from '@mui/icons-material/Send';
-//import { useStore } from '../../store';
+import { useStore } from '../../store';
 
 function CommentInput(props) {
-  //const { state, dispatch } = useStore();
+  const { state, dispatch } = useStore();
   const [openEmoji, setOpenEmoji] = React.useState(false);
   const onEmojiClick = (emojiObject) => {
     props?.setInput(props?.input.concat(emojiObject.native));
@@ -52,7 +52,14 @@ function CommentInput(props) {
       }}
     >
       <div className="container-item-reactInfo" ref={wrapperRef}>
-        <div style={{ width: '100%', padding: '0 10px' }}>
+        <div 
+          style={{ 
+            width: '100%', 
+            padding: '0 10px',
+            backgroundColor: state.background ? '#242526f7' : 'white',
+            color: '#6C7588',
+          }}
+        >
           <input
             type="text"
             className="react-input"

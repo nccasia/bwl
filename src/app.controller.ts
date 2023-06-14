@@ -153,7 +153,7 @@ export class AppController {
   async deletePost(@Req() req: Request, @Res() res: Response) {
     const { id, messageId } = req.query;
     const deletePost = await this.appService.deletePost(id as string, messageId as string);
-    if(deletePost && deletePost.source){
+    if(deletePost.source){
       const filePath= `./public/assets/images/${deletePost?.links[0]}`;
       fs.unlinkSync(filePath);
     }
@@ -373,21 +373,15 @@ export class AppController {
   async editPost(@UploadedFile() file: Express.Multer.File, @Req() req: Request, @Res() res: Response) {
     const { id, messageId } = req.query;
     const editPost:any = await this.appService.editPost(id as string, messageId as string);
-    if (editPost && editPost?.length === 1) {
-      if(editPost[0]?.source){
-        const filePath= `./public/assets/images/${editPost[0]?.links[0]}`;
-        fs.unlinkSync(filePath);
-        fs.copyFileSync(file.path, filePath);
-        fs.unlinkSync(file.path);
-      } else{
-        const destinationPath = `./public/assets/images/${file.filename}`;
-        fs.copyFileSync(file.path, destinationPath);
-        await this.appService.updatePost(id as string, file.filename as string)
-      }
-    }
-    return res.json({ message:editPost ?  true : false});
+    if(editPost[0]?.source){
+      const filePath= `./public/assets/images/${editPost[0]?.links[0]}`;
+      fs.unlinkSync(filePath);
+    } 
+    const destinationPath = `./public/assets/images/${file.filename}`;
+    fs.copyFileSync(file.path, destinationPath);
+    const updatePost= await this.appService.updatePost(id as string, file.filename as string);
+    return res.json({ message: updatePost ?  true : false});
   }
-
 
 }
 

@@ -42,7 +42,13 @@ const DelPost = (props) => {
 
   return (
     <div>
-      <div className="button-dialog">
+      <div 
+        className="button-dialog"
+        style={{
+          backgroundColor: state.background ? '#242526' : 'white',
+          color: '#6C7588',
+        }}
+      >
         <div className="button" onClick={() => setOpenEdit(true)}>
           Edit
         </div>
@@ -56,6 +62,7 @@ const DelPost = (props) => {
         type="edit"
         link={props?.link}
         id={props?.id}
+        source={props?.source}
       />
       <Dialog
         open={open}
@@ -63,31 +70,38 @@ const DelPost = (props) => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <div
+        <div 
           style={{
-            display: 'flex',
-            justifyContent: 'center',
-            marginTop: '20px',
+            backgroundColor: state.background ? '#242526' : 'white',
+            color: '#6C7588',
           }}
         >
-          <RemoveCircleOutlineIcon
-            sx={{ color: '#f8bb86', fontSize: '85px' }}
-          />
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              marginTop: '20px',
+            }}
+          >
+            <RemoveCircleOutlineIcon
+              sx={{ color: '#f8bb86', fontSize: '85px' }}
+            />
+          </div>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              <div className="content">
+                <h1>Delete post?</h1>
+                <p>Are you sure you want to delete this post?</p>
+              </div>
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button onClick={() => handleDelete(props.id)} autoFocus>
+              Delete
+            </Button>
+          </DialogActions>
         </div>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            <div className="content">
-              <h1>Delete post?</h1>
-              <p>Are you sure you want to delete this post?</p>
-            </div>
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={() => handleDelete(props.id)} autoFocus>
-            Delete
-          </Button>
-        </DialogActions>
       </Dialog>
     </div>
   );
