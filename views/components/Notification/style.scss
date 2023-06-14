@@ -22,3 +22,9 @@
 .container::-webkit-scrollbar-thumb {
   background-color: #5a5a64;
 }
+@media (max-width: 500px){
+  .container{
+    width: 320px;
+    height: 450px;
+  }
+}
