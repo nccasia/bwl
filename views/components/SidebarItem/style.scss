@@ -6,17 +6,16 @@
   flex-direction: column;
   align-items: flex-start;
   cursor: pointer;
-  .sidebar-item-image img {
+  .sidebar-item-image{
     width: 100%;
+     img {
+      width: 100%;
+    }
   }
 }
 @media (max-width: 768px) {
   .sidebar-item {
     align-items: center;
     justify-content: center;
-    cursor: pointer;
-    .sidebar-item-image {
-      width: 100%;
-    }
   }
 }
