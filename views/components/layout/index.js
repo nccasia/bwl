@@ -5,9 +5,8 @@ import './style.scss';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useStore } from '../../store';
-import SideBar from '../Sidebar';
 import {useDataDebouncer} from '../../util/useDebounce';
-import { getAll } from '../../api/apiPosts';
+import SideBar from '../Sidebar';
 import CircularProgress from '@mui/material/CircularProgress';
 import  UploadPost from "../UploadPost";
 
@@ -15,7 +14,6 @@ const MainContent = () => {
   const {state, dispatch}=useStore();
   const [scroll, setScroll] = React.useState(false);
   const [scrollY, setScrollY] = React.useState(0);
-  const debounce = useDataDebouncer(state.page, 300)
   React.useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY >= 100) {
@@ -29,23 +27,13 @@ const MainContent = () => {
     }
     window.addEventListener('scroll', () => {
       handleScroll();
-      if (window.scrollY + window.innerHeight >= document.body.scrollHeight && state.page !== -1) {
-        dispatch({type: "CHANGE_PAGE", payload: debounce});
-      }
-    })
-    const foo = async (index) => {
-      await getAll({page:state.page, messageId: index}, dispatch);
-    };
-    if( state.page > 0) {
-      if (!document.cookie && document.cookie.split("=")[0] !== "token") {
-        foo(null);
-      }else {
-        if(state?.author?.id) {
-          foo(state?.author?.id);
+      if (window.scrollY + window.innerHeight >= document.body.scrollHeight) {
+        if(!state.loadingPost && state.page !== -1){
+          useDataDebouncer(dispatch({type: "CHANGE_PAGE", payload: state.page+ 1}), 500);
         }
       }
-    }
-  }, [debounce, state?.author?.id]);
+    })
+  }, [dispatch, state.page, state.loadingPost]);
   
   const handleScrollUpClick = () => {
     const step = Math.max(window.scrollY / 50, 20);
@@ -67,7 +55,7 @@ const MainContent = () => {
         </div>
         <div className="main-content">
           {state.author?.id && <UploadPost/>}
-          <Container />
+          <Container type="ALL"/>
           {state.loadingPost && (
             <div className="notifi-progress">
               <CircularProgress />

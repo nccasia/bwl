@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import axios from 'axios';
+import {showToast}  from "../util/showToast";
 
 export const getComment = async (index) => {
   try {
@@ -8,7 +9,8 @@ export const getComment = async (index) => {
       method: 'GET',
     });
     return res.data?.comments;
-  } catch {
+  } catch(error) {
+    showToast("error", error?.response?.data?.message);
     return [];
   }
 };
@@ -21,7 +23,7 @@ export const postComment = async (index) => {
             method: "POST",
         });
         return res.data;
-    } catch {
+    } catch(error) {
         return {};
     }
 }
@@ -33,7 +35,8 @@ export const deleteComment = async (index) => {
             method: "DELETE",
           });
         return res.data;
-    } catch {
+    } catch (error){
+        showToast("error", error?.response?.data?.message);
         return false;
     }
 }
@@ -46,7 +49,8 @@ export const editComment = async (index) => {
             method: "POST",
         });
         return res.data;
-    } catch {
+    } catch (error){
+        showToast("error", error?.response?.data?.message);
         return {};
     }
 }

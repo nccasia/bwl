@@ -2,6 +2,7 @@
     padding: 80px 0px 0px 20px;
     display: flex;
     align-items: center;
+    gap: 3px;
     color: #6C7588;
     cursor: pointer;
 }
@@ -12,6 +13,10 @@
 }
 .container-post{
     padding: 0px 20% 50px 20% ;
+    .notifi-progress{
+        text-align: center;
+        height: 100px;
+    }
 }
 
 @media (max-width: 768px){
