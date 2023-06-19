@@ -5,6 +5,7 @@ import { changeTime } from '../../util/changeTime';
 import { useNavigate } from 'react-router-dom';
 import { useStore } from '../../store';
 import CircularProgress from '@mui/material/CircularProgress';
+import {getNotification} from '../../api/apiNotification';
 
 const NotificationList = () => {
   const { state, dispatch } = useStore();
@@ -12,6 +13,12 @@ const NotificationList = () => {
   const handleChangePage = async (index) => {
     navigate(`/posts?messageId=${index}`);
   };
+
+  React.useEffect(() => {
+    if(state.author?.id && state.pageNotification > 0) {
+      getNotification({messageId: state.author.id, page: state.pageNotification}, dispatch)
+    }
+  },[state.pageNotification, state.author?.id])
 
   return (
     <div>
