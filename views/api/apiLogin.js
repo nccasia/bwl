@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import axios from 'axios';
+import {showToast}  from "../util/showToast";
 
 export const getLogin = async () => {
   try {
@@ -8,7 +9,8 @@ export const getLogin = async () => {
       method: 'GET',
     });
     return res.data?.url;
-  } catch {
+  } catch (error) {
+    showToast("error", error?.response?.data?.message);
     return '';
   }
 };
@@ -19,7 +21,8 @@ export const getLogout = async () => {
       url: '/api/logout',
       method: 'GET',
     });
-  } catch {
+  } catch (error) {
+    showToast("error", error?.response?.data?.message);
     return '';
   }
 };

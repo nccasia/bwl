@@ -12,6 +12,7 @@ export const getUser = async (index, dispatch) => {
     });
     dispatch({type:"SET_AUTHOR", payload: res?.data})
   } catch {
+    showToast("error", "discord.com not run");
     return [];
   }
 };
