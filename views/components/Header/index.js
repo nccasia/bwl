@@ -9,6 +9,7 @@ import { faBell, faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
 import { getNotificationSize } from '../../api/apiNotification';
 import { Link } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import SideBar from '../Sidebar';
 
 function HeaderPage() {
@@ -31,7 +32,7 @@ function HeaderPage() {
     setOpenNotification(true);
     setOpen(false);
   };
-  const [isHidden, setIsHidden] = React.useState(true);
+  const [isHidden, setIsHidden] = React.useState(false);
   const toggle = () => setIsHidden(!isHidden);
   return (
     <nav
@@ -40,12 +41,13 @@ function HeaderPage() {
     >
       <div className="nav-header-icon">
         <div className="nav-header-menu">
-          {isHidden ? null : (
-            <div className="sidebar_mobile">
+          {isHidden && (
+            <div className={`sidebar_mobile ${isHidden ? "open" : " "}`}>
               <SideBar />
             </div>
-          )}
-          <MenuIcon onClick={toggle} className="menu_icon" />
+          )} 
+          {isHidden ?  <ArrowBackIcon onClick={toggle} className="menu_icon"/> : <MenuIcon onClick={toggle} className="menu_icon" />}
+         
         </div>
         <Link to="/">
           <div className="logoNcc">
