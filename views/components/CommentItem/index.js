@@ -55,7 +55,7 @@ const CommentItem = (props) => {
           <div    
             className="author-name"
             style={{
-              backgroundColor: state.background ? '#242526f7' : '#ebedf0',
+              backgroundColor: state.background ? '#282829f7' : '#ebedf0',
               color: '#6C7588',
             }}
           >
