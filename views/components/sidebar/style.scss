@@ -57,7 +57,12 @@
 }
 @media (max-width: 768px) {
   .sidebar-left-content{
-    max-width: 100%;
+    max-width: 350px;
     margin: 0 15px 0 0;
   }
+}
+@media (max-width: 500px) {
+  .sidebar-left-content{
+    max-width: 300px;
+    }
 }
