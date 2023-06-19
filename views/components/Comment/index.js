@@ -1,12 +1,12 @@
 /* eslint-disable prettier/prettier */
 import './style.scss';
-import React, { useState } from 'react';
+import React from 'react';
 import CommentItem from '../CommentItem';
-import { toast } from 'react-toastify';
 import { useStore } from '../../store';
 import { postComment } from '../../api/apiComment';
 import CommentInput from '../CommentInput';
 import { getComment } from '../../api/apiComment';
+import {showToast}  from "../../util/showToast";
 
 function Comment(props) {
   const { state, dispatch } = useStore();
@@ -20,15 +20,7 @@ function Comment(props) {
       })
       setInput('');
     } else {
-      toast.warning('Bạn cần đăng nhập để bình luận!', {
-        position: 'bottom-right',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      showToast("warning", 'Bạn cần đăng nhập để bình luận!');
     }
   };
   const numberComment = Math.ceil(props?.totalComment / state.size);
