@@ -1,14 +1,12 @@
 /* eslint-disable prettier/prettier */
 import './style.scss';
 import React from 'react';
-//import onClickOutside from 'react-click-outside';
 import data from '@emoji-mart/data';
 import Picker from '@emoji-mart/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faFaceSmile,
   faXmark,
-  //faPaperPlane,
 } from '@fortawesome/free-solid-svg-icons';
 import SendIcon from '@mui/icons-material/Send';
 import { useStore } from '../../store';
@@ -42,6 +40,18 @@ function CommentInput(props) {
     };
   }, []);
 
+  const [isPickerOpen, setPickerOpen] = React.useState(false);
+  const handleEmojiIconClick = (event) => {
+    event.stopPropagation();
+    setOpenEmoji(!openEmoji);
+  };
+  const handleInputClick = () => {
+    if (openEmoji) {
+      setOpenEmoji(false);
+    }
+  };
+  
+  
   return (
     <div
       style={{
@@ -68,24 +78,17 @@ function CommentInput(props) {
             onChange={handleInputChange}
             autoFocus
             onKeyDown={handleKeyDown}
+            onClick={handleInputClick} 
           />
 
           <div className="container-item-icon">
             <div className="container-item-emoji">
-              {!openEmoji ? (
-                <FontAwesomeIcon
-                  className="input-icon"
-                  icon={faFaceSmile}
-                  onClick={() => setOpenEmoji(!openEmoji)}
-                />
-              ) : (
-                <FontAwesomeIcon
-                  className="input-icon"
-                  icon={faXmark}
-                  onClick={() => setOpenEmoji(!openEmoji)}
-                />
-              )}
-              {openEmoji && (
+              <FontAwesomeIcon
+                className="input-icon"
+                icon={openEmoji ? faXmark : faFaceSmile}
+                onClick={handleEmojiIconClick}
+              />
+              {openEmoji && isPickerOpen && (
                 <div className="emoji-box">
                   <Picker data={data} onEmojiSelect={onEmojiClick} />
                 </div>

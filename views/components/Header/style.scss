@@ -1,5 +1,4 @@
-
-.nav-header{
+.nav-header {
   align-items: center;
   display: flex;
   justify-content: space-between;
@@ -13,19 +12,29 @@
   left: 0;
   right: 0;
   z-index: 9998;
-  .nav-header-icon{
+  .nav-header-icon {
     display: flex;
     align-items: center;
-    gap: 3px;
-    .nav-header-menu{
+    gap: 5px;
+    .nav-header-menu {
       display: none;
-      .sidebar_mobile{
-        position: absolute;
-        bottom: 0px;
-        animation-name: fadeIn;
-        animation-duration: 0.1s;
+      .sidebar_mobile {
+        position: fixed;
+        top: 59px;
+        left: -300px; /* Vị trí ban đầu nằm ngoài màn hình */
+        // width: 300px;
+        // height: 100vh;
+        background-color: #fff;
+        transition: transform 1s ease; /* Áp dụng hiệu ứng chuyển động */
+        transition-duration: 0.5s; /* Áp dụng hiệu ứng chuyển động */
+        
       }
-      .menu_icon{
+      .open {
+        left: 0; /* Di chuyển sidebar vào màn hình */
+        transition-timing-function: linear;
+        // background-color: red;
+      }
+      .menu_icon {
         cursor: pointer;
         font-size: 25px;
         color: #a1a1b6;
@@ -83,17 +92,14 @@
 }
 @keyframes fadeIn {
   from {
-    opacity: 0;
-    transform: translateX(-100px);
+    left: -300px;
   }
   to {
-    opacity: 1;
-    background-color: red;
-    transform: translateX(0);
+    left: 0;
   }
 }
 
-.dialog-button-light{
+.dialog-button-light {
   box-shadow: rgba(0, 0, 0, 0.35) 0px 0px 10px;
   position: absolute;
   top: 60px;
@@ -104,11 +110,11 @@
   flex-direction: column;
   justify-content: start;
   gap: 10px;
-  color:#6C7588;
+  color: #6c7588;
   background-color: white;
 }
 
-.dialog-button-light::before{
+.dialog-button-light::before {
   position: absolute;
   content: '';
   border-width: 10px 15px;
@@ -118,7 +124,7 @@
   border-color: transparent transparent white transparent;
 }
 
-.dialog-button-dark{
+.dialog-button-dark {
   box-shadow: rgba(0, 0, 0, 0.35) 0px 0px 10px;
   position: absolute;
   top: 60px;
@@ -129,12 +135,12 @@
   flex-direction: column;
   justify-content: start;
   gap: 10px;
-  color:#6C7588;
+  color: #6c7588;
 }
 
-.dialog-button-dark::before{
+.dialog-button-dark::before {
   position: absolute;
-  content: "";
+  content: '';
   border-width: 10px 15px;
   border-style: solid;
   right: 17%;
@@ -142,18 +148,20 @@
   border-color: transparent transparent #242526 transparent;
 }
 
-.dialog-button-dark_notifi,.dialog-button-light_notifi{
+.dialog-button-dark_notifi,
+.dialog-button-light_notifi {
   position: absolute;
   right: -80px;
 }
-.dialog-button-dark_notifi::before,.dialog-button-light_notifi::before{
+.dialog-button-dark_notifi::before,
+.dialog-button-light_notifi::before {
   position: absolute;
   right: 24%;
 }
 @media (max-width: 1240px) {
-  .nav-header{
-    .nav-header-icon{
-      .nav-header-menu{
+  .nav-header {
+    .nav-header-icon {
+      .nav-header-menu {
         display: block;
       }
     }
@@ -163,16 +171,20 @@
   .nav-header {
     padding: 5px 16px;
   }
-  .dialog-button-dark,.dialog-button-light{
+  .dialog-button-dark,
+  .dialog-button-light {
     right: -2px;
   }
-  .dialog-button-dark::before,.dialog-button-light::before{
+  .dialog-button-dark::before,
+  .dialog-button-light::before {
     right: 4%;
   }
-  .dialog-button-dark_notifi,.dialog-button-light_notifi{
+  .dialog-button-dark_notifi,
+  .dialog-button-light_notifi {
     right: -46px;
   }
-  .dialog-button-dark_notifi::before,.dialog-button-light_notifi::before{
+  .dialog-button-dark_notifi::before,
+  .dialog-button-light_notifi::before {
     right: 16%;
   }
 }
