@@ -50,7 +50,7 @@ function Comment(props) {
               </div>
             ))
         : null}
-      { numberComment > props?.pageComment && <p className="show" onClick={() => handleClickPage(props?.pageComment)}>Xem thêm</p>}
+      { numberComment > props?.pageComment && <p className="show-page-comment" onClick={() => handleClickPage(props?.pageComment)}>Xem thêm</p>}
     </div>
   );
 }

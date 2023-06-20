@@ -43,6 +43,7 @@ export class AppController {
   }
 
   @Get('')
+  @Render('index')
   async index(@Query() query: any, @Req() req: Request, @Res() res: Response) {
     if (req.cookies['token']) {
       try {
@@ -70,7 +71,7 @@ export class AppController {
                 );
               }
               const posts = await this.appService.getAll(1, 5, null);
-              return res.render('index', { posts, user });
+              //return res.render('index', { posts, user });
             }),
             first(),
           );
@@ -116,8 +117,8 @@ export class AppController {
                   user.discriminator,
                 );
               }
-              const posts = await this.appService.getAll(1, 5, null);
-              return res.render('index', { posts, user });
+              //const posts = await this.appService.getAll(1, 5, null);
+              //return res.render('index', { posts, user });
             }),
             first(),
           );
@@ -127,7 +128,7 @@ export class AppController {
     } else {
       const posts = await this.appService.getAll(1, 5, null);
       //console.log(posts);
-      return res.render('index', { posts });
+      //return res.render('index', { posts });
     }
   }
   
@@ -445,7 +446,4 @@ export class AppController {
       return res.status(500).json({message:"Internal Server Error"});
     }
   }
-
 }
-
-

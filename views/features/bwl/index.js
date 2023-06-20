@@ -19,7 +19,7 @@ const Bwl = () => {
 
   return (
     <React.Fragment>
-      <Header />
+      <Header open="ALL"/>
       <MainContent />
     </React.Fragment>
   );

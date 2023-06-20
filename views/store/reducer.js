@@ -17,6 +17,7 @@ const initState = {
   lengthPosts: 0,
   changePage: false,
   onEdit: false,
+  onMenu: false,
 };
 
 function reducer(state, action) {
@@ -258,22 +259,27 @@ function reducer(state, action) {
         ...state,
         posts: listComment,
       };
-      case 'SET_COMMENTS_PAGE':
-        const listCommentPage = state.posts.map((main) => {
-          if (main.messageId === action.payload?.messageId) {
-            return {
-              ...main, 
-              comments: [...main.comments,...action.payload.comments],
-              pageComment: main.pageComment + 1,
-            }
-          } else {
-            return main;
+    case 'SET_COMMENTS_PAGE':
+      const listCommentPage = state.posts.map((main) => {
+        if (main.messageId === action.payload?.messageId) {
+          return {
+            ...main, 
+            comments: [...main.comments,...action.payload.comments],
+            pageComment: main.pageComment + 1,
           }
-        });
-        return {
-          ...state,
-          posts: listCommentPage,
-        };
+        } else {
+          return main;
+        }
+      });
+      return {
+        ...state,
+        posts: listCommentPage,
+      };
+    case 'CHANGE_MENU':
+      return {
+        ...state,
+        onMenu: action.payload,
+      };
     default:
       throw new Error('Error');
   }

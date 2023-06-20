@@ -9,6 +9,8 @@ import {useDataDebouncer} from '../../util/useDebounce';
 import SideBar from '../Sidebar';
 import CircularProgress from '@mui/material/CircularProgress';
 import  UploadPost from "../UploadPost";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {faCircleChevronUp} from '@fortawesome/free-solid-svg-icons';
 
 const MainContent = () => {
   const {state, dispatch}=useStore();
@@ -25,15 +27,17 @@ const MainContent = () => {
     if (window.scrollY >= 100) {
       setScroll(true);
     }
-    window.addEventListener('scroll', () => {
-      handleScroll();
-      if (window.scrollY + window.innerHeight >= document.body.scrollHeight) {
-        if(!state.loadingPost && state.page !== -1){
-          useDataDebouncer(dispatch({type: "CHANGE_PAGE", payload: state.page+ 1}), 500);
+    if(!state.changePage){
+      window.addEventListener('scroll', () => {
+        handleScroll();
+        if (window.scrollY + window.innerHeight >= document.body.scrollHeight) {
+          if(!state.loadingPost && state.page !== -1){
+            useDataDebouncer(dispatch({type: "CHANGE_PAGE", payload: state.page+ 1}), 500);
+          }
         }
-      }
-    })
-  }, [dispatch, state.page, state.loadingPost]);
+      })
+    }
+  }, [state.page, state.loadingPost, state.changePage]);
   
   const handleScrollUpClick = () => {
     const step = Math.max(window.scrollY / 50, 20);
@@ -53,7 +57,13 @@ const MainContent = () => {
         <div className="sidebar-left">
           <SideBar />
         </div>
-        <div className="main-content">
+        <div 
+          className="main-content"
+          style={{
+            opacity: state.onMenu ? 0.2 : 1,
+            pointerEvents: state.onMenu ? "none": "auto", 
+          }}
+        >
           {state.author?.id && <UploadPost/>}
           <Container type="ALL"/>
           {state.loadingPost && (
@@ -63,7 +73,15 @@ const MainContent = () => {
           )}
         </div>
         {scroll && (
-          <div onClick={handleScrollUpClick} className="scrollUp"></div>
+          <FontAwesomeIcon 
+            icon={faCircleChevronUp} 
+            className="scrollUp"
+            onClick={handleScrollUpClick} 
+            style={{
+              opacity: state.onMenu ? 0.2 : 1,
+              pointerEvents: state.onMenu ? "none": "auto", 
+            }}
+          />
         )}
       </div>
       <ToastContainer
