@@ -4,7 +4,7 @@ import './app.scss';
 import Login from './features/Login';
 import Posts from './features/Posts';
 import Bwl from './features/Bwl';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import {useStore} from "./store";
 
 
@@ -19,13 +19,11 @@ function App() {
   }, []);
 
   return (
-    <Router>
-      <Routes>
-        <Route exact path="/" element={<Bwl />} />
-        <Route exact path="/login" element={<Login />} />
-        <Route exact path="/posts" element={<Posts />} />
-      </Routes>
-    </Router>
+    <Routes>
+      <Route exact path="/" element={<Bwl />} />
+      <Route exact path="/login" element={<Login />} />
+      <Route exact path="/posts" element={<Posts />} />
+    </Routes>
   );
 }
 export default App;

@@ -34,7 +34,7 @@ const Posts = () => {
 
   return (
     <React.Fragment>
-      <Header/>
+      <Header open="ONE"/>
       <h1 
         className="home-posts"
         onClick={handleChangePage}

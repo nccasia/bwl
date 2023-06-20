@@ -12,10 +12,9 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import SideBar from '../Sidebar';
 
-function HeaderPage() {
+function HeaderPage(props) {
   const { state, dispatch } = useStore();
   const [open, setOpen] = React.useState(false);
-  const [openLabel, setOpenLabel] = React.useState(true);
   const [openNotification, setOpenNotification] = React.useState(false);
   const handleClick = () => {
     setOpen(!open);
@@ -33,22 +32,26 @@ function HeaderPage() {
     setOpen(false);
   };
   const [isHidden, setIsHidden] = React.useState(false);
-  const toggle = () => setIsHidden(!isHidden);
+  const openMenu =()=>{
+    dispatch({ type: 'CHANGE_MENU', payload: !isHidden });
+    setIsHidden(!isHidden);
+  }
   return (
     <nav
       className="nav-header"
       style={{ backgroundColor: state.background ? '#242526' : 'white' }}
     >
       <div className="nav-header-icon">
-        <div className="nav-header-menu">
-          {isHidden && (
-            <div className={`sidebar_mobile ${isHidden ? "open" : " "}`}>
-              <SideBar />
-            </div>
-          )} 
-          {isHidden ?  <ArrowBackIcon onClick={toggle} className="menu_icon"/> : <MenuIcon onClick={toggle} className="menu_icon" />}
-         
-        </div>
+        {props.open!=="ONE" && (
+          <div className="nav-header-menu">
+            {isHidden  && (
+              <div className={`sidebar_mobile ${isHidden ? "open" : " "}`}>
+                <SideBar />
+              </div>
+            )} 
+            {isHidden ?  <ArrowBackIcon onClick={openMenu} className="menu_icon"/> : <MenuIcon onClick={openMenu} className="menu_icon" />}  
+          </div>
+        )}
         <Link to="/">
           <div className="logoNcc">
             <img src="./assets/img/favicon.png" alt="logo" />
