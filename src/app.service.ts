@@ -33,16 +33,18 @@ export class AppService {
     this.checkForChanges();
   }
 
-  private checkForChanges() {
-    const checkChanges = async () => {
-      const currentTime = new Date().getTime() - 5000;
+  private setTime=0;
+  private checkForChanges () {
+    const checkChanges = async(index: number)=> {
+      const currentTime = index;
       const aggregatorOpts = [
         { 
           $match: {
             channelId: channel, 
-            createdTimestamp: { $gte: currentTime },
+            createdTimestamp: {$gt: currentTime },
           } 
         },
+        { $sort: { _id: -1 } },
       ]
       const newRecord= await this.komuMessage.aggregate(aggregatorOpts as any).exec();
       let list : any =[];
@@ -52,11 +54,41 @@ export class AppService {
           list = [...list,...test];
         }
         this.addEvent({ data: {list, posts: "add" } });
+        this.setTime=Number(newRecord[0]?.createdTimestamp);
       }
     };
-    setInterval(checkChanges, 5000);
+    const findTime = async()=>{
+      const result= await this.komuMessage.aggregate([
+        { 
+          $match: {
+            channelId: channel, 
+          } 
+        },
+        {
+          $group: {
+            _id: null,
+            maxCreatedTimestamp: { $max: '$createdTimestamp' },
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            maxCreatedTimestamp: 1,
+          },
+        },
+      ]);
+      if (result?.length > 0) {
+        return result[0]?.maxCreatedTimestamp;
+      }
+    }
+    const foo = async() => {
+      if(this.setTime===0){
+        this.setTime=Number(await findTime());
+      }
+      setInterval(()=> checkChanges(this.setTime), 5000);
+    }
+    foo();
   }
-
   async findLikeFromDiscordId( authorId: string,messageId: string): Promise<any> {
     return await this.komuLike.findOne({ authorId: authorId, messageId: messageId });
   }
