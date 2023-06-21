@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import axios from 'axios';
+import {showToast}  from "../util/showToast";
 
 export const getLikes = async (index) => {
     try {
@@ -8,8 +9,9 @@ export const getLikes = async (index) => {
             method: "GET",
           });
         return res.data;
-    } catch {
-        return [];
+    } catch(error) {
+      showToast("error", error?.response?.data?.message);
+      return [];
     }
 }
 
@@ -24,7 +26,8 @@ export const postLike = async (messageId, authorId) => {
       method: 'POST',
     });
     return res.data;
-  } catch {
+  } catch (error){
+    showToast("error", error?.response?.data?.message);
     return {};
   }
 };

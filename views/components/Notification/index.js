@@ -5,29 +5,22 @@ import {postNotification } from '../../api/apiNotification';
 import {useStore} from "../../store";
 import NotificationList  from "../NotificationList";
 import {useDataDebouncer} from '../../util/useDebounce';
-import {getNotification} from '../../api/apiNotification';
 
 const Notification = (props) => {
   const { state, dispatch } = useStore();
   const spanRef = React.useRef(null);
-  const debounce = useDataDebouncer(state.pageNotification, 300)
   React.useEffect(() => {
     const scrollElement = spanRef.current;
     const handleScroll = () => {
-      if (scrollElement.scrollTop + scrollElement.clientHeight >= scrollElement.scrollHeight - 10 && state.lengthNotication !== -1) {
-        dispatch({type: "CHANGE_PAGE_NOTIFICATION", payload: debounce});
+      if (scrollElement.scrollTop + scrollElement.clientHeight >= scrollElement.scrollHeight - 10 ) {
+        if(!state.loadingNotifi && state.pageNotification !== -1){
+          useDataDebouncer(dispatch({type: "CHANGE_PAGE_NOTIFICATION", payload: state.pageNotification + 1 }), 500)
+        }
       }
     };
     scrollElement.addEventListener('scroll', handleScroll);
     document.addEventListener('click', handleOutsideClick);
-    if(state.author?.id && state.pageNotification > 0) {
-      getNotification({messageId: state.author.id, page: debounce}, dispatch)
-    }
-    return () => {
-      document.removeEventListener('click', handleOutsideClick);
-      scrollElement.addEventListener('scroll', handleScroll);
-    };
-  }, [debounce]);
+  }, [state.pageNotification, state.loadingNotifi]);
 
   const handleOutsideClick = async (event) => {
     if (spanRef.current && !spanRef.current.contains(event.target)) {

@@ -17,6 +17,7 @@ const initState = {
   lengthPosts: 0,
   changePage: false,
   onEdit: false,
+  onMenu: false,
 };
 
 function reducer(state, action) {
@@ -145,12 +146,12 @@ function reducer(state, action) {
         ...state,
         changePage: action.payload,
         posts: [],
-        page: 1,
+        page: action.payload? -1 : 1,
       };
     case 'CHANGE_LOADING_POST':
       return {
         ...state,
-        loadingPost: true,
+        loadingPost: action.payload,
       };
     case 'SET_POST_ONE':
       const commentListOne = action.payload?.map((main) => {
@@ -163,6 +164,7 @@ function reducer(state, action) {
         ...state,
         posts: commentListOne,
         page: 1,
+        loadingPost: false,
       };
     case 'SET_HOTPOSTS':
       return {
@@ -173,7 +175,7 @@ function reducer(state, action) {
     case 'CHANGE_LOADING_HOTPOST':
       return {
         ...state,
-        loadingHotPost: true,
+        loadingHotPost: action.payload,
       };
     case 'SET_AUTHOR':
       return {
@@ -193,7 +195,7 @@ function reducer(state, action) {
     case 'CHANGE_LOADING_NOTIFICATION':
       return {
         ...state,
-        loadingNotifi: true,
+        loadingNotifi: action.payload,
       };
     case 'SET_LENGTH_NOTIFICATION':
       return {
@@ -220,8 +222,11 @@ function reducer(state, action) {
         loadingPost:
           numberPosts > action.payload && action.payload > 0 && state.page > 0 ? true : false,
         page:
-          numberPosts > action.payload && action.payload  > 0 && state.page > 0
-            ? action.payload + 1
+          numberPosts > action.payload && action.payload  > 0 && state.page > 0 
+            ? 
+          action.payload === state.page+ 1 ? 
+            action.payload
+            : state.page
             : -1,
       };
     case 'CHANGE_PAGE_NOTIFICATION':
@@ -232,7 +237,10 @@ function reducer(state, action) {
           numberNotifi > action.payload && action.payload > 0 && state.pageNotification > 0 ? true : false,
         pageNotification:
           numberNotifi > action.payload && action.payload > 0 && state.pageNotification > 0
-            ? action.payload + 1
+            ? 
+              action.payload === state.pageNotification+ 1 ? 
+              action.payload
+              : state.pageNotification
             : -1,
       };
     case 'SET_COMMENTS':
@@ -251,22 +259,27 @@ function reducer(state, action) {
         ...state,
         posts: listComment,
       };
-      case 'SET_COMMENTS_PAGE':
-        const listCommentPage = state.posts.map((main) => {
-          if (main.messageId === action.payload?.messageId) {
-            return {
-              ...main, 
-              comments: [...main.comments,...action.payload.comments],
-              pageComment: main.pageComment + 1,
-            }
-          } else {
-            return main;
+    case 'SET_COMMENTS_PAGE':
+      const listCommentPage = state.posts.map((main) => {
+        if (main.messageId === action.payload?.messageId) {
+          return {
+            ...main, 
+            comments: [...main.comments,...action.payload.comments],
+            pageComment: main.pageComment + 1,
           }
-        });
-        return {
-          ...state,
-          posts: listCommentPage,
-        };
+        } else {
+          return main;
+        }
+      });
+      return {
+        ...state,
+        posts: listCommentPage,
+      };
+    case 'CHANGE_MENU':
+      return {
+        ...state,
+        onMenu: action.payload,
+      };
     default:
       throw new Error('Error');
   }

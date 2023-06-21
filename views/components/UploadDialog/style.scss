@@ -9,9 +9,6 @@
         padding: 10px 10px;
         border-bottom: none;
         p{
-            border-radius: 50%;
-            border: 1px solid #8080805c;
-            padding: 2px;
             cursor: pointer;
         }
         .upload-dialog-div-user{
@@ -56,9 +53,8 @@
         top: -5px;
         right: 5px;
         float: right;
+        height: 20px;
         border-radius: 50%;
-        border: 1px solid #8080805c;
-        padding: 2px;
         color: rgb(108, 117, 136);
         cursor: pointer;
     }

@@ -23,7 +23,7 @@ function UploadPost() {
                         alt="avatar"
                     />
                 )}
-                <p onClick={()=>setOpen(true)}>What are you thinking? Please post a image...</p>
+                <p onClick={()=>setOpen(true)}>Share your image...</p>
             </div>
             <UploadDialog open={open} setOpen={setOpen} type="add"/>
         </div>

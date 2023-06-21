@@ -5,13 +5,13 @@ import React from 'react';
 import { useStore } from '../../store';
 import { getComment } from '../../api/apiComment';
 import { postLike } from '../../api/apiLike';
-import { toast } from 'react-toastify';
 import EmojiLike from '../EmojiLike';
 import Comment from '../Comment';
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMessage } from '@fortawesome/free-solid-svg-icons';
+import {showToast}  from "../../util/showToast";
 
 const ContainerItem = (props) => {
   const { state, dispatch } = useStore();
@@ -33,26 +33,10 @@ const ContainerItem = (props) => {
       if (props?.authorId !== state.author?.id) {
         postLike(props?.messageId, state.author?.id);
       } else {
-        toast.warning('Ha ha, không được đâu!', {
-          position: 'bottom-right',
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        showToast("warning", 'Ha ha, không được đâu!');
       }
     } else {
-      toast.warning('Bạn cần đăng nhập để like!', {
-        position: 'bottom-right',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      showToast("warning", 'Bạn cần đăng nhập để like!');
     }
   };
 

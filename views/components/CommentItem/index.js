@@ -71,7 +71,7 @@ const CommentItem = (props) => {
               />
             )}
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '5px',  marginLeft: "15px" }}>
             <div className="comment-time">
               {formatDay(
                 props?.createdTimestamp

@@ -7,7 +7,7 @@ import {
     Dialog,
     Tooltip,
 } from "@mui/material";
-import ClearIcon from '@mui/icons-material/Clear';
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import { toast } from 'react-toastify';
 import {addPost, editPost} from "../../api/apiPosts";
@@ -205,7 +205,7 @@ function UploadDialog(props){
                 <div className="upload-dialog-div">
                     <h1>{props?.type==="add" ? "New Post":"Edit Post"}</h1>
                     <p onClick={handleOpen}>
-                        <ClearIcon sx={{fontSize: "20px"}}/>
+                        <HighlightOffIcon sx={{fontSize: "20px"}}/>
                     </p>
                 </div>
                 <div className="upload-dialog-div">
@@ -250,7 +250,7 @@ function UploadDialog(props){
                 )}
                 <div className="upload-div-image">
                     {image && openImage && (
-                        <button 
+                        <div 
                             onClick={handleDelete}
                             className="upload-delete-image"
                             style={{
@@ -258,8 +258,8 @@ function UploadDialog(props){
                                 color: '#6C7588',
                             }}
                         >
-                            <ClearIcon sx={{fontSize: "17px"}}/>
-                        </button >
+                            <HighlightOffIcon />
+                        </div >
                     )}
                     {image && openImage && <img src={image} alt="Preview" className="upload-image"/>}
                 </div>

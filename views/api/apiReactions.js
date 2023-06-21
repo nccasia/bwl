@@ -1,5 +1,6 @@
 /* eslint-disable prettier/prettier */
 import axios from 'axios';
+import {showToast}  from "../util/showToast";
 
 export const getReactions = async (index) => {
     try {
@@ -8,7 +9,8 @@ export const getReactions = async (index) => {
             method: "GET",
           });
         return res.data;
-    } catch {
+    } catch(error) {
+        showToast("error", error?.response?.data?.message);
         return [];
     }
 }
