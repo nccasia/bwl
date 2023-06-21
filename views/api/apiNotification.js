@@ -11,7 +11,7 @@ export const getNotification = async (index, dispatch) => {
           });
         dispatch({type:"CHANGE_NOTIFICATION_ALL", payload: res.data?.notifications})
     } catch(error) {
-        dispatch({type:"CHANGE_LOADING_NOTIFICATION", payload: false});
+        dispatch({type:"CHANGE_LOADING_NOTIFICATION", payload: true});
         showToast("error", error?.response?.data?.message);
         return [];
     }

@@ -11,7 +11,7 @@ export const getAll = async (index, dispatch) => {
           });
         dispatch({type:"SET_POSTS", payload: res.data})
     } catch(error) {
-        dispatch({type:"CHANGE_LOADING_POST", payload: false});
+        dispatch({type:"CHANGE_LOADING_POST", payload: true});
         showToast("error", error?.response?.data?.message);
         return [];
     }
@@ -26,7 +26,7 @@ export const getOne = async (index, dispatch) => {
           });
         dispatch({type:"SET_POST_ONE", payload: res.data})
     } catch(error) {
-        dispatch({type:"CHANGE_LOADING_POST", payload: false});
+        dispatch({type:"CHANGE_LOADING_POST", payload: true});
         showToast("error", error?.response?.data?.message);
         return [];
     }
@@ -41,7 +41,7 @@ export const getHotPosts = async (dispatch) => {
           });
         dispatch({type:"SET_HOTPOSTS", payload: res.data?.hotposts})
     } catch(error) {
-        dispatch({type:"CHANGE_LOADING_HOTPOST", payload: false});
+        dispatch({type:"CHANGE_LOADING_HOTPOST", payload: true});
         showToast("error", error?.response?.data?.message);
         return [];
     }
