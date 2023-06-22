@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import {updateSize} from "../util/updateSize";
+import { updateSize } from '../util/updateSize';
 
 const initState = {
   posts: [],
@@ -80,7 +80,7 @@ function reducer(state, action) {
               return main;
             }
           } else {
-            if (action.payload?.posts ==="edit") {
+            if (action.payload?.posts === 'edit') {
               if (main._id === action.payload?.id) {
                 return {
                   ...main,
@@ -97,32 +97,43 @@ function reducer(state, action) {
       });
       return {
         ...state,
-        posts: action.payload?.posts ==="add" ? 
-                [...action.payload?.list.map((main) => {
-                    return {
-                      ...main,
-                      ...{
-                        comments: [],
-                        pageComment: 1,
-                      }
-                    }
-                  }),
-                  ...state.posts
-                ] 
-              : 
-                action.payload?.posts ==="delete" ? 
-                state.posts.filter(item => item?._id !== action.payload?.id)
-              :
-                ssePosts,
-        sizeNotifi: action.payload?.authorNotifi === state.author?.id && action.payload?.authorNotifi2 !== state.author?.id  ? state.sizeNotifi + 1 : state.sizeNotifi,
-        notification: action.payload?.authorNotifi === state.author?.id && action.payload?.authorNotifi2 !== state.author?.id  ? [...[action.payload?.notification], ...state.notification] : state.notification,
-        hotPosts: action.payload?.posts ==="delete" ? 
-                    state.hotPosts.filter(item => item?._id !== action.payload?.id) 
-                  : 
-                    state.hotPosts?.length <10 && action.payload?.posts ==="add" ?
-                    [...state.hotPosts, ...action.payload?.list] 
-                  :
-                    state.hotPosts,
+        posts:
+          action.payload?.posts === 'add'
+            ? [
+                ...action.payload?.list.map((main) => {
+                  return {
+                    ...main,
+                    ...{
+                      comments: [],
+                      pageComment: 1,
+                    },
+                  };
+                }),
+                ...state.posts,
+              ]
+            : action.payload?.posts === 'delete'
+            ? state.posts.filter((item) => item?._id !== action.payload?.id)
+            : ssePosts,
+        sizeNotifi:
+          action.payload?.authorNotifi === state.author?.id &&
+          action.payload?.authorNotifi2 !== state.author?.id
+            ? state.sizeNotifi + 1
+            : state.sizeNotifi,
+        notification:
+          action.payload?.authorNotifi === state.author?.id &&
+          action.payload?.authorNotifi2 !== state.author?.id
+            ? [...[action.payload?.notification], ...state.notification]
+            : action.payload?.posts === 'delete'
+            ? state.notification.filter(
+                (item) => item?.message[0]?._id !== action.payload?.id,
+              )
+            : state.notification,
+        hotPosts:
+          action.payload?.posts === 'delete'
+            ? state.hotPosts.filter((item) => item?._id !== action.payload?.id)
+            : state.hotPosts?.length < 10 && action.payload?.posts === 'add'
+            ? [...state.hotPosts, ...action.payload?.list]
+            : state.hotPosts,
       };
     case 'SET_POSTS':
       const commentList = action.payload?.posts.map((main) => {
@@ -131,9 +142,9 @@ function reducer(state, action) {
           ...{
             comments: [],
             pageComment: 1,
-          }
-        }
-      })
+          },
+        };
+      });
       return {
         ...state,
         posts: state.changePage
@@ -147,7 +158,7 @@ function reducer(state, action) {
         ...state,
         changePage: action.payload,
         posts: [],
-        page: action.payload? -1 : 1,
+        page: action.payload ? -1 : 1,
         onMenu: false,
       };
     case 'CHANGE_LOADING_POST':
@@ -223,8 +234,13 @@ function reducer(state, action) {
       return {
         ...state,
         loadingPost:
-          numberPosts > action.payload && action.payload > 0 && state.page > 0 ? true : false,
-        page: numberPosts > count?.page && count?.page > 0 && state.page > 0 ? count?.page : -1,
+          numberPosts > action.payload && action.payload > 0 && state.page > 0
+            ? true
+            : false,
+        page:
+          numberPosts > count?.page && count?.page > 0 && state.page > 0
+            ? count?.page
+            : -1,
         size: count?.size,
       };
     case 'CHANGE_PAGE_NOTIFICATION':
@@ -232,12 +248,17 @@ function reducer(state, action) {
       return {
         ...state,
         loadingNotifi:
-          numberNotifi > action.payload && action.payload > 0 && state.pageNotification > 0 ? true : false,
+          numberNotifi > action.payload &&
+          action.payload > 0 &&
+          state.pageNotification > 0
+            ? true
+            : false,
         pageNotification:
-          numberNotifi > action.payload && action.payload > 0 && state.pageNotification > 0
-            ? 
-              action.payload === state.pageNotification+ 1 ? 
-              action.payload
+          numberNotifi > action.payload &&
+          action.payload > 0 &&
+          state.pageNotification > 0
+            ? action.payload === state.pageNotification + 1
+              ? action.payload
               : state.pageNotification
             : -1,
       };
@@ -245,10 +266,10 @@ function reducer(state, action) {
       const listComment = state.posts.map((main) => {
         if (main.messageId === action.payload?.messageId) {
           return {
-            ...main, 
+            ...main,
             comments: action.payload?.comments,
             pageComment: 1,
-          }
+          };
         } else {
           return main;
         }
@@ -261,10 +282,10 @@ function reducer(state, action) {
       const listCommentPage = state.posts.map((main) => {
         if (main.messageId === action.payload?.messageId) {
           return {
-            ...main, 
-            comments: [...main.comments,...action.payload.comments],
+            ...main,
+            comments: [...main.comments, ...action.payload.comments],
             pageComment: main.pageComment + 1,
-          }
+          };
         } else {
           return main;
         }

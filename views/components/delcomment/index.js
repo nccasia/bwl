@@ -6,48 +6,41 @@ import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
-import { toast } from 'react-toastify';
 import { deleteComment } from '../../api/apiComment';
 import { useStore } from '../../store';
 import './style.scss';
+import {showToast} from "../../util/showToast";
 
 const Delcomment = (props)  => {
-    const { state, dispatch } = useStore();
-    const handleDelete = async (id) => {
-      if (state.author?.id) {
-        deleteComment({ id: props?.id, messageId: state.author?.id });
-      }
-      setOpen(false)
-      toast.success('Đã xóa bình luận thành công', {
-        position: 'bottom-right',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
+  const { state, dispatch } = useStore();
+  const [openDeleteComment, setOpenDeleteComment] = React.useState(false);
+  const handleDelete = async () => {
+    if (state.author?.id) {
+      deleteComment({ id: props?.id, messageId: state.author?.id }).then(data=> {
+        if(data){
+          showToast("success", data?.message)
+        }
       });
-    };
-  const [open, setOpen] = React.useState(false);
+    }
+    setOpenDeleteComment(false);
+  };
 
   const handleClickOpen = () => {
-    setOpen(true);
+    setOpenDeleteComment(true);
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setOpenDeleteComment(false);
   };
 
   return (
     <div>
-      <div  onClick={handleClickOpen}>
+      <div onClick={handleClickOpen}>
         Delete
       </div>
       <Dialog
-        open={open}
+        open={openDeleteComment}
         onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
       >
         <div 
           style={{
@@ -68,7 +61,7 @@ const Delcomment = (props)  => {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose} >Cancel</Button>
-            <Button onClick={()=>handleDelete(props.id)}  autoFocus>
+            <Button onClick={()=>handleDelete(props.id)}  >
               Delete
             </Button>
           </DialogActions>
