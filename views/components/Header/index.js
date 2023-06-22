@@ -11,6 +11,8 @@ import { Link } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import SideBar from '../Sidebar';
+import { Badge } from '@mui/material';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 
 function HeaderPage(props) {
   const { state, dispatch } = useStore();
@@ -95,13 +97,9 @@ function HeaderPage(props) {
             }}
             onClick={handleNotification}
           >
-            <FontAwesomeIcon
-              icon={faBell}
-              style={{ color: openNotification ? 'white' : '#6C7588' }}
-            />
-            {state.sizeNotifi !== 0 && (
-              <p className="icon-notifi">{state.sizeNotifi}</p>
-            )}
+          <Badge badgeContent={state.sizeNotifi} color="primary">
+            <NotificationsIcon sx={{ color: openNotification ? 'white' : '#6C7588'}} color="action" />
+          </Badge>
             {openNotification ? (
               <div
                 className={
