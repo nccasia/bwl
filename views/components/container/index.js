@@ -10,8 +10,8 @@ const Container = (props) => {
   React.useEffect(()=>{
     const foo = async (index) => {
       if(props?.type==="ALL" && !state.changePage){
-        if(state.page>0){
-          await getAll({page: state.page, messageId: index}, dispatch);
+        if(state.page>0 && state.size){
+          await getAll({page: state.page, size: state.size, messageId: index}, dispatch);
         }
       }
       if(props?.type==="ONE" && state.page=== -1){
@@ -25,7 +25,7 @@ const Container = (props) => {
         foo(state?.author?.id);
       }
     }
-  },[state?.author?.id, state.page, props?.type, state.changePage]);
+  },[state?.author?.id, state.page, props?.type, state.changePage, state.size]);
 
   return (
     <div className="container-list">

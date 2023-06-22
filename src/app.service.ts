@@ -551,8 +551,8 @@ export class AppService {
     const aggregatorOpts = [
       { $match: { channelId: channel } },
       { $sort: { _id: -1 } },
-      { $skip: (page - 1) * size },
-      { $limit: size },
+      { $skip: (page - 1) * 5 },
+      { $limit: 5 },
       {
         $lookup: {
           from: 'komu_users',
@@ -600,6 +600,7 @@ export class AppService {
     ];
     // eslint-disable-next-line prefer-const
     let data = await this.komuMessage.aggregate(aggregatorOpts as any).exec();
+    data=data.slice(-size);
     data.forEach((item : any) => {
       item.reactions = item.reactions?.reduce((result: any, reaction: any) => {
         const exists = result.find((e: any) => e.name === reaction.emoji);
