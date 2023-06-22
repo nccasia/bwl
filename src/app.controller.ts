@@ -194,7 +194,7 @@ export class AppController {
   @Get('/api/getAllPaging')
   async getAllPaging(@Req() req: Request, @Res() res: Response) {
     try {
-      const posts= await this.appService.getAll(Number(req.query?.page), 5, String(req.query?.messageId)? String(req.query?.messageId) : null);
+      const posts= await this.appService.getAll(Number(req.query?.page), Number(req.query?.size), String(req.query?.messageId)? String(req.query?.messageId) : null);
       const size= await this.appService.findLengthMessage();
       return res.status(200).json({posts, size})
     } catch (error) {

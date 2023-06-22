@@ -1,4 +1,5 @@
 /* eslint-disable prettier/prettier */
+import {updateSize} from "../util/updateSize";
 
 const initState = {
   posts: [],
@@ -216,18 +217,14 @@ function reducer(state, action) {
         sizeNotifi: 0,
       };
     case 'CHANGE_PAGE':
-      const numberPosts = Math.ceil(state.lengthPosts / state.size);
+      const numberPosts = Math.ceil(state.lengthPosts / 5);
+      const count = updateSize(action.payload, state.posts?.length);
       return {
         ...state,
         loadingPost:
           numberPosts > action.payload && action.payload > 0 && state.page > 0 ? true : false,
-        page:
-          numberPosts > action.payload && action.payload  > 0 && state.page > 0 
-            ? 
-          action.payload === state.page+ 1 ? 
-            action.payload
-            : state.page
-            : -1,
+        page: numberPosts > count?.page && count?.page > 0 && state.page > 0 ? count?.page : -1,
+        size: count?.size,
       };
     case 'CHANGE_PAGE_NOTIFICATION':
       const numberNotifi = Math.ceil(state.lengthNotication / state.size);
