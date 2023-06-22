@@ -102,7 +102,7 @@ function HeaderPage(props) {
             {state.sizeNotifi !== 0 && (
               <p className="icon-notifi">{state.sizeNotifi}</p>
             )}
-            {openNotification ? (
+            {openNotification && (
               <div
                 className={
                   state.background
@@ -110,9 +110,9 @@ function HeaderPage(props) {
                     : 'dialog-button-light dialog-button-light_notifi'
                 }
               >
-                <Notification setOpenNotification={setOpenNotification} />
+                <Notification setOpenNotification={setOpenNotification} openNotification={openNotification}/>
               </div>
-            ) : null}
+            )}
           </div>
           <div className="person-icon logout" onClick={() => handleClick()}>
             <img
