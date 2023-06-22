@@ -32,7 +32,7 @@ const MainContent = () => {
         handleScroll();
         if (window.scrollY + window.innerHeight >= document.body.scrollHeight) {
           if(!state.loadingPost && state.page !== -1){
-            useDataDebouncer(dispatch({type: "CHANGE_PAGE", payload: state.page+ 1}), 500);
+            useDataDebouncer(dispatch({type: "CHANGE_PAGE", payload: state.page}), 500);
           }
         }
       })

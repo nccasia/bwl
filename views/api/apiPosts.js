@@ -6,7 +6,7 @@ export const getAll = async (index, dispatch) => {
     try {
         dispatch({type:"CHANGE_LOADING_POST", payload: true});
         const res = await axios({
-            url: index.messageId ? `/api/getAllPaging?page=${index.page}&messageId=${index.messageId}` : `/api/getAllPaging?page=${index.page}`,
+            url: index.messageId ? `/api/getAllPaging?page=${index.page}&size=${index.size}&messageId=${index.messageId}` : `/api/getAllPaging?page=${index.page}&size=${index.size}`,
             method: "GET",
           });
         dispatch({type:"SET_POSTS", payload: res.data})
