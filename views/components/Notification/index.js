@@ -20,11 +20,11 @@ const Notification = (props) => {
     };
     scrollElement.addEventListener('scroll', handleScroll);
     document.addEventListener('click', handleOutsideClick);
-  }, [state.pageNotification, state.loadingNotifi]);
+  }, [state.pageNotification, state.loadingNotifi, props?.openNotification]);
 
   const handleOutsideClick = async (event) => {
     if (spanRef.current && !spanRef.current.contains(event.target)) {
-      await props?.setOpenNotification(false);
+      props?.setOpenNotification(false);
       if (state.author?.id) {
         postNotification(state.author?.id, dispatch);
       }
@@ -37,7 +37,7 @@ const Notification = (props) => {
       style={{ backgroundColor: state.background ? "#242526": "white", color: "#6C7588"}}
     >
       <h1 className="title-notifi"><b>Thông báo</b></h1>
-      <NotificationList />
+      <NotificationList openNotification={props?.openNotification}/>
     </div>
   );
 };

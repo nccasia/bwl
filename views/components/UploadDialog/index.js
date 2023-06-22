@@ -193,7 +193,7 @@ function UploadDialog(props){
     return(
         <Dialog 
             onClose={handleOpen} 
-            open={props?.open}
+            open={state.onMenu ? false: props?.open}
             className="upload-dialog"
         >  
             <div
