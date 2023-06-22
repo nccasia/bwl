@@ -148,6 +148,7 @@ function reducer(state, action) {
         changePage: action.payload,
         posts: [],
         page: action.payload? -1 : 1,
+        onMenu: false,
       };
     case 'CHANGE_LOADING_POST':
       return {

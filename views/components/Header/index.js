@@ -100,7 +100,7 @@ function HeaderPage(props) {
           <Badge badgeContent={state.sizeNotifi} color="primary">
             <NotificationsIcon sx={{ color: openNotification ? 'white' : '#6C7588'}} color="action" />
           </Badge>
-            {openNotification ? (
+            {openNotification && (
               <div
                 className={
                   state.background
@@ -108,9 +108,9 @@ function HeaderPage(props) {
                     : 'dialog-button-light dialog-button-light_notifi'
                 }
               >
-                <Notification setOpenNotification={setOpenNotification} />
+                <Notification setOpenNotification={setOpenNotification} openNotification={openNotification}/>
               </div>
-            ) : null}
+            )}
           </div>
           <div className="person-icon logout" onClick={() => handleClick()}>
             <img
