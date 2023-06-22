@@ -11,6 +11,7 @@ import { Link } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import SideBar from '../Sidebar';
+import {postNotification } from '../../api/apiNotification';
 
 function HeaderPage(props) {
   const { state, dispatch } = useStore();
@@ -28,8 +29,11 @@ function HeaderPage(props) {
     }
   }, [state.author?.id]);
   const handleNotification = async () => {
-    setOpenNotification(true);
+    setOpenNotification(!openNotification);
     setOpen(false);
+    if(openNotification && state?.notification[0]?.onLabel){
+      postNotification(state.author?.id, dispatch);
+    }
   };
   const [isHidden, setIsHidden] = React.useState(false);
   const openMenu =()=>{

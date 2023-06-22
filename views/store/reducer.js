@@ -115,7 +115,12 @@ function reducer(state, action) {
               :
                 ssePosts,
         sizeNotifi: action.payload?.authorNotifi === state.author?.id && action.payload?.authorNotifi2 !== state.author?.id  ? state.sizeNotifi + 1 : state.sizeNotifi,
-        notification: action.payload?.authorNotifi === state.author?.id && action.payload?.authorNotifi2 !== state.author?.id  ? [...[action.payload?.notification], ...state.notification] : state.notification,
+        notification: action.payload?.authorNotifi === state.author?.id && action.payload?.authorNotifi2 !== state.author?.id  ? 
+        [...[action.payload?.notification], ...state.notification] 
+        : action.payload?.posts ==="delete" ? 
+          state.notification.filter(item => item?.message[0]?._id !== action.payload?.id) 
+        :
+        state.notification,
         hotPosts: action.payload?.posts ==="delete" ? 
                     state.hotPosts.filter(item => item?._id !== action.payload?.id) 
                   : 

@@ -96,7 +96,7 @@ const CommentItem = (props) => {
                   Edit
                 </div>
                 <div className="content">
-                  <Delcomment id={props?._id} messageId={state.author?.id} />
+                  <Delcomment id={props?._id}/>
                 </div>
               </div>
             ) : (
