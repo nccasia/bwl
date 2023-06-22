@@ -87,9 +87,13 @@ function CommentInput(props) {
                 icon={openEmoji ? faXmark : faFaceSmile}
                 onClick={handleEmojiIconClick}
               />
-              {openEmoji && (
+              {openEmoji &&  (
                 <div className="emoji-box">
-                  <Picker data={data} onEmojiSelect={onEmojiClick} />
+                  <Picker 
+                    data={data} 
+                    onEmojiSelect={onEmojiClick} 
+                    theme={state.background ? "dark": "light"}
+                  />
                 </div>
               )}
             </div>
