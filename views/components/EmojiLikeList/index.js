@@ -95,7 +95,7 @@ const EmojiLikeList = (props) => {
                               alt={main.name}
                             />
                           ) : (
-                            <p className="emoji">{main?.name}</p>
+                            <p className="emoji">{main?.emoji}</p>
                           )}
                           <p>{main.count}</p>
                         </div>

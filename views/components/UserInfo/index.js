@@ -33,7 +33,7 @@ const UserInfo = (props) => {
             {formatDay(props?.createdTimestamp?.$numberDecimal || props?.createdTimestamp)}
           </p>
         </div>
-        {state.author?.id && state.author?.id === props?.authorId && (
+        {state.author?.id && state.author?.id === props?.author?.id && (
           <div className="delete-post-btn"
             onMouseLeave={handleContainerMouseLeave}>
             <div className="delete-icon" onClick={handleMoreIconClick}>
