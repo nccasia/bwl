@@ -82,7 +82,7 @@ const CommentItem = (props) => {
             {props?.onEdit && <p style={{ fontSize: '7px' }}>đã chỉnh sữa</p>}
           </div>
         </div>
-        {state.author?.id && props?.authorId === state.author?.id && (
+        {state.author?.id && props?.author[0]?.id === state.author?.id && (
           <div
             className="delete-comment-btn"
             onMouseLeave={handleContainerMouseLeave}

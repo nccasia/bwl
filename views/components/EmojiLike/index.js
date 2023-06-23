@@ -8,6 +8,7 @@ import EmojiLikeList from '../EmojiLikeList';
 import { useStore } from '../../store';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
+
 const EmojiLike = (props) => {
   const { state, dispatch } = useStore();
   const [like, setLike] = React.useState([]);
@@ -55,7 +56,6 @@ const EmojiLike = (props) => {
   };
 
   const [openList, setOpenList] = React.useState('');
-
   return (
     <ul className="container-item-reactTotal">
       <div className="dialog-like">
@@ -71,6 +71,7 @@ const EmojiLike = (props) => {
             <Tooltip
               arrow
               placement="top"
+              interactive
               open={openReactions === main.emoji ? true : false}
               onOpen={() => handleClickGetReactions(main)}
               onClose={() => setOpenReactions('')}
@@ -94,7 +95,7 @@ const EmojiLike = (props) => {
                         src={`https://cdn.discordapp.com/emojis/${
                           changeReactions(reactions)?.main?.id
                         }.png`}
-                        alt={changeReactions(reactions)?.main?.name}
+                        alt={changeReactions(reactions)?.main?.emoji}
                         style={{
                           width: '30px',
                           height: '30px',
@@ -106,12 +107,12 @@ const EmojiLike = (props) => {
                         className="reactions-emoji"
                         style={{ fontSize: '20px' }}
                       >
-                        {changeReactions(reactions)?.main?.name}
+                        {changeReactions(reactions)?.main?.emoji}
                       </p>
                     )}
                   </div>
                   <p>
-                    <b>{changeReactions(reactions)?.main?.name}:</b>
+                    <b>{changeReactions(reactions)?.main?.emoji}:</b>
                     {' đã được tương tác bởi: '}
                     {changeReactions(reactions)?.list?.length < 4 ? (
                       changeReactions(reactions)?.list?.join(', ')
@@ -131,16 +132,19 @@ const EmojiLike = (props) => {
                 </div>
               }
             >
-              <li className="list-inline-item list-reaction">
+              <li 
+                className="list-inline-item list-reaction"
+                onTouchStart={() => handleClickGetReactions(main)}
+              >
                 <div className="btn-reaction">
                   {main.id ? (
                     <img
                       className="emoji"
                       src={`https://cdn.discordapp.com/emojis/${main.id}.png`}
-                      alt={main.name}
+                      alt={main.emoji}
                     />
                   ) : (
-                    <p>{main?.name}</p>
+                    <p>{main?.emoji}</p>
                   )}
                   <span>{main.count}</span>
                 </div>
@@ -192,7 +196,10 @@ const EmojiLike = (props) => {
               </div>
             }
           >
-            <li className="list-inline-item list-reaction ">
+            <li 
+              className="list-inline-item list-reaction "
+              onTouchStart={handleClickGetLike}
+            >
               <div className="btn-reaction">
                 <ThumbUpOffAltIcon
                   className="emoji-like"
