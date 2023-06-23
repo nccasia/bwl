@@ -95,7 +95,7 @@ const EmojiLike = (props) => {
                         src={`https://cdn.discordapp.com/emojis/${
                           changeReactions(reactions)?.main?.id
                         }.png`}
-                        alt={changeReactions(reactions)?.main?.name}
+                        alt={changeReactions(reactions)?.main?.emoji}
                         style={{
                           width: '30px',
                           height: '30px',
@@ -107,12 +107,12 @@ const EmojiLike = (props) => {
                         className="reactions-emoji"
                         style={{ fontSize: '20px' }}
                       >
-                        {changeReactions(reactions)?.main?.name}
+                        {changeReactions(reactions)?.main?.emoji}
                       </p>
                     )}
                   </div>
                   <p>
-                    <b>{changeReactions(reactions)?.main?.name}:</b>
+                    <b>{changeReactions(reactions)?.main?.emoji}:</b>
                     {' đã được tương tác bởi: '}
                     {changeReactions(reactions)?.list?.length < 4 ? (
                       changeReactions(reactions)?.list?.join(', ')
@@ -141,10 +141,10 @@ const EmojiLike = (props) => {
                     <img
                       className="emoji"
                       src={`https://cdn.discordapp.com/emojis/${main.id}.png`}
-                      alt={main.name}
+                      alt={main.emoji}
                     />
                   ) : (
-                    <p>{main?.name}</p>
+                    <p>{main?.emoji}</p>
                   )}
                   {main.count}
                 </div>

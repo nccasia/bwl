@@ -150,8 +150,23 @@ export class AppService {
             from: 'komu_users',
             localField: 'authorId',
             foreignField: 'id',
-            as: 'author',
+            as: 'author1',
           },
+        },
+        {
+          $unwind: '$author1',
+        },
+        {
+          $project: {
+            content: 1,
+            onEdit: 1,
+            createdTimestamp: 1,
+            author: [{
+              username: "$author1.username",
+              avatar: "$author1.avatar",
+              id: "$author1.id",
+            }],
+          }
         },
       ])
       .exec();
@@ -261,8 +276,20 @@ export class AppService {
             from: 'komu_users',
             localField: 'authorId',
             foreignField: 'id',
-            as: 'author',
+            as: 'author1',
           },
+        },
+        {
+          $unwind: '$author1',
+        },
+        {
+          $project: {
+            author: [{
+              username: "$author1.username",
+              avatar: "$author1.avatar",
+              id: "$author1.id",
+            }],
+          }
         },
       ])
       .exec();
@@ -273,7 +300,7 @@ export class AppService {
         {
           $match: {
             messageId,
-            emoji
+            emoji,
           },
         },
         {
@@ -281,8 +308,21 @@ export class AppService {
             from: 'komu_users',
             localField: 'authorId',
             foreignField: 'id',
-            as: 'author',
+            as: 'author1',
           },
+        },
+        {
+          $unwind: '$author1',
+        },
+        {
+          $project: {
+            author: [{
+              username: "$author1.username",
+              avatar: "$author1.avatar",
+              id: "$author1.id",
+            }],
+            emoji:1,
+          }
         },
       ])
       .exec();
@@ -353,7 +393,7 @@ export class AppService {
         },
         {
           $project: {
-            messageId: 1
+            messageId: 1,
           }
         }
       ])
@@ -379,16 +419,39 @@ export class AppService {
             from: 'komu_bwls',
             localField: 'messageId',
             foreignField: 'messageId',
-            as: 'message'
+            as: 'message1'
           }
+        },
+        {
+          $unwind: '$message1' ,
         },
         {
           $lookup: {
             from: 'komu_users',
             localField: 'authorId',
             foreignField: 'id',
-            as: 'author',
+            as: 'author1',
           },
+        },
+        {
+          $unwind: '$author1',
+        },
+        {
+          $project: {
+            content:1,
+            createdTimestamp:1,
+            onComment: 1,
+            onLabel:1,
+            messageId:1,
+            author: [{
+              username: "$author1.username",
+              avatar: "$author1.avatar",
+              id: "$author1.id",
+            }],
+            message: [{
+              links: "$message1.links",
+            }]
+          }
         },
       ])
       .exec();
@@ -460,24 +523,10 @@ export class AppService {
     ];
     // eslint-disable-next-line prefer-const
     let data = await this.komuMessage.aggregate(aggregatorOpts as any).exec();
-    data.forEach((item : any) => {
-      item.reactions = item.reactions?.reduce((result: any, reaction: any) => {
-        const exists = result.find((e: any) => e.name === reaction.emoji);
-        const emojiWithId = emojis.find((e: any) => e.name === reaction.emoji);
-        if (exists) {
-          exists.count++;
-        } else {
-          result.push({
-            ...reaction,
-            name: reaction.emoji,
-            count: 1,
-            ...(emojiWithId ? { id: emojiWithId.id } : {}),
-          });
-        }
-        return result;
-      }, []);
-      item.likes = item.likes?.filter((e: any) => e.authorId === authorId).length >0 ? true : false;
-    })
+    for (const item of data) {
+      item.reactions = this.reduceReactions(item.reactions);
+      item.likes = item.likes?.filter((e: any) => e.authorId === authorId).length > 0 ? true : false;
+    }
     return data;
   }
   async postNotification(messageId: string) {
@@ -503,11 +552,11 @@ export class AppService {
           from: 'komu_users',
           localField: 'authorId',
           foreignField: 'id',
-          as: 'author',
+          as: 'author1',
         },
       },
       {
-        $unwind: '$author',
+        $unwind: '$author1',
       },
       {
         $lookup: {
@@ -527,6 +576,11 @@ export class AppService {
       },
       {
         $addFields: {
+          author: {
+            username: "$author1.username",
+            avatar: "$author1.avatar",
+            id: "$author1.id",
+          },
           totalComment: { $size: '$comments' },
           totalLike: { $size: '$likes' },
         },
@@ -539,9 +593,20 @@ export class AppService {
       },
       {
         $limit: 10,
+      },  
+      {
+        $unset: ['author1','comments', 'likes']
       },
       {
-        $unset: ['comments', 'likes']
+        $project: {
+          messageId: 1,
+          links: 1,
+          createdTimestamp: 1,
+          source:1,
+          author: 1,
+          totalComment: 1,
+          totalLike: 1
+        }
       },
     ]; 
     const data = await this.komuMessage.aggregate(aggregatorOpts as any).exec();
@@ -558,11 +623,11 @@ export class AppService {
           from: 'komu_users',
           localField: 'authorId',
           foreignField: 'id',
-          as: 'author',
+          as: 'author1',
         },
       },
       {
-        $unwind: '$author',
+        $unwind: '$author1',
       },
       {
         $lookup: {
@@ -590,36 +655,75 @@ export class AppService {
       },
       {
         $addFields: {
+          'reactions': {
+            $map: {
+              input: '$reactions',
+              as: 'reaction',
+              in: {
+                emoji: '$$reaction.emoji'
+              }
+            }
+          },
+          author: {
+            username: "$author1.username",
+            avatar: "$author1.avatar",
+            id: "$author1.id",
+          },
           totalComment: { $size: "$comments" },
           totalLike: { $size: "$likes" },
         }
       },      
       {
-        $unset: authorId ? ['comments'] : ['comments', 'likes'],
+        $unset: authorId ? ['author1', 'comments'] : ['author1', 'comments', 'likes'],
       },
+      {
+        $project: {
+          messageId: 1,
+          links: 1,
+          createdTimestamp: 1,
+          source:1,
+          author: 1,
+          reactions: 1,
+          totalComment: 1,
+          totalLike: 1
+        }
+      }
     ];
     // eslint-disable-next-line prefer-const
     let data = await this.komuMessage.aggregate(aggregatorOpts as any).exec();
     data=data.slice(-size);
-    data.forEach((item : any) => {
-      item.reactions = item.reactions?.reduce((result: any, reaction: any) => {
-        const exists = result.find((e: any) => e.name === reaction.emoji);
-        const emojiWithId = emojis.find((e: any) => e.name === reaction.emoji);
-        if (exists) {
-          exists.count++;
-        } else {
-          result.push({
-            ...reaction,
-            name: reaction.emoji,
-            count: 1,
-            ...(emojiWithId ? { id: emojiWithId.id } : {}),
-          });
-        }
-        return result;
-      }, []);
-      item.likes = item.likes?.filter((e: any) => e.authorId === authorId).length >0 ? true : false;
-    })
+    for (const item of data) {
+      item.reactions = this.reduceReactions(item.reactions);
+      item.likes = item.likes?.filter((e: any) => e.authorId === authorId).length > 0 ? true : false;
+    }
     return data;
+  }
+
+  reduceReactions(reactions: any) {
+    if (!reactions) {
+      return reactions;
+    }
+  
+    const reducedReactions = [];
+    const emojiMap = {};
+  
+    for (const reaction of reactions) {
+      const exists = emojiMap[reaction.emoji];
+      const emojiWithId = emojis.find((e) => e.name === reaction.emoji);
+      if (exists) {
+        exists.count++;
+      } else {
+        const newReaction = {
+          ...reaction,
+          count: 1,
+          ...(emojiWithId ? { id: emojiWithId.id } : {}),
+        };
+        reducedReactions.push(newReaction);
+        emojiMap[reaction.emoji] = newReaction;
+      }
+    }
+  
+    return reducedReactions;
   }
 
   async deletePost(id: string, messageId: string) {
