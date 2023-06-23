@@ -93,6 +93,7 @@ function CommentInput(props) {
                     data={data} 
                     onEmojiSelect={onEmojiClick} 
                     theme={state.background ? "dark": "light"}
+                    onClick={handleInputClick}
                   />
                 </div>
               )}

@@ -142,7 +142,7 @@ const EmojiLike = (props) => {
                   ) : (
                     <p>{main?.name}</p>
                   )}
-                  {main.count}
+                  <span>{main.count}</span>
                 </div>
               </li>
             </Tooltip>

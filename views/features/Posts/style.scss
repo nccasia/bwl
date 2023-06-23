@@ -19,6 +19,16 @@
     }
 }
 
+@media (max-width: 1200px){
+    .container-post{
+        padding: 10px 15% 50px 15% ;
+    }
+}
+@media (max-width: 950px){
+    .container-post{
+        padding: 0px 8% 50px 8% ;
+    }
+}
 @media (max-width: 768px){
     .container-post{
         padding: 20px 16px;
