@@ -5,6 +5,7 @@ import { Dialog, Tabs, Tab, Box} from '@mui/material';
 import { useStore } from '../../store';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import EmojiList  from "../EmojiList";
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
 const EmojiLikeList = (props) => {
   const { state, dispatch } = useStore();
@@ -21,9 +22,14 @@ const EmojiLikeList = (props) => {
       onClose={() => props.setOpen('')}
     >
       <div style={{ backgroundColor: state.background ? "#242526": "white"}}>
-        <h1 className="header-all">
-          Tất cả
-        </h1>
+        <div className="header-all">
+          <h1 >
+            Tất cả
+          </h1>
+          <p onClick={() => props.setOpen('')}>
+            <HighlightOffIcon sx={{fontSize: "20px"}}/>
+          </p>
+        </div>
         <Box className="box-reaction">
           <Tabs
             orientation="vertical"

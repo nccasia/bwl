@@ -9,7 +9,7 @@
     display: flex;
     gap: 3px;
     align-items: center;
-    width: 400px;
+    max-width: 400px;
     .list-inline-item {
       padding: 1px;
       //cursor: pointer;
@@ -19,14 +19,14 @@
         background-color: none;
         display: flex;
         align-items: center;
-        gap: 2px;
+        gap: 3px;
         .emoji-like {
           font-size: 20px;
         }
         .emoji {
           height: 15px;
         }
-        .icon-like{
+        .icon-like {
           font-size: 25px;
           color: #fff;
         }
@@ -45,7 +45,7 @@
     }
     .icon-cmt {
       font-size: 18px;
-      color: #6C7588
+      color: #6c7588;
     }
   }
 }

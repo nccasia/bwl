@@ -89,10 +89,10 @@
 }
 @keyframes fadeIn {
   from {
-    left: -300px;
+    transform: translateX(-300px);
   }
   to {
-    left: 0;
+    transform: translateX(0);
   }
 }
 
