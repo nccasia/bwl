@@ -12,38 +12,41 @@ import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 const EmojiLike = (props) => {
   const { state, dispatch } = useStore();
   const [like, setLike] = React.useState([]);
-  const [openLike, setOpenLike] = React.useState(false);
   const [reactions, setReactions] = React.useState([]);
-  const [openReactions, setOpenReactions] = React.useState('');
-  //const [reactions1, setReactions1] = React.useState([]);
-
-  const handleClickGetLike = async () => {
-    await getLikes(props?.messageId).then((item) => {
-      if (item?.likes) {
-        setLike(item?.likes);
+  const [open, setOpen] = React.useState('');
+  
+  React.useEffect(()=> {
+    const runList = async() => {
+      if(open==="like-icon-x"){
+        await getLikes({
+          messageId:props?.messageId,
+          size: false,
+          page: 1,
+        }).then((item) => {
+          if (item?.likes) {
+            setLike({likes: item?.likes, total: item?.total});
+          }
+        });
       }
-    });
-    setOpenLike(true);
-    setOpenReactions(false);
+      if(open !== "" && open!=="like-icon-x"){
+        await getReactions({
+          messageId: props?.messageId,
+          emoji: open,
+          size: false,
+          page: 1,
+        }).then((item) => {
+          setReactions({ list: item?.reactions, total: item?.total });
+        });
+      }
+    }
+    runList();
+  }, [open]);
+  
+  const handleClickGetLike = async () => {
+    setOpen("like-icon-x");
   };
   const handleClickGetReactions = async (index) => {
-    await getReactions({
-      messageId: props?.messageId,
-      emoji: index.emoji,
-    }).then((item) => {
-      setReactions({ list: item?.reactions, index: index });
-    });
-    setOpenReactions(index.emoji);
-    setOpenLike(false);
-  };
-  const changeReactions = (index) => {
-    if (index) {
-      let list = [];
-      index?.list?.forEach((item) => {
-        list.push(item?.author[0]?.username);
-      });
-      return { list, main: index.index };
-    }
+    setOpen(index.emoji);
   };
   const changeLike = (index) => {
     if (index) {
@@ -66,15 +69,74 @@ const EmojiLike = (props) => {
           listReactions={reactions?.list}
           {...props}
         />
+        {props?.totalLike > 0 ? (
+          <Tooltip
+            arrow
+            placement="top"
+            open={open === "like-icon-x"? true : false}
+            onOpen={handleClickGetLike}
+            onClose={() => setOpen("")}
+            title={
+              <div
+                className="dialog-like-list"
+                onClick={() => setOpenList('like-icon-x')}
+                style={{
+                  display: 'flex',
+                  gap: "5px",
+                  alignItems: 'center',
+                  padding: '8px',
+                  cursor: 'pointer',
+                }}
+              >
+                <ThumbUpOffAltIcon
+                  style={{ color: state.background ? '#6C7588' : 'black' }}
+                  className="emoji-like"
+                />
+                <p>
+                  <b>Like:</b>
+                  {' đã được tương tác bởi: '}
+                  {like && like?.total< 4 ? (
+                    changeLike(like?.likes).join(', ')
+                  ) : (
+                    <span>
+                      {changeLike(like?.likes)?.slice(0, 3).join(', ')}
+                      {' và '}
+                      <u>
+                        <button>
+                          {like?.total - 3}
+                          {' người khác'}
+                        </button>
+                      </u>
+                    </span>
+                  )}
+                </p>
+              </div>
+            }
+          >
+            <li 
+              className="list-inline-item list-reaction "
+              onTouchStart={handleClickGetLike}
+            >
+              <div className="btn-reaction">
+                <ThumbUpOffAltIcon
+                  className="emoji-like"
+                />
+                <span>
+                  {props?.totalLike}
+                </span>
+              </div>
+            </li>
+          </Tooltip>
+        ) : null}
         {props?.reactions?.map((main, index) => {
           return (
             <Tooltip
               arrow
               placement="top"
               interactive
-              open={openReactions === main.emoji ? true : false}
+              open={open === main.emoji ? true : false}
               onOpen={() => handleClickGetReactions(main)}
-              onClose={() => setOpenReactions('')}
+              onClose={() => setOpen("")}
               key={index}
               title={
                 <div
@@ -82,20 +144,18 @@ const EmojiLike = (props) => {
                   onClick={() => setOpenList(main.emoji)}
                   style={{
                     display: 'flex',
-                    gap: 5,
+                    gap: "5px",
                     alignItems: 'center',
                     padding: '8px',
                     cursor: 'pointer',
                   }}
                 >
                   <div>
-                    {changeReactions(reactions)?.main?.id ? (
+                    {main?.id ? (
                       <img
                         className="reactions-emoji"
-                        src={`https://cdn.discordapp.com/emojis/${
-                          changeReactions(reactions)?.main?.id
-                        }.png`}
-                        alt={changeReactions(reactions)?.main?.emoji}
+                        src={`https://cdn.discordapp.com/emojis/${main?.id}.png`}
+                        alt={main?.emoji}
                         style={{
                           width: '30px',
                           height: '30px',
@@ -107,23 +167,23 @@ const EmojiLike = (props) => {
                         className="reactions-emoji"
                         style={{ fontSize: '20px' }}
                       >
-                        {changeReactions(reactions)?.main?.emoji}
+                        {main?.emoji}
                       </p>
                     )}
                   </div>
                   <p>
-                    <b>{changeReactions(reactions)?.main?.emoji}:</b>
+                    <b>{main?.emoji}:</b>
                     {' đã được tương tác bởi: '}
-                    {changeReactions(reactions)?.list?.length < 4 ? (
-                      changeReactions(reactions)?.list?.join(', ')
+                    {reactions?.total <= 3 ? (
+                      changeLike(reactions?.list)?.join(', ')
                     ) : (
                       <span>
-                        {changeReactions(reactions)
-                          ?.list?.slice(0, 3)
+                        {changeLike(reactions?.list)
+                          ?.slice(0, 3)
                           .join(', ')}
                         {' và '}
                         <u>
-                          {changeReactions(reactions)?.list?.length - 3}
+                          {reactions?.total-3}
                           {' người khác'}
                         </u>
                       </span>
@@ -152,65 +212,6 @@ const EmojiLike = (props) => {
             </Tooltip>
           );
         })}
-        {props?.totalLike > 0 ? (
-          <Tooltip
-            arrow
-            placement="top"
-            open={openLike}
-            onOpen={handleClickGetLike}
-            onClose={() => setOpenLike(false)}
-            title={
-              <div
-                className="dialog-like-list"
-                onClick={() => setOpenList('like-icon-x')}
-                style={{
-                  display: 'flex',
-                  gap: 5,
-                  alignItems: 'center',
-                  padding: '8px',
-                  cursor: 'pointer',
-                }}
-              >
-                <ThumbUpOffAltIcon
-                  style={{ color: state.background ? '#6C7588' : 'black' }}
-                  className="emoji-like"
-                />
-                <p>
-                  <b>Like:</b>
-                  {' đã được tương tác bởi: '}
-                  {like && changeLike(like)?.length < 4 ? (
-                    changeLike(like).join(', ')
-                  ) : (
-                    <span>
-                      {changeLike(like)?.slice(0, 3).join(', ')}
-                      {' và '}
-                      <u>
-                        <button>
-                          {changeLike(like).length - 3}
-                          {' người khác'}
-                        </button>
-                      </u>
-                    </span>
-                  )}
-                </p>
-              </div>
-            }
-          >
-            <li 
-              className="list-inline-item list-reaction "
-              onTouchStart={handleClickGetLike}
-            >
-              <div className="btn-reaction">
-                <ThumbUpOffAltIcon
-                  className="emoji-like"
-                />
-                <span>
-                  {props?.totalLike}
-                </span>
-              </div>
-            </li>
-          </Tooltip>
-        ) : null}
       </div>
 
       <div

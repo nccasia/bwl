@@ -1,9 +1,13 @@
 .header-all {
-  padding: 15px;
-  font-weight: 500;
+  display: flex;
+  justify-content:space-between;
   border-bottom: 1px solid #80808042;
-  font-size: 17px;
   color: #6C7588;
+  padding: 15px;
+  h1{
+    font-weight: 500;
+    font-size: 17px;
+  }
 }
 
 .box-reaction {

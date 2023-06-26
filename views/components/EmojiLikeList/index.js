@@ -2,45 +2,18 @@
 import './style.scss';
 import React from 'react';
 import { Dialog, Tabs, Tab, Box} from '@mui/material';
-import { getLikes } from '../../api/apiLike';
-import { getReactions } from '../../api/apiReactions';
 import { useStore } from '../../store';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
+import EmojiList  from "../EmojiList";
+import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 
 const EmojiLikeList = (props) => {
   const { state, dispatch } = useStore();
-  const [like, setLike] = React.useState([]);
-  const [listReactions, setListReactions] = React.useState([]);
-  React.useEffect(() => {
-    const runList = async () => {
-      if (props.open !== '') {
-        if (props.like && props.open === 'like-icon-x') {
-          setLike(props.like);
-        }
-        if (props.listReactions && props.open !== 'like-icon-x') {
-          setListReactions(props.listReactions);
-        }
-      }
-    };
-    runList();
-  }, [props.open]);
+  
+  const [page, setPage]= React.useState(1);
   const handleChange = (event, newValue) => {
     props.setOpen(newValue);
-  };
-  const handleClickGetLike = async () => {
-    await getLikes(props?.messageId).then((item) => {
-      if (item?.likes) {
-        setLike(item?.likes);
-      }
-    });
-  };
-  const handleClickGetReactions = async (index) => {
-    await getReactions({
-      messageId: props?.messageId,
-      emoji: index.emoji,
-    }).then((item) => {
-      setListReactions(item?.reactions);
-    });
+    setPage(1);
   };
 
   return (
@@ -49,9 +22,14 @@ const EmojiLikeList = (props) => {
       onClose={() => props.setOpen('')}
     >
       <div style={{ backgroundColor: state.background ? "#242526": "white"}}>
-        <h1 className="header-all">
-          Tất cả
-        </h1>
+        <div className="header-all">
+          <h1 >
+            Tất cả
+          </h1>
+          <p onClick={() => props.setOpen('')}>
+            <HighlightOffIcon sx={{fontSize: "20px"}}/>
+          </p>
+        </div>
         <Box className="box-reaction">
           <Tabs
             orientation="vertical"
@@ -63,7 +41,6 @@ const EmojiLikeList = (props) => {
             {props?.totalLike > 0 && (
               <Tab
                 value="like-icon-x"
-                onClick={handleClickGetLike}
                 className="btn-reaction"
                 label={
                   <div className="button-emoji">
@@ -83,9 +60,6 @@ const EmojiLikeList = (props) => {
                       key={index}
                       value={main.emoji}
                       className="btn-reaction"
-                      onClick={() =>
-                        handleClickGetReactions({ emoji: main.emoji })
-                      }
                       label={
                         <div className="button-emoji">
                           {main.id ? (
@@ -106,34 +80,13 @@ const EmojiLikeList = (props) => {
               : null}
             <Tab value="" />
           </Tabs>
-          <div className="list-reaction">
-            {props.open !== 'like-icon-x' && listReactions && props.open
-              ? listReactions?.map((main, index) => {
-                  if (props.open === main?.emoji) {
-                    return (
-                      <div key={index} className="list-reaction-user">
-                        <img
-                          src={`https://cdn.discordapp.com/avatars/${main?.author[0]?.id}/${main?.author[0]?.avatar}`}
-                        />
-                        <p>{main?.author[0]?.username}</p>
-                      </div>
-                    );
-                  }
-                })
-              : null}
-            {props.open === 'like-icon-x' && like
-              ? like?.map((main, index) => {
-                  return (
-                    <div key={index} className="list-reaction-user">
-                      <img
-                        src={`https://cdn.discordapp.com/avatars/${main?.author[0]?.id}/${main?.author[0]?.avatar}`}
-                      />
-                      <p>{main?.author[0]?.username}</p>
-                    </div>
-                  );
-                })
-              : null}
-          </div>
+          <EmojiList 
+            page={page}
+            setPage={setPage}
+            messageId={props?.messageId}
+            open={props?.open}
+            setOpen={props?.setOpen}
+          />
         </Box>  
       </div>
     </Dialog>

@@ -263,7 +263,7 @@ export class AppService {
     } });
     return true;
   }
-  async getLikes(messageId: string) {
+  async getLikes(messageId: string, size: string, page: number) {
     return await this.komuLike
       .aggregate([
         {
@@ -271,6 +271,8 @@ export class AppService {
             messageId,
           },
         },
+        { $skip: (page - 1) * 5 },
+        { $limit: size ? 5: 3 },
         {
           $lookup: {
             from: 'komu_users',
@@ -283,18 +285,36 @@ export class AppService {
           $unwind: '$author1',
         },
         {
-          $project: {
+          $project: size === "true" ? 
+          {
             author: [{
               username: "$author1.username",
               avatar: "$author1.avatar",
               id: "$author1.id",
             }],
           }
+          : 
+          {
+            author: [{
+              username: "$author1.username",
+            }],
+          },
         },
       ])
       .exec();
   }
-  async getReactions(messageId: string, emoji: string) {
+  async getLikesLength(messageId: string) {
+    return this.komuLike
+      .aggregate([
+        {
+          $match: {
+            messageId,
+          },
+        },
+      ])
+      .exec();
+  }
+  async getReactions(messageId: string, emoji: string, size: string, page: number) {
     return this.komuReaction
       .aggregate([
         {
@@ -303,6 +323,8 @@ export class AppService {
             emoji,
           },
         },
+        { $skip: (page - 1) * 5 },
+        { $limit: size ? 5: 3 },
         {
           $lookup: {
             from: 'komu_users',
@@ -315,7 +337,8 @@ export class AppService {
           $unwind: '$author1',
         },
         {
-          $project: {
+          $project: size === "true" ? 
+          {
             author: [{
               username: "$author1.username",
               avatar: "$author1.avatar",
@@ -323,6 +346,24 @@ export class AppService {
             }],
             emoji:1,
           }
+          : 
+          {
+            author: [{
+              username: "$author1.username",
+            }],
+          },
+        },
+      ])
+      .exec();
+  }
+  async getReactionsLength(messageId: string, emoji: string) {
+    return this.komuReaction
+      .aggregate([
+        {
+          $match: {
+            messageId,
+            emoji,
+          },
         },
       ])
       .exec();
@@ -450,6 +491,7 @@ export class AppService {
             }],
             message: [{
               links: "$message1.links",
+              source: "$message1.source",
             }]
           }
         },
@@ -481,11 +523,11 @@ export class AppService {
           from: 'komu_users',
           localField: 'authorId',
           foreignField: 'id',
-          as: 'author',
+          as: 'author1',
         },
       },
       {
-        $unwind: '$author',
+        $unwind: '$author1',
       },
       {
         $lookup: {
@@ -510,16 +552,44 @@ export class AppService {
           foreignField: 'messageId',
           as: 'reactions',
         },
-      },
+      },     
       {
         $addFields: {
+          'reactions': {
+            $map: {
+              input: '$reactions',
+              as: 'reaction',
+              in: {
+                emoji: '$$reaction.emoji'
+              }
+            }
+          },
+          author: {
+            username: "$author1.username",
+            avatar: "$author1.avatar",
+            id: "$author1.id",
+          },
           totalComment: { $size: "$comments" },
           totalLike: { $size: "$likes" },
+          likes: "$likes",
         }
       },      
       {
-        $unset: authorId ? ['comments'] : ['comments', 'likes'],
+        $unset: authorId ? ['author1', 'comments'] : ['author1', 'comments', 'likes'],
       },
+      {
+        $project: {
+          messageId: 1,
+          links: 1,
+          createdTimestamp: 1,
+          source:1,
+          author: 1,
+          reactions: 1,
+          totalComment: 1,
+          totalLike: 1,
+          likes: 1,
+        }
+      }
     ];
     // eslint-disable-next-line prefer-const
     let data = await this.komuMessage.aggregate(aggregatorOpts as any).exec();
@@ -671,6 +741,7 @@ export class AppService {
           },
           totalComment: { $size: "$comments" },
           totalLike: { $size: "$likes" },
+          likes: "$likes",
         }
       },      
       {
@@ -685,7 +756,8 @@ export class AppService {
           author: 1,
           reactions: 1,
           totalComment: 1,
-          totalLike: 1
+          totalLike: 1,
+          likes: 1,
         }
       }
     ];
@@ -698,7 +770,6 @@ export class AppService {
     }
     return data;
   }
-
   reduceReactions(reactions: any) {
     if (!reactions) {
       return reactions;
@@ -725,7 +796,6 @@ export class AppService {
   
     return reducedReactions;
   }
-
   async deletePost(id: string, messageId: string) {
     const deletePost = await this.komuMessage.findOneAndDelete({
       _id: id,
@@ -738,7 +808,6 @@ export class AppService {
     } });
     return deletePost;
   }
-
   async editPost(id: string, messageId: string) {
     const editPost = await this.komuMessage.find({
       _id: id,

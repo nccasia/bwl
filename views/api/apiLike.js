@@ -5,7 +5,7 @@ import {showToast}  from "../util/showToast";
 export const getLikes = async (index) => {
     try {
         const res = await axios({
-            url: `/api/likes?messageId=${index}`,
+            url: `/api/likes?messageId=${index.messageId}&size=${index.size}&page=${index.page}`,
             method: "GET",
           });
         return res.data;

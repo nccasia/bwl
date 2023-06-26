@@ -325,9 +325,10 @@ export class AppController {
   @Get('/api/likes')
   async getLikes(@Req() req: Request, @Res() res: Response) {
     try {
-      const { messageId } = req.query;
-      const likes = await this.appService.getLikes(messageId as string);
-      return res.status(200).json({ likes });
+      const { messageId, size, page } = req.query;
+      const likes = await this.appService.getLikes(messageId as string, String(size) as string, Number(page) as number);
+      const total = await this.appService.getLikesLength(messageId as string);
+      return res.status(200).json({ likes, total: total?.length });
     } catch (error) {
       return res.status(500).json({message:"Internal Server Error"});
     }
@@ -336,9 +337,10 @@ export class AppController {
   @Get('/api/reactions')
   async getReactions(@Req() req: Request, @Res() res: Response) {
     try {
-      const { messageId, emoji } = req.query;
-      const reactions = await this.appService.getReactions(messageId as string, emoji as string);
-      return res.status(200).json({ reactions });
+      const { messageId, emoji, size, page } = req.query;
+      const reactions = await this.appService.getReactions(messageId as string, emoji as string, String(size) as string, Number(page) as number);
+      const total = await this.appService.getReactionsLength(messageId as string, emoji as string);
+      return res.status(200).json({ reactions, total: total?.length});
     } catch (error) {
       return res.status(500).json({message:"Internal Server Error"});
     }
