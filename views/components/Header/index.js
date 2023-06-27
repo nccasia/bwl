@@ -11,6 +11,9 @@ import { Link } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import SideBar from '../Sidebar';
+import {postNotification } from '../../api/apiNotification';
+import { Badge } from '@mui/material';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 
 function HeaderPage(props) {
   const { state, dispatch } = useStore();
@@ -19,6 +22,8 @@ function HeaderPage(props) {
   const handleClick = () => {
     setOpen(!open);
     setOpenNotification(false);
+    setIsHidden(false);
+    dispatch({ type: 'CHANGE_MENU', payload: false });
   };
   React.useEffect(() => {
     if (state.author?.id) {
@@ -28,13 +33,20 @@ function HeaderPage(props) {
     }
   }, [state.author?.id]);
   const handleNotification = async () => {
-    setOpenNotification(true);
+    setOpenNotification(!openNotification);
     setOpen(false);
+    setIsHidden(false);
+    dispatch({ type: 'CHANGE_MENU', payload: false });
+    if(openNotification && state?.notification[0]?.onLabel){
+      postNotification(state.author?.id, dispatch);
+    }
   };
   const [isHidden, setIsHidden] = React.useState(false);
   const openMenu =()=>{
     dispatch({ type: 'CHANGE_MENU', payload: !isHidden });
     setIsHidden(!isHidden);
+    setOpen(false);
+    setOpenNotification(false);
   }
   return (
     <nav
@@ -95,14 +107,10 @@ function HeaderPage(props) {
             }}
             onClick={handleNotification}
           >
-            <FontAwesomeIcon
-              icon={faBell}
-              style={{ color: openNotification ? 'white' : '#6C7588' }}
-            />
-            {state.sizeNotifi !== 0 && (
-              <p className="icon-notifi">{state.sizeNotifi}</p>
-            )}
-            {openNotification ? (
+            <Badge badgeContent={state.sizeNotifi} color="primary">
+              <NotificationsIcon sx={{ color: openNotification ? 'white' : '#6C7588'}} color="action" />
+            </Badge>
+            {openNotification && (
               <div
                 className={
                   state.background
@@ -110,9 +118,9 @@ function HeaderPage(props) {
                     : 'dialog-button-light dialog-button-light_notifi'
                 }
               >
-                <Notification setOpenNotification={setOpenNotification} />
+                <Notification setOpenNotification={setOpenNotification} openNotification={openNotification}/>
               </div>
-            ) : null}
+            )}
           </div>
           <div className="person-icon logout" onClick={() => handleClick()}>
             <img

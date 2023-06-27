@@ -22,8 +22,6 @@
         position: fixed;
         top: 59px;
         left: -300px; /* Vị trí ban đầu nằm ngoài màn hình */
-        // width: 300px;
-        // height: 100vh;
         background-color: #fff;
         transition: transform 1s ease; /* Áp dụng hiệu ứng chuyển động */
         transition-duration: 0.5s; /* Áp dụng hiệu ứng chuyển động */
@@ -32,7 +30,6 @@
       .open {
         left: 0; /* Di chuyển sidebar vào màn hình */
         transition-timing-function: linear;
-        // background-color: red;
       }
       .menu_icon {
         cursor: pointer;
@@ -92,10 +89,10 @@
 }
 @keyframes fadeIn {
   from {
-    left: -300px;
+    transform: translateX(-300px);
   }
   to {
-    left: 0;
+    transform: translateX(0);
   }
 }
 

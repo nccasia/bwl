@@ -44,7 +44,7 @@
     "dayjs": "^1.11.7",
     "dotenv": "^16.1.4",
     "emoji-mart": "^5.5.2",
-    "emoji-picker-react": "^4.4.8",
+    "emoji-picker-react": "^4.4.9",
     "express": "^4.17.3",
     "handlebars-helper-json": "^1.0.0",
     "hbs": "^4.2.0",

@@ -6,28 +6,23 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
-import { toast } from 'react-toastify';
 import { useStore } from '../../store';
 import './style.scss';
 import { deletePost } from '../../api/apiPosts';
 import UploadDialog from '../UploadDialog';
+import {showToast} from "../../util/showToast";
 
 const DelPost = (props) => {
   const { state, dispatch } = useStore();
   const handleDelete = async () => {
     if (state.author?.id) {
-      deletePost({ id: props?.id, messageId: state.author?.id });
+      deletePost({ id: props?.id, messageId: state.author?.id }).then(data => {
+        if(data){
+          showToast("success", data?.message)
+        }
+      });
     }
     setOpen(false);
-    toast.success('Đã xóa bài đăng thành công', {
-      position: 'bottom-right',
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
   };
   const [open, setOpen] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);

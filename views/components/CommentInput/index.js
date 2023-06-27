@@ -40,7 +40,6 @@ function CommentInput(props) {
     };
   }, []);
 
-  const [isPickerOpen, setPickerOpen] = React.useState(false);
   const handleEmojiIconClick = (event) => {
     event.stopPropagation();
     setOpenEmoji(!openEmoji);
@@ -88,9 +87,14 @@ function CommentInput(props) {
                 icon={openEmoji ? faXmark : faFaceSmile}
                 onClick={handleEmojiIconClick}
               />
-              {openEmoji && isPickerOpen && (
+              {openEmoji &&  (
                 <div className="emoji-box">
-                  <Picker data={data} onEmojiSelect={onEmojiClick} />
+                  <Picker 
+                    data={data} 
+                    onEmojiSelect={onEmojiClick} 
+                    theme={state.background ? "dark": "light"}
+                    onClick={handleInputClick}
+                  />
                 </div>
               )}
             </div>

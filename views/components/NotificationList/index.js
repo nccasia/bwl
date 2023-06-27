@@ -7,7 +7,7 @@ import { useStore } from '../../store';
 import CircularProgress from '@mui/material/CircularProgress';
 import {getNotification} from '../../api/apiNotification';
 
-const NotificationList = () => {
+const NotificationList = (props) => {
   const { state, dispatch } = useStore();
   const navigate = useNavigate();
   const handleChangePage = async (index) => {
@@ -15,10 +15,10 @@ const NotificationList = () => {
   };
 
   React.useEffect(() => {
-    if(state.author?.id && state.pageNotification > 0) {
+    if(state.author?.id && state.pageNotification > 0 && props?.openNotification) {
       getNotification({messageId: state.author.id, page: state.pageNotification}, dispatch)
     }
-  },[state.pageNotification, state.author?.id])
+  },[state.pageNotification, state.author?.id, props?.openNotification])
 
   return (
     <div>

@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
 import './style.scss';
-import {postNotification } from '../../api/apiNotification';
 import {useStore} from "../../store";
 import NotificationList  from "../NotificationList";
 import {useDataDebouncer} from '../../util/useDebounce';
@@ -19,17 +18,8 @@ const Notification = (props) => {
       }
     };
     scrollElement.addEventListener('scroll', handleScroll);
-    document.addEventListener('click', handleOutsideClick);
   }, [state.pageNotification, state.loadingNotifi]);
 
-  const handleOutsideClick = async (event) => {
-    if (spanRef.current && !spanRef.current.contains(event.target)) {
-      await props?.setOpenNotification(false);
-      if (state.author?.id) {
-        postNotification(state.author?.id, dispatch);
-      }
-    }
-  };
   return (
     <div 
       className="container" 
@@ -37,7 +27,7 @@ const Notification = (props) => {
       style={{ backgroundColor: state.background ? "#242526": "white", color: "#6C7588"}}
     >
       <h1 className="title-notifi"><b>Thông báo</b></h1>
-      <NotificationList />
+      <NotificationList openNotification={props?.openNotification}/>
     </div>
   );
 };
