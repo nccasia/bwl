@@ -36,7 +36,7 @@ function HeaderPage(props) {
     setOpenNotification(!openNotification);
     setOpen(false);
     setIsHidden(false);
-    dispatch({ type: 'CHANGE_MENU', payload: false });
+    dispatch({ type: 'CHANGE_MENU', payload: !openNotification  });
     if(openNotification && state?.notification[0]?.onLabel){
       postNotification(state.author?.id, dispatch);
     }
