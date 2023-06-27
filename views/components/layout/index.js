@@ -54,13 +54,19 @@ const MainContent = () => {
   return (
     <div style={{ backgroundColor: state.background ? "black": "#f5f5f500"}}>
       <div className="main-container">
-        <div className="sidebar-left">
+        <div 
+          className="sidebar-left"
+          style={{
+            opacity: state.onMenu ? 0.5 : 1,
+            pointerEvents: state.onMenu ? "none": "auto", 
+          }}
+        >
           <SideBar />
         </div>
         <div 
           className="main-content"
           style={{
-            opacity: state.onMenu ? 0.2 : 1,
+            opacity: state.onMenu ? 0.5 : 1,
             pointerEvents: state.onMenu ? "none": "auto", 
           }}
         >
@@ -78,7 +84,7 @@ const MainContent = () => {
             className="scrollUp"
             onClick={handleScrollUpClick} 
             style={{
-              opacity: state.onMenu ? 0.2 : 1,
+              opacity: state.onMenu ? 0.5 : 1,
               pointerEvents: state.onMenu ? "none": "auto", 
             }}
           />

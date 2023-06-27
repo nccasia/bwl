@@ -47,8 +47,8 @@ const Posts = () => {
         className="container-post"
         style={{ backgroundColor: state.background ? "black": "#f5f5f500"}}
       >
-        {state.loadingPost && state.changePage && (
-          <div className="notifi-progress">
+        {state.posts?.length === 0 && state.loadingPost && state.changePage && (
+          <div className="posts-progress">
             <CircularProgress />
           </div>
         )}
