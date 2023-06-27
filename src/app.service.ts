@@ -483,6 +483,7 @@ export class AppService {
             createdTimestamp:1,
             onComment: 1,
             onLabel:1,
+            onLike:1,
             messageId:1,
             author: [{
               username: "$author1.username",
