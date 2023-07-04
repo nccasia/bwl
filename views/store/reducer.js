@@ -51,9 +51,11 @@ function reducer(state, action) {
                 totalComment:
                   action.payload?.comment === 'add' || action.payload?.comment === 'addItem'
                     ? main.totalComment + 1
-                    : action.payload?.comment === 'delete' || action.payload?.comment === 'deleteItem'
-                    ? main.totalComment - 1
-                    : main.totalComment,
+                    : action.payload?.comment === 'deleteItem'
+                      ? main.totalComment - 1
+                      :action.payload?.comment === 'delete' ?
+                        main.totalComment - 1 - action.payload?.lengthItem
+                        : main.totalComment,
                 comments:
                   action.payload?.comment === 'add'
                     ? [...[{...action.payload,...{likeComment: 0, dislikeComment: 0, authorLike: null, itemList: [], length: 0}}], ...main?.comments]
@@ -61,7 +63,7 @@ function reducer(state, action) {
                       main?.comments?.map(item=> {
                         if(item?._id === action.payload?.item ){
                           if(item?.itemList?.length> 0){
-                            return {...item, length: item?.length+ 1, itemList: [...[action.payload],...item?.itemList]}
+                            return {...item, length: item?.length+ 1, itemList: [...[{...action.payload,...{likeComment: 0, dislikeComment: 0, authorLike: null,}}],...item?.itemList]}
                           } else{
                             return {...item, length: item?.length+ 1}
                           }
