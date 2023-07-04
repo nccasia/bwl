@@ -149,7 +149,7 @@ const CommentItem = (props) => {
                 </p>
                 )}
             </div>
-            {props?.onEdit && <p style={{ fontSize: '8px' }}>đã chỉnh sữa</p>}
+            {props?.onEdit && <p style={{ fontSize: '8px' }}>đã chỉnh sửa</p>}
           </div>
         </div>
         {state.author?.id && props?.author[0]?.id === state.author?.id && (
