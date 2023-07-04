@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import './style.scss';
-import UserInfo from '../userInfo';
+import UserInfo from '../UserInfo';
 import React from 'react';
 import { useStore } from '../../store';
 import { getComment } from '../../api/apiComment';
