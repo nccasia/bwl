@@ -23,12 +23,12 @@
       line-height: 1.3;
     }
   }
-  &:hover .delete-post-btn {
-    display: block;
-    cursor: pointer;
-  }
+  // &:hover .delete-post-btn {
+  //   display: block;
+  //   cursor: pointer;
+  // }
   .delete-post-btn {
-    display: none;
+    cursor: pointer;
     position: relative;
     .dialog-form-light {
       display: flex;

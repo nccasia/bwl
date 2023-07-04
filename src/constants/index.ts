@@ -158,4 +158,6 @@ export const emojis = [
   { id: '1107981556766740540', name: 'good_boy_hn1' },
   { id: '1021330442374352966', name: 'ruou_ngon' },
   { id: '1005313799156416563', name: 'OR' },
+  { id: '1026413635435765841', name: 'huh' },
+  { id: '1097030219489087509', name: 'becuong' },
 ];
