@@ -49,19 +49,41 @@ function reducer(state, action) {
               return {
                 ...main,
                 totalComment:
-                  action.payload?.comment === 'add'
+                  action.payload?.comment === 'add' || action.payload?.comment === 'addItem'
                     ? main.totalComment + 1
-                    : action.payload?.comment === 'delete'
+                    : action.payload?.comment === 'delete' || action.payload?.comment === 'deleteItem'
                     ? main.totalComment - 1
                     : main.totalComment,
                 comments:
                   action.payload?.comment === 'add'
-                    ? [...[action.payload], ...main?.comments]
-                    : action.payload?.comment === 'delete'
+                    ? [...[{...action.payload,...{likeComment: 0, dislikeComment: 0, authorLike: null, itemList: [], length: 0}}], ...main?.comments]
+                    : action.payload?.comment === 'addItem' && main?.comments?.length >0 ? 
+                      main?.comments?.map(item=> {
+                        if(item?._id === action.payload?.item ){
+                          if(item?.itemList?.length> 0){
+                            return {...item, length: item?.length+ 1, itemList: [...[action.payload],...item?.itemList]}
+                          } else{
+                            return {...item, length: item?.length+ 1}
+                          }
+                        }
+                        else{
+                          return item
+                        }
+                      })
+                      : action.payload?.comment === 'delete'
                     ? main?.comments?.filter(
                         (item) => item?._id !== action.payload?.id,
                       )
-                    : action.payload?.comment === 'edit'
+                    : action.payload?.comment === 'deleteItem'? 
+                      main?.comments?.map(item=> {
+                        if(item?._id === action.payload?.item){
+                          return {...item, length: item?.length - 1, itemList: item?.itemList?.filter(e=> e._id !==action.payload?.id)}
+                        }
+                        else{
+                          return item
+                        }
+                      })
+                    :action.payload?.comment === 'edit'
                     ? main?.comments.map((item) => {
                         if (item._id === action.payload?.id) {
                           return {
@@ -74,7 +96,96 @@ function reducer(state, action) {
                           return item;
                         }
                       })
-                    : main?.comments,
+                    : action.payload?.comment === 'editItem'? 
+                      main?.comments?.map(item=> {
+                        if(item?._id === action.payload?.item){
+                          return {
+                            ...item, 
+                            itemList: item?.itemList?.map(e=>{
+                              if(e?._id === action.payload?.id){
+                                return {
+                                  ...e,
+                                  content: action.payload?.input,
+                                  onEdit: action.payload?.onEdit,
+                                  createdTimestamp: action.payload?.createdTimestamp,
+                                };
+                              }else{
+                                return e;
+                              }
+                            })
+                          }
+                        }
+                        else{
+                          return item
+                        }
+                      })
+                      :action.payload?.comment === 'commentLike' ? 
+                        main?.comments?.map(item=> {
+                          if(item?._id === action.payload?.commentId){
+                            return {
+                              ...item, 
+                              likeComment: 
+                                action.payload?.onLikeComment=== true? 
+                                  item?.likeComment + 1 
+                                  : action.payload?.onLikeComment=== false && action.payload?.test? 
+                                    item?.likeComment-1 
+                                    :action.payload?.onLikeComment=== null &&  item?.authorLike === true? 
+                                      item?.likeComment -1 
+                                      : item?.likeComment,
+                              dislikeComment: 
+                                action.payload?.onLikeComment=== false? 
+                                  item?.dislikeComment + 1 
+                                  : action.payload?.onLikeComment=== true && action.payload?.test? 
+                                    item?.dislikeComment -1 
+                                    : action.payload?.onLikeComment=== null &&  item?.authorLike === false? 
+                                      item?.dislikeComment -1 
+                                      :item?.dislikeComment,
+                              authorLike: action.payload?.onLikeComment,
+                            }
+                          }
+                          else{
+                            return item
+                          }
+                        })
+                        :action.payload?.comment === 'commentLikeItem'? 
+                          main?.comments?.map(item=> {
+                            if(item?._id === action.payload?.item){
+                              return {
+                                ...item,
+                                itemList:
+                                  item?.itemList?.map(e => {
+                                    if(e?._id === action.payload?.commentId){
+                                      return {
+                                        ...e, 
+                                        likeComment: 
+                                          action.payload?.onLikeComment=== true ? 
+                                            e?.likeComment + 1 
+                                            : action.payload?.onLikeComment=== false && action.payload?.test? 
+                                              e?.likeComment-1 
+                                              :action.payload?.onLikeComment=== null &&  e?.authorLike === true? 
+                                                e?.likeComment -1 
+                                                : e?.likeComment,
+                                        dislikeComment: 
+                                          action.payload?.onLikeComment=== false ? 
+                                            e?.dislikeComment + 1 
+                                            : action.payload?.onLikeComment=== true && action.payload?.test? 
+                                              e?.dislikeComment -1 
+                                              : action.payload?.onLikeComment=== null &&  e?.authorLike === false? 
+                                                e?.dislikeComment -1 
+                                                :e?.dislikeComment,
+                                        authorLike: action.payload?.onLikeComment,
+                                      }
+                                    }else{
+                                      return e
+                                    }
+                                })
+                              }
+                            } else{
+                              return item;
+                            }
+                            
+                          })
+                          :main?.comments,
               };
             } else {
               return main;
@@ -139,7 +250,6 @@ function reducer(state, action) {
           ...main,
           ...{
             comments: [],
-            pageComment: 1,
           },
         };
       });
@@ -228,7 +338,7 @@ function reducer(state, action) {
       };
     case 'CHANGE_PAGE':
       const numberPosts = Math.ceil(state.lengthPosts / 5);
-      const count = updateSize(action.payload, state.posts?.length);
+      const count = updateSize(state.posts?.length);
       return {
         ...state,
         loadingPost:
@@ -265,8 +375,11 @@ function reducer(state, action) {
         if (main.messageId === action.payload?.messageId) {
           return {
             ...main,
-            comments: action.payload?.comments,
-            pageComment: 1,
+            comments: action.payload?.type ? action.payload?.list : [...main.comments, ...action.payload?.list],
+            ...{
+              page: action.payload?.type ? 1 : action.payload?.page,
+              size: action.payload?.size,
+            }
           };
         } else {
           return main;
@@ -276,13 +389,29 @@ function reducer(state, action) {
         ...state,
         posts: listComment,
       };
-    case 'SET_COMMENTS_PAGE':
-      const listCommentPage = state.posts.map((main) => {
+    case 'CHANGE_MENU':
+      return {
+        ...state,
+        onMenu: action.payload,
+      };
+    case 'SET_COMMENTS_ITEM':
+      const listCommentItem = state.posts.map((main) => {
         if (main.messageId === action.payload?.messageId) {
+          const listItemComment= main?.comments.map(item=>{
+            if(item?._id === action.payload?.id){
+              const itemList=action.payload?.list;
+              const addItem={
+                page: action.payload?.type ? 1 : action.payload?.page,
+                size: action.payload?.size,
+              }
+              return action.payload?.type ? {...item, itemList, ...addItem} : {...item, itemList: [...item?.itemList, ...itemList], ...addItem};
+            } else{
+              return item;
+            }
+          })
           return {
             ...main,
-            comments: [...main.comments, ...action.payload.comments],
-            pageComment: main.pageComment + 1,
+            comments: listItemComment,
           };
         } else {
           return main;
@@ -290,12 +419,7 @@ function reducer(state, action) {
       });
       return {
         ...state,
-        posts: listCommentPage,
-      };
-    case 'CHANGE_MENU':
-      return {
-        ...state,
-        onMenu: action.payload,
+        posts: listCommentItem,
       };
     default:
       throw new Error('Error');

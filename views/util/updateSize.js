@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 
-export const updateSize = (page, length) => {
+export const updateSize = (length) => {
     const count = length % 5;
     const changePage= Math.ceil(length/5);
     if(count===0){

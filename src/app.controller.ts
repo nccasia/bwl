@@ -202,6 +202,18 @@ export class AppController {
     }
   }
 
+  @Get('/api/comment/item')
+  async getCommentItem(@Req() req: Request, @Res() res: Response) {
+    try{
+      const { id , page, size, messageId, commentId } = req.query;  
+      const item= await this.appService.getCommentsItem(String(id) as string, String(commentId), String(messageId), Number(page), Number(size));
+      const total = await this.appService.getCommentsItemLength(String(commentId), messageId as string);
+    return res.status(200).json({ item, size: total?.length });
+    } catch (error) {
+      return res.status(500).json({message:"Internal Server Error"});
+    }
+  }
+
   @Post('/api/comment')
   async postComment(@Req() req: Request, @Res() res: Response) {
     if (!req.cookies['token']) {
@@ -226,6 +238,7 @@ export class AppController {
             content,
             messageId,
             authorId,
+            id: req.body?.id,
           });
           return res.json(true);
         },
@@ -240,9 +253,10 @@ export class AppController {
   @Get('/api/comments')
   async getComments(@Req() req: Request, @Res() res: Response) {
     try {
-      const { messageId, page } = req.query;
-      const comments = await this.appService.getComments(messageId as string, Number(page), 5);
-      return res.status(200).json({ comments });
+      const { messageId, id, page, size } = req.query;
+      const comments = await this.appService.getComments(messageId as string, String(id),  Number(page), Number(size));
+      const total = await this.appService.getCommentsItemLength(null, messageId as string);
+      return res.status(200).json({ comments, size: total?.length });
     } catch (error) {
       return res.status(500).json({message:"Internal Server Error"});
     }
@@ -444,6 +458,22 @@ export class AppController {
       fs.copyFileSync(file.path, destinationPath);
       await this.appService.updatePost(id as string, file.filename as string);
       return res.status(200).json({ message: "Edit image successfully!" });
+    } catch (error) {
+      return res.status(500).json({message:"Internal Server Error"});
+    }
+  }
+
+  @Post('/api/comment/like')
+  async postCommentLike(@Req() req: Request, @Res() res: Response) {
+    try{
+      const { messageId, id, onLike, commentId } = req.body;
+      await this.appService.postLikeComment(
+        messageId as string,
+        id as string,
+        String(onLike) ==="true" ? true: false,
+        commentId as string,
+      );
+      return res.status(200).json({ message: "Read notification successfully!" });
     } catch (error) {
       return res.status(500).json({message:"Internal Server Error"});
     }

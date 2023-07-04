@@ -19,12 +19,7 @@ const ContainerItem = (props) => {
   const handleClick = async (index) => {
     setOpen(!open);
     if (open === false) {
-      getComment({ messageId: index, page: 1 }).then((data) =>
-        dispatch({
-          type: 'SET_COMMENTS',
-          payload: { comments: data, messageId: index },
-        }),
-      );
+      getComment({messageId: index, page: 1, size: 5, type: true, id: state.author?.id}, dispatch);
     }
   };
 
@@ -80,7 +75,9 @@ const ContainerItem = (props) => {
           <span>Comment </span>
         </span>
       </div>
-      {open && <Comment {...props} />}
+      {open && (
+        <Comment {...props} />
+      )}
     </div>
   );
 };
