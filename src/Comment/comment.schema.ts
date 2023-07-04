@@ -23,6 +23,10 @@ export class Comment {
 
   @Prop()
   createdTimestamp: number;
+
+  @Prop()
+  item: string | null;
+
 }
 
 export const CommentSchema = SchemaFactory.createForClass(Comment);

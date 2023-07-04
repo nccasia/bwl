@@ -28,7 +28,7 @@ export class Message {
   authorId: string;
 
   @Prop()
-  source: boolean;
+  source: boolean ;
 }
 
 export const MessageSchema = SchemaFactory.createForClass(Message);
