@@ -13,15 +13,19 @@ function Comment(props) {
   const { state, dispatch } = useStore();
   const [input, setInput] = React.useState('');
   const handleClickComment = async () => {
-    if (state.author?.id) {
-      await postComment({
-        authorId: state.author?.id,
-        content: input,
-        messageId: props?.messageId,
-      })
-      setInput('');
-    } else {
-      showToast("warning", 'Bạn cần đăng nhập để bình luận!');
+    if(input !== ""){
+      if (state.author?.id) {
+        await postComment({
+          authorId: state.author?.id,
+          content: input,
+          messageId: props?.messageId,
+        })
+        setInput('');
+      } else {
+        showToast("warning", 'Bạn cần đăng nhập để bình luận!');
+      }
+    }else{
+      showToast("warning", "Không để trống");
     }
   };
   const [page, setPage] = React.useState(0);
