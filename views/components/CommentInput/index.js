@@ -48,8 +48,7 @@ function CommentInput(props) {
     if (openEmoji) {
       setOpenEmoji(false);
     }
-  };
-  
+  };  
   
   return (
     <div
