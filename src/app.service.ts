@@ -248,6 +248,8 @@ export class AppService {
       _id: id,
       authorId: messageId,
     }).exec();
+    const deleteItem: any = await this.komuComment.find({item: id}).exec();
+    await this.komuComment.deleteMany({item: id}).exec();
     const message = await this.komuMessage.find({ messageId: deleteComment?.messageId }).exec();
     if(message[0]?.authorId !==messageId){
       const createdTimestamp = new Date().getTime();
@@ -262,7 +264,8 @@ export class AppService {
       await notification.save();
       const author = await this.komuUser.find({ id: messageId }).exec();
       this.addEvent({ data: { 
-        comment: deleteComment?.item ? "deleteItem" : "delete", 
+        comment: deleteComment?.item ? "deleteItem" : "delete",
+        lengthItem:  deleteItem?.length, 
         id, 
         messageId: deleteComment?.messageId,
         item: deleteComment?.item,
@@ -273,6 +276,7 @@ export class AppService {
     } else{
       this.addEvent({ data: { 
         comment: deleteComment?.item ? "deleteItem" : "delete", 
+        lengthItem:  deleteItem?.length,
         id, 
         messageId: deleteComment?.messageId,
         item: deleteComment?.item,

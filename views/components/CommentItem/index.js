@@ -26,12 +26,18 @@ const CommentItem = (props) => {
     }
   }, [props?.content]);
   const handleClickComment = async () => {
-    if (state.author?.id) {
-      await editComment({
-        id: props?._id,
-        content: input,
-        messageId: state.author?.id,
-      });
+    if(input !== ""){
+      if (state.author?.id) {
+        await editComment({
+          id: props?._id,
+          content: input,
+          messageId: state.author?.id,
+        });
+      } else {
+        showToast("warning", 'Bạn cần đăng nhập để bình luận!');
+      }
+    } else{
+      showToast("warning", "Không để trống");
     }
     setOpenEdit(false);
   };
@@ -55,15 +61,21 @@ const CommentItem = (props) => {
   } 
 
   const handleClickCommentFeedback = async (index) => {
-    if (state.author?.id) {
-      await postComment({
-        authorId: state.author?.id,
-        content: feedback,
-        messageId: props?.messageId,
-        id: index,
-      })
-      setFeedback('');
-      setOpenFeedback(false);
+    if(feedback !== ""){
+      if (state.author?.id) {
+        await postComment({
+          authorId: state.author?.id,
+          content: feedback,
+          messageId: props?.messageId,
+          id: index,
+        })
+        setFeedback('');
+        setOpenFeedback(false);
+      } else {
+        showToast("warning", 'Bạn cần đăng nhập để bình luận!');
+      }
+    }else{
+      showToast("warning", "Không để trống");
     }
   };
 
@@ -148,7 +160,7 @@ const CommentItem = (props) => {
                 </p>
                 )}
             </div>
-            {props?.onEdit && <p style={{ fontSize: '8px' }}>đã chỉnh sữa</p>}
+            {props?.onEdit && <p style={{ fontSize: '8px' }}>đã chỉnh sửa</p>}
           </div>
         </div>
         {state.author?.id && props?.author[0]?.id === state.author?.id && (

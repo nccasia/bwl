@@ -59,7 +59,7 @@ function FeedbackComment(props){
                                 <CommentItem {...main} type="false"/>
                             </div>
                         )): null}
-                        { open && numberComment > page && <p className="show-page-comment" onClick={() => handleClickPage(page)}>Xem thêm</p>}
+                        { open && numberComment > page && <p className="show-page-comment" onClick={() => handleClickPage(page)}>See More</p>}
                     </div>
                 </div>
             )}
