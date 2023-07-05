@@ -4,9 +4,15 @@ import React from 'react';
 import { formatDay } from '../../util/formatDay';
 import { useStore } from '../../store';
 import CommentInput from '../CommentInput';
-import { editComment } from '../../api/apiComment';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import Delcomment from '../delcomment';
+import FeedbackComment  from "../FeedbackComment";
+import { postComment, postCommentLike, editComment  } from '../../api/apiComment';
+import {showToast}  from "../../util/showToast";
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
+import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
+import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
+import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 
 const CommentItem = (props) => {
   const { state, dispatch } = useStore();
@@ -42,15 +48,52 @@ const CommentItem = (props) => {
   const handleContainerMouseLeave = () => {
     setOpen(false);
   };
+  const [openFeedback , setOpenFeedback ] = React.useState(false);
+  const [feedback , setFeedback ] = React.useState("");
+  const handleClickFeedback =() => {
+    setOpenFeedback(!openFeedback);
+  } 
+
+  const handleClickCommentFeedback = async (index) => {
+    if (state.author?.id) {
+      await postComment({
+        authorId: state.author?.id,
+        content: feedback,
+        messageId: props?.messageId,
+        id: index,
+      })
+      setFeedback('');
+      setOpenFeedback(false);
+    }
+  };
+
+  const handleClickLikeComment =(index)=>{
+    if(state.author?.id){
+      if(state.author?.id !==props?.author[0]?.id){
+        postCommentLike({
+          messageId: props?.messageId, 
+          id: state.author?.id, 
+          onLike: index, 
+          commentId: props?._id,
+        })
+      } else{
+        showToast("warning", "Gian lận không tốt đâu!")
+      }
+    } else{
+      showToast("warning", "Bạn nên đăng nhập!");
+    }
+  }
 
   return (
     <div className="comment-item">
       <div className="author-avatar">
-        <img
-          src={`https://cdn.discordapp.com/avatars/${props?.author[0].id}/${props?.author[0].avatar}`}
-          className="img-people"
-          alt="avatar"
-        />
+        <div className="author-image">
+          <img
+            src={`https://cdn.discordapp.com/avatars/${props?.author[0].id}/${props?.author[0].avatar}`}
+            className="img-people"
+            alt="avatar"
+          />
+        </div>
         <div className="author-boxcontent">
           <div    
             className="author-name"
@@ -61,6 +104,13 @@ const CommentItem = (props) => {
           >
             <div className="author-name-item">
               <p className="name">{props?.author[0]?.username}</p>
+              <div className="comment-time">
+                {formatDay(
+                  props?.createdTimestamp
+                    ? props?.createdTimestamp
+                    : props?.comment?.createdTimestamp,
+                )}
+              </div>
             </div>
             {!openEdit && <p className="comment">{props?.content}</p>}
             {openEdit && (
@@ -72,14 +122,33 @@ const CommentItem = (props) => {
             )}
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '5px',  marginLeft: "15px" }}>
-            <div className="comment-time">
-              {formatDay(
-                props?.createdTimestamp
-                  ? props?.createdTimestamp
-                  : props?.comment?.createdTimestamp,
-              )}
+            <div className="comment-like-div">
+              <p onClick={()=>handleClickLikeComment(true)}>
+                {props.likeComment}
+                {props?.authorLike=== true?
+                  <ThumbUpAltIcon sx={{fontSize: "15px"}}/>
+                  :
+                  <ThumbUpOffAltIcon sx={{fontSize: "15px"}}/>
+                }
+              </p>
+              <p onClick={()=>handleClickLikeComment(false)}>
+                {props.dislikeComment}
+                {props?.authorLike === false?
+                  <ThumbDownAltIcon sx={{fontSize: "15px"}}/>
+                  :
+                  <ThumbDownOffAltIcon sx={{fontSize: "15px"}}/>
+                }
+              </p>
+              {props?.type==="true" && (
+                <p 
+                  style={{ fontSize: '12px' }}
+                  onClick={handleClickFeedback}
+                >
+                  Reply
+                </p>
+                )}
             </div>
-            {props?.onEdit && <p style={{ fontSize: '7px' }}>đã chỉnh sữa</p>}
+            {props?.onEdit && <p style={{ fontSize: '8px' }}>đã chỉnh sữa</p>}
           </div>
         </div>
         {state.author?.id && props?.author[0]?.id === state.author?.id && (
@@ -104,6 +173,23 @@ const CommentItem = (props) => {
             )}
           </div>
         )}
+      </div>
+      <div>
+        {openFeedback && (
+          <CommentInput 
+            handleClickComment={() => handleClickCommentFeedback(props?._id)}
+            input={feedback}
+            setInput={setFeedback}
+          />
+        )}
+        <FeedbackComment 
+          length={props?.length} 
+          item={props?.itemList}
+          id={props?._id}
+          messageId={props?.messageId}
+          page={props.page}
+          size={props.size}
+        />
       </div>
     </div>
   );

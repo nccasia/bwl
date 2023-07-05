@@ -7,6 +7,7 @@ import { postComment } from '../../api/apiComment';
 import CommentInput from '../CommentInput';
 import { getComment } from '../../api/apiComment';
 import {showToast}  from "../../util/showToast";
+import {updateSize} from "../../util/updateSize";
 
 function Comment(props) {
   const { state, dispatch } = useStore();
@@ -23,17 +24,25 @@ function Comment(props) {
       showToast("warning", 'Bạn cần đăng nhập để bình luận!');
     }
   };
-  const numberComment = Math.ceil(props?.totalComment / state.size);
-  const handleClickPage = async(index) => {
-    if(numberComment > index){
-      getComment({messageId: props?.messageId, page: index + 1}).then((data) =>
-        dispatch({
-          type: 'SET_COMMENTS_PAGE',
-          payload: { comments: data, messageId: props?.messageId },
-        }),
-      );
+  const [page, setPage] = React.useState(0);
+  const [size, setSize] = React.useState(0);
+  React.useEffect(()=>{
+    if(props?.size){
+      setSize(props?.size);
     }
-  }  
+    if(props.page){
+      setPage(props.page);
+    }
+  },[props?.size, props.page]); 
+  const numberComment= Math.ceil(size / 5);
+  const handleClickPage = async(index) => {
+    if(numberComment > index && numberComment >0){
+      const test = updateSize(props?.comments?.length);
+      getComment({messageId: props?.messageId, page: test?.page, size: test?.size, id: state.author?.id}, dispatch);
+      setPage(test?.page);
+      setSize(test?.size);
+    }
+  } 
 
   return (
     <div className="container-comment">
@@ -46,11 +55,22 @@ function Comment(props) {
         ? props?.comments
             .map((comment, index) => (
               <div className="comment" key={index}>
-                <CommentItem {...comment} />
+                <CommentItem 
+                  {...comment} 
+                  messageId={props?.messageId} 
+                  type="true"
+                />
               </div>
             ))
         : null}
-      { numberComment > props?.pageComment && <p className="show-page-comment" onClick={() => handleClickPage(props?.pageComment)}>Xem thêm</p>}
+      {numberComment > page && (
+        <p 
+          className="show-page-comment" 
+          onClick={() => handleClickPage(page)}
+        >
+          Xem thêm
+        </p>
+      )}
     </div>
   );
 }

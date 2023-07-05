@@ -1,9 +1,11 @@
 .comment-item {
-  margin-top: 20px;
-  display: flex;
-  justify-content: space-between;
+  //margin-top: 20px;
+  // display: flex;
+  // justify-content: space-between;
+  margin-left: 20px;
+  padding-top: 15px;
   width: 100%;
-  padding: 0px 16px 16px 16px;
+  //padding: 0px 16px 16px 16px;
   .author-avatar {
     display: flex;
     // justify-content: center;
@@ -13,12 +15,26 @@
     align-items: center;
     gap: 5px;
     position: relative;
-    img {
-      border-radius: 50%;
-      vertical-align: middle;
-      border-style: none;
-      max-width: 50px;
-      max-height: 50px;
+    margin-bottom: 10px;
+    .author-image{
+      display: flex;
+      align-items: center;
+      div{
+        // content: "";
+        // //position: absolute;
+        // top: 0;
+        // left: 10px; /* Điều chỉnh khoảng cách của đường nối dọc */
+        // width: 10px; /* Độ dài đường nối dọc */
+        // height: 20px; /* Độ cao đường nối dọc */
+        // background: linear-gradient(#6C7588, #6C7588) center/100% 3px no-repeat;
+      }
+      img {
+        border-radius: 50%;
+        vertical-align: middle;
+        border-style: none;
+        max-width: 50px;
+        max-height: 50px;
+      }
     }
     .author-boxcontent {
       gap: 5px;
@@ -38,19 +54,24 @@
         padding: 10px;
         background: #242526f7;
         max-width: 500px;
-        .name {
-          font-weight: 500;
+        .author-name-item{
+          display: flex;
+          align-items: center;
+          gap: 5px;
+          .name {
+            font-weight: 500;
+          }
+          .comment-time {
+            font-size: 7px;
+            font-weight: 400;
+            color: #6C7588;
+          }
         }
         .comment {
           font-size: 0.8rem;
           line-height: 1.3;
           overflow-wrap: break-word;
         }
-      }
-      .comment-time {
-        font-size: 7px;
-        font-weight: 400;
-        color: #5b5b5b;
       }
     }
 
@@ -122,6 +143,19 @@
     }
   }
 }
+
+
+.comment-like-div{
+  display: flex; 
+  gap: 5px;
+  p{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    cursor: pointer;
+  }
+}
 @media (max-width: 768px){
   .comment-item{
     .author-avatar {
@@ -172,6 +206,7 @@
 }
 @media (max-width: 550px){
   .comment-item{
+    width: auto;
     .author-avatar {
       .author-boxcontent{
         .author-name{
