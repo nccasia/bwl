@@ -24,6 +24,10 @@ const NotificationList = (props) => {
     <div>
       {state.notification
         ? state.notification.map((main, index) => {
+          const truncatedContent =
+              main?.content.length > 20
+                ? `${main?.content.substring(0, 20)}...`
+                : main?.content;
             return (
               <div
                 key={index}
@@ -48,7 +52,7 @@ const NotificationList = (props) => {
                         </b>
                         {' đã' + main?.onComment +' bình luận bài viết của bạn có nội dung:'}
                       </p>
-                      <p>{main?.content}</p>
+                      <p>{truncatedContent}</p>
                       <p className="time-notifi">
                         {changeTime(main?.createdTimestamp)}
                       </p>
