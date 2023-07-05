@@ -2,7 +2,7 @@
 import './style.scss';
 import React from 'react';
 import data from '@emoji-mart/data';
-import Picker from '@emoji-mart/react';
+import Picker from 'emoji-picker-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faFaceSmile,
@@ -14,9 +14,10 @@ import { useStore } from '../../store';
 function CommentInput(props) {
   const { state, dispatch } = useStore();
   const [openEmoji, setOpenEmoji] = React.useState(false);
-  const onEmojiClick = (emojiObject) => {
-    props?.setInput(props?.input.concat(emojiObject.native));
+  const onEmojiClick = (event, emojiObject) => {
+    props?.setInput(props?.input.concat(emojiObject.emoji));
   };
+
   const handleInputChange = (event) => {
     props?.setInput(event.target.value);
   };
@@ -49,6 +50,7 @@ function CommentInput(props) {
       setOpenEmoji(false);
     }
   };
+  const font = 'Segoe UI Emoji'
   
   
   return (
@@ -67,6 +69,7 @@ function CommentInput(props) {
             padding: '0 10px',
             backgroundColor: state.background ? '#242526f7' : 'white',
             color: '#6C7588',
+            fontFamily: font,
           }}
         >
           <input
@@ -78,6 +81,7 @@ function CommentInput(props) {
             autoFocus
             onKeyDown={handleKeyDown}
             onClick={handleInputClick} 
+            style={{ fontFamily: font }}
           />
 
           <div className="container-item-icon">
@@ -91,9 +95,10 @@ function CommentInput(props) {
                 <div className="emoji-box">
                   <Picker 
                     data={data} 
-                    onEmojiSelect={onEmojiClick} 
+                    onEmojiClick={onEmojiClick} 
                     theme={state.background ? "dark": "light"}
                     onClick={handleInputClick}
+                    style={{ fontFamily: font }}
                   />
                 </div>
               )}

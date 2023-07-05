@@ -6,6 +6,7 @@ import {getCommentItem } from "../../api/apiComment"
 import { useStore } from '../../store';
 import {updateSize} from "../../util/updateSize";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 function FeedbackComment(props){
 
@@ -49,7 +50,7 @@ function FeedbackComment(props){
                         className="header-text"
                         onClick={handleClickNumber}
                     >
-                        <KeyboardArrowDownIcon sx={{fontSize: "14px"}}/>
+                        <div>{open ? <KeyboardArrowUpIcon sx={{fontSize: "14px"}}/> : <KeyboardArrowDownIcon sx={{fontSize: "14px"}}/>}</div>
                         {props?.length + " Reply"} 
                     </p>
                     <div className="comment-feedback-div">
@@ -58,7 +59,7 @@ function FeedbackComment(props){
                                 <CommentItem {...main} type="false"/>
                             </div>
                         )): null}
-                        { open && numberComment > page && <p className="show-page-comment" onClick={() => handleClickPage(page)}>Xem thêm</p>}
+                        { open && numberComment > page && <p className="show-page-comment" onClick={() => handleClickPage(page)}>See More</p>}
                     </div>
                 </div>
             )}

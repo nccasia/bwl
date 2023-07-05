@@ -100,7 +100,6 @@ const CommentItem = (props) => {
     <div className="comment-item">
       <div className="author-avatar">
         <div className="author-image">
-          <div></div>
           <img
             src={`https://cdn.discordapp.com/avatars/${props?.author[0].id}/${props?.author[0].avatar}`}
             className="img-people"
