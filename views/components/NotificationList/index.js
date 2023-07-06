@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useStore } from '../../store';
 import CircularProgress from '@mui/material/CircularProgress';
 import {getNotification} from '../../api/apiNotification';
+import { truncatedContent } from '../../util/truncatedContent';
 
 const NotificationList = (props) => {
   const { state, dispatch } = useStore();
@@ -49,7 +50,7 @@ const NotificationList = (props) => {
                           </b>
                           {' đã' + main?.onComment +' bình luận bài viết của bạn có nội dung:'}
                         </p>
-                        <p>{main?.content}</p>
+                        <p>{truncatedContent(main?.content)}</p>
                         <p className="time-notifi">
                           {changeTime(main?.createdTimestamp)}
                         </p>
@@ -79,9 +80,9 @@ const NotificationList = (props) => {
                               </b>
                               {' đã' + main?.onItem +'phản hồi vào bình luận của bạn '}
                             </p>
-                            <p>{main?.contentItem}</p>
+                            <p>{truncatedContent(main?.contentItem)}</p>
                             <p> có nội dung như sau: </p>
-                            <p>{main?.content}</p>
+                            <p>{truncatedContent(main?.content)}</p>
                             <p className="time-notifi">
                               {changeTime(main?.createdTimestamp)}
                             </p>
@@ -115,7 +116,7 @@ const NotificationList = (props) => {
                                   ' đã bỏ thích bình luận của bạn.'
                                   :' đã hờ hững với bình luận của bạn.'
                               } 
-                              {main?.contentItem}
+                              {truncatedContent(main?.contentItem)}
                             </p>
                             <p className="time-notifi">
                               {changeTime(main?.createdTimestamp)}
