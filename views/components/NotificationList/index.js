@@ -114,7 +114,8 @@ const NotificationList = (props) => {
                                 :main?.onLikeItem=== "false" ?
                                   ' đã bỏ thích bình luận của bạn.'
                                   :' đã hờ hững với bình luận của bạn.'
-                              }
+                              } 
+                              {main?.contentItem}
                             </p>
                             <p className="time-notifi">
                               {changeTime(main?.createdTimestamp)}

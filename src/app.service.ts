@@ -681,6 +681,9 @@ export class AppService {
             onLabel:1,
             onLike:1,
             messageId:1,
+            onLikeItem: 1,
+            onItem: 1,
+            contentItem: 1,
             author: [{
               username: "$author1.username",
               avatar: "$author1.avatar",
@@ -1172,6 +1175,7 @@ export class AppService {
           authorId,
           createdTimestamp,
           onLikeItem: "null",
+          contentItem: testItem[0]?.content,
         });
         await notification.save();
         this.addEvent({ data: { 
@@ -1198,6 +1202,7 @@ export class AppService {
           authorId,
           createdTimestamp,
           onLikeItem: onLike ? "true": "false",
+          contentItem: testItem[0]?.content,
         });
         await notification.save();
 
@@ -1229,6 +1234,7 @@ export class AppService {
         authorId,
         createdTimestamp,
         onLikeItem: onLike ? "true": "false",
+        contentItem: testItem[0]?.content,
       });
       this.addEvent({ data: { 
         comment: testItem[0]?.item ? "commentLikeItem" : "commentLike",
