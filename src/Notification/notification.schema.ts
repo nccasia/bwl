@@ -33,6 +33,15 @@ export class Notification {
   @Prop()
   onComment: string;
 
+  @Prop()
+  onItem: string;
+
+  @Prop()
+  onLikeItem: string;
+
+  @Prop()
+  contentItem: string;
+
   @Prop({ default: true })
   onLabel: boolean;
 }

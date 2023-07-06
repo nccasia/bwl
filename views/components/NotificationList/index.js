@@ -24,74 +24,140 @@ const NotificationList = (props) => {
     <div>
       {state.notification
         ? state.notification.map((main, index) => {
-          const truncatedContent =
-              main?.content.length > 20
-                ? `${main?.content.substring(0, 20)}...`
-                : main?.content;
             return (
               <div
                 key={index}
                 onClick={() => handleChangePage(main?.messageId)}
                 className="notification-list"
               >
-                {main?.onComment ? (
-                  <div className="list-notifi">
-                    <img
-                      className="list-notifi-image"
-                      src={`https://cdn.discordapp.com/avatars/${main?.author[0]?.id}/${main?.author[0]?.avatar}`}
-                      alt="avatar"
-                    />
-                    <span>
-                      <p>
-                        <b
-                          style={{
-                            color: state.background ? '#c0c0cd' : 'black',
-                          }}
-                        >
-                          {main?.author[0]?.username}
-                        </b>
-                        {' đã' + main?.onComment +' bình luận bài viết của bạn có nội dung:'}
-                      </p>
-                      <p>{truncatedContent}</p>
-                      <p className="time-notifi">
-                        {changeTime(main?.createdTimestamp)}
-                      </p>
-                    </span>
-                    <img 
-                      src={main?.message[0]?.source ? `https://bwl.vn/assets/images/${main?.message[0]?.links[0]}` : `https://bwl.vn/images/${main?.message[0]?.links[0]}`} 
-                      className="notifi-list-image"
-                    />
-                  </div>
-                ) : (
-                  <div className="list-notifi">
-                    <img
-                      className="list-notifi-image"
-                      alt="avatar"
-                      src={`https://cdn.discordapp.com/avatars/${main?.author[0]?.id}/${main?.author[0]?.avatar}`}
-                    />
-                    <span>
-                      <p>
-                        <b
-                          style={{
-                            color: state.background ? '#c0c0cd' : 'black',
-                          }}
-                        >
-                          {main?.author[0]?.username}{' '}
-                        </b>
-                        {main?.onLike
-                          ? ' đã thích bài viết của bạn.'
-                          : ' đã bỏ thích bài viết của bạn.'}
-                      </p>
-                      <p className="time-notifi">
-                        {changeTime(main?.createdTimestamp)}
-                      </p>
-                    </span>
-                    <img
-                      src={main?.message[0]?.source ? `https://bwl.vn/assets/images/${main?.message[0]?.links[0]}` : `https://bwl.vn/images/${main?.message[0]?.links[0]}`}
-                      className="notifi-list-image"
-                    />
-                  </div>
-                )}
+                {main?.onComment ? 
+                  (
+                    <div className="list-notifi">
+                      <img
+                        className="list-notifi-image"
+                        src={`https://cdn.discordapp.com/avatars/${main?.author[0]?.id}/${main?.author[0]?.avatar}`}
+                        alt="avatar"
+                      />
+                      <span>
+                        <p>
+                          <b
+                            style={{
+                              color: state.background ? '#c0c0cd' : 'black',
+                            }}
+                          >
+                            {main?.author[0]?.username}
+                          </b>
+                          {' đã' + main?.onComment +' bình luận bài viết của bạn có nội dung:'}
+                        </p>
+                        <p>{main?.content}</p>
+                        <p className="time-notifi">
+                          {changeTime(main?.createdTimestamp)}
+                        </p>
+                      </span>
+                      <img 
+                        src={main?.message[0]?.source ? `https://bwl.vn/assets/images/${main?.message[0]?.links[0]}` : `https://bwl.vn/images/${main?.message[0]?.links[0]}`} 
+                        className="notifi-list-image"
+                      />
+                    </div>
+                  ) 
+                  : main?.onItem ?
+                      (
+                        <div className="list-notifi">
+                          <img
+                            className="list-notifi-image"
+                            src={`https://cdn.discordapp.com/avatars/${main?.author[0]?.id}/${main?.author[0]?.avatar}`}
+                            alt="avatar"
+                          />
+                          <span>
+                            <p>
+                              <b
+                                style={{
+                                  color: state.background ? '#c0c0cd' : 'black',
+                                }}
+                              >
+                                {main?.author[0]?.username}
+                              </b>
+                              {' đã' + main?.onItem +'phản hồi vào bình luận của bạn '}
+                            </p>
+                            <p>{main?.contentItem}</p>
+                            <p> có nội dung như sau: </p>
+                            <p>{main?.content}</p>
+                            <p className="time-notifi">
+                              {changeTime(main?.createdTimestamp)}
+                            </p>
+                          </span>
+                          <img 
+                            src={main?.message[0]?.source ? `https://bwl.vn/assets/images/${main?.message[0]?.links[0]}` : `https://bwl.vn/images/${main?.message[0]?.links[0]}`} 
+                            className="notifi-list-image"
+                          />
+                        </div>
+                      )
+                    : main?.onLikeItem ?
+                      (
+                        <div className="list-notifi">
+                          <img
+                            className="list-notifi-image"
+                            alt="avatar"
+                            src={`https://cdn.discordapp.com/avatars/${main?.author[0]?.id}/${main?.author[0]?.avatar}`}
+                          />
+                          <span>
+                            <p>
+                              <b
+                                style={{
+                                  color: state.background ? '#c0c0cd' : 'black',
+                                }}
+                              >
+                                {main?.author[0]?.username}{' '}
+                              </b>
+                              {main?.onLikeItem=== "true"? 
+                                ' đã thích bình luận của bạn.'
+                                :main?.onLikeItem=== "false" ?
+                                  ' đã bỏ thích bình luận của bạn.'
+                                  :' đã hờ hững với bình luận của bạn.'
+                              }
+                            </p>
+                            <p className="time-notifi">
+                              {changeTime(main?.createdTimestamp)}
+                            </p>
+                          </span>
+                          <img
+                            src={main?.message[0]?.source ? `https://bwl.vn/assets/images/${main?.message[0]?.links[0]}` : `https://bwl.vn/images/${main?.message[0]?.links[0]}`}
+                            className="notifi-list-image"
+                          />
+                        </div>
+                      )
+                      :
+                      (
+                        <div className="list-notifi">
+                          <img
+                            className="list-notifi-image"
+                            alt="avatar"
+                            src={`https://cdn.discordapp.com/avatars/${main?.author[0]?.id}/${main?.author[0]?.avatar}`}
+                          />
+                          <span>
+                            <p>
+                              <b
+                                style={{
+                                  color: state.background ? '#c0c0cd' : 'black',
+                                }}
+                              >
+                                {main?.author[0]?.username}{' '}
+                              </b>
+                              {main?.onLike
+                                ? ' đã thích bài viết của bạn.'
+                                : ' đã bỏ thích bài viết của bạn.'}
+                            </p>
+                            <p className="time-notifi">
+                              {changeTime(main?.createdTimestamp)}
+                            </p>
+                          </span>
+                          <img
+                            src={main?.message[0]?.source ? `https://bwl.vn/assets/images/${main?.message[0]?.links[0]}` : `https://bwl.vn/images/${main?.message[0]?.links[0]}`}
+                            className="notifi-list-image"
+                          />
+                        </div>
+                      )
+                  }
                 {main?.onLabel && <p className="new-notifi">New</p>}
               </div>
             );

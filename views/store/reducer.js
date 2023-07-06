@@ -328,7 +328,7 @@ function reducer(state, action) {
     case 'CHANGE_NOTIFICATION_ALL':
       return {
         ...state,
-        notification: [...state.notification, ...action.payload],
+        notification: [...state.notification, ...action.payload?.list],
         loadingNotifi: false,
       };
     case 'SET_NOTIFICATION':

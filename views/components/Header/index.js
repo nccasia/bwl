@@ -37,9 +37,12 @@ function HeaderPage(props) {
     setOpen(false);
     setIsHidden(false);
     dispatch({ type: 'CHANGE_MENU', payload: !openNotification  });
-    if(openNotification && state?.notification[0]?.onLabel){
-      postNotification(state.author?.id, dispatch);
-    }
+    if(openNotification){
+      if(state?.notification[0]?.onLabel){
+        postNotification(state.author?.id);
+      }
+      dispatch({type: "SET_NOTIFICATION"});
+    } 
   };
   const [isHidden, setIsHidden] = React.useState(false);
   const openMenu =()=>{
