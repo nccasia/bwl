@@ -21,10 +21,23 @@ const NotificationList = (props) => {
     }
   },[state.pageNotification, state.author?.id, props?.openNotification])
 
+  const [showFullContent, setShowFullContent] = React.useState(false);
+  const handleToggleContent = () => {
+    setShowFullContent(true);
+  };
+  const handleToggleContentLeave = () => {
+    setShowFullContent(false);
+  };
+
+
+
   return (
     <div>
       {state.notification
         ? state.notification.map((main, index) => {
+          const truncated = truncatedContent(main?.content);
+          const truncateditem = truncatedContent(main?.contentItem);
+          const content = main?.content ? truncated : '';
             return (
               <div
                 key={index}
@@ -48,9 +61,13 @@ const NotificationList = (props) => {
                           >
                             {main?.author[0]?.username}
                           </b>
-                          {' đã' + main?.onComment +' bình luận bài viết của bạn có nội dung:'}
+                          {' đã' + main?.onComment +' bình luận bài viết qủa bạn có nội dung:'}
                         </p>
-                        <p>{truncatedContent(main?.content)}</p>
+                        {truncated !== main?.content && (
+                          <p className="ellipsis"  onMouseEnter={handleToggleContent}  onMouseLeave={handleToggleContentLeave}>
+                          {showFullContent ? main?.content : truncated}
+                          </p>
+                         )}
                         <p className="time-notifi">
                           {changeTime(main?.createdTimestamp)}
                         </p>
@@ -80,9 +97,17 @@ const NotificationList = (props) => {
                               </b>
                               {' đã' + main?.onItem +'phản hồi vào bình luận của bạn '}
                             </p>
-                            <p>{truncatedContent(main?.contentItem)}</p>
+                            {truncateditem !== main?.contentItem && (
+                              <p className="ellipsis"  onMouseEnter={handleToggleContent}  onMouseLeave={handleToggleContentLeave}>
+                              {showFullContent ? main?.contentItem : truncateditem}
+                              </p>
+                            )}
                             <p> có nội dung như sau: </p>
-                            <p>{truncatedContent(main?.content)}</p>
+                            {truncated !== main?.content && (
+                              <p className="ellipsis"  onMouseEnter={handleToggleContent}  onMouseLeave={handleToggleContentLeave}>
+                              {showFullContent ? main?.content : truncated}
+                              </p>
+                            )}
                             <p className="time-notifi">
                               {changeTime(main?.createdTimestamp)}
                             </p>
@@ -116,7 +141,11 @@ const NotificationList = (props) => {
                                   ' đã bỏ thích bình luận của bạn.'
                                   :' đã hờ hững với bình luận của bạn.'
                               } 
-                              {truncatedContent(main?.contentItem)}
+                              {truncateditem !== main?.contentItem && (
+                                <p className="ellipsis"  onMouseEnter={handleToggleContent}  onMouseLeave={handleToggleContentLeave}>
+                                {showFullContent ? main?.contentItem : truncateditem}
+                                </p>
+                            )}
                             </p>
                             <p className="time-notifi">
                               {changeTime(main?.createdTimestamp)}
