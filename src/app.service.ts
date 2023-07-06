@@ -239,6 +239,8 @@ export class AppService {
           content,
           onItem,
           contentItem: contentItem[0]?.content,
+          authorItem: contentItem[0]?.authorId,
+          authorNotifi:contentItem[0]?.authorId,
           createdTimestamp,
         });
         await notification.save();
@@ -261,6 +263,7 @@ export class AppService {
           content,
           onComment,
           createdTimestamp,
+          authorNotifi:message[0]?.authorId,
         });
         await notification.save();
         this.addEvent({ data: { 
@@ -308,6 +311,8 @@ export class AppService {
           onItem,
           contentItem: contentItem[0]?.content,
           content: deleteComment?.content,
+          authorItem: contentItem[0]?.authorId,
+          authorNotifi:contentItem[0]?.authorId,
           createdTimestamp,
         });
         await notification.save();
@@ -333,6 +338,7 @@ export class AppService {
           onComment,
           content: deleteComment?.content,
           createdTimestamp,
+          authorNotifi:message[0]?.authorId,
         });
         await notification.save();
         const author = await this.komuUser.find({ id: messageId }).exec();
@@ -387,6 +393,8 @@ export class AppService {
           content: oldComment[0]?.content + " => " + newContent,
           onItem,
           contentItem: contentItem[0]?.content,
+          authorItem: contentItem[0]?.authorId,
+          authorNotifi:contentItem[0]?.authorId,
           createdTimestamp,
         });
         await notification.save();
@@ -413,6 +421,7 @@ export class AppService {
           onComment,
           content: oldComment[0]?.content + " => " + newContent,
           createdTimestamp,
+          authorNotifi:message[0]?.authorId,
         });
         await notification.save();
         const author = await this.komuUser.find({ id: messageId }).exec();
@@ -549,12 +558,13 @@ export class AppService {
       ])
       .exec();
   }
-  async like({ messageId, authorId }) {
+  async like(messageId: string, authorId: string, onLike: boolean) {
     const like = new this.komuLike({
       messageId,
       authorId,
       createdTimestamp: Date.now(),
       commentId: null,
+      onLike
     });
     await like.save();
     const message = await this.komuMessage.find({ messageId }).exec();
@@ -566,6 +576,7 @@ export class AppService {
         authorId,
         onLike,
         createdTimestamp,
+        authorNotifi:message[0]?.authorId,
       });
       const author = await this.komuUser.find({ id:authorId }).exec();
       await notification.save();
@@ -579,19 +590,18 @@ export class AppService {
     } else{
       this.addEvent({ data: { 
         like: "true", 
-        messageId, 
-        authorNotifi: message[0]?.authorId, 
-        authorNotifi2: authorId, 
+        messageId,
       } });
     }
     return like;
   }
-  async unlike({ messageId, authorId }) {
+  async unlike(messageId: string, authorId: string) {
     await this.komuLike
       .deleteOne({
         messageId,
         authorId,
         commentId: null,
+        onLike:true,
       })
       .exec();
     const message = await this.komuMessage.find({ messageId }).exec();
@@ -603,6 +613,7 @@ export class AppService {
         authorId,
         onLike,
         createdTimestamp,
+        authorNotifi:message[0]?.authorId,
       });
       const author = await this.komuUser.find({ id:authorId }).exec();
       await notification.save();
@@ -617,38 +628,17 @@ export class AppService {
       this.addEvent({ data: { 
         like: "false", 
         messageId, 
-        authorNotifi: message[0]?.authorId, 
-        authorNotifi2: authorId,
       } });
     }
     return true;
   }
   async getNotifications(authorId: string, page: number, size: number) {
-    const messageIds = await this.komuMessage
-      .aggregate([
-        {
-          $match: {
-            authorId: authorId,
-            channelId: channel,
-          }
-        },
-        {
-          $project: {
-            messageId: 1,
-          }
-        }
-      ])
-      .exec();
-  
-    const messageIdsArray = messageIds.map((message: any) => message.messageId);
   
     return await this.komuNotification
       .aggregate([
         {
           $match: {
-            messageId: {
-              $in: messageIdsArray
-            },
+            authorNotifi: authorId,
             authorId: { $ne: authorId },
           }
         },
@@ -702,12 +692,12 @@ export class AppService {
       ])
       .exec();
   }
-  async getNotificationsSize(messageId: string, authorId: string) {
+  async getNotificationsSize(authorId: string) {
     return this.komuNotification
       .aggregate([
         {
           $match: {
-            messageId,
+            authorNotifi: authorId,
             authorId: { $ne: authorId },
           },
         },
@@ -820,9 +810,9 @@ export class AppService {
     }
     return data;
   }
-  async postNotification(messageId: string) {
+  async postNotification(authorId: string) {
     const notification: any = await this.komuNotification.updateMany(
-      { messageId: messageId, onLabel: true },
+      { authorNotifi: authorId, onLabel: true },
       { $set: { onLabel: false } }
     ).exec();
     return notification;
@@ -1224,6 +1214,7 @@ export class AppService {
           createdTimestamp,
           onLikeItem: "null",
           contentItem: testItem[0]?.content,
+          authorNotifi:testItem[0]?.authorId,
         });
         await notification.save();
         this.addEvent({ data: { 
@@ -1251,6 +1242,7 @@ export class AppService {
           createdTimestamp,
           onLikeItem: onLike ? "true": "false",
           contentItem: testItem[0]?.content,
+          authorNotifi:testItem[0]?.authorId,
         });
         await notification.save();
 
@@ -1283,6 +1275,7 @@ export class AppService {
         createdTimestamp,
         onLikeItem: onLike ? "true": "false",
         contentItem: testItem[0]?.content,
+        authorNotifi:testItem[0]?.authorId,
       });
       this.addEvent({ data: { 
         comment: testItem[0]?.item ? "commentLikeItem" : "commentLike",

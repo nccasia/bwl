@@ -78,10 +78,8 @@ const NotificationList = (props) => {
                               >
                                 {main?.author[0]?.username}
                               </b>
-                              {' đã' + main?.onItem +'phản hồi vào bình luận của bạn '}
+                              {` đã ${main?.onItem} phản hồi vào bình luận "${main?.contentItem}" `} {main?.authorItem === state.author?.id ? "của bạn" : "trên bài viết của bạn" + ", có nội dung như sau:"}
                             </p>
-                            <p>{truncatedContent(main?.contentItem)}</p>
-                            <p> có nội dung như sau: </p>
                             <p>{truncatedContent(main?.content)}</p>
                             <p className="time-notifi">
                               {changeTime(main?.createdTimestamp)}
@@ -111,12 +109,12 @@ const NotificationList = (props) => {
                                 {main?.author[0]?.username}{' '}
                               </b>
                               {main?.onLikeItem=== "true"? 
-                                ' đã thích bình luận của bạn.'
+                                ' đã thích'
                                 :main?.onLikeItem=== "false" ?
-                                  ' đã bỏ thích bình luận của bạn.'
-                                  :' đã hờ hững với bình luận của bạn.'
+                                  ' đã bỏ thích'
+                                  :' đã hờ hững '
                               } 
-                              {truncatedContent(main?.contentItem)}
+                              {` với bình luận "${truncatedContent(main?.contentItem)}" của bạn.`}
                             </p>
                             <p className="time-notifi">
                               {changeTime(main?.createdTimestamp)}
