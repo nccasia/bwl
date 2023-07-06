@@ -35,6 +35,9 @@
     margin: 5px 0 0 45px; 
     .comment-feedback {
         position: relative;
+        &:last-child{
+            margin-bottom: 20px;
+        }
         .comment-item{
             .author-avatar{
                 margin-bottom: 0;
