@@ -2,7 +2,7 @@
 import './style.scss';
 import React from 'react';
 import data from '@emoji-mart/data';
-import Picker from 'emoji-picker-react';
+import Picker from '@emoji-mart/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faFaceSmile,
@@ -14,8 +14,8 @@ import { useStore } from '../../store';
 function CommentInput(props) {
   const { state, dispatch } = useStore();
   const [openEmoji, setOpenEmoji] = React.useState(false);
-  const onEmojiClick = (event, emojiObject) => {
-    props?.setInput(props?.input.concat(emojiObject.emoji));
+  const onEmojiClick = (emojiObject) => {
+    props?.setInput(props?.input.concat(emojiObject.native));
   };
 
   const handleInputChange = (event) => {
@@ -95,7 +95,7 @@ function CommentInput(props) {
                 <div className="emoji-box">
                   <Picker 
                     data={data} 
-                    onEmojiClick={onEmojiClick} 
+                    onEmojiSelect={onEmojiClick} 
                     theme={state.background ? "dark": "light"}
                     onClick={handleInputClick}
                     style={{ fontFamily: font }}

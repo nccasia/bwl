@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useStore } from '../../store';
 import CircularProgress from '@mui/material/CircularProgress';
 import {getNotification} from '../../api/apiNotification';
+import { truncatedContent } from '../../util/truncatedContent';
 
 const NotificationList = (props) => {
   const { state, dispatch } = useStore();
@@ -49,7 +50,7 @@ const NotificationList = (props) => {
                           </b>
                           {' đã' + main?.onComment +' bình luận bài viết của bạn có nội dung:'}
                         </p>
-                        <p>{main?.content}</p>
+                        <p>{truncatedContent(main?.content)}</p>
                         <p className="time-notifi">
                           {changeTime(main?.createdTimestamp)}
                         </p>
@@ -79,7 +80,7 @@ const NotificationList = (props) => {
                               </b>
                               {` đã ${main?.onItem} phản hồi vào bình luận "${main?.contentItem}" `} {main?.authorItem === state.author?.id ? "của bạn" : "trên bài viết của bạn" + ", có nội dung như sau:"}
                             </p>
-                            <p>{main?.content}</p>
+                            <p>{truncatedContent(main?.content)}</p>
                             <p className="time-notifi">
                               {changeTime(main?.createdTimestamp)}
                             </p>
@@ -113,7 +114,7 @@ const NotificationList = (props) => {
                                   ' đã bỏ thích'
                                   :' đã hờ hững '
                               } 
-                              {` với bình luận "${main?.contentItem}" của bạn.`}
+                              {` với bình luận "${truncatedContent(main?.contentItem)}" của bạn.`}
                             </p>
                             <p className="time-notifi">
                               {changeTime(main?.createdTimestamp)}
