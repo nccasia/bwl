@@ -286,54 +286,13 @@ export class AppController {
 
   @Post('/api/like')
   async postLike(@Req() req: Request, @Res() res: Response) {
-    if (!req.cookies['token']) {
-      throw new UnauthorizedException();
+    const { messageId, authorId, onLike } = req.body;
+    if(onLike===true){
+      await this.appService.like(messageId, authorId, true);
+    } else{
+      await this.appService.unlike(messageId, authorId);
     }
-    return this.httpService
-      .get(discordUserUrl, {
-        headers: {
-          Authorization: `Bearer ${req.cookies['token']}`,
-        },
-      })
-      .pipe(
-        map((userResponse) => {
-          return userResponse.data;
-        }),
-        first(),
-      )
-      .subscribe({
-        next: async (user) => {
-          const { messageId, authorId } = req.body;
-          const userDB = await this.appService.findLikeFromDiscordId(
-            user.id,
-            messageId,
-          );
-          const messageDB = await this.appService.findLikeMessageFromDiscordId(
-            messageId,
-          );
-          const usernameDB = await this.appService.findLikeMessageId(user.id);
-          const messageLikeDB = await this.appService.findLikeId(messageId);
-
-          if (messageDB && !userDB) {
-            const like = await this.appService.like({
-              messageId,
-              authorId,
-            });
-            return res.json({ success: true, like, usernameDB, messageLikeDB });
-          } else if (userDB) {
-            const dislike = await this.appService.unlike({
-              messageId,
-              authorId: user.id,
-            });
-            return res.json({ success: true, dislike });
-          }
-        },
-        error: (error) => {
-          return res
-            .status(401)
-            .json({ success: false, message: error.response});
-        },
-      });
+    return res.status(200).json(true);
   }
 
   @Get('/api/likes')
@@ -380,19 +339,9 @@ export class AppController {
   async getNotificationsSize(@Req() req: Request, @Res() res: Response) {
     try {
       const { messageId } = req.query;
-      const list = await this.appService.findMessageAuthorId(
-        messageId as string,
-      );
-      let length =0;
-      let size =0;
-      for(let i= 0; i< list.length; i++){
-        const notification= await this.appService.getNotificationsSize(
-          list[i].messageId as string,
-          messageId as string,
-        );
-        length = length + notification?.length;
-        size = size + notification?.filter((item: any) => item?.onLabel === true).length
-      }
+      const notification= await this.appService.getNotificationsSize(messageId as string);
+      const length = notification?.length;
+      const size = notification?.filter((item: any) => item?.onLabel === true).length;
       return res.status(200).json({ size, length });
     } catch (error) {
       return res.status(500).json({message:"Internal Server Error"});
@@ -403,13 +352,7 @@ export class AppController {
   async postNotificationsSize(@Req() req: Request, @Res() res: Response) {
     try{
       const { messageId } = req.body;
-      const list = await this.appService.findMessageAuthorId(
-        messageId as string,
-      );
-      const promises = list.map((item: any) =>
-        this.appService.postNotification(item.messageId as string)
-      );
-      await Promise.all(promises);
+      await this.appService.postNotification(messageId as string)
       return res.status(200).json({ message: "Read notification successfully!" });
     } catch (error) {
       return res.status(500).json({message:"Internal Server Error"});
@@ -478,4 +421,5 @@ export class AppController {
       return res.status(500).json({message:"Internal Server Error"});
     }
   }
+
 }

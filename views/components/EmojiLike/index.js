@@ -102,10 +102,8 @@ const EmojiLike = (props) => {
                       {changeLike(like?.likes)?.slice(0, 3).join(', ')}
                       {' và '}
                       <u>
-                        <button>
-                          {like?.total - 3}
-                          {' người khác'}
-                        </button>
+                        {like?.total - 3}
+                        {' người khác'}
                       </u>
                     </span>
                   )}

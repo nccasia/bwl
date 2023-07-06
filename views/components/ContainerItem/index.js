@@ -23,10 +23,10 @@ const ContainerItem = (props) => {
     }
   };
 
-  const handleClickLike = async () => {
+  const handleClickLike = async (index) => {
     if (state.author?.id) {
       if (props?.author?.id !== state.author?.id) {
-        postLike(props?.messageId, state.author?.id);
+        postLike(props?.messageId, state.author?.id, !index);
       } else {
         showToast("warning", 'Ha ha, không được đâu!');
       }
@@ -54,7 +54,7 @@ const ContainerItem = (props) => {
         messageId={props?.messageId}
       />
       <div className="container-item-react">
-        <span className="react-like" onClick={handleClickLike}>
+        <span className="react-like" onClick={()=>handleClickLike(props?.likes)}>
           {props?.likes ? (
             <div className="react-like-icon">
               <ThumbDownAltIcon className="like_icon" />
