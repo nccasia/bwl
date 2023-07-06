@@ -72,7 +72,7 @@ function Comment(props) {
           className="show-page-comment" 
           onClick={() => handleClickPage(page)}
         >
-          Xem thêm
+          See More
         </p>
       )}
     </div>

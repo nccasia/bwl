@@ -31,18 +31,40 @@
       display: flex;
       cursor: pointer;
       padding: 20px;
+      position: relative;
 
       &:hover {
         background-color: #ccc;
       }
-
       .react-like-icon {
         display: flex;
         align-items: center;
         gap: 2px;
+        .react-icon-like{
+          display: flex;
+          align-items: center;
+          gap: 2px;
+        }
         &:hover .delete-comment-btn{
-          display: block;
-          cursor: pointer;
+          display: flex;
+          background-color: red;
+          position: absolute;
+          top: -10px;
+        }
+        .delete-comment-btn{
+          height: 30px;
+          .delete-icon{
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 10px;
+            li{
+              list-style: none;
+            }
+            .p:hover{
+              font-size: 20px;
+            }
+          }
         }
         .like_icon {
           font-size: 20px;
@@ -105,7 +127,6 @@
 
   .comment {
     width: 100%;
-    border-bottom: 1px solid #ccc;
   }
 
   .comment:last-child {

@@ -1181,6 +1181,8 @@ export class AppService {
           onLikeComment: null,
           item: testItem[0]?.item,
           commentId,
+          authorNotifi: message[0]?.authorId, 
+          authorNotifi2: authorId,
           notification: {...notification.toObject(), ...{message: messageNoti}, ...{author: author} },
         } });
       }
@@ -1207,6 +1209,8 @@ export class AppService {
           test: true,
           commentId,
           item: testItem[0]?.item,
+          authorNotifi: message[0]?.authorId, 
+          authorNotifi2: authorId,
           notification: {...notification.toObject(), ...{message: messageNoti}, ...{author: author} },
         } });
       }
@@ -1233,6 +1237,8 @@ export class AppService {
         authorId,
         onLikeComment: onLike,
         commentId,
+        authorNotifi: message[0]?.authorId, 
+        authorNotifi2: authorId,
         notification: {...notification.toObject(), ...{message: messageNoti}, ...{author: author} },
       } });
       await notification.save();
