@@ -16,7 +16,7 @@ export class Like {
   createdTimestamp: number;
 
   @Prop()
-  commentId: string;
+  commentId: string | null;
 
   @Prop()
   onLike: boolean | null;

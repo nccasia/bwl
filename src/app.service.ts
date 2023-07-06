@@ -448,6 +448,7 @@ export class AppService {
         {
           $match: {
             messageId,
+            commentId: null,
           },
         },
         { $skip: (page - 1) * 5 },
@@ -488,6 +489,7 @@ export class AppService {
         {
           $match: {
             messageId,
+            commentId: null,
           },
         },
       ])
@@ -552,6 +554,7 @@ export class AppService {
       messageId,
       authorId,
       createdTimestamp: Date.now(),
+      commentId: null,
     });
     await like.save();
     const message = await this.komuMessage.find({ messageId }).exec();
@@ -588,6 +591,7 @@ export class AppService {
       .deleteOne({
         messageId,
         authorId,
+        commentId: null,
       })
       .exec();
     const message = await this.komuMessage.find({ messageId }).exec();
@@ -770,8 +774,25 @@ export class AppService {
             id: "$author1.id",
           },
           totalComment: { $size: "$comments" },
-          totalLike: { $size: "$likes" },
-          likes: "$likes",
+          totalLike: {
+            $size: {
+              $filter: {
+                input: "$likes",
+                as: "like",
+                cond: { $or: [
+                  { $eq: ["$$like.commentId", null] },
+                  { $not: "$$like.commentId" }
+                ] }
+              }
+            }
+          },
+          likes: {
+            $filter: {
+              input: "$likes",
+              as: "like",
+              cond: { $eq: ["$$like.commentId", null] }
+            }
+          }
         }
       },      
       {
@@ -852,7 +873,18 @@ export class AppService {
             id: "$author1.id",
           },
           totalComment: { $size: '$comments' },
-          totalLike: { $size: '$likes' },
+          totalLike: {
+            $size: {
+              $filter: {
+                input: "$likes",
+                as: "like",
+                cond: { $or: [
+                  { $eq: ["$$like.commentId", null] },
+                  { $not: "$$like.commentId" }
+                ] }
+              }
+            }
+          },
         },
       },
       {
@@ -940,8 +972,25 @@ export class AppService {
             id: "$author1.id",
           },
           totalComment: { $size: "$comments" },
-          totalLike: { $size: "$likes" },
-          likes: "$likes",
+          totalLike: {
+            $size: {
+              $filter: {
+                input: "$likes",
+                as: "like",
+                cond: { $or: [
+                  { $eq: ["$$like.commentId", null] },
+                  { $not: "$$like.commentId" }
+                ] }
+              }
+            }
+          },
+          likes: {
+            $filter: {
+              input: "$likes",
+              as: "like",
+              cond: { $eq: ["$$like.commentId", null] }
+            }
+          }
         }
       },      
       {
@@ -971,7 +1020,6 @@ export class AppService {
     for (const item of data) {
       item.reactions = this.reduceReactions(item.reactions);
       item.likes = item.likes?.filter((e: any) => e.authorId === authorId).length > 0 ? true : false;
-
     }
     return data;
   }
