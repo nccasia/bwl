@@ -78,7 +78,9 @@ const NotificationList = (props) => {
                               >
                                 {main?.author[0]?.username}
                               </b>
-                              {` đã ${main?.onItem} phản hồi vào bình luận "${main?.contentItem}" `} {main?.authorItem === state.author?.id ? "của bạn" : "trên bài viết của bạn" + ", có nội dung như sau:"}
+                              {` đã ${main?.onItem} phản hồi vào bình luận "${main?.contentItem}" `} 
+                              {main?.authorItem === state.author?.id ? "của bạn" : "trên bài viết của bạn"}
+                              { ", có nội dung như sau:"}
                             </p>
                             <p>{truncatedContent(main?.content)}</p>
                             <p className="time-notifi">
