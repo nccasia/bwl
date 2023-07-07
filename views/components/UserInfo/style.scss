@@ -36,9 +36,9 @@
       background-color: #fff;
       box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
       position: absolute;
-      padding: 10px 20px;
+      padding: 5px 5px;
       border-radius: 6px;
-      width: 100px;
+      //width: 100px;
       z-index: 999;
       &::before {
         position: absolute;
@@ -78,7 +78,7 @@
   .userInfo-item {
     .delete-post-btn {
       .dialog-form-light {
-        width: 90px;
+        //width: 90px;
         position: absolute;
         left: -30px;
         &::before {
@@ -91,7 +91,7 @@
         }
       }
       .dialog-form-dark {
-        width: 90px;
+        //width: 90px;
         position: absolute;
         left: -30px;
         &::before {

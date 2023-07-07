@@ -11,6 +11,8 @@ import './style.scss';
 import { deletePost } from '../../api/apiPosts';
 import UploadDialog from '../UploadDialog';
 import {showToast} from "../../util/showToast";
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 const DelPost = (props) => {
   const { state, dispatch } = useStore();
@@ -45,10 +47,12 @@ const DelPost = (props) => {
         }}
       >
         <div className="button" onClick={() => setOpenEdit(true)}>
-          Edit
+          <EditIcon sx={{fontSize: "16px"}}/>
+          <p>Edit</p>
         </div>
         <div className="button" onClick={handleClickOpen}>
-          Delete
+          <DeleteForeverIcon sx={{fontSize: "16px"}}/>
+          <p>Delete</p>
         </div>
       </div>
       <UploadDialog
