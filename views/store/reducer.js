@@ -402,11 +402,6 @@ function reducer(state, action) {
         ...state,
         background: !state.background,
       };
-    case 'SET_SIZE_NOTIFICATION':
-      return {
-        ...state,
-        sizeNotifi: action.payload,
-      };
     case 'CHANGE_LOADING_NOTIFICATION':
       return {
         ...state,
@@ -415,7 +410,8 @@ function reducer(state, action) {
     case 'SET_LENGTH_NOTIFICATION':
       return {
         ...state,
-        lengthNotication: action.payload,
+        lengthNotication: action.payload?.length,
+        sizeNotifi:action.payload?.size,
       };
     case 'CHANGE_NOTIFICATION_ALL':
       return {
@@ -446,7 +442,7 @@ function reducer(state, action) {
         size: count?.size,
       };
     case 'CHANGE_PAGE_NOTIFICATION':
-      const numberNotifi = Math.ceil(state.lengthNotication / state.size);
+      const numberNotifi = Math.ceil(state.lengthNotication / 5);
       return {
         ...state,
         loadingNotifi:
@@ -456,7 +452,7 @@ function reducer(state, action) {
             ? true
             : false,
         pageNotification:
-          numberNotifi > action.payload &&
+          numberNotifi >= action.payload &&
           action.payload > 0 &&
           state.pageNotification > 0
             ? action.payload === state.pageNotification + 1
