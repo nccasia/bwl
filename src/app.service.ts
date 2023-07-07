@@ -226,7 +226,7 @@ export class AppService {
       const createdTimestamp = new Date().getTime();
       const onItem = " thêm ";
       const contentItem = await this.komuComment.find({_id: id});
-      if(contentItem[0]?.authorId === authorId && message[0]?.authorId === contentItem[0]?.authorId){
+      if(contentItem[0]?.authorId === authorId){
         this.addEvent({ data: { 
           ...comments.toObject(), 
           comment: "addItem", 
@@ -294,7 +294,7 @@ export class AppService {
     const message = await this.komuMessage.find({ messageId: deleteComment?.messageId }).exec();
     if(deleteComment?.item){
       const contentItem = await this.komuComment.find({_id: deleteComment?.item});
-      if(contentItem[0]?.authorId ===messageId && message[0]?.authorId === contentItem[0]?.authorId){
+      if(contentItem[0]?.authorId ===messageId){
         this.addEvent({ data: { 
           comment: "deleteItem",
           lengthItem:  deleteItem?.length, 
@@ -375,7 +375,7 @@ export class AppService {
     const message = await this.komuMessage.find({ messageId: updatedComment?.messageId }).exec();
     if(updatedComment?.item){
       const contentItem = await this.komuComment.find({_id: updatedComment.item});
-      if(contentItem[0]?.authorId === messageId && message[0]?.authorId === contentItem[0]?.authorId){
+      if(contentItem[0]?.authorId === messageId){
         this.addEvent({ data: { 
           comment: "editItem", 
           id: _id, 
@@ -678,6 +678,7 @@ export class AppService {
             onLikeItem: 1,
             onItem: 1,
             contentItem: 1,
+            authorItem: 1,
             author: [{
               username: "$author1.username",
               avatar: "$author1.avatar",
