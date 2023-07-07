@@ -10,6 +10,7 @@ import { deleteComment } from '../../api/apiComment';
 import { useStore } from '../../store';
 import './style.scss';
 import {showToast} from "../../util/showToast";
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 const Delcomment = (props)  => {
   const { state, dispatch } = useStore();
@@ -35,8 +36,12 @@ const Delcomment = (props)  => {
 
   return (
     <div>
-      <div onClick={handleClickOpen}>
-        Delete
+      <div 
+        onClick={handleClickOpen}
+        style={{display: "flex", gap: "5px"}}
+      >
+        <DeleteForeverIcon sx={{fontSize: "16px"}}/>
+        <p>Delete</p>
       </div>
       <Dialog
         open={openDeleteComment}

@@ -7,12 +7,14 @@ import CommentInput from '../CommentInput';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import Delcomment from '../delcomment';
 import FeedbackComment  from "../FeedbackComment";
-import { postComment, postCommentLike, editComment  } from '../../api/apiComment';
+import { postComment, postCommentLike, editComment, postPinComment  } from '../../api/apiComment';
 import {showToast}  from "../../util/showToast";
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
+import PushPinIcon from '@mui/icons-material/PushPin';
+import EditIcon from '@mui/icons-material/Edit';
 
 const CommentItem = (props) => {
   const { state, dispatch } = useStore();
@@ -95,6 +97,9 @@ const CommentItem = (props) => {
       showToast("warning", "Bạn nên đăng nhập!");
     }
   }
+  const handlePinComment =(id, onPin)=>{
+    postPinComment({id: id, onPin: !onPin});
+  }
 
   return (
     <div className="comment-item">
@@ -124,6 +129,11 @@ const CommentItem = (props) => {
                 )}
               </div>
             </div>
+            {props?.onPin && 
+              <p className="comment-pin-icon">
+                <PushPinIcon sx={{fontSize: "16px"}}/>
+              </p>
+            }
             {!openEdit && <p className="comment">{props?.content}</p>}
             {openEdit && (
               <CommentInput
@@ -163,7 +173,7 @@ const CommentItem = (props) => {
             {props?.onEdit && <p style={{ fontSize: '8px' }}>đã chỉnh sửa</p>}
           </div>
         </div>
-        {state.author?.id && props?.author[0]?.id === state.author?.id && (
+        {state.author?.id && (props?.author[0]?.id === state.author?.id || props?.authorMessage === state.author?.id) && (
           <div
             className="delete-comment-btn"
             onMouseLeave={handleContainerMouseLeave}
@@ -173,12 +183,23 @@ const CommentItem = (props) => {
             </div>
             {open ? (
               <div className={state.background ? "dialog-form-dark" : "dialog-form-light"}>
-                <div className="content" onClick={handledit}>
-                  Edit
-                </div>
-                <div className="content">
-                  <Delcomment id={props?._id}/>
-                </div>
+                {props?.authorMessage === state.author?.id && (
+                  <div className="content" onClick={()=> handlePinComment(props?._id, props?.onPin)}>
+                    <PushPinIcon sx={{fontSize: "16px"}}/>
+                    <p>{props?.onPin ? "Unpin" : "Pin"}</p>
+                  </div>
+                )}
+                {props?.author[0]?.id === state.author?.id && (
+                  <div>
+                    <div className="content" onClick={handledit}>
+                      <EditIcon sx={{fontSize: "16px"}}/>
+                      <p>Edit</p>
+                    </div>
+                    <div className="content">
+                      <Delcomment id={props?._id}/>
+                    </div>
+                  </div>
+                )}
               </div>
             ) : (
               <></>
@@ -201,6 +222,8 @@ const CommentItem = (props) => {
           messageId={props?.messageId}
           page={props.page}
           size={props.size}
+          authorMessage={props?.authorMessage}
+          loading={props?.loading}
         />
       </div>
     </div>

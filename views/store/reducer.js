@@ -59,11 +59,44 @@ function reducer(state, action) {
                 comments:
                   action.payload?.comment === 'add'
                     ? [...[{...action.payload,...{likeComment: 0, dislikeComment: 0, authorLike: null, itemList: [], length: 0}}], ...main?.comments]
+                      .sort(function(a, b) {
+                        if (a.onPin > b.onPin) {
+                          return -1;
+                        } else if (a.onPin < b.onPin) {
+                          return 1;
+                        } else {
+                          if (a._id > b._id) {
+                            return -1;
+                          } else if (a._id < b._id) {
+                            return 1;
+                          } else {
+                            return 0;
+                          }
+                        }
+                      })
                     : action.payload?.comment === 'addItem' && main?.comments?.length >0 ? 
                       main?.comments?.map(item=> {
                         if(item?._id === action.payload?.item ){
                           if(item?.itemList?.length> 0){
-                            return {...item, length: item?.length+ 1, itemList: [...[{...action.payload,...{likeComment: 0, dislikeComment: 0, authorLike: null,}}],...item?.itemList]}
+                            return {
+                              ...item, 
+                              length: item?.length+ 1, 
+                              itemList: [...[{...action.payload,...{likeComment: 0, dislikeComment: 0, authorLike: null,}}],...item?.itemList]
+                                .sort(function(a, b) {
+                                  if (a.onPin > b.onPin) {
+                                    return -1;
+                                  } else if (a.onPin < b.onPin) {
+                                    return 1;
+                                  } else {
+                                    if (a._id > b._id) {
+                                      return -1;
+                                    } else if (a._id < b._id) {
+                                      return 1;
+                                    } else {
+                                      return 0;
+                                    }
+                                  }
+                                })}
                           } else{
                             return {...item, length: item?.length+ 1}
                           }
@@ -73,18 +106,18 @@ function reducer(state, action) {
                         }
                       })
                       : action.payload?.comment === 'delete'
-                    ? main?.comments?.filter(
-                        (item) => item?._id !== action.payload?.id,
-                      )
-                    : action.payload?.comment === 'deleteItem'? 
-                      main?.comments?.map(item=> {
-                        if(item?._id === action.payload?.item){
-                          return {...item, length: item?.length - 1, itemList: item?.itemList?.filter(e=> e._id !==action.payload?.id)}
-                        }
-                        else{
-                          return item
-                        }
-                      })
+                      ? main?.comments?.filter(
+                          (item) => item?._id !== action.payload?.id,
+                        )
+                      : action.payload?.comment === 'deleteItem'? 
+                        main?.comments?.map(item=> {
+                          if(item?._id === action.payload?.item){
+                            return {...item, length: item?.length - 1, itemList: item?.itemList?.filter(e=> e._id !==action.payload?.id)}
+                          }
+                          else{
+                            return item
+                          }
+                        })
                     :action.payload?.comment === 'edit'
                     ? main?.comments.map((item) => {
                         if (item._id === action.payload?.id) {
@@ -187,7 +220,65 @@ function reducer(state, action) {
                             }
                             
                           })
-                          :main?.comments,
+                          :action.payload?.comment === 'pinComment'? 
+                            main?.comments
+                              .map(item => {
+                                if(item._id === action.payload?.id){
+                                  return {...item, onPin: action.payload?.onPin}
+                                } else{
+                                  return item;
+                                }
+                              })
+                              .sort(function(a, b) {
+                                if (a.onPin > b.onPin) {
+                                  return -1;
+                                } else if (a.onPin < b.onPin) {
+                                  return 1;
+                                } else {
+                                  if (a._id > b._id) {
+                                    return -1;
+                                  } else if (a._id < b._id) {
+                                    return 1;
+                                  } else {
+                                    return 0;
+                                  }
+                                }
+                              })
+                              :action.payload?.comment === 'pinCommentItem'? 
+                                main?.comments
+                                  .map(item => {
+                                    if(item._id === action.payload?.item){
+                                      return {
+                                        ...item,
+                                        itemList: item?.itemList
+                                          .map(e => {
+                                            if(e._id === action.payload?.id){
+                                              return {...e, onPin: action.payload?.onPin}
+                                            } else{
+                                              return e;
+                                            }
+                                          })
+                                          .sort(function(a, b) {
+                                            if (a.onPin > b.onPin) {
+                                              return -1;
+                                            } else if (a.onPin < b.onPin) {
+                                              return 1;
+                                            } else {
+                                              if (a._id > b._id) {
+                                                return -1;
+                                              } else if (a._id < b._id) {
+                                                return 1;
+                                              } else {
+                                                return 0;
+                                              }
+                                            }
+                                          })
+                                      }
+                                    } else{
+                                      return item;
+                                    }
+                                  })
+                                :main?.comments,
               };
             } else {
               return main;
@@ -219,6 +310,7 @@ function reducer(state, action) {
                     ...{
                       comments: [],
                       pageComment: 1,
+                      loading: false,
                     },
                   };
                 }),
@@ -310,11 +402,6 @@ function reducer(state, action) {
         ...state,
         background: !state.background,
       };
-    case 'SET_SIZE_NOTIFICATION':
-      return {
-        ...state,
-        sizeNotifi: action.payload,
-      };
     case 'CHANGE_LOADING_NOTIFICATION':
       return {
         ...state,
@@ -323,7 +410,8 @@ function reducer(state, action) {
     case 'SET_LENGTH_NOTIFICATION':
       return {
         ...state,
-        lengthNotication: action.payload,
+        lengthNotication: action.payload?.length,
+        sizeNotifi:action.payload?.size,
       };
     case 'CHANGE_NOTIFICATION_ALL':
       return {
@@ -354,7 +442,7 @@ function reducer(state, action) {
         size: count?.size,
       };
     case 'CHANGE_PAGE_NOTIFICATION':
-      const numberNotifi = Math.ceil(state.lengthNotication / state.size);
+      const numberNotifi = Math.ceil(state.lengthNotication / 5);
       return {
         ...state,
         loadingNotifi:
@@ -364,7 +452,7 @@ function reducer(state, action) {
             ? true
             : false,
         pageNotification:
-          numberNotifi > action.payload &&
+          numberNotifi >= action.payload &&
           action.payload > 0 &&
           state.pageNotification > 0
             ? action.payload === state.pageNotification + 1
@@ -423,8 +511,37 @@ function reducer(state, action) {
         ...state,
         posts: listCommentItem,
       };
+    case 'SET_COMMENTS_LOADING':
+      const loadingComment = state.posts?.map(item => {
+        if(item?.messageId === action.payload?.messageId){
+          if(action.payload?.item){
+            return {
+              ...item,
+              comments: item?.comments?.map(e=>{
+                if(e?._id ===action.payload?.item){
+                  if(e?.loading){
+                    return {...e, ...{loading: action.payload?.loading}}
+                  } else{
+                    return {...e, loading: action.payload?.loading}
+                  }
+                } else{
+                  return e;
+                }
+              })
+            }
+          } else{
+            return {...item, loading: action.payload?.loading}
+          }
+        } else{
+          return item;
+        }
+      })
+      return {
+        ...state,
+        posts: loadingComment,
+      };  
     default:
-      throw new Error('Error');
+    throw new Error('Error');
   }
 }
 export { initState };

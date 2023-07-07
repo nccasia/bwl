@@ -8,6 +8,7 @@ import CommentInput from '../CommentInput';
 import { getComment } from '../../api/apiComment';
 import {showToast}  from "../../util/showToast";
 import {updateSize} from "../../util/updateSize";
+import CircularProgress from '@mui/material/CircularProgress';
 
 function Comment(props) {
   const { state, dispatch } = useStore();
@@ -62,11 +63,17 @@ function Comment(props) {
                 <CommentItem 
                   {...comment} 
                   messageId={props?.messageId} 
+                  authorMessage={props?.author?.id} 
                   type="true"
                 />
               </div>
             ))
-        : null}
+      : null}
+      {props?.loading && (
+        <div className="comment-progress">
+          <CircularProgress sx={{color: "rgb(108, 117, 136)"}}/>
+        </div>
+      )}
       {numberComment > page && (
         <p 
           className="show-page-comment" 

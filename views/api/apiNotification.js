@@ -23,7 +23,7 @@ export const getNotificationSize = async (index, dispatch) => {
             url: `/api/notifications/size?messageId=${index}`,
             method: "GET",
           });
-        dispatch({type: "SET_LENGTH_NOTIFICATION", payload: res.data?.length})
+        dispatch({type: "SET_LENGTH_NOTIFICATION", payload: res.data})
         return res.data;
     } catch (error) {
         showToast("error", error?.response?.data?.message);

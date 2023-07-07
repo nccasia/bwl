@@ -16,15 +16,8 @@ const NotificationList = (props) => {
   };
 
   React.useEffect(() => {
-    if (
-      state.author?.id &&
-      state.pageNotification > 0 &&
-      props?.openNotification
-    ) {
-      getNotification(
-        { messageId: state.author.id, page: state.pageNotification },
-        dispatch,
-      );
+    if (state.author?.id && state.pageNotification > 0 && props?.openNotification) {
+      getNotification({ messageId: state.author.id, page: state.pageNotification },dispatch);
     }
   }, [state.pageNotification, state.author?.id, props?.openNotification]);
 
@@ -247,7 +240,7 @@ const NotificationList = (props) => {
         : null}
       {state.loadingNotifi && (
         <div className="notifi-progress">
-          <CircularProgress />
+          <CircularProgress sx={{color: "rgb(108, 117, 136)"}}/>
         </div>
       )}
     </div>
