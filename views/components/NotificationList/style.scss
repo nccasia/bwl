@@ -25,14 +25,18 @@
         color: #1876f2;
       }
       p {
-        font-size: 12px;
+        font-size: 12.5px;
         line-height: 16px;
-        width: 200px;
-        word-wrap: break-word;
         b {
           font-weight: 800;
           font-size: 14px;
         }
+      }
+      .ellipsis{
+        font-size: 12px;
+        margin-left: 5px;
+        width: 200px;
+        word-wrap: break-word;
       }
     }
   }
