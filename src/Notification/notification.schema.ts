@@ -10,6 +10,9 @@ export class Notification {
   id: number;
 
   @Prop()
+  authorNotifi: string;
+
+  @Prop()
   messageId: string;
 
   @Prop()
@@ -41,6 +44,9 @@ export class Notification {
 
   @Prop()
   contentItem: string;
+
+  @Prop()
+  authorItem: string;
 
   @Prop({ default: true })
   onLabel: boolean;

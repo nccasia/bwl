@@ -63,11 +63,12 @@ const NotificationList = (props) => {
                           </b>
                           {' đã' + main?.onComment +' bình luận bài viết qủa bạn có nội dung:'}
                         </p>
-                        {truncated !== main?.content && (
+                        <p>
+                        {truncated !== main?.content ? (
                           <p className="ellipsis"  onMouseEnter={handleToggleContent}  onMouseLeave={handleToggleContentLeave}>
                           {showFullContent ? main?.content : truncated}
-                          </p>
-                         )}
+                          </p>):( <>{main?.content}</>)}
+                        </p>
                         <p className="time-notifi">
                           {changeTime(main?.createdTimestamp)}
                         </p>
@@ -95,19 +96,24 @@ const NotificationList = (props) => {
                               >
                                 {main?.author[0]?.username}
                               </b>
-                              {' đã' + main?.onItem +'phản hồi vào bình luận của bạn '}
-                            </p>
-                            {truncateditem !== main?.contentItem && (
-                              <p className="ellipsis"  onMouseEnter={handleToggleContent}  onMouseLeave={handleToggleContentLeave}>
-                              {showFullContent ? main?.contentItem : truncateditem}
+                              {` đã ${main?.onItem} phản hồi vào bình luận `}
+                              <p>
+                              {truncateditem !== main?.contentItem ? (
+                                <p className="ellipsis"  onMouseEnter={handleToggleContent}  onMouseLeave={handleToggleContentLeave}>
+                                {showFullContent ? main?.contentItem : truncateditem}
+                                </p>):( <>{main?.contentItem}</>)}
                               </p>
-                            )}
-                            <p> có nội dung như sau: </p>
-                            {truncated !== main?.content && (
+                              {main?.authorItem === state.author?.id
+                                ? "của bạn"
+                                : `trên bài viết của bạn, có nội dung như sau:`}
+
+                            </p>
+                            <p>
+                            {truncated !== main?.content ? (
                               <p className="ellipsis"  onMouseEnter={handleToggleContent}  onMouseLeave={handleToggleContentLeave}>
                               {showFullContent ? main?.content : truncated}
-                              </p>
-                            )}
+                              </p>):( <>{main?.content}</>)}
+                            </p>
                             <p className="time-notifi">
                               {changeTime(main?.createdTimestamp)}
                             </p>
@@ -136,16 +142,19 @@ const NotificationList = (props) => {
                                 {main?.author[0]?.username}{' '}
                               </b>
                               {main?.onLikeItem=== "true"? 
-                                ' đã thích bình luận của bạn.'
+                                ' đã thích'
                                 :main?.onLikeItem=== "false" ?
-                                  ' đã bỏ thích bình luận của bạn.'
-                                  :' đã hờ hững với bình luận của bạn.'
+                                  ' đã bỏ thích'
+                                  :' đã hờ hững '
                               } 
-                              {truncateditem !== main?.contentItem && (
+                              {" với bình luận "}
+                              <p>
+                              {truncateditem !== main?.contentItem ? (
                                 <p className="ellipsis"  onMouseEnter={handleToggleContent}  onMouseLeave={handleToggleContentLeave}>
                                 {showFullContent ? main?.contentItem : truncateditem}
-                                </p>
-                            )}
+                                </p>):( <>{main?.contentItem}</>)}
+                              </p>
+                              {" của bạn."}
                             </p>
                             <p className="time-notifi">
                               {changeTime(main?.createdTimestamp)}
