@@ -4,6 +4,7 @@ import {showToast}  from "../util/showToast";
 
 export const getComment = async (index, dispatch) => {
   try {
+    await dispatch({type: 'SET_COMMENTS_LOADING', payload: {messageId: index?.messageId, loading: true}})
     const res = await axios({
       url: `/api/comments?page=${index?.page}&size=${index?.size}&messageId=${index?.messageId}&id=${index?.id}`,
       method: 'GET',
@@ -18,8 +19,10 @@ export const getComment = async (index, dispatch) => {
         type: index?.type
       }
     });
+    dispatch({type: 'SET_COMMENTS_LOADING', payload: {messageId: index?.messageId, loading: false}})
   } catch(error) {
     showToast("error", error?.response?.data?.message);
+    dispatch({type: 'SET_COMMENTS_LOADING', payload: {messageId: index?.messageId, loading: false}})
     return [];
   }
 };
@@ -80,6 +83,7 @@ export const postCommentItem = async (index) => {
 
 export const getCommentItem = async (id,commentId, page, size, dispatch, messageId, type) => {
     try {
+      await dispatch({type: 'SET_COMMENTS_LOADING', payload: {messageId: messageId, loading: true, item: commentId}})
       const res = await axios({
         url: `/api/comment/item?page=${page}&size=${size}&id=${id}&messageId=${messageId}&commentId=${commentId}`,
         method: 'GET',
@@ -95,8 +99,10 @@ export const getCommentItem = async (id,commentId, page, size, dispatch, message
           type: type
         }
       });
+      dispatch({type: 'SET_COMMENTS_LOADING', payload: {messageId: messageId, loading: false, item: commentId}})
     } catch(error) {
       showToast("error", error?.response?.data?.message);
+      dispatch({type: 'SET_COMMENTS_LOADING', payload: {messageId: messageId, loading: false, item: commentId}})
       return [];
     }
   };
@@ -113,4 +119,18 @@ export const postCommentLike = async (index) => {
       showToast("error", error?.response?.data?.message);
       return {};
     }
+}
+
+export const postPinComment = async (index) => {
+  try {
+      const res = await axios({
+          url: "/api/comment/pin",
+          data: index,
+          method: "POST",
+      });
+      return res.data;
+  } catch(error) {
+    showToast("error", error?.response?.data?.message);
+    return {};
+  }
 }

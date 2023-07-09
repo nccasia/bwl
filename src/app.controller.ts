@@ -421,4 +421,15 @@ export class AppController {
       return res.status(500).json({message:"Internal Server Error"});
     }
   }
+
+  @Post('/api/comment/pin')
+  async postPinComment(@Req() req: Request, @Res() res: Response) {
+    try {
+      const { id, onPin } = req.body;
+      await this.appService.pinComment(id as string, onPin);
+      return res.status(200).json({ message: "Pin comment successfully!" });
+    } catch (error) {
+      return res.status(500).json({message:"Internal Server Error"});
+    }
+  }
 }

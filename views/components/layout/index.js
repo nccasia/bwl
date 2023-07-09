@@ -74,7 +74,7 @@ const MainContent = () => {
           <Container type="ALL"/>
           {state.loadingPost && (
             <div className="notifi-progress">
-              <CircularProgress />
+              <CircularProgress sx={{color: "rgb(108, 117, 136)"}}/>
             </div>
           )}
         </div>

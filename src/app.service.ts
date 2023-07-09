@@ -141,7 +141,7 @@ export class AppService {
             item: null,
           },
         },
-        {$sort: {_id: -1,}},
+        {$sort: {onPin: -1, _id: -1,}},
         { $skip: (page - 1) * 5 },
         { $limit: 5 },
         {
@@ -169,6 +169,7 @@ export class AppService {
             onEdit: 1,
             createdTimestamp: 1,
             length:1,
+            onPin:1,
             likeComment:1,
             dislikeComment:1,
             authorLike: id ? 1 : 0,
@@ -1118,7 +1119,10 @@ export class AppService {
             messageId,
           },
         },
-        {$sort: {_id: -1,}},
+        {$sort: {
+          onPin: -1 ,
+          _id: -1
+        }},
         { $skip: (page - 1) * 5 },
         { $limit: 5 },
         {
@@ -1148,6 +1152,7 @@ export class AppService {
             length:1,
             likeComment:1,
             dislikeComment:1,
+            onPin:1,
             authorLike: id ? 1 : 0,
             messageId: 1,
             author: [{
@@ -1312,5 +1317,18 @@ export class AppService {
         },
       ];
       return await this.komuLike.aggregate(aggregatorOpts as any).exec();
+  }
+  async pinComment(id: string, onPin: boolean | null) {  
+    const  pinComment= await this.komuComment.findByIdAndUpdate(
+      {_id: id},
+      {onPin: onPin}, 
+    ).exec();
+    this.addEvent({ data: { 
+      comment: pinComment?.item ? "pinCommentItem" : "pinComment",
+      id,
+      onPin,
+      messageId: pinComment?.messageId,
+      item: pinComment?.item, 
+    } });
   }
 }

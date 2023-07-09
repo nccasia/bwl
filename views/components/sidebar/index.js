@@ -33,7 +33,7 @@ const SideBar = () => {
           : null}
         {state.loadingHotPost && (
           <div className="sidebar-progress">
-            <CircularProgress />
+            <CircularProgress sx={{color: "rgb(108, 117, 136)"}}/>
           </div>
         )}
       </div>

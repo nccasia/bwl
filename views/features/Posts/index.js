@@ -49,7 +49,7 @@ const Posts = () => {
       >
         {state.posts?.length === 0 && state.loadingPost && state.changePage && (
           <div className="posts-progress">
-            <CircularProgress />
+            <CircularProgress sx={{color: "rgb(108, 117, 136)"}}/>
           </div>
         )}
         <Container type="ONE" messageId={messageId}/>

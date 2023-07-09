@@ -27,9 +27,7 @@ function HeaderPage(props) {
   };
   React.useEffect(() => {
     if (state.author?.id) {
-      getNotificationSize(state.author.id, dispatch).then((data) => {
-        dispatch({ type: 'SET_SIZE_NOTIFICATION', payload: data?.size });
-      });
+      getNotificationSize(state.author.id, dispatch);
     }
   }, [state.author?.id]);
   const handleNotification = async () => {

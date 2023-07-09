@@ -7,6 +7,7 @@ import { useStore } from '../../store';
 import {updateSize} from "../../util/updateSize";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import CircularProgress from '@mui/material/CircularProgress';
 
 function FeedbackComment(props){
 
@@ -56,9 +57,14 @@ function FeedbackComment(props){
                     <div className="comment-feedback-div">
                         {open && props?.item ? props?.item.map((main, index) => (
                             <div className="comment-feedback" key={index}>
-                                <CommentItem {...main} type="false"/>
+                                <CommentItem {...main} type="false" authorMessage={props?.authorMessage}/>
                             </div>
                         )): null}
+                        {props?.loading && (
+                            <div className="comment-item-progress">
+                                <CircularProgress sx={{color: "rgb(108, 117, 136)"}}/>
+                            </div>
+                        )}
                         { open && numberComment > page && <p className="show-page-comment" onClick={() => handleClickPage(page)}>See More</p>}
                     </div>
                 </div>
