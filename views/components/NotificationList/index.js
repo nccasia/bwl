@@ -29,11 +29,16 @@ const NotificationList = (props) => {
   }, [state.pageNotification, state.author?.id, props?.openNotification]);
 
   const [showFullContent, setShowFullContent] = React.useState(false);
-  const handleToggleContent = () => {
+  const [hoveredIndex, setHoveredIndex] = React.useState(null);
+
+  const handleToggleContent = (index) => {
     setShowFullContent(true);
+    setHoveredIndex(index);
   };
+
   const handleToggleContentLeave = () => {
     setShowFullContent(false);
+    setHoveredIndex(null);
   };
 
   return (
@@ -43,6 +48,7 @@ const NotificationList = (props) => {
             const truncated = truncatedContent(main?.content);
             const truncateditem = truncatedContent(main?.contentItem);
             const content = main?.content ? truncated : '';
+            const isHovered = index === hoveredIndex;
             return (
               <div
                 key={index}
@@ -67,18 +73,17 @@ const NotificationList = (props) => {
                         </b>
                         {' đã' +
                           main?.onComment +
-                          ' bình luận bài viết qủa bạn có nội dung:'}
+                          ' bình luận bài viết của bạn có nội dung:'}
                       </p>
                       <div className="ellipsis">
-                        {truncated !== main?.content ? (
-                          <div
-                            onMouseEnter={handleToggleContent}
-                            onMouseLeave={handleToggleContentLeave}
-                          >
-                            {showFullContent ? main?.content : truncated}
+                        {isHovered ? (
+                          <div onMouseLeave={handleToggleContentLeave}>
+                            {main?.content}
                           </div>
                         ) : (
-                          <>{main?.content}</>
+                          <div onMouseEnter={() => handleToggleContent(index)}>
+                            {truncated}
+                          </div>
                         )}
                       </div>
                       <p className="time-notifi">
@@ -112,35 +117,35 @@ const NotificationList = (props) => {
                         </b>
                         {` đã ${main?.onItem} phản hồi vào bình luận: `}
                         <div className="ellipsis">
-                          {truncateditem !== main?.contentItem ? (
-                            <div
-                              onMouseEnter={handleToggleContent}
-                              onMouseLeave={handleToggleContentLeave}
-                            >
-                              {showFullContent
-                                ? main?.contentItem
-                                : truncateditem}
+                          {isHovered && showFullContent ? (
+                            <div onMouseLeave={handleToggleContentLeave}>
+                              {main?.contentItem}
                             </div>
                           ) : (
-                            <>{main?.contentItem}</>
+                            <div
+                              onMouseEnter={() => handleToggleContent(index)}
+                            >
+                              {truncateditem}
+                            </div>
                           )}
                         </div>
                         {main?.authorItem === state.author?.id
                           ? 'của bạn'
                           : 'trên bài viết của bạn'}
                         {', có nội dung như sau:'}
-                        <div  className="ellipsis">
-                        {truncated !== main?.content ? (
-                          <div
-                            onMouseEnter={handleToggleContent}
-                            onMouseLeave={handleToggleContentLeave}
-                          >
-                            {showFullContent ? main?.content : truncated}
-                          </div>
-                        ) : (
-                          <>{main?.content}</>
-                        )}
-                      </div>
+                        <div className="ellipsis">
+                          {isHovered && showFullContent ? (
+                            <div onMouseLeave={handleToggleContentLeave}>
+                              {main?.content}
+                            </div>
+                          ) : (
+                            <div
+                              onMouseEnter={() => handleToggleContent(index)}
+                            >
+                              {truncated}
+                            </div>
+                          )}
+                        </div>
                       </p>
                       <p className="time-notifi">
                         {changeTime(main?.createdTimestamp)}
@@ -177,18 +182,17 @@ const NotificationList = (props) => {
                           ? ' đã bỏ thích'
                           : ' đã hờ hững '}
                         {' với bình luận '}
-                        <div  className="ellipsis">
-                          {truncateditem !== main?.contentItem ? (
-                            <div
-                              onMouseEnter={handleToggleContent}
-                              onMouseLeave={handleToggleContentLeave}
-                            >
-                              {showFullContent
-                                ? main?.contentItem
-                                : truncateditem}
+                        <div className="ellipsis">
+                          {isHovered ? (
+                            <div onMouseLeave={handleToggleContentLeave}>
+                              {main?.contentItem}
                             </div>
                           ) : (
-                            <>{main?.contentItem}</>
+                            <div
+                              onMouseEnter={() => handleToggleContent(index)}
+                            >
+                              {truncateditem}
+                            </div>
                           )}
                         </div>
                         {' của bạn.'}
