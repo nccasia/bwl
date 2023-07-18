@@ -34,6 +34,20 @@ const NotificationList = (props) => {
     setHoveredIndex(null);
   };
 
+  React.useEffect(() => {
+    const handleResize = () => {
+      setHoveredIndex(window.innerWidth <= 768); 
+    };
+
+    handleResize(); 
+
+    window.addEventListener('resize', handleResize); 
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   return (
     <div>
       {state.notification
@@ -71,11 +85,11 @@ const NotificationList = (props) => {
                       <div className="ellipsis">
                         {isHovered ? (
                           <div onMouseLeave={handleToggleContentLeave}>
-                            {main?.content}
+                            "{main?.content}"
                           </div>
                         ) : (
                           <div onMouseEnter={() => handleToggleContent(index)}>
-                            {truncated}
+                            "{truncated}"
                           </div>
                         )}
                       </div>
@@ -108,17 +122,17 @@ const NotificationList = (props) => {
                         >
                           {main?.author[0]?.username}
                         </b>
-                        {` đã ${main?.onItem} phản hồi vào bình luận: `}
+                        {` đã ${main?.onItem} một phản hồi vào bình luận: `}
                         <div className="ellipsis">
                           {isHovered && showFullContent ? (
                             <div onMouseLeave={handleToggleContentLeave}>
-                              {main?.contentItem}
+                              "{main?.contentItem}"
                             </div>
                           ) : (
                             <div
                               onMouseEnter={() => handleToggleContent(index)}
                             >
-                              {truncateditem}
+                              "{truncateditem}"
                             </div>
                           )}
                         </div>
@@ -129,13 +143,13 @@ const NotificationList = (props) => {
                         <div className="ellipsis">
                           {isHovered && showFullContent ? (
                             <div onMouseLeave={handleToggleContentLeave}>
-                              {main?.content}
+                              "{main?.content}"
                             </div>
                           ) : (
                             <div
                               onMouseEnter={() => handleToggleContent(index)}
                             >
-                              {truncated}
+                              "{truncated}"
                             </div>
                           )}
                         </div>
@@ -178,13 +192,13 @@ const NotificationList = (props) => {
                         <div className="ellipsis">
                           {isHovered ? (
                             <div onMouseLeave={handleToggleContentLeave}>
-                              {main?.contentItem}
+                              "{main?.contentItem}"
                             </div>
                           ) : (
                             <div
                               onMouseEnter={() => handleToggleContent(index)}
                             >
-                              {truncateditem}
+                              "{truncateditem}"
                             </div>
                           )}
                         </div>

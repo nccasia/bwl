@@ -40,7 +40,7 @@ const Delcomment = (props)  => {
         onClick={handleClickOpen}
         style={{display: "flex", gap: "5px"}}
       >
-        <DeleteForeverIcon sx={{fontSize: "16px"}}/>
+        <DeleteForeverIcon sx={{fontSize: "13px"}}/>
         <p>Delete</p>
       </div>
       <Dialog
