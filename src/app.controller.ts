@@ -28,7 +28,6 @@ const discordUserUrl = 'https://discord.com/api/users/@me';
 @Controller()
 export class AppController {
   getHello(): any {
-    //throw new Error('Method not implemented.');
     return 'Hello World!';
   }
   constructor(
@@ -38,7 +37,33 @@ export class AppController {
   ) {}
 
   @Sse('/api/sse')
-  sse(): Observable<MessageEvent> {
+  sse(@Query() query: any, @Req() req: Request, @Res() res: Response): Observable<MessageEvent> {
+    res.on('close', () => {
+      const testClose = async()=>{
+        if (req.cookies['token']) {
+          this.httpService
+            .get(discordUserUrl, {
+              headers: {
+                Authorization: `Bearer ${req.cookies['token']}`,
+              },
+            })
+            .pipe(
+              map((userResponse) => {
+                return userResponse.data;
+              }),
+              map(async (user) => {
+                await this.appService.onlineUser(
+                  user.id,
+                  false,
+                );
+              }),
+              first(),
+            )
+            .subscribe();
+        } 
+      }
+      testClose();
+    });
     return this.appService.sendEvents();
   }
 
@@ -58,20 +83,19 @@ export class AppController {
               return userResponse.data;
             }),
             map(async (user) => {
-              const userDb = await this.authService.findUserFromDiscordId(
+              const userDb: any = await this.appService.onlineUser(
                 user.id,
+                true,
               );
-
               if (!userDb) {
                 await this.authService.saveUser(
                   user.id,
                   user.username,
                   user.avatar,
                   user.discriminator,
+                  true,
                 );
               }
-              const posts = await this.appService.getAll(1, 5, null);
-              //return res.render('index', { posts, user });
             }),
             first(),
           );
@@ -106,8 +130,9 @@ export class AppController {
               return userResponse.data;
             }),
             map(async (user) => {
-              const userDb = await this.authService.findUserFromDiscordId(
+              const userDb: any = await this.appService.onlineUser(
                 user.id,
+                true,
               );
               if (!userDb) {
                 await this.authService.saveUser(
@@ -115,10 +140,9 @@ export class AppController {
                   user.username,
                   user.avatar,
                   user.discriminator,
+                  true,
                 );
               }
-              //const posts = await this.appService.getAll(1, 5, null);
-              //return res.render('index', { posts, user });
             }),
             first(),
           );
@@ -126,9 +150,6 @@ export class AppController {
         throw new error();
       }
     } else {
-      const posts = await this.appService.getAll(1, 5, null);
-      //console.log(posts);
-      //return res.render('index', { posts });
     }
   }
   
@@ -142,11 +163,23 @@ export class AppController {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
   posts() {}
 
+  @Get('/api/users')
+  async getUsers(@Req() req: Request, @Res() res: Response) {
+    try {
+      const users = await this.appService.getUsers(1);
+      const size = await this.appService.getUsersLength();
+      const online = size?.filter((item: any) => item?.online === true)?.length;
+      return res.status(200).json({users, size: size?.length, online});
+    } catch (error) {
+      return res.status(500).json({message:"Internal Server Error"});
+    }
+  }
+
   @Get('/api/posts')
   async getPostsOne(@Req() req: Request, @Res() res: Response) {
     try {
       const posts = await this.appService.getPostsOne(req.query?.messageId as string, String(req.query?.id)? String(req.query?.id) : null);
-      return res.status(200).json(posts);
+      return res.status(200).json({posts, size: 1});
     } catch (error) {
       return res.status(500).json({message:"Internal Server Error"});
     }
@@ -182,10 +215,15 @@ export class AppController {
   }
 
   @Get('/api/logout')
-  async logout(@Res() res: Response) {
+  async logout(@Req() req: Request,@Res() res: Response) {
     try {
       res.clearCookie('token');
       res.redirect('/');
+      const { messageId} = req.query;  
+      await this.appService.onlineUser(
+        String(messageId),
+        false,
+      );
     } catch (error) {
       return res.status(500).json({message:"Internal Server Error"});
     }
@@ -362,8 +400,10 @@ export class AppController {
   @Get('/api/hotposts')
   async getHotPosts(@Req() req: Request, @Res() res: Response) {
     try {
-      const hotposts = await this.appService.getHotPosts();
-      return res.status(200).json({ hotposts });
+      const { messageId, page, size } = req.query;
+      const posts = await this.appService.getHotPosts(String(messageId), Number(page), Number(size));
+      const size1= await this.appService.findLengthMessage();
+      return res.status(200).json({ posts, size: size1});
     } catch (error) {
       return res.status(500).json({message:"Internal Server Error"});
     }
@@ -428,6 +468,52 @@ export class AppController {
       const { id, onPin } = req.body;
       await this.appService.pinComment(id as string, onPin);
       return res.status(200).json({ message: "Pin comment successfully!" });
+    } catch (error) {
+      return res.status(500).json({message:"Internal Server Error"});
+    }
+  }
+
+  @Get('/api/search')
+  async getSearch(@Req() req: Request, @Res() res: Response) {
+    try {
+      const { name, page } = req.query;
+      const users = await this.appService.searchByName(String(name), Number(page));
+      const size = await this.appService.searchByLength(String(name));
+      return res.status(200).json({ users, size: size?.length });
+    } catch (error) {
+      return res.status(500).json({message:"Internal Server Error"});
+    }
+  }
+
+  @Get('/api/search/posts')
+  async getSearchPosts(@Req() req: Request, @Res() res: Response) {
+    try {
+      const { messageId, page } = req.query;
+      const posts = await this.appService.searchPosts(String(messageId), Number(page));
+      const size = await this.appService.searchPostsLength(String(messageId));
+      return res.status(200).json({ posts, total: size?.length});
+    } catch (error) {
+      return res.status(500).json({message:"Internal Server Error"});
+    }
+  }
+
+  @Get('/api/search/time/posts')
+  async getSearchTimePosts(@Req() req: Request, @Res() res: Response) {
+    try {
+      const { start, end, page } = req.query;
+      const posts = await this.appService.searchTimePosts(Number(start), Number(end) + 86400000, Number(page));
+      const size = await this.appService.searchTimePostsLength(Number(start), Number(end) + 86400000);
+      return res.status(200).json({ posts, total: size?.length});
+    } catch (error) {
+      return res.status(500).json({message:"Internal Server Error"});
+    }
+  }
+
+  @Get('/api/test')
+  async getTest(@Req() req: Request, @Res() res: Response) {
+    try {
+      const a= await this.appService.deleteStart();
+      return res.status(200).json(a);
     } catch (error) {
       return res.status(500).json({message:"Internal Server Error"});
     }

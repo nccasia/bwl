@@ -6,6 +6,9 @@ import { Model } from 'mongoose';
 
 @Injectable()
 export class KomuUsersService {
+  findOneAndUpdate(arg0: { id: string; }, arg1: { online: boolean; }) {
+    throw new Error('Method not implemented.');
+  }
   constructor(
     @InjectModel(KomuUsers.name)
     private readonly komuUserModel: Model<IKomuUsers>,
@@ -13,5 +16,9 @@ export class KomuUsersService {
 
   async findOne(id: string) {
     return this.komuUserModel.findOne({ id: id });
+  }
+
+  async findUpdate(id: string) {
+    return this.komuUserModel.find({ id: id });
   }
 }

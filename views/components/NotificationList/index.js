@@ -2,17 +2,18 @@
 import React from 'react';
 import './style.scss';
 import { changeTime } from '../../util/changeTime';
-import { useNavigate } from 'react-router-dom';
 import { useStore } from '../../store';
 import CircularProgress from '@mui/material/CircularProgress';
-import { getNotification } from '../../api/apiNotification';
+import { getNotification, postNotification } from '../../api/apiNotification';
 import { truncatedContent } from '../../util/truncatedContent';
 
 const NotificationList = (props) => {
   const { state, dispatch } = useStore();
-  const navigate = useNavigate();
   const handleChangePage = async (index) => {
-    navigate(`/posts?messageId=${index}`);
+    dispatch({type: "SET_SEARCH_MESSAGE", payload: index});
+    if(state?.notification[0]?.onLabel){
+      postNotification(state.author?.id);
+    }
   };
 
   React.useEffect(() => {

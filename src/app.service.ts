@@ -213,6 +213,11 @@ export class AppService {
     });
     await comments.save();
     const message = await this.komuMessage.find({ messageId }).exec();
+    await this.komuMessage.findOneAndUpdate(
+      {messageId},
+      { $set: { totalComment: message[0]?.totalComment ? message[0]?.totalComment + 1 : 1 } },
+      { new: true },
+    );
     const commentAuthor = await this.komuUser.findOne({ id: authorId }).exec();
     const author={
       username: commentAuthor?.username,
@@ -293,6 +298,11 @@ export class AppService {
     const deleteItem: any = await this.komuComment.find({item: id}).exec();
     await this.komuComment.deleteMany({item: id}).exec();
     const message = await this.komuMessage.find({ messageId: deleteComment?.messageId }).exec();
+    await this.komuMessage.findOneAndUpdate(
+      {messageId},
+      { $set: { totalComment: message[0]?.totalComment - 1} },
+      { new: true },
+    );
     if(deleteComment?.item){
       const contentItem = await this.komuComment.find({_id: deleteComment?.item});
       if(contentItem[0]?.authorId ===messageId){
@@ -568,7 +578,12 @@ export class AppService {
       onLike
     });
     await like.save();
-    const message = await this.komuMessage.find({ messageId }).exec();
+    const message = await this.komuMessage.find({ messageId });
+    await this.komuMessage.findOneAndUpdate(
+      {messageId},
+      { $set: { totalLike: message[0]?.totalLike ? message[0]?.totalLike + 1 : 1 } },
+      { new: true },
+    );
     if(message[0]?.authorId !==authorId){
       const onLike = true;
       const createdTimestamp = new Date().getTime();
@@ -605,7 +620,12 @@ export class AppService {
         onLike:true,
       })
       .exec();
-    const message = await this.komuMessage.find({ messageId }).exec();
+    const message = await this.komuMessage.find({ messageId });
+    await this.komuMessage.findOneAndUpdate(
+      {messageId},
+      { $set: { totalLike: message[0]?.totalLike - 1} },
+      { new: true },
+    );
     if(message[0]?.authorId !==authorId){
       const onLike = false;
       const createdTimestamp = new Date().getTime();
@@ -819,97 +839,10 @@ export class AppService {
     ).exec();
     return notification;
   }
-  async getHotPosts() {
-    const sevenDaysAgo = new Date();
-    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-    const now = new Date();
-    const aggregatorOpts = [
-      {
-        $match: {
-          channelId: channel,
-          createdTimestamp: { $gte: sevenDaysAgo.getTime(), $lte: now.getTime() },
-        },
-      },
-      {
-        $lookup: {
-          from: 'komu_users',
-          localField: 'authorId',
-          foreignField: 'id',
-          as: 'author1',
-        },
-      },
-      {
-        $unwind: '$author1',
-      },
-      {
-        $lookup: {
-          from: 'komu_bwlcomments',
-          localField: 'messageId',
-          foreignField: 'messageId',
-          as: 'comments',
-        },
-      },
-      {
-        $lookup: {
-          from: 'komu_bwllikes',
-          localField: 'messageId',
-          foreignField: 'messageId',
-          as: 'likes',
-        },
-      },
-      {
-        $addFields: {
-          author: {
-            username: "$author1.username",
-            avatar: "$author1.avatar",
-            id: "$author1.id",
-          },
-          totalComment: { $size: '$comments' },
-          totalLike: {
-            $size: {
-              $filter: {
-                input: "$likes",
-                as: "like",
-                cond: { $or: [
-                  { $eq: ["$$like.commentId", null] },
-                  { $not: "$$like.commentId" }
-                ] }
-              }
-            }
-          },
-        },
-      },
-      {
-        $sort: {
-          totalLike: -1,
-          totalComment: -1,
-        },
-      },
-      {
-        $limit: 10,
-      },  
-      {
-        $unset: ['author1','comments', 'likes']
-      },
-      {
-        $project: {
-          messageId: 1,
-          links: 1,
-          createdTimestamp: 1,
-          source:1,
-          author: 1,
-          totalComment: 1,
-          totalLike: 1
-        }
-      },
-    ]; 
-    const data = await this.komuMessage.aggregate(aggregatorOpts as any).exec();
-    return data;
-  }  
-  async getAll(page: number, size: number, authorId: string | null) {
+  async getHotPosts(authorId: string, page: number, size: number) {
     const aggregatorOpts = [
       { $match: { channelId: channel } },
-      { $sort: { _id: -1 } },
+      { $sort: { totalLike: -1, totalComment: -1, _id: -1} },
       { $skip: (page - 1) * 5 },
       { $limit: 5 },
       {
@@ -922,14 +855,6 @@ export class AppService {
       },
       {
         $unwind: '$author1',
-      },
-      {
-        $lookup: {
-          from: 'komu_bwlcomments',
-          localField: 'messageId',
-          foreignField: 'messageId',
-          as: 'comments',
-        },
       },
       {
         $lookup: {
@@ -963,18 +888,89 @@ export class AppService {
             avatar: "$author1.avatar",
             id: "$author1.id",
           },
-          totalComment: { $size: "$comments" },
-          totalLike: {
-            $size: {
-              $filter: {
-                input: "$likes",
-                as: "like",
-                cond: { $or: [
-                  { $eq: ["$$like.commentId", null] },
-                  { $not: "$$like.commentId" }
-                ] }
+          likes: {
+            $filter: {
+              input: "$likes",
+              as: "like",
+              cond: { $eq: ["$$like.commentId", null] }
+            }
+          }
+        }
+      },    
+      {
+        $project: {
+          messageId: 1,
+          links: 1,
+          createdTimestamp: 1,
+          source:1,
+          author: 1,
+          reactions: 1,
+          totalComment: 1,
+          totalLike: 1,
+          likes: 1,
+        }
+      },
+    ];
+    let data = await this.komuMessage.aggregate(aggregatorOpts as any).exec();
+    if(data?.length <  size && size !==5){
+      data.splice(0, 5-size);
+    } else{
+      data= data.slice(-size);
+    }
+    for (const item of data) {
+      item.reactions = this.reduceReactions(item.reactions);
+      item.likes = item.likes?.filter((e: any) => e.authorId === authorId).length > 0 ? true : false;
+    }
+    return data;
+  }  
+  async getAll(page: number, size: number, authorId: string | null) {
+    const aggregatorOpts = [
+      { $match: { channelId: channel } },
+      { $sort: { _id: -1 } },
+      { $skip: (page - 1) * 5 },
+      { $limit: 5 },
+      {
+        $lookup: {
+          from: 'komu_users',
+          localField: 'authorId',
+          foreignField: 'id',
+          as: 'author1',
+        },
+      },
+      {
+        $unwind: '$author1',
+      },
+      {
+        $lookup: {
+          from: 'komu_bwllikes',
+          localField: 'messageId',
+          foreignField: 'messageId',
+          as: 'likes',
+        },
+      },
+      {
+        $lookup: {
+          from: 'komu_bwlreactions',
+          localField: 'messageId',
+          foreignField: 'messageId',
+          as: 'reactions',
+        },
+      },
+      {
+        $addFields: {
+          'reactions': {
+            $map: {
+              input: '$reactions',
+              as: 'reaction',
+              in: {
+                emoji: '$$reaction.emoji'
               }
             }
+          },
+          author: {
+            username: "$author1.username",
+            avatar: "$author1.avatar",
+            id: "$author1.id",
           },
           likes: {
             $filter: {
@@ -985,9 +981,6 @@ export class AppService {
           }
         }
       },      
-      {
-        $unset: authorId ? ['author1', 'comments'] : ['author1', 'comments', 'likes'],
-      },
       {
         $project: {
           messageId: 1,
@@ -1330,5 +1323,213 @@ export class AppService {
       messageId: pinComment?.messageId,
       item: pinComment?.item, 
     } });
+  }
+  async onlineUser(id: string, online: boolean) {  
+    return await this.komuUser.findOneAndUpdate(
+      {id: id},
+      {online: online}, 
+    ).exec();
+  }
+  async getUsers(page: number) {  
+    return await this.komuUser
+    .aggregate([
+      { 
+        $match: { 
+          $or: [
+            { username: { $ne: null } },
+            { username: { $ne: undefined } },
+            { email: { $ne: null } },
+            { email: { $ne: undefined } },
+            { online: { $ne: null } },
+            {online: { $ne: undefined } },
+          ],
+          username: { $exists: true },
+          email: { $exists: true },
+          online: { $exists: true },
+        } 
+      },
+      { 
+        $sort: { online: -1, username: 1, email: 1, } 
+      },
+      { $skip: (page - 1) * 10 },
+      { $limit: 10 },
+      {
+        $project: {
+          id: 1,
+          email: 1,
+          avatar: 1,
+          online: 1,
+          username: 1,
+        }
+      }
+    ]).exec();
+  }
+  async getUsersLength() {  
+    return await this.komuUser
+    .aggregate([
+      { 
+        $match: { 
+          $or: [
+            { username: { $ne: null } },
+            { username: { $ne: undefined } },
+            { email: { $ne: null } },
+            { email: { $ne: undefined } },
+            { online: { $ne: null } },
+            {online: { $ne: undefined } },
+          ],
+          username: { $exists: true },
+          email: { $exists: true },
+          online: { $exists: true },
+        } 
+      },
+    ]).exec();
+  }
+  async searchByName(name: string, page: number) {
+    return await this.komuUser
+      .aggregate([
+        {
+          $match: {
+            username: { $regex: name, $options: 'i' }
+          }
+        },
+        {
+          $lookup: {
+            from: 'komu_bwls',
+            localField: 'id',
+            foreignField: 'authorId',
+            as: 'messages'
+          }
+        },
+        {
+          $addFields: {
+            total: {
+              $size: {
+                $filter: {
+                  input: "$messages",
+                  as: "message",
+                  cond: { 
+                    $and: [
+                      { $eq: ["$$message.channelId", channel] },
+                      { $ne: ["$$message.links", []] }
+                    ]
+                  },
+                }
+              }
+            },
+          }
+        },
+        { $sort: { total: -1, username: 1 } },
+        { $skip: (page - 1) * 10 },
+        { $limit: 10 },      
+        {
+          $project: {
+            total: 1,
+            id: 1,
+            email: 1,
+            avatar: 1,
+            online: 1,
+            username: 1,
+          }
+        }
+      ])
+      .exec();
+  }
+  async searchByLength(name: string) {
+    return await this.komuUser
+      .aggregate([
+        {
+          $match: {
+            username: { $regex: name, $options: 'i' }
+          }
+        },
+      ])
+      .exec();
+  }
+  async searchPosts(id: string, page: number) {
+    return await this.komuMessage
+      .aggregate([
+        {
+          $match: {
+            channelId: channel,
+            authorId: id,
+            links: { $ne: [] },
+          }
+        },
+        { $sort: { _id: -1 } },
+        { $skip: (page - 1) * 10 },
+        { $limit: 10 },
+        {
+          $project: {
+            messageId: 1,
+            source: 1,
+            links: 1,
+            createdTimestamp: 1,
+          }
+        }
+      ])
+      .exec();
+  }
+  async searchTimePosts(start: number, end: number, page: number) {
+    return await this.komuMessage
+      .aggregate([
+        {
+          $match: {
+            channelId: channel,
+            links: { $ne: [] },
+            createdTimestamp: { $gte: start, $lt: end },
+          }
+        },
+        { $sort: { _id: -1 } },
+        { $skip: (page - 1) * 10 },
+        { $limit: 10 },
+        {
+          $project: {
+            messageId: 1,
+            source: 1,
+            links: 1,
+            createdTimestamp: 1,
+          }
+        }
+      ])
+      .exec();
+  }
+  async searchPostsLength(id: string) {
+    return await this.komuMessage
+      .aggregate([
+        {
+          $match: {
+            channelId: channel,
+            authorId: id,
+            links: { $ne: [] },
+          }
+        },
+      ])
+      .exec();
+  }
+  async searchTimePostsLength(start: number, end: number) {
+    return await this.komuMessage
+      .aggregate([
+        {
+          $match: {
+            channelId: channel,
+            links: { $ne: [] },
+            createdTimestamp: { $gte: start, $lt: end },
+          }
+        },
+      ])
+      .exec();
+  }
+  async deleteStart() {
+    // await this.komuMessage.deleteMany({authorId: "1027051170650406913"});
+    //await this.komuUser.deleteMany({username: "9694"});
+    // await this.komuLike.deleteMany({authorId: "1027051170650406913"});
+    // await this.komuComment.deleteMany({authorId: "1027051170650406913"});
+    //await this.komuComment.deleteMany({item: "1027051170650406913"});
+    //await this.komuUser.deleteMany({email: "9694"});
+    //await this.komuLike.deleteMany();
+    //this.komuMessage.find({channelId: channel});
+    //await this.komuUser.deleteMany({id: "1027051170650406913"})
+    //await this.komuMessage.find({channelId: channel}).sort({ _id: -1 });
+    return await this.komuUser.find({id: "1027051170650406913"})
   }
 }
