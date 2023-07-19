@@ -7,8 +7,8 @@ import { getLogout } from '../../api/apiLogin';
 const LoginButton = (props) => {
   const { state, dispatch } = useStore();
   const handleOnclick = () => {
-    if (props.title === 'Logout') {
-      getLogout();
+    if (props.title === 'Logout' && state.author?.id) {
+      getLogout(state.author?.id);
     }
   };
   return (

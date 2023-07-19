@@ -55,21 +55,9 @@ function HeaderPage(props) {
       style={{ backgroundColor: state.background ? '#242526' : 'white' }}
     >
       <div className="nav-header-icon">
-        {props.open!=="ONE" && (
-          <div className="nav-header-menu">
-            {isHidden  && (
-              <div className={`sidebar_mobile ${isHidden ? "open" : " "}`}>
-                <SideBar />
-              </div>
-            )} 
-            {isHidden ?  <ArrowBackIcon onClick={openMenu} className="menu_icon"/> : <MenuIcon onClick={openMenu} className="menu_icon" />}  
-          </div>
-        )}
-        <Link to="/">
-          <div className="logoNcc">
-            <img src="./assets/img/favicon.png" alt="logo" />
-          </div>
-        </Link>
+        <div className="logoNcc">
+          <img src="./assets/img/favicon.png" alt="logo" />
+        </div>
       </div>
       {!state.author?.id ? (
         <div className="person-icon" onClick={() => handleClick()}>

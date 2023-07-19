@@ -29,6 +29,12 @@ export class Message {
 
   @Prop()
   source: boolean ;
+
+  @Prop({ default: 0 })
+  totalLike: number;
+
+  @Prop({ default: 0 })
+  totalComment: number;
 }
 
 export const MessageSchema = SchemaFactory.createForClass(Message);
