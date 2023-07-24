@@ -10,11 +10,12 @@
         position:relative;
         .date-picker {
             border-radius: 25px 0 0 25px;
-            background-color: white;
             border: none;
             width: 90%;
             height: 40px;
-            color: #6C7588;
+            .css-1uvydh2{
+                color: #6C7588;
+            }
             div {
                 height: 40px;
                 border-radius: 25px 0 0 25px;
@@ -36,7 +37,7 @@
             background-color: white;
         }
     }
-    .date-range-picker{
+    .date-range-picker-dark{
         width: 80%;
         z-index: 100000;
         position: absolute;
@@ -44,9 +45,52 @@
         left: 32px;
         .react-datepicker {
             width: 100%;
+            background-color: rgb(36, 37, 38);
+            border: 1px solid rgb(108, 117, 136);
         }
         .react-datepicker__month-container{
             width: 100%;
+            .react-datepicker__header{
+                border-bottom: 1px solid #6c7588;
+                background-color: rgb(36, 37, 38);
+                .react-datepicker__current-month, .react-datepicker__day-name{
+                    color: #6C7588;
+                }
+            }
+            .react-datepicker__day{
+                color: #6C7588;
+            }
+            .react-datepicker__day--keyboard-selected, .react-datepicker__day--in-range{
+                background-color: #bad9f133;
+            }
+        }
+    }
+    .date-range-picker-light{
+        width: 80%;
+        z-index: 100000;
+        position: absolute;
+        top: 62px;
+        left: 32px;
+        .react-datepicker {
+            width: 100%;
+            background-color: white;
+            border: 1px solid rgb(108, 117, 136);
+        }
+        .react-datepicker__month-container{
+            width: 100%;
+            .react-datepicker__header{
+                border-bottom: 1px solid #6c7588;
+                background-color: white;
+                .react-datepicker__current-month, .react-datepicker__day-name{
+                    color: #6C7588;
+                }
+            }
+            .react-datepicker__day{
+                color: #6C7588;
+            }
+            .react-datepicker__day--keyboard-selected, .react-datepicker__day--in-range{
+                background-color: #216ba57d;
+            }
         }
     }
 }

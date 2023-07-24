@@ -98,7 +98,7 @@ export const getSearchPost = async (index, dispatch) => {
     try {
         dispatch({type:"CHANGE_LOADING_USERS", payload: true});
         const res = await axios({
-            url: `api/search/posts?page=${index?.page}&messageId=${index?.messageId}`,
+            url: `api/search/posts?page=${index?.page}&messageId=${index?.messageId}&channelId=${index?.channelId}`,
             method: "GET",
           });
         dispatch({type:"SET_SEARCH_POSTS", payload: res.data})
@@ -113,7 +113,7 @@ export const getSearchTimePost = async (index, dispatch) => {
     try {
         dispatch({type:"CHANGE_LOADING_USERS", payload: true});
         const res = await axios({
-            url: `api/search/time/posts?page=${index?.page}&start=${index?.start}&end=${index?.end}`,
+            url: `api/search/time/posts?page=${index?.page}&start=${index?.start}&end=${index?.end}&channelId=${index?.channelId}`,
             method: "GET",
           });
         dispatch({type:"SET_SEARCH_POSTS", payload: res.data})
