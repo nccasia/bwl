@@ -8,6 +8,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import TextField from '@mui/material/TextField';
 import EventIcon from '@mui/icons-material/Event';
 import ClearIcon from '@mui/icons-material/Clear';
+import EventBusyIcon from '@mui/icons-material/EventBusy';
 import { getTime, format } from 'date-fns';
 import {showToast}  from "../../util/showToast";
 
@@ -18,12 +19,29 @@ function InputPost(){
     const [startDate, endDate] = dateRange;
     const [openPicker, setOpenPicker]= React.useState(false);
 
+    React.useEffect(()=>{
+        if(state.search !== ""){
+            setText(state.search);
+        }
+        if(state.searchTime?.length === 2){
+            setText(String(format(state.searchTime[0], 'dd/MM/yyyy')) + " ~ " + String(format(state.searchTime[1], 'dd/MM/yyyy')));
+        }
+    }, [state.search, state.searchTime]);
+
     const handleClickSearch =()=>{
-        if(text !== ""){
+        if(text.trim() !== ""){
             if(dateRange[0] && dateRange[1] && text === (String(format(dateRange[0], 'dd/MM/yyyy')) + " ~ " + String(format(dateRange[1], 'dd/MM/yyyy')))){
-                dispatch({type:"SET_SEARCH_TIME", payload: [getTime(dateRange[0]), getTime(dateRange[1])]});
+                if(state.searchTime?.length === 2 && text.trim() === String(format(state.searchTime[0], 'dd/MM/yyyy')) + " ~ " + String(format(state.searchTime[1], 'dd/MM/yyyy'))){
+                    showToast("warning", "Khi bạn làm việc với máy tính, sự trùng nhau không bao giờ là lỗi, đó là tính năng!")
+                } else{
+                    dispatch({type:"SET_SEARCH_TIME", payload: [getTime(dateRange[0]), getTime(dateRange[1])]});
+                }
             } else {
-                dispatch({type:"SET_SEARCH", payload: text});
+                if(text.trim() === state.search){
+                    showToast("warning", "Khi bạn làm việc với máy tính, sự trùng nhau không bao giờ là lỗi, đó là tính năng!")
+                } else{
+                    dispatch({type:"SET_SEARCH", payload: text});
+                }
             }
         }
     }
@@ -49,17 +67,30 @@ function InputPost(){
         <div className="container-input-posts" style={{ backgroundColor: state.background ? "rgb(36, 37, 38)": "white"}}>
             <div className="search-input">
                 <TextField
-                    placeholder="Search name..."
+                    placeholder="Search name or date-date..."
                     className="date-picker"
                     sx={{ backgroundColor: state.background ? "rgb(36, 37, 38)": "white"}}
                     value={text}
                     onChange={e => handleChangeSearch(e?.target?.value)}
                     InputProps={{
-                        endAdornment: (
+                        startAdornment: (
                             <span className="icon-date-picker">
                                 {openPicker ? 
-                                    <ClearIcon onClick={()=> setOpenPicker(false)} sx={{color: "#6C7588", fontSize: "20px"}}/> 
+                                    <EventBusyIcon onClick={()=> setOpenPicker(false)} sx={{color: "#6C7588", fontSize: "18px"}}/> 
                                     : <EventIcon onClick={()=> setOpenPicker(true)} sx={{color: "#6C7588", fontSize: "18px"}}/>
+                                }
+                            </span>
+                        ),
+                        endAdornment: (
+                            <span className="icon-date-picker">
+                                {text && 
+                                    <ClearIcon 
+                                        onClick={()=> {
+                                                setOpenPicker(false);
+                                                handleChangeSearch("");
+                                            }} 
+                                        sx={{color: "#6C7588", fontSize: "16px"}}
+                                    />
                                 }
                             </span>
                         ),
@@ -81,6 +112,8 @@ function InputPost(){
                         endDate={endDate}
                         onChange={(update) => handleChangeTime(update)}
                         isClearable={true}
+                        showYearDropdown
+                        dropdownMode="select"
                         inline
                     />
                 </div>
