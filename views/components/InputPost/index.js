@@ -10,14 +10,15 @@ import EventIcon from '@mui/icons-material/Event';
 import ClearIcon from '@mui/icons-material/Clear';
 import EventBusyIcon from '@mui/icons-material/EventBusy';
 import { getTime, format } from 'date-fns';
-import {showToast}  from "../../util/showToast";
+import { showToast } from '../../util/showToast';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-function InputPost(){
-    const {state, dispatch}=useStore();
-    const [text, setText]= React.useState("");
-    const [dateRange, setDateRange] = React.useState([null, null]);
-    const [startDate, endDate] = dateRange;
-    const [openPicker, setOpenPicker]= React.useState(false);
+function InputPost() {
+  const { state, dispatch } = useStore();
+  const [text, setText] = React.useState('');
+  const [dateRange, setDateRange] = React.useState([null, null]);
+  const [startDate, endDate] = dateRange;
+  const [openPicker, setOpenPicker] = React.useState(false);
 
     React.useEffect(()=>{
         if(state.search !== ""){
@@ -63,6 +64,18 @@ function InputPost(){
         }
         
     }
+
+    const handleInputClick = () => {
+      if (openPicker) {
+        setOpenPicker(false);
+      }
+    };
+    const handleKeyPress = (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        handleClickSearch();
+      }
+    }
     return(
         <div className="container-input-posts" style={{ backgroundColor: state.background ? "rgb(36, 37, 38)": "white"}}>
             <div className="search-input">
@@ -72,17 +85,15 @@ function InputPost(){
                     sx={{ backgroundColor: state.background ? "rgb(36, 37, 38)": "white"}}
                     value={text}
                     onChange={e => handleChangeSearch(e?.target?.value)}
-                    onKeyUp={(e)=>{
-                        if(e.key === 'Enter'){
-                            handleClickSearch();
-                        }
-                    }}
+                    autoFocus
+        onKeyPress={handleKeyPress}
+        onClick={handleInputClick}
                     InputProps={{
                         startAdornment: (
                             <span className="icon-date-picker">
                                 {openPicker ? 
-                                    <EventBusyIcon onClick={()=> setOpenPicker(false)} sx={{color: "#6C7588", fontSize: "18px"}}/> 
-                                    : <EventIcon onClick={()=> setOpenPicker(true)} sx={{color: "#6C7588", fontSize: "18px"}}/>
+                                    <EventBusyIcon onClick={()=> setOpenPicker(false)} className="icon"/> 
+                                    : <EventIcon onClick={()=> setOpenPicker(true)} className="icon"/>
                                 }
                             </span>
                         ),
@@ -94,7 +105,7 @@ function InputPost(){
                                                 setOpenPicker(false);
                                                 handleChangeSearch("");
                                             }} 
-                                        sx={{color: "#6C7588", fontSize: "16px"}}
+                                        sx={{color: "#6C7588", fontSize: "16px", cursor: "pointer"}}
                                     />
                                 }
                             </span>

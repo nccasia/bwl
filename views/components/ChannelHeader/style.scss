@@ -55,6 +55,7 @@
     .channel-header-container {
         .res-onclick-channel{
           display: block;
+          cursor: pointer;
         }
     }
     .res-channel{
@@ -70,5 +71,11 @@
     }
     .res-channel{
         display:block;
+    }
+}
+
+@media (max-width: 500px){
+    .res-channel{
+        width: 80%;
     }
 }

@@ -39,12 +39,20 @@ function SearchPost(props){
     }
 
     return(
-        <div className="container-list-posts">
-            <div className="list-post-header">
+        <div className="container-list-posts"
+            style={{
+                    backgroundColor: state.background ? '#242526' : '',
+                    color: 'rgb(108, 117, 136)',
+                    }}>
+            <div className="list-post-header"
+                style={{
+                    backgroundColor: state.background ? '#242526' : '',
+                    color: 'rgb(108, 117, 136)',
+                    }}>
                 <p>{state.lengthUsers} Posts</p>
                 {state.searchTime?.length !== 2 &&(
                     <ClearIcon
-                        sx={{fontSize: "20px"}}
+                        sx={{fontSize: "20px", cursor: "pointer"}}
                         onClick={()=> {
                             handleClickSearchMessage("");
                             dispatch({type: "CHANGE_PAGE_USERS_POST", payload: ""});
@@ -52,31 +60,33 @@ function SearchPost(props){
                     />
                 )}
             </div>
-            {state.searchPosts ? state.searchPosts?.map((item, index) =>{
-                return(
-                    <div key={index} className="list-post">
-                        <div className="list-post-author">
-                            {state?.searchMessage !== item?.messageId ? (
-                                <NavigateBeforeIcon 
-                                    sx={{fontSize: "25px"}}
-                                    onClick={()=> handleClickSearchMessage(item?.messageId)}
-                                />
-                            ): (
-                                <NavigateNextIcon
-                                    sx={{fontSize: "25px"}}
-                                    onClick={()=> {
-                                        handleClickSearchMessage("");
-                                        dispatch({type: "CHANGE_TAB_POST", payload: "New"});
-                                    }}
-                                />
-                            )}
-                            <img src={item?.source ? `https://bwl.vn/assets/images/${item?.links[0]}` : `https://bwl.vn/images/${item?.links[0]}`} />
+            <div className="box-list">
+                {state.searchPosts ? state.searchPosts?.map((item, index) =>{
+                    return(
+                        <div key={index} className="list-post">
+                            <div className="list-post-author">
+                                {state?.searchMessage !== item?.messageId ? (
+                                    <NavigateBeforeIcon 
+                                        className="list-icon"
+                                        onClick={()=> handleClickSearchMessage(item?.messageId)}
+                                    />
+                                ): (
+                                    <NavigateNextIcon
+                                        className="list-icon"
+                                        onClick={()=> {
+                                            handleClickSearchMessage("");
+                                            dispatch({type: "CHANGE_TAB_POST", payload: "New"});
+                                        }}
+                                    />
+                                )}
+                                <img src={item?.source ? `https://bwl.vn/assets/images/${item?.links[0]}` : `https://bwl.vn/images/${item?.links[0]}`} />
+                            </div>
+                            <p>{formatDay(item?.createdTimestamp?.$numberDecimal || item?.createdTimestamp)}</p>
                         </div>
-                        <p>{formatDay(item?.createdTimestamp?.$numberDecimal || item?.createdTimestamp)}</p>
-                    </div>
-                )
-            })
-            : null}
+                    )
+                })
+                : null}
+            </div>
         </div>
     )
 }

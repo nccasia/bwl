@@ -25,6 +25,8 @@
         }
         .post-onclick-p:hover{
             text-decoration: underline;
+            cursor: pointer;
+            color: rgb(25, 118, 210);
         }
     }
     .list-channel{
@@ -33,6 +35,11 @@
         align-items: center;
         justify-content:space-between;
         border-bottom: 1px solid #80808042;
+        &:hover{
+            color: rgb(25, 118, 210);
+            cursor: pointer;
+            background-color:rgb(192, 191, 191);
+        }
         .list-channel-icon{
             display: flex;
             gap:5px;
@@ -41,9 +48,6 @@
         .list-channel-total{
             font-size: 14px;
         }
-    }
-    .list-channel:hover{
-        background-color:rgb(192, 191, 191);
     }
     .list-channel-header{
         padding-bottom: 11px;

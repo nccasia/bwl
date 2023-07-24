@@ -3,13 +3,13 @@
   width: 100%;
   max-width: 1400px;
   margin: auto;
-  padding: 70px 5% 0 5%;
+  padding: 70px 0 0 0;
   gap: 20px;
   .sidebar-left {
-    width: 30%;
+    width: calc(100% - (74% + 55px));
     height: 85vh;
     position: fixed;
-    left: 69%;
+    left: 74%;
     top: 69px;
     background-color: white;
     max-width: 350px;
@@ -17,7 +17,7 @@
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
   }
   .main-content {
-    width: 70%;
+    width: 75%;
     position:relative;
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
     .notifi-progress{
@@ -63,6 +63,9 @@
 
 @media (max-width: 1440px) {
   .main-container {
+    .main-content{
+      padding: 0 2% 0 4%;
+    }
     .sidebar-left {
       padding: 10px;
     }
@@ -78,6 +81,8 @@
       padding: 10px 5% 0px;
       .res-onclick-users{
         display: block;
+        cursor: pointer;
+        padding: 0 20px 0 0;
       }
     }
   }
@@ -90,6 +95,16 @@
       .res-onclick-users{
         display: block;
       }
+      .res-users{
+        width: auto;
+      }
+    }
+  }
+}
+@media (max-width: 500px) {
+  .main-container {
+    .main-content {
+      padding: 70px 14px 0 14px;
     }
   }
 }

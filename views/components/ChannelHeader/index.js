@@ -38,7 +38,7 @@ function ChannelHeader(props){
                   <div className="res-channel-header">
                     <PersonSearchIcon sx={{fontSize: "28px", color: "#6C7588"}}/>
                     <ClearIcon 
-                      sx={{fontSize: "20px", color: "#6C7588"}}
+                      sx={{fontSize: "20px", color: "#6C7588", cursor: "pointer"}}
                       onClick={()=>setOpenUsers(false)}
                     />
                   </div>

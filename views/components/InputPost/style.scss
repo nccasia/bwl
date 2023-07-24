@@ -29,6 +29,11 @@
             display: flex;
             align-items: center;
             margin: 3px;
+            .icon{
+              color: #6C7588;
+              font-size: 18px;
+              cursor: pointer;  
+            }
         }
         input{
             color: #6C7588;
@@ -36,10 +41,17 @@
         }
         .search-button{
             height: 40px;
-            width: 10%;
+            width: 13%;
             border-radius: 0 25px 25px 0;
             border: 1px solid #80808042;
             background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            &:hover{
+                background-color: #ebebeb;
+            }
         }
     }
     .date-range-picker-dark{
@@ -127,6 +139,23 @@
             }
             .react-datepicker__year-select::-webkit-scrollbar-thumb {
             background-color: #5a5a64;
+            }
+        }
+    }
+}
+
+@media (max-width: 1240px){
+    .container-input-posts {
+       .date-range-picker{
+        margin-top: 30px;
+       }
+    }
+}
+@media (max-width: 768px){
+    .container-input-posts {
+        .search-input{
+            .search-button{
+                width: 20%;
             }
         }
     }

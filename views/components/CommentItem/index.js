@@ -128,12 +128,12 @@ const CommentItem = (props) => {
                     : props?.comment?.createdTimestamp,
                 )}
               </div>
-            </div>
-            {props?.onPin && 
+              {props?.onPin && 
               <p className="comment-pin-icon">
-                <PushPinIcon sx={{fontSize: "16px"}}/>
+                <PushPinIcon sx={{fontSize: "14px"}}/>
               </p>
             }
+            </div>
             {!openEdit && <p className="comment">{props?.content}</p>}
             {openEdit && (
               <CommentInput
@@ -163,7 +163,7 @@ const CommentItem = (props) => {
               </p>
               {props?.type==="true" && (
                 <p 
-                  style={{ fontSize: '12px' }}
+                  style={{ fontSize: '11px' }}
                   onClick={handleClickFeedback}
                 >
                   Reply
@@ -185,14 +185,14 @@ const CommentItem = (props) => {
               <div className={state.background ? "dialog-form-dark" : "dialog-form-light"}>
                 {props?.authorMessage === state.author?.id && (
                   <div className="content" onClick={()=> handlePinComment(props?._id, props?.onPin)}>
-                    <PushPinIcon sx={{fontSize: "16px"}}/>
+                    <PushPinIcon sx={{fontSize: "13px"}}/>
                     <p>{props?.onPin ? "Unpin" : "Pin"}</p>
                   </div>
                 )}
                 {props?.author[0]?.id === state.author?.id && (
                   <div>
                     <div className="content" onClick={handledit}>
-                      <EditIcon sx={{fontSize: "16px"}}/>
+                      <EditIcon sx={{fontSize: "13px"}}/>
                       <p>Edit</p>
                     </div>
                     <div className="content">

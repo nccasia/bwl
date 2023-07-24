@@ -1,28 +1,72 @@
 .container-list-posts{
+    padding: 0 10px;
     .list-post-header{
         display: flex;
         justify-content:space-between;
         align-items:center;
+        position: fixed;
+        width: 21%;
+        background: #fff;
+        height: 40px;
+        top: 123px;
     }
-    .list-post {
-        display: flex;
-        justify-content:space-between;
-        align-items: center;
-        border-bottom: 1px solid #80808042;
-        margin: 5px;
-        .list-post-author{
+    .box-list{
+        margin-top: 45px;
+        .list-post {
             display: flex;
+            justify-content:space-between;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 5px;
-            img {
-                width: 50px;
-                height: 50px;
+            border-bottom: 1px solid #80808042;
+            margin: 0 5px 5px 5px;
+            .list-post-author{
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 5px;
+                .list-icon{
+                    font-size: 25px;
+                    cursor: pointer;
+                }
+                img {
+                    width: 50px;
+                    height: 50px;
+                }
             }
-        }
-        p{
-            font-size:14px;
+            p{
+                font-size:14px;
+            }
         }
     }
 }
 
+@media (max-width: 1440px){
+    .container-list-posts {
+        .list-post-header{
+            width: 19%;
+            top: 155px
+        }   
+    } 
+}
+@media (max-width: 1240px){
+    .container-list-posts {
+        .list-post-header{
+            width: 46%;
+            top: 157px;
+        }   
+    } 
+}
+@media (max-width: 768px){
+    .container-list-posts {
+        .list-post-header{
+            width: 44%;
+            top: 157px;
+        }   
+    } 
+}
+@media (max-width: 500px){
+    .container-list-posts {
+        .list-post-header{
+            width: 70%;
+        }   
+    } 
+}
