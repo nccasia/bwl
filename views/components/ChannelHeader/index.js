@@ -13,8 +13,8 @@ function ChannelHeader(props){
     const [openUsers, setOpenUsers] = React.useState(false);
 
     return(
-        <div>
-            <div className="channel-header-container">
+        <div style={{ backgroundColor: state.background ? "rgb(36, 37, 38)": "white", borderRadius: "5px"}}>
+            <div className="channel-header-container" style={{ backgroundColor: state.background ? "rgb(36, 37, 38)": "white"}}>
                 {state.channelList ? state.channelList?.filter(item => item?.id === state.channel).map(item =>{
                     return(     
                         <div className="channel-header-item" key={item?.id}>
@@ -34,7 +34,7 @@ function ChannelHeader(props){
                 </p>
             </div>
             {openUsers && (
-                <div className="res-channel">
+                <div className="res-channel" style={{ backgroundColor: state.background ? "rgb(36, 37, 38)": "white"}}>
                   <div className="res-channel-header">
                     <PersonSearchIcon sx={{fontSize: "28px", color: "#6C7588"}}/>
                     <ClearIcon 

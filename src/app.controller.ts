@@ -459,9 +459,9 @@ export class AppController {
   @Get('/api/search/posts')
   async getSearchPosts(@Req() req: Request, @Res() res: Response) {
     try {
-      const { messageId, page } = req.query;
-      const posts = await this.appService.searchPosts(String(messageId), Number(page));
-      const size = await this.appService.searchPostsLength(String(messageId));
+      const { messageId, page, channelId } = req.query;
+      const posts = await this.appService.searchPosts(String(messageId), Number(page), String(channelId));
+      const size = await this.appService.searchPostsLength(String(messageId), String(channelId));
       return res.status(200).json({ posts, total: size?.length});
     } catch (error) {
       return res.status(500).json({message:"Internal Server Error"});
@@ -471,9 +471,9 @@ export class AppController {
   @Get('/api/search/time/posts')
   async getSearchTimePosts(@Req() req: Request, @Res() res: Response) {
     try {
-      const { start, end, page } = req.query;
-      const posts = await this.appService.searchTimePosts(Number(start), Number(end) + 86400000, Number(page));
-      const size = await this.appService.searchTimePostsLength(Number(start), Number(end) + 86400000);
+      const { start, end, page, channelId } = req.query;
+      const posts = await this.appService.searchTimePosts(Number(start), Number(end) + 86400000, Number(page), String(channelId));
+      const size = await this.appService.searchTimePostsLength(Number(start), Number(end) + 86400000, String(channelId));
       return res.status(200).json({ posts, total: size?.length});
     } catch (error) {
       return res.status(500).json({message:"Internal Server Error"});

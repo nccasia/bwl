@@ -40,12 +40,12 @@ function InputPost() {
     setOpenPicker(false);
   };
 
-    const handleChangeSearch =(index)=>{
-        setText(index);
-        if(index === ""){
-            dispatch({type:"RESET_SEARCH", payload: ""});
-            setDateRange([]);
-        }
+  const handleChangeSearch = (index) => {
+    setText(index);
+    if (index === '') {
+      dispatch({ type: 'RESET_SEARCH', payload: '' });
+      setDateRange([]);
+    }
   };
   const handleChangeTime = (date) => {
     setDateRange(date);
@@ -60,6 +60,7 @@ function InputPost() {
       );
     }
   };
+
   const handleInputClick = () => {
     if (openPicker) {
       setOpenPicker(false);
@@ -71,87 +72,76 @@ function InputPost() {
       handleClickSearch();
     }
   };
-
-  const lightTheme = createTheme({
-    palette: {
-      mode: 'light',
-      primary: {
-        main: '#000000',
-      },
-      text: {
-        secondary: '#000000', // Thay đổi màu chữ của placeholder khi ở chế độ sáng
-      },
-    },
-  });
-
-  const darkTheme = createTheme({
-    palette: {
-      mode: 'dark', 
-      primary: {
-        main: 'rgb(108, 117, 136)', 
-      },
-      text: {
-        secondary: 'rgb(108, 117, 136)', // Thay đổi màu chữ của placeholder khi ở chế độ tối
-      },
-    },
-  });
   return (
-    <div className="container-input-posts">
+    <div
+      className="container-input-posts"
+      style={{
+        backgroundColor: state.background ? 'rgb(36, 37, 38)' : 'white',
+      }}
+    >
       <div className="search-input">
-        <ThemeProvider theme={state.background ? darkTheme : lightTheme}>
-          <TextField
-            placeholder="Search name..."
-            className="date-picker"
-            value={text}
-            onChange={(e) => handleChangeSearch(e?.target?.value)}
-            autoFocus
-            onKeyPress={handleKeyPress}
-            onClick={handleInputClick}
-            InputProps={{
-              endAdornment: (
-                <span className="icon-date-picker">
-                  {openPicker ? (
-                    <ClearIcon
-                      onClick={() => setOpenPicker(false)}
-                      sx={{ color: '#6C7588', fontSize: '20px' }}
-                    />
-                  ) : (
-                    <EventIcon
-                      onClick={() => setOpenPicker(true)}
-                      sx={{ color: '#6C7588', fontSize: '18px' }}
-                    />
-                  )}
-                </span>
-              ),
-              style: {
-                backgroundColor: state.background ? '#242526' : '',
-                color: state.background
-                  ? darkTheme.palette.text.secondary
-                  : lightTheme.palette.text.secondary,
-              },
-            }}
-          />
-        </ThemeProvider>
+        <TextField
+          placeholder="Search name..."
+          className="date-picker"
+          sx={{
+            backgroundColor: state.background ? 'rgb(36, 37, 38)' : 'white',
+          }}
+          value={text}
+          onChange={(e) => handleChangeSearch(e?.target?.value)}
+          autoFocus
+          onKeyPress={handleKeyPress}
+          onClick={handleInputClick}
+          InputProps={{
+            endAdornment: (
+              <span className="icon-date-picker">
+                {openPicker ? (
+                  <ClearIcon
+                    onClick={() => setOpenPicker(false)}
+                    sx={{ color: '#6C7588', fontSize: '20px' }}
+                  />
+                ) : (
+                  <EventIcon
+                    onClick={() => setOpenPicker(true)}
+                    sx={{ color: '#6C7588', fontSize: '18px' }}
+                  />
+                )}
+              </span>
+            ),
+          }}
+        />
         <button
           className="search-button"
+          style={{
+            backgroundColor: state.background ? 'rgb(36, 37, 38)' : 'white',
+          }}
           onClick={handleClickSearch}
-          style={{ backgroundColor: state.background ? '#242526' : '' }}
         >
           <SearchIcon sx={{ color: '#6C7588', fontSize: '18px' }} />
         </button>
+        {openPicker && (
+          <div
+            className={
+              state.background
+                ? 'date-range-picker-dark'
+                : 'date-range-picker-light'
+            }
+          >
+            <DatePicker
+              selectsRange={true}
+              startDate={startDate}
+              endDate={endDate}
+              onChange={(update) => handleChangeTime(update)}
+              isClearable={true}
+              inline
+            />
+            ) : (
+            <EventIcon
+              onClick={() => setOpenPicker(true)}
+              sx={{ color: '#6C7588', fontSize: '18px' }}
+            />
+          </div>
+        )}
       </div>
-      {openPicker && (
-        <div className="date-range-picker">
-          <DatePicker
-            selectsRange={true}
-            startDate={startDate}
-            endDate={endDate}
-            onChange={(update) => handleChangeTime(update)}
-            isClearable={true}
-            inline
-          />
-        </div>
-      )}
     </div>
   );
 }

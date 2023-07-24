@@ -168,7 +168,7 @@ const CommentItem = (props) => {
                 >
                   Reply
                 </p>
-                )}
+              )}
             </div>
             {props?.onEdit && <p style={{ fontSize: '8px' }}>đã chỉnh sửa</p>}
           </div>

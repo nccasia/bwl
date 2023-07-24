@@ -13,19 +13,26 @@ function SearchPost(props){
 
     React.useEffect(()=> {
         if(props?.type==="searchUsersPosts" && state.pageUsers !== -1){
-            getSearchPost({messageId: state.searchUsersPosts, page: state.pageUsers}, dispatch);
+            getSearchPost(
+                {
+                    messageId: state.searchUsersPosts, 
+                    page: state.pageUsers,
+                    channelId: state.channel,
+                }
+            , dispatch);
         }
         if(props?.type==="searchTimePosts" && state.pageUsers !== -1){
             getSearchTimePost(
                 {
                     start: state.searchTime[0], 
                     end: state.searchTime[1], 
-                    page: state.pageUsers
+                    page: state.pageUsers,
+                    channelId: state.channel,
                 }, 
                 dispatch
             )
         }
-    },[state.searchUsersPosts, state.pageUsers, state.searchTime, props?.type]);
+    },[state.searchUsersPosts, state.pageUsers, state.searchTime, props?.type, state.channel]);
 
     const handleClickSearchMessage =(index)=>{
         dispatch({type: "SET_SEARCH_MESSAGE", payload: index});
