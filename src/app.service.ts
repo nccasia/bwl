@@ -37,10 +37,11 @@ export class AppService {
   private checkForChanges () {
     const checkChanges = async(index: number)=> {
       const currentTime = index;
+      const channelIdArray = channelList.map(channel => channel.id);
       const aggregatorOpts = [
         { 
           $match: {
-            channelId: { $in: channelList }, 
+            channelId: { $in: channelIdArray }, 
             createdTimestamp: {$gt: currentTime },
           } 
         },
@@ -728,7 +729,6 @@ export class AppService {
   async getPostsOne(messageId: string, authorId: string | null) {
     const aggregatorOpts = [
       { $match: { 
-          //channelId: channel,
           messageId, 
         } 
       },
@@ -812,6 +812,7 @@ export class AppService {
       {
         $project: {
           messageId: 1,
+          channelId:1,
           links: 1,
           createdTimestamp: 1,
           source:1,

@@ -22,7 +22,7 @@ function OnlineUsers(props){
         dispatch({type: "SET_CHANNEL", payload: index})
     }
 
-    console.log(state?.channelList);
+    //console.log(state?.channelList);
 
     return(
         <div className="container-list-users">
@@ -62,7 +62,11 @@ function OnlineUsers(props){
                         return(
                             <div key={Number(item?.id)} 
                                 className="list-channel"
-                                onClick={()=> handleClickChangeChannel(item?.id)}
+                                onClick={()=> {
+                                    if(item?.id !== state.channel){
+                                        handleClickChangeChannel(item?.id);
+                                    }
+                                }}
                             >                       
                                 <div className="list-channel-icon">
                                     {item?.id === state.channel ? <NavigateNextIcon /> : <NavigateBeforeIcon/>}

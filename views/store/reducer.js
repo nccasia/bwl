@@ -317,7 +317,7 @@ function reducer(state, action) {
         posts:
           action.payload?.posts === 'add' && !state.typePosts 
             ? [
-                ...action.payload?.list.filter(main => main?.channelId === state.channel).map((main) => {
+                ...action.payload?.list?.filter(main => main?.channelId === state.channel).map((main) => {
                   return {
                     ...main,
                     ...{
@@ -344,12 +344,6 @@ function reducer(state, action) {
               [...[action.payload?.notification], ...state.notification]
               : state.notification
             : state.notification,
-        hotPosts:
-          action.payload?.posts === 'delete'
-            ? state.hotPosts.filter((item) => item?._id !== action.payload?.id)
-            : state.hotPosts?.length < 10 && action.payload?.posts === 'add'
-            ? [...state.hotPosts, ...action.payload?.list]
-            : state.hotPosts,
       };
     case 'SET_POSTS':
       const commentList = action.payload?.posts.map((main) => {
