@@ -3,49 +3,40 @@
   width: 100%;
   max-width: 1400px;
   margin: auto;
-  margin-top: 10px;
-  padding: 60px 0 0 0;
+  padding: 70px 0 0 0;
+  gap: 20px;
   .sidebar-left {
-    width: 22%;
-    height: 90vh;
+    width: calc(100% - (74% + 55px));
+    height: 85vh;
     position: fixed;
-    right: 58px;
-    top: 66.5px;
+    left: 74%;
+    top: 69px;
+    background-color: white;
+    max-width: 350px;
+    border-radius: 5px;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
   }
   .main-content {
-    width: 76%;
+    width: 75%;
     position:relative;
-    .TabPanel{
-      padding: 24px 16px;
-      .notifi-progress{
-        text-align: center;
-        height: 100px;
-      }
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    .notifi-progress{
+      text-align: center;
+      height: 100px;
+    }
+    .main-tabs{
+      background-color: white;
+      padding: 10px;
+      min-height: 80vh;
+      border-radius:5px;
+    }
+    .css-19kzrtu {
+      padding: 0;
     }
     .box-tabs{
       align-items: center;
       display: flex;
       justify-content: space-between;
-    }
-    .res-onclick-users{
-      display: none;
-    }
-    .res-users{
-      position: fixed;
-      top: 60px;
-      right: 0;
-      z-index: 9999;
-      width: 50%;
-      background-color: white;
-      padding: 10px 10px 0 10px;
-      height: 90vh;
-      .res-users-header{
-        display: flex;
-        justify-content:space-between;
-        align-items: center;
-        padding: 0 5px;
-        margin-bottom: 5px;
-      }
     }
   }
   .scrollUp {
@@ -69,13 +60,14 @@
     opacity: 0.5;
   }
 }
+
 @media (max-width: 1440px) {
   .main-container {
-    .sidebar-left {
-      padding: 10px 5px 0px 25px
+    .main-content{
+      padding: 0 2% 0 4%;
     }
-    .main-content {
-      padding: 10px 25px 0px 5px;
+    .sidebar-left {
+      padding: 10px;
     }
   }
 }
@@ -112,7 +104,7 @@
 @media (max-width: 500px) {
   .main-container {
     .main-content {
-      padding: 70px 0 0 0;
+      padding: 70px 14px 0 14px;
     }
   }
 }

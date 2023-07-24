@@ -28,6 +28,8 @@ const initState = {
   lengthUsers: 0,
   searchTime:[],
   searchUsersPosts:"",
+  channel:"924543969357099018",
+  channelList: []
 };
 
 function reducer(state, action) {
@@ -315,7 +317,7 @@ function reducer(state, action) {
         posts:
           action.payload?.posts === 'add' && !state.typePosts 
             ? [
-                ...action.payload?.list.map((main) => {
+                ...action.payload?.list?.filter(main => main?.channelId === state.channel).map((main) => {
                   return {
                     ...main,
                     ...{
@@ -342,12 +344,6 @@ function reducer(state, action) {
               [...[action.payload?.notification], ...state.notification]
               : state.notification
             : state.notification,
-        hotPosts:
-          action.payload?.posts === 'delete'
-            ? state.hotPosts.filter((item) => item?._id !== action.payload?.id)
-            : state.hotPosts?.length < 10 && action.payload?.posts === 'add'
-            ? [...state.hotPosts, ...action.payload?.list]
-            : state.hotPosts,
       };
     case 'SET_POSTS':
       const commentList = action.payload?.posts.map((main) => {
@@ -545,6 +541,14 @@ function reducer(state, action) {
         search: action.payload,
         pageUsers: 1,
         users:[],
+        searchTime:[],
+      };
+    case 'RESET_SEARCH':
+      return {
+        ...state,
+        search: action.payload,
+        pageUsers: 1,
+        searchTime:[],
       };
     case 'SET_SEARCH_POSTS':
       return {
@@ -593,11 +597,24 @@ function reducer(state, action) {
       return {
         ...state,
         searchTime: action.payload,
+        search:"",
         searchPosts:[],
         lengthUsers: 0,
         pageUsers: 1,
       };
-    default:
+    case 'SET_CHANNEL':
+      return {
+        ...state,
+        channel: action.payload,
+        page:1,
+        posts: [],
+      };
+    case 'SET_CHANNEL_LIST':
+      return {
+        ...state,
+        channelList: action.payload,
+      };
+      default:
     throw new Error('Error');
   }
 }

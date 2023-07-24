@@ -40,12 +40,12 @@ function InputPost() {
     setOpenPicker(false);
   };
 
-  const handleChangeSearch = (index) => {
-    setText(index);
-    if (index === '') {
-      dispatch({ type: 'SET_SEARCH', payload: '' });
-      dispatch({ type: 'SET_SEARCH_TIME', payload: [] });
-    }
+    const handleChangeSearch =(index)=>{
+        setText(index);
+        if(index === ""){
+            dispatch({type:"RESET_SEARCH", payload: ""});
+            setDateRange([]);
+        }
   };
   const handleChangeTime = (date) => {
     setDateRange(date);

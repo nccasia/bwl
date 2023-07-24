@@ -5,10 +5,10 @@
         justify-content:space-between;
         align-items:center;
         position: fixed;
-        width: 21%;
+        width: 22%;
         background: #fff;
-        height: 35px;
-        top: 143px;
+        height: 40px;
+        top: 123px;
     }
     .box-list{
         margin-top: 45px;
@@ -51,22 +51,22 @@
     .container-list-posts {
         .list-post-header{
             width: 46%;
-            top: 179px;
+            top: 157px;
         }   
     } 
 }
 @media (max-width: 768px){
     .container-list-posts {
         .list-post-header{
-            width: 263px;
-            top: 179px;
+            width: 45%;
+            top: 157px;
         }   
     } 
 }
 @media (max-width: 500px){
     .container-list-posts {
         .list-post-header{
-            width: 260px;
+            width: 71%;
         }   
     } 
 }
