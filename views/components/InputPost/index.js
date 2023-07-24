@@ -72,6 +72,11 @@ function InputPost(){
                     sx={{ backgroundColor: state.background ? "rgb(36, 37, 38)": "white"}}
                     value={text}
                     onChange={e => handleChangeSearch(e?.target?.value)}
+                    onKeyUp={(e)=>{
+                        if(e.key === 'Enter'){
+                            handleClickSearch();
+                        }
+                    }}
                     InputProps={{
                         startAdornment: (
                             <span className="icon-date-picker">
