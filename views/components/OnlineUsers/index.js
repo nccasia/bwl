@@ -2,23 +2,30 @@
 import './style.scss';
 import { useStore } from '../../store';
 import React from 'react';
-import {getUsers, getSearchUsers} from "../../api/apiUser";
+import {getSearchUsers} from "../../api/apiUser";
+import {getChannel} from "../../api/apiPosts";
+import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 
 function OnlineUsers(props){
     const {state, dispatch}=useStore();
     React.useEffect(()=> {
-        if(props?.type=== "onlineUsers" && state.pageUsers !== -1){
-            getUsers(state.pageUsers, dispatch);
+        if(props?.type=== "channelList"){
+            getChannel(dispatch);
         } 
         if(props?.type=== "searchUsers" && state.pageUsers !== -1 && state.searchUsersPosts === ""){
             getSearchUsers(state.search, state.pageUsers, dispatch)
         } 
     },[state.search, state.pageUsers, props?.type]);
 
+    const handleClickChangeChannel =(index)=>{
+        dispatch({type: "SET_CHANNEL", payload: index})
+    }
+
+    console.log(state?.channelList);
+
     return(
-        <div 
-            className="container-list-users"
-        >
+        <div className="container-list-users">
             {props?.type=== "searchUsers" && (
                 <div>
                     <p>{"Searches: "} {state.lengthUsers}</p>
@@ -48,34 +55,21 @@ function OnlineUsers(props){
                     : null}
                 </div>
             )}
-            {props?.type=== "onlineUsers" && (
+            {props?.type=== "channelList" && (
                 <div>
-                    <p>{"Online:  "} {state.sizeUsers}</p>
-                    {state.users ? state.users?.filter(item => item?.online === true).map(item =>{
+                    <h1 className="list-channel-header">Channel</h1>
+                    {state.channelList ? state.channelList?.map(item =>{
                         return(
-                            <div key={Number(item?.id)} className="list-user">                       
-                                <div className="list-user-author">
-                                    <img
-                                        src={`https://cdn.discordapp.com/avatars/${item?.id}/${item?.avatar}`}
-                                    />
-                                    <p>{item?.username}</p>
+                            <div key={Number(item?.id)} 
+                                className="list-channel"
+                                onClick={()=> handleClickChangeChannel(item?.id)}
+                            >                       
+                                <div className="list-channel-icon">
+                                    {item?.id === state.channel ? <NavigateNextIcon /> : <NavigateBeforeIcon/>}
+                                    <p>{item?.icon}</p>
+                                    <p>{item?.name}</p>
                                 </div>
-                                <p style={{fontSize: "14px"}}>{item?.online ? "Action" : "Deaction"}</p> 
-                            </div>
-                        )
-                    })
-                    : null}
-                    <p>{"Offline:  "} {state.lengthUsers - state.sizeUsers}</p>
-                    {state.users ? state.users?.filter(item => item?.online === false).map(item =>{
-                        return(
-                            <div key={Number(item?.id)} className="list-user">                       
-                                <div className="list-user-author">
-                                    <img
-                                        src={`https://cdn.discordapp.com/avatars/${item?.id}/${item?.avatar}`}
-                                    />
-                                    <p>{item?.username}</p>
-                                </div>
-                                <p style={{fontSize: "14px"}}>{item?.online ? "Action" : "Deaction"}</p> 
+                                <p className="list-channel-total">{item?.total + " Posts"} </p>
                             </div>
                         )
                     })

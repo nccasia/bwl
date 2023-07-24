@@ -22,7 +22,7 @@ function ContentRight(){
         };
         scrollElement.addEventListener('scroll', handleScroll);
     }, [state.loadingUsers, state.pageUsers, state.lengthUsers]);
-    console.log(state.searchUsersPosts);
+    
     return(
         <div className="content-right-container">
             <InputPost/>
@@ -30,10 +30,10 @@ function ContentRight(){
                 ref={spanRef}
                 className="content-right-scroll"
             >
-                {state.search === ""  && state.searchTime?.length !==2 &&  <OnlineUsers type="onlineUsers"/>}
+                {state.search === ""  && state.searchTime?.length !==2 && state.searchUsersPosts === "" && <OnlineUsers type="channelList"/>}
                 {state.search !== "" && state.searchUsersPosts === "" && state.searchTime?.length !==2 && <OnlineUsers type="searchUsers"/>}
-                {state.searchUsersPosts !== "" && state.search !== "" && <SearchPost type="searchUsersPosts"/>}
-                {state.searchTime?.length ===2 && <SearchPost type="searchTimePosts"/>}
+                {state.searchUsersPosts !== "" && state.search !== "" && state.searchTime?.length !==2 && <SearchPost type="searchUsersPosts"/>}
+                {state.searchTime?.length ===2 && state.search === "" && <SearchPost type="searchTimePosts"/>}
                 {state.loadingUsers && (
                     <div className="content-right-progress">
                         <CircularProgress sx={{color: "rgb(108, 117, 136)"}}/>

@@ -6,7 +6,7 @@ export const getAll = async (index, dispatch) => {
     try {
         dispatch({type:"CHANGE_LOADING_POST", payload: true});
         const res = await axios({
-            url: index.messageId ? `/api/getAllPaging?page=${index.page}&size=${index.size}&messageId=${index.messageId}` : `/api/getAllPaging?page=${index.page}&size=${index.size}`,
+            url: index.messageId ? `/api/getAllPaging?page=${index.page}&size=${index.size}&messageId=${index.messageId}&channel=${index.channel}` : `/api/getAllPaging?page=${index.page}&size=${index.size}&channel=${index.channel}`,
             method: "GET",
           });
         dispatch({type:"SET_POSTS", payload: res.data})
@@ -36,7 +36,7 @@ export const getHotPosts = async (index, dispatch) => {
     try {
         dispatch({type:"CHANGE_LOADING_POST", payload: true})
         const res = await axios({
-            url: `/api/hotposts?page=${index?.page}&size=${index?.size}&messageId=${index?.messageId}`,
+            url: `/api/hotposts?page=${index?.page}&size=${index?.size}&messageId=${index?.messageId}&channel=${index.channel}`,
             method: "GET",
           });
         dispatch({type:"SET_POSTS", payload: res.data})
@@ -63,7 +63,7 @@ export const deletePost = async (index) => {
 export const addPost = async (index) => {
     try {
         const res = await axios({
-            url: `/api/upload?id=${index.id}`,
+            url: `/api/upload?id=${index.id}&channelId=${index.channelId}`,
             method: "POST",
             data: index?.formData,
             headers: {
@@ -124,3 +124,18 @@ export const getSearchTimePost = async (index, dispatch) => {
     }
 }
 
+export const getChannel = async (dispatch) => {
+    try {
+      dispatch({type:"CHANGE_LOADING_USERS", payload: true});
+      const res = await axios({
+        url: "/api/channel",
+        method: 'GET',
+      });
+      dispatch({type:"CHANGE_LOADING_USERS", payload: false});
+      dispatch({type:"SET_CHANNEL_LIST", payload: res?.data?.channel});
+    } catch(error){
+      showToast("error", error?.response?.data?.message);
+      dispatch({type:"CHANGE_LOADING_USERS", payload: false});
+      return [];
+    }
+};
