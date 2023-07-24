@@ -37,36 +37,9 @@ export class AppController {
   ) {}
 
   @Sse('/api/sse')
-  sse(@Query() query: any, @Req() req: Request, @Res() res: Response): Observable<MessageEvent> {
-    res.on('close', () => {
-      const testClose = async()=>{
-        if (req.cookies['token']) {
-          this.httpService
-            .get(discordUserUrl, {
-              headers: {
-                Authorization: `Bearer ${req.cookies['token']}`,
-              },
-            })
-            .pipe(
-              map((userResponse) => {
-                return userResponse.data;
-              }),
-              map(async (user) => {
-                await this.appService.onlineUser(
-                  user.id,
-                  false,
-                );
-              }),
-              first(),
-            )
-            .subscribe();
-        } 
-      }
-      testClose();
-    });
+  sse(): Observable<MessageEvent> {
     return this.appService.sendEvents();
   }
-
   @Get('')
   @Render('index')
   async index(@Query() query: any, @Req() req: Request, @Res() res: Response) {
@@ -163,13 +136,11 @@ export class AppController {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
   posts() {}
 
-  @Get('/api/users')
-  async getUsers(@Req() req: Request, @Res() res: Response) {
+  @Get('/api/channel')
+  async getChannel(@Req() req: Request, @Res() res: Response) {
     try {
-      const users = await this.appService.getUsers(1);
-      const size = await this.appService.getUsersLength();
-      const online = size?.filter((item: any) => item?.online === true)?.length;
-      return res.status(200).json({users, size: size?.length, online});
+      const channel = await this.appService.getChannelTotal();
+      return res.status(200).json({channel});
     } catch (error) {
       return res.status(500).json({message:"Internal Server Error"});
     }
@@ -232,8 +203,8 @@ export class AppController {
   @Get('/api/getAllPaging')
   async getAllPaging(@Req() req: Request, @Res() res: Response) {
     try {
-      const posts= await this.appService.getAll(Number(req.query?.page), Number(req.query?.size), String(req.query?.messageId)? String(req.query?.messageId) : null);
-      const size= await this.appService.findLengthMessage();
+      const posts= await this.appService.getAll(Number(req.query?.page), Number(req.query?.size), String(req.query?.messageId)? String(req.query?.messageId) : null, String(req.query?.channel));
+      const size= await this.appService.findLengthMessage(String(req.query?.channel));
       return res.status(200).json({posts, size})
     } catch (error) {
       return res.status(500).json({message:"Internal Server Error"});
@@ -400,9 +371,9 @@ export class AppController {
   @Get('/api/hotposts')
   async getHotPosts(@Req() req: Request, @Res() res: Response) {
     try {
-      const { messageId, page, size } = req.query;
-      const posts = await this.appService.getHotPosts(String(messageId), Number(page), Number(size));
-      const size1= await this.appService.findLengthMessage();
+      const { messageId, page, size, channel } = req.query;
+      const posts = await this.appService.getHotPosts(String(messageId), Number(page), Number(size), String(channel));
+      const size1= await this.appService.findLengthMessage(String(channel));
       return res.status(200).json({ posts, size: size1});
     } catch (error) {
       return res.status(500).json({message:"Internal Server Error"});
@@ -413,14 +384,14 @@ export class AppController {
   @UseInterceptors(FileInterceptor('image', multerOptions))
   async uploadFile(@UploadedFile() file: Express.Multer.File, @Req() req: Request, @Res() res: Response) {
     try{
-      const { id } = req.query;
+      const { id, channelId } = req.query;
       const destinationPath = `./public/assets/images/${file.filename}`;
       const destinationDir = './public/assets/images';
       if (!fs.existsSync(destinationDir)) {
         fs.mkdirSync(destinationDir);
       }
       fs.copyFileSync(file.path, destinationPath);
-      await this.appService.addPost(String(id), file.filename);
+      await this.appService.addPost(String(id), file.filename, String(channelId));
       return res.status(200).json({ message: "Upload image successfully!" });
     } catch (error) {
       return res.status(500).json({message:"Internal Server Error"});

@@ -16,9 +16,7 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import ContentRight  from "../ContentRight";
-import PersonSearchIcon from '@mui/icons-material/PersonSearch';
-import ClearIcon from '@mui/icons-material/Clear';
-
+import ChannelHeader from "../ChannelHeader";
 
 const MainContent = () => {
   const {state, dispatch}=useStore();
@@ -40,13 +38,14 @@ const MainContent = () => {
 
     if (window.innerWidth <= 1240) {
       setOpenReponsive(true);
-    } else{
+    } 
+    if (window.innerWidth > 1240){
       setOpenReponsive(false);
     }
     
     window.addEventListener('scroll', () => {
       handleScroll();
-      if (window.scrollY + window.innerHeight >= document.body.scrollHeight) {
+      if (window.scrollY + window.innerHeight >= document.body.scrollHeight - 5 ) {
         if(!state.loadingPost && state.page !== -1){
           useDataDebouncer(dispatch({type: "CHANGE_PAGE", payload: {page: state.page}}), 500);
         }
@@ -83,9 +82,6 @@ const MainContent = () => {
     setValue(newValue);
   };
 
-  const [openUsers, setOpenUsers] = React.useState(false);
-
-
   return (
     <div style={{ backgroundColor: state.background ? "black": "#f5f5f500"}}>
       <div className="main-container">
@@ -96,59 +92,44 @@ const MainContent = () => {
             pointerEvents: state.onMenu ? "none": "auto", 
           }}
         >
+          <ChannelHeader openReponsive={openReponsive}/>
           <TabContext value={value}>
-            <Box sx={{ borderBottom: 1, borderColor: 'divider'}} className="box-tabs">
-              <TabList onChange={handleChange} aria-label="lab API tabs example">
-                <Tab label="New" value="1" onClick={() => dispatch({type: "CHANGE_TAB_POST", payload: "New"})}/>
-                <Tab label="Top" value="2" onClick={() => dispatch({type: "CHANGE_TAB_POST", payload: "Hot"})}/>
-                {state?.searchMessage !== "" && <Tab label="Search" value="3" onClick={() => dispatch({type: "CHANGE_TAB_POST", payload: "Search"})}/>}
-              </TabList>
-              <p 
-                className="res-onclick-users"
-                onClick={()=>setOpenUsers(true)}
-              >
-                <PersonSearchIcon sx={{fontSize: "25px", color: "#6C7588"}}/>
-              </p>
-            </Box>
-            <TabPanel value="1">
-              {state.author?.id && <UploadPost/>}
-              <Container type="New"/>
-              {state.loadingPost && (
-                <div className="notifi-progress">
-                  <CircularProgress sx={{color: "rgb(108, 117, 136)"}}/>
-                </div>
-              )}
-            </TabPanel>
-            <TabPanel value="2">
-              <Container/>
-              {state.loadingPost && (
-                <div className="notifi-progress">
-                  <CircularProgress sx={{color: "rgb(108, 117, 136)"}}/>
-                </div>
-              )}
-            </TabPanel>
-            {state?.searchMessage !== "" && (
-              <TabPanel value="3">
+            <div className="main-tabs">
+              <Box sx={{ borderBottom: 1, borderColor: 'divider'}} className="box-tabs">
+                <TabList onChange={handleChange} aria-label="lab API tabs example">
+                  <Tab label="New" value="1" onClick={() => dispatch({type: "CHANGE_TAB_POST", payload: "New"})}/>
+                  <Tab label="Top" value="2" onClick={() => dispatch({type: "CHANGE_TAB_POST", payload: "Hot"})}/>
+                  {state?.searchMessage !== "" && <Tab label="Search" value="3" onClick={() => dispatch({type: "CHANGE_TAB_POST", payload: "Search"})}/>}
+                </TabList>
+              </Box>
+              <TabPanel value="1">
+                {state.author?.id && <UploadPost/>}
+                <Container type="New"/>
                 {state.loadingPost && (
                   <div className="notifi-progress">
                     <CircularProgress sx={{color: "rgb(108, 117, 136)"}}/>
                   </div>
                 )}
-                <Container messageId={state?.searchMessage}/>
               </TabPanel>
-            )}
-            {openUsers && (
-              <div className="res-users">
-                <div className="res-users-header">
-                  <PersonSearchIcon sx={{fontSize: "28px", color: "#6C7588"}}/>
-                  <ClearIcon 
-                    sx={{fontSize: "20px", color: "#6C7588"}}
-                    onClick={()=>setOpenUsers(false)}
-                  />
-                </div>
-                {openReponsive && (<ContentRight />)}
-              </div>
-            )}
+              <TabPanel value="2">
+                <Container/>
+                {state.loadingPost && (
+                  <div className="notifi-progress">
+                    <CircularProgress sx={{color: "rgb(108, 117, 136)"}}/>
+                  </div>
+                )}
+              </TabPanel>
+              {state?.searchMessage !== "" && (
+                <TabPanel value="3">
+                  {state.loadingPost && (
+                    <div className="notifi-progress">
+                      <CircularProgress sx={{color: "rgb(108, 117, 136)"}}/>
+                    </div>
+                  )}
+                  <Container messageId={state?.searchMessage}/>
+                </TabPanel>
+              )}
+            </div>
           </TabContext>
         </div>
         <div 

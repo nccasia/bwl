@@ -84,7 +84,7 @@ function UploadDialog(props){
     const handleUpdate  = async () => {
         if(data && state.author?.id){
             if(props?.type==="add"){
-                await addPost({formData: data, id: state.author?.id}).then(data => {
+                await addPost({formData: data, id: state.author?.id, channelId: state.channel}).then(data => {
                     if(data){
                         showToast("success", 'Success!');
                         props?.setOpen(false);

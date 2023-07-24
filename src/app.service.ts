@@ -10,7 +10,7 @@ import { Like, LikeDocument } from './Like/like.schema';
 import { Notification, NotificationDocument} from './Notification/notification.schema';
 import { Observable, Subject } from 'rxjs';
 import { KomuUsers, KomuUsersDocument } from './Komu_users/komu_users.schema';
-import {channel, guild} from "./Channel"
+import {channel, guild, channelList} from "./Channel"
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
@@ -40,7 +40,7 @@ export class AppService {
       const aggregatorOpts = [
         { 
           $match: {
-            channelId: channel, 
+            channelId: { $in: channelList }, 
             createdTimestamp: {$gt: currentTime },
           } 
         },
@@ -117,8 +117,8 @@ export class AppService {
   async findLikeMessageId(id: string): Promise<any> {
     return await this.komuMessage.findOne({ id: id });
   }
-  async findLengthMessage(): Promise<any> {
-    const count = await this.komuMessage.countDocuments({ channelId: channel }).exec();
+  async findLengthMessage(channel1: string): Promise<any> {
+    const count = await this.komuMessage.countDocuments({ channelId: channel1, links: { $ne: [] } }).exec();
     return count;
   }
 
@@ -654,7 +654,6 @@ export class AppService {
     return true;
   }
   async getNotifications(authorId: string, page: number, size: number) {
-  
     return await this.komuNotification
       .aggregate([
         {
@@ -729,7 +728,7 @@ export class AppService {
   async getPostsOne(messageId: string, authorId: string | null) {
     const aggregatorOpts = [
       { $match: { 
-          channelId: channel,
+          //channelId: channel,
           messageId, 
         } 
       },
@@ -839,9 +838,12 @@ export class AppService {
     ).exec();
     return notification;
   }
-  async getHotPosts(authorId: string, page: number, size: number) {
+  async getHotPosts(authorId: string, page: number, size: number, channel1: string) {
     const aggregatorOpts = [
-      { $match: { channelId: channel } },
+      { $match: { 
+        channelId: channel1,
+        links: { $ne: [] },
+      } },
       { $sort: { totalLike: -1, totalComment: -1, _id: -1} },
       { $skip: (page - 1) * 5 },
       { $limit: 5 },
@@ -923,9 +925,12 @@ export class AppService {
     }
     return data;
   }  
-  async getAll(page: number, size: number, authorId: string | null) {
+  async getAll(page: number, size: number, authorId: string | null, channel1: string) {
     const aggregatorOpts = [
-      { $match: { channelId: channel } },
+      { $match: { 
+        channelId: channel1,
+        links: { $ne: [] },
+      } },
       { $sort: { _id: -1 } },
       { $skip: (page - 1) * 5 },
       { $limit: 5 },
@@ -1069,7 +1074,7 @@ export class AppService {
     const count = await this.komuMessage.countDocuments({ messageId });
     return count > 0;
   }
-  async addPost(authorId: string, links: string) {
+  async addPost(authorId: string, links: string, channelId: string) {
     let messageId: string;
     let isMessageIdExists1: boolean;
 
@@ -1080,7 +1085,7 @@ export class AppService {
 
     const addPost =  new this.komuMessage({
       links:[links],
-      channelId:channel,
+      channelId: channelId,
       guildId: guild,
       createdTimestamp: new Date().getTime(),
       authorId:authorId,
@@ -1330,59 +1335,14 @@ export class AppService {
       {online: online}, 
     ).exec();
   }
-  async getUsers(page: number) {  
-    return await this.komuUser
-    .aggregate([
-      { 
-        $match: { 
-          $or: [
-            { username: { $ne: null } },
-            { username: { $ne: undefined } },
-            { email: { $ne: null } },
-            { email: { $ne: undefined } },
-            { online: { $ne: null } },
-            {online: { $ne: undefined } },
-          ],
-          username: { $exists: true },
-          email: { $exists: true },
-          online: { $exists: true },
-        } 
-      },
-      { 
-        $sort: { online: -1, username: 1, email: 1, } 
-      },
-      { $skip: (page - 1) * 10 },
-      { $limit: 10 },
-      {
-        $project: {
-          id: 1,
-          email: 1,
-          avatar: 1,
-          online: 1,
-          username: 1,
-        }
-      }
-    ]).exec();
-  }
-  async getUsersLength() {  
-    return await this.komuUser
-    .aggregate([
-      { 
-        $match: { 
-          $or: [
-            { username: { $ne: null } },
-            { username: { $ne: undefined } },
-            { email: { $ne: null } },
-            { email: { $ne: undefined } },
-            { online: { $ne: null } },
-            {online: { $ne: undefined } },
-          ],
-          username: { $exists: true },
-          email: { $exists: true },
-          online: { $exists: true },
-        } 
-      },
-    ]).exec();
+  async getChannelTotal() {  
+    const list = await Promise.all(
+      channelList?.map(async(item: any)=> {
+        const length = await this.findLengthMessage(item?.id);
+        return {...item,...{total: length}}
+      })
+    );
+    return list;
   }
   async searchByName(name: string, page: number) {
     return await this.komuUser
@@ -1530,6 +1490,6 @@ export class AppService {
     //this.komuMessage.find({channelId: channel});
     //await this.komuUser.deleteMany({id: "1027051170650406913"})
     //await this.komuMessage.find({channelId: channel}).sort({ _id: -1 });
-    return await this.komuUser.find({id: "1027051170650406913"})
+    return await this.komuMessage.find({messageId: "ec8b7427-7daf-4af2-9ec8-b8c7de76bd4f"});
   }
 }

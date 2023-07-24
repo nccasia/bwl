@@ -31,8 +31,8 @@ function InputPost(){
     const handleChangeSearch =(index)=>{
         setText(index);
         if(index === ""){
-            dispatch({type:"SET_SEARCH", payload: ""});
-            dispatch({type:"SET_SEARCH_TIME", payload: []});
+            dispatch({type:"RESET_SEARCH", payload: ""});
+            setDateRange([]);
         }
     }
     const handleChangeTime =(date)=>{
