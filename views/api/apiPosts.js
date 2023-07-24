@@ -11,7 +11,7 @@ export const getAll = async (index, dispatch) => {
           });
         dispatch({type:"SET_POSTS", payload: res.data})
     } catch(error) {
-        dispatch({type:"CHANGE_LOADING_POST", payload: true});
+        dispatch({type:"CHANGE_LOADING_POST", payload: false});
         showToast("error", error?.response?.data?.message);
         return [];
     }
@@ -24,24 +24,24 @@ export const getOne = async (index, dispatch) => {
             url: index.id ? `/api/posts?messageId=${index.messageId}&id=${index.id}` : `/api/posts?messageId=${index.messageId}`,
             method: "GET",
           });
-        dispatch({type:"SET_POST_ONE", payload: res.data})
+        dispatch({type:"SET_POSTS", payload: res.data})
     } catch(error) {
-        dispatch({type:"CHANGE_LOADING_POST", payload: true});
+        dispatch({type:"CHANGE_LOADING_POST", payload: false});
         showToast("error", error?.response?.data?.message);
         return [];
     }
 }
 
-export const getHotPosts = async (dispatch) => {
+export const getHotPosts = async (index, dispatch) => {
     try {
-        dispatch({type:"CHANGE_LOADING_HOTPOST", payload: true})
+        dispatch({type:"CHANGE_LOADING_POST", payload: true})
         const res = await axios({
-            url: "/api/hotposts",
+            url: `/api/hotposts?page=${index?.page}&size=${index?.size}&messageId=${index?.messageId}`,
             method: "GET",
           });
-        dispatch({type:"SET_HOTPOSTS", payload: res.data?.hotposts})
+        dispatch({type:"SET_POSTS", payload: res.data})
     } catch(error) {
-        dispatch({type:"CHANGE_LOADING_HOTPOST", payload: true});
+        dispatch({type:"CHANGE_LOADING_POST", payload: false});
         showToast("error", error?.response?.data?.message);
         return [];
     }
@@ -93,3 +93,34 @@ export const editPost = async (index) => {
         return false;
     }
 }
+
+export const getSearchPost = async (index, dispatch) => {
+    try {
+        dispatch({type:"CHANGE_LOADING_USERS", payload: true});
+        const res = await axios({
+            url: `api/search/posts?page=${index?.page}&messageId=${index?.messageId}`,
+            method: "GET",
+          });
+        dispatch({type:"SET_SEARCH_POSTS", payload: res.data})
+    } catch(error) {
+        dispatch({type:"CHANGE_LOADING_USERS", payload: false});
+        showToast("error", error?.response?.data?.message);
+        return [];
+    }
+}
+
+export const getSearchTimePost = async (index, dispatch) => {
+    try {
+        dispatch({type:"CHANGE_LOADING_USERS", payload: true});
+        const res = await axios({
+            url: `api/search/time/posts?page=${index?.page}&start=${index?.start}&end=${index?.end}`,
+            method: "GET",
+          });
+        dispatch({type:"SET_SEARCH_POSTS", payload: res.data})
+    } catch(error) {
+        dispatch({type:"CHANGE_LOADING_USERS", payload: false});
+        showToast("error", error?.response?.data?.message);
+        return [];
+    }
+}
+

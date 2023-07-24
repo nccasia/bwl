@@ -15,10 +15,10 @@ export const getLogin = async () => {
   }
 };
 
-export const getLogout = async () => {
+export const getLogout = async (index) => {
   try {
     await axios({
-      url: '/api/logout',
+      url: `/api/logout?messageId=${index}`,
       method: 'GET',
     });
   } catch (error) {

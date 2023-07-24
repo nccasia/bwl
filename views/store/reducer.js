@@ -3,7 +3,7 @@ import { updateSize } from '../util/updateSize';
 
 const initState = {
   posts: [],
-  hotPosts: [],
+  typePosts: "",
   author: [],
   background: false,
   notification: [],
@@ -14,11 +14,20 @@ const initState = {
   size: 5,
   loadingNotifi: false,
   loadingPost: false,
-  loadingHotPost: false,
   lengthPosts: 0,
   changePage: false,
   onEdit: false,
   onMenu: false,
+  users: [],
+  sizeUsers: 0,
+  search: "",
+  searchPosts: [],
+  searchMessage: "",
+  pageUsers: 1,
+  loadingUsers: false,
+  lengthUsers: 0,
+  searchTime:[],
+  searchUsersPosts:"",
 };
 
 function reducer(state, action) {
@@ -31,7 +40,7 @@ function reducer(state, action) {
               ...main,
               totalLike:
                 action.payload?.like === 'true'
-                  ? main.totalLike + 1
+                  ? main.totalLike ? main.totalLike + 1 : 1
                   : main.totalLike - 1,
               likes:
                 action.payload?.authorNotifi2 === state.author?.id
@@ -49,8 +58,10 @@ function reducer(state, action) {
               return {
                 ...main,
                 totalComment:
-                  action.payload?.comment === 'add' || action.payload?.comment === 'addItem'
-                    ? main.totalComment + 1
+                  action.payload?.comment === 'add'
+                    ? main.totalComment ? main.totalComment + 1 : 1
+                    :action.payload?.comment === 'addItem' ?
+                      main.totalComment + 1
                     : action.payload?.comment === 'deleteItem'
                       ? main.totalComment - 1
                       :action.payload?.comment === 'delete' ?
@@ -302,7 +313,7 @@ function reducer(state, action) {
       return {
         ...state,
         posts:
-          action.payload?.posts === 'add'
+          action.payload?.posts === 'add' && !state.typePosts 
             ? [
                 ...action.payload?.list.map((main) => {
                   return {
@@ -349,9 +360,7 @@ function reducer(state, action) {
       });
       return {
         ...state,
-        posts: state.changePage
-          ? commentList
-          : [...state.posts, ...commentList],
+        posts: state.page ===1 ? commentList : [...state.posts, ...commentList],
         loadingPost: false,
         lengthPosts: action.payload?.size,
       };
@@ -368,29 +377,13 @@ function reducer(state, action) {
         ...state,
         loadingPost: action.payload,
       };
-    case 'SET_POST_ONE':
-      const commentListOne = action.payload?.map((main) => {
-        return {
-          ...main,
-          ...{ comments: [] },
-        };
-      });
+    case 'CHANGE_TAB_POST':
       return {
         ...state,
-        posts: commentListOne,
+        typePosts: action.payload,
+        posts: [],
         page: 1,
-        loadingPost: false,
-      };
-    case 'SET_HOTPOSTS':
-      return {
-        ...state,
-        hotPosts: action.payload,
-        loadingHotPost: false,
-      };
-    case 'CHANGE_LOADING_HOTPOST':
-      return {
-        ...state,
-        loadingHotPost: action.payload,
+        size: 5,
       };
     case 'SET_AUTHOR':
       return {
@@ -431,14 +424,12 @@ function reducer(state, action) {
       const count = updateSize(state.posts?.length);
       return {
         ...state,
-        loadingPost:
-          numberPosts > action.payload && action.payload > 0 && state.page > 0
-            ? true
-            : false,
         page:
-          numberPosts > count?.page && count?.page > 0 && state.page > 0
-            ? count?.page
-            : -1,
+          state.typePosts ==="Search" ? 
+            -1 
+            :numberPosts > count?.page && count?.page > 0 && state.page > 0
+              ? count?.page
+              : -1,
         size: count?.size,
       };
     case 'CHANGE_PAGE_NOTIFICATION':
@@ -540,6 +531,72 @@ function reducer(state, action) {
         ...state,
         posts: loadingComment,
       };  
+    case 'SET_USERS':
+      return {
+        ...state,
+        users: state.pageUsers === 1 ? action.payload?.list?.users : [...state?.users,...action.payload?.list?.users],
+        lengthUsers: action.payload?.list?.size,
+        sizeUsers: action.payload?.list?.online,
+        loadingUsers: false,
+      };
+    case 'SET_SEARCH':
+      return {
+        ...state,
+        search: action.payload,
+        pageUsers: 1,
+        users:[],
+      };
+    case 'SET_SEARCH_POSTS':
+      return {
+        ...state,
+        searchPosts: state.pageUsers ===1 ? action.payload?.posts : [...state.searchPosts, ...action.payload?.posts],
+        lengthUsers: action.payload?.total,
+        loadingUsers:false,
+      };
+    case 'SET_SEARCH_MESSAGE':
+      return {
+        ...state,
+        searchMessage: action.payload,
+      };
+    case 'CHANGE_LOADING_USERS':
+      return {
+        ...state,
+        loadingUsers: action.payload,
+      };
+    case 'CHANGE_PAGE_USERS':
+      const numberUsers = Math.ceil(action.payload?.length/ 10);
+      return {
+        ...state,
+        pageUsers:
+          numberUsers >= action.payload?.page &&
+          action.payload?.page > 0 &&
+          state.pageUsers > 0
+            ? action.payload?.page === state.pageUsers + 1
+              ? action.payload?.page
+              : state.pageUsers
+            : -1,
+      };
+    case 'CHANGE_SEARCH_POSTS':
+      return {
+        ...state,
+        searchPosts: [],
+        lengthUsers: 0,
+        pageUsers: 1,
+      };
+    case 'CHANGE_PAGE_USERS_POST':
+      return {
+        ...state,
+        pageUsers: 1,
+        searchUsersPosts:action.payload,
+      };
+    case 'SET_SEARCH_TIME':
+      return {
+        ...state,
+        searchTime: action.payload,
+        searchPosts:[],
+        lengthUsers: 0,
+        pageUsers: 1,
+      };
     default:
     throw new Error('Error');
   }

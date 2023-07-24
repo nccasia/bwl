@@ -17,6 +17,9 @@ export class KomuUsers {
 
   @Prop()
   avatar: string;
+
+  @Prop()
+  online: boolean | null;
 }
 
 export const KomuUsersSchema = SchemaFactory.createForClass(KomuUsers);

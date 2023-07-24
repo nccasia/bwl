@@ -4,16 +4,48 @@
   max-width: 1400px;
   margin: auto;
   margin-top: 10px;
-  padding: 60px 30px 0 30px;
-  gap: 20px;
+  padding: 60px 0 0 0;
   .sidebar-left {
-    width: 35%;
+    width: 22%;
+    height: 90vh;
+    position: fixed;
+    right: 58px;
+    top: 66.5px;
   }
   .main-content {
-    width: 65%;
-    .notifi-progress{
-      text-align: center;
-      height: 100px;
+    width: 76%;
+    position:relative;
+    .TabPanel{
+      padding: 24px 16px;
+      .notifi-progress{
+        text-align: center;
+        height: 100px;
+      }
+    }
+    .box-tabs{
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
+    }
+    .res-onclick-users{
+      display: none;
+    }
+    .res-users{
+      position: fixed;
+      top: 60px;
+      right: 0;
+      z-index: 9999;
+      width: 50%;
+      background-color: white;
+      padding: 10px 10px 0 10px;
+      height: 90vh;
+      .res-users-header{
+        display: flex;
+        justify-content:space-between;
+        align-items: center;
+        padding: 0 5px;
+        margin-bottom: 5px;
+      }
     }
   }
   .scrollUp {
@@ -21,12 +53,13 @@
     height: 40px;
     position: fixed;
     bottom: 50px;
-    right: 50px;
+    right: 10px;
     font-size: 35px;
     background-color: white;
     border-radius: 50%;
     border: 1px solid #0000004d;
   }
+
 }
 @keyframes fadeIn {
   0% {
@@ -54,6 +87,11 @@
     .main-content {
       width: 100%;
       padding: 10px 5% 0px;
+      .res-onclick-users{
+        display: block;
+        cursor: pointer;
+        padding: 0 20px 0 0;
+      }
     }
   }
 }
@@ -62,6 +100,19 @@
     padding: 0;
     .main-content {
       padding: 70px 5% 0px;
+      .res-onclick-users{
+        display: block;
+      }
+      .res-users{
+        width: auto;
+      }
+    }
+  }
+}
+@media (max-width: 500px) {
+  .main-container {
+    .main-content {
+      padding: 70px 0 0 0;
     }
   }
 }
