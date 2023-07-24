@@ -94,7 +94,7 @@ const MainContent = () => {
         >
           <ChannelHeader openReponsive={openReponsive}/>
           <TabContext value={value}>
-            <div className="main-tabs">
+            <div className="main-tabs" style={{ backgroundColor: state.background ? "rgb(36, 37, 38)": "white"}}>
               <Box sx={{ borderBottom: 1, borderColor: 'divider'}} className="box-tabs">
                 <TabList onChange={handleChange} aria-label="lab API tabs example">
                   <Tab label="New" value="1" onClick={() => dispatch({type: "CHANGE_TAB_POST", payload: "New"})}/>
@@ -137,6 +137,7 @@ const MainContent = () => {
           style={{
             opacity: state.onMenu ? 0.5 : 1,
             pointerEvents: state.onMenu ? "none": "auto",
+            backgroundColor: state.background ? "rgb(36, 37, 38)": "white"
           }}
         >
           {!openReponsive && (<ContentRight />)}

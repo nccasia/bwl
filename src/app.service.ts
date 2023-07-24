@@ -299,9 +299,10 @@ export class AppService {
     const deleteItem: any = await this.komuComment.find({item: id}).exec();
     await this.komuComment.deleteMany({item: id}).exec();
     const message = await this.komuMessage.find({ messageId: deleteComment?.messageId }).exec();
+    
     await this.komuMessage.findOneAndUpdate(
-      {messageId},
-      { $set: { totalComment: message[0]?.totalComment - 1} },
+      {messageId: deleteComment?.messageId},
+      { $set: { totalComment: deleteComment?.item ? Number(message[0]?.totalComment - 1) : Number(message[0]?.totalComment - 1 - deleteItem?.length)} },
       { new: true },
     );
     if(deleteComment?.item){
@@ -1406,12 +1407,12 @@ export class AppService {
       ])
       .exec();
   }
-  async searchPosts(id: string, page: number) {
+  async searchPosts(id: string, page: number, channelId: string) {
     return await this.komuMessage
       .aggregate([
         {
           $match: {
-            channelId: channel,
+            channelId: channelId,
             authorId: id,
             links: { $ne: [] },
           }
@@ -1430,12 +1431,12 @@ export class AppService {
       ])
       .exec();
   }
-  async searchTimePosts(start: number, end: number, page: number) {
+  async searchTimePosts(start: number, end: number, page: number, channelId: string) {
     return await this.komuMessage
       .aggregate([
         {
           $match: {
-            channelId: channel,
+            channelId: channelId,
             links: { $ne: [] },
             createdTimestamp: { $gte: start, $lt: end },
           }
@@ -1454,12 +1455,12 @@ export class AppService {
       ])
       .exec();
   }
-  async searchPostsLength(id: string) {
+  async searchPostsLength(id: string, channeld: string) {
     return await this.komuMessage
       .aggregate([
         {
           $match: {
-            channelId: channel,
+            channelId: channeld,
             authorId: id,
             links: { $ne: [] },
           }
@@ -1467,12 +1468,12 @@ export class AppService {
       ])
       .exec();
   }
-  async searchTimePostsLength(start: number, end: number) {
+  async searchTimePostsLength(start: number, end: number, channelId: string) {
     return await this.komuMessage
       .aggregate([
         {
           $match: {
-            channelId: channel,
+            channelId: channelId,
             links: { $ne: [] },
             createdTimestamp: { $gte: start, $lt: end },
           }

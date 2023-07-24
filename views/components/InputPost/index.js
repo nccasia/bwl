@@ -46,11 +46,12 @@ function InputPost(){
         
     }
     return(
-        <div className="container-input-posts">
+        <div className="container-input-posts" style={{ backgroundColor: state.background ? "rgb(36, 37, 38)": "white"}}>
             <div className="search-input">
                 <TextField
                     placeholder="Search name..."
                     className="date-picker"
+                    sx={{ backgroundColor: state.background ? "rgb(36, 37, 38)": "white"}}
                     value={text}
                     onChange={e => handleChangeSearch(e?.target?.value)}
                     InputProps={{
@@ -66,13 +67,14 @@ function InputPost(){
                 />
                 <button 
                     className="search-button"
+                    style={{ backgroundColor: state.background ? "rgb(36, 37, 38)": "white",}}
                     onClick={handleClickSearch}
                 >
                     <SearchIcon sx={{color: "#6C7588", fontSize: "18px"}}/>
                 </button>
             </div>
             {openPicker && (
-                <div className="date-range-picker">
+                <div className={state.background ? "date-range-picker-dark" : "date-range-picker-light"}>
                     <DatePicker 
                         selectsRange={true}
                         startDate={startDate}

@@ -25,7 +25,7 @@ function OnlineUsers(props){
     //console.log(state?.channelList);
 
     return(
-        <div className="container-list-users">
+        <div className="container-list-users" style={{ backgroundColor: state.background ? "rgb(36, 37, 38)": "white"}}>
             {props?.type=== "searchUsers" && (
                 <div>
                     <p>{"Searches: "} {state.lengthUsers}</p>

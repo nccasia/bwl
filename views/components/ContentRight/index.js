@@ -24,11 +24,12 @@ function ContentRight(){
     }, [state.loadingUsers, state.pageUsers, state.lengthUsers]);
     
     return(
-        <div className="content-right-container">
+        <div className="content-right-container" style={{ backgroundColor: state.background ? "rgb(36, 37, 38)": "white"}}>
             <InputPost/>
             <div 
                 ref={spanRef}
                 className="content-right-scroll"
+                style={{ backgroundColor: state.background ? "rgb(36, 37, 38)": "white"}}
             >
                 {state.search === ""  && state.searchTime?.length !==2 && state.searchUsersPosts === "" && <OnlineUsers type="channelList"/>}
                 {state.search !== "" && state.searchUsersPosts === "" && state.searchTime?.length !==2 && <OnlineUsers type="searchUsers"/>}
