@@ -97,9 +97,9 @@ const MainContent = () => {
             <div className="main-tabs" style={{ backgroundColor: state.background ? "rgb(36, 37, 38)": "white"}}>
               <Box sx={{ borderBottom: 1, borderColor: 'divider'}} className="box-tabs">
                 <TabList onChange={handleChange} aria-label="lab API tabs example">
-                  <Tab label="New" value="1" onClick={() => dispatch({type: "CHANGE_TAB_POST", payload: "New"})}/>
-                  <Tab label="Top" value="2" onClick={() => dispatch({type: "CHANGE_TAB_POST", payload: "Hot"})}/>
-                  {state?.searchMessage !== "" && <Tab label="Search" value="3" onClick={() => dispatch({type: "CHANGE_TAB_POST", payload: "Search"})}/>}
+                  <Tab  sx={{ color: 'rgb(108, 117, 136)' }} label="New" value="1" onClick={() => dispatch({type: "CHANGE_TAB_POST", payload: "New"})}/>
+                  <Tab  sx={{ color: 'rgb(108, 117, 136)' }} label="Top" value="2" onClick={() => dispatch({type: "CHANGE_TAB_POST", payload: "Hot"})}/>
+                  {state?.searchMessage !== "" && <Tab  sx={{ color: 'rgb(108, 117, 136)' }} label="Search" value="3" onClick={() => dispatch({type: "CHANGE_TAB_POST", payload: "Search"})}/>}
                 </TabList>
               </Box>
               <TabPanel value="1">

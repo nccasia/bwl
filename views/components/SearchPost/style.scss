@@ -5,7 +5,7 @@
         justify-content:space-between;
         align-items:center;
         position: fixed;
-        width: 22%;
+        width: 21%;
         background: #fff;
         height: 40px;
         top: 123px;
@@ -58,7 +58,7 @@
 @media (max-width: 768px){
     .container-list-posts {
         .list-post-header{
-            width: 45%;
+            width: 44%;
             top: 157px;
         }   
     } 
@@ -66,7 +66,7 @@
 @media (max-width: 500px){
     .container-list-posts {
         .list-post-header{
-            width: 71%;
+            width: 70%;
         }   
     } 
 }

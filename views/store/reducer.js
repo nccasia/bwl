@@ -542,6 +542,7 @@ function reducer(state, action) {
         pageUsers: 1,
         users:[],
         searchTime:[],
+        searchUsersPosts:"",
       };
     case 'RESET_SEARCH':
       return {
@@ -601,6 +602,7 @@ function reducer(state, action) {
         searchPosts:[],
         lengthUsers: 0,
         pageUsers: 1,
+        searchUsersPosts:"",
       };
     case 'SET_CHANNEL':
       return {
