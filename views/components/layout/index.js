@@ -36,13 +36,6 @@ const MainContent = () => {
       setScroll(true);
     }
 
-    if (window.innerWidth <= 986) {
-      setOpenReponsive(true);
-    } 
-    if (window.innerWidth > 986){
-      setOpenReponsive(false);
-    }
-
     window.addEventListener('scroll', () => {
       handleScroll();
       if (window.scrollY + window.innerHeight >= document.body.scrollHeight - 5 ) {
@@ -51,7 +44,7 @@ const MainContent = () => {
         }
       }
     });
-  }, [state.page, state.loadingPost, window.innerWidth]);
+  }, [state.page, state.loadingPost]);
 
   React.useEffect(() => {
     if (state?.searchMessage !== '') {
@@ -63,6 +56,14 @@ const MainContent = () => {
     }
   }, [state?.searchMessage]);
 
+  React.useEffect(() => {
+    if (window.innerWidth <= 986) {
+      setOpenReponsive(true);
+    } 
+    if (window.innerWidth > 986){
+      setOpenReponsive(false);
+    }
+  }, [window.innerWidth]);
   const handleScrollUpClick = () => {
     const step = Math.max(window.scrollY / 50, 20);
     const animation = () => {
