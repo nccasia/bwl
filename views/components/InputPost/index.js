@@ -11,7 +11,6 @@ import ClearIcon from '@mui/icons-material/Clear';
 import EventBusyIcon from '@mui/icons-material/EventBusy';
 import { getTime, format } from 'date-fns';
 import { showToast } from '../../util/showToast';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 function InputPost() {
   const { state, dispatch } = useStore();
@@ -45,7 +44,7 @@ function InputPost() {
                 }
             }
         }
-        setOpenPicker(false)
+        setOpenPicker(false);
     }
 
     const handleChangeSearch =(index)=>{
@@ -53,6 +52,7 @@ function InputPost() {
         if(index === ""){
             dispatch({type:"RESET_SEARCH", payload: ""});
             setDateRange([]);
+            dispatch({type: "CHANGE_PAGE_USERS_POST", payload: ""});
         }
     }
     const handleChangeTime =(date)=>{
@@ -66,11 +66,6 @@ function InputPost() {
         
     }
 
-    const handleInputClick = () => {
-      if (openPicker) {
-        setOpenPicker(false);
-      }
-    };
     const handleKeyPress = (event) => {
       if (event.key === 'Enter') {
         event.preventDefault();
@@ -87,8 +82,7 @@ function InputPost() {
                     value={text}
                     onChange={e => handleChangeSearch(e?.target?.value)}
                     autoFocus
-                    onKeyPress={handleKeyPress}
-                    onClick={handleInputClick}
+                    onKeyUp={handleKeyPress}
                     InputProps={{
                         startAdornment: (
                             <span className="icon-date-picker">
@@ -103,9 +97,9 @@ function InputPost() {
                                 {text && 
                                     <ClearIcon 
                                         onClick={()=> {
-                                                setOpenPicker(false);
-                                                handleChangeSearch("");
-                                            }} 
+                                            setOpenPicker(false);
+                                            handleChangeSearch("");
+                                        }} 
                                         sx={{color: "#6C7588", fontSize: "16px", cursor: "pointer"}}
                                     />
                                 }

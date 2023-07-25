@@ -2,15 +2,15 @@
     width: 100%;
     background-color: white;
     background-color: white;
-    padding: 10px;
+    padding: 0 10px 15px 10px;
     color: #6C7588;
-    margin-top: 20px;
     .list-user {
         display: flex;
         justify-content:space-between;
         align-items: center;
         border-bottom: 1px solid #80808042;
         margin: 5px;
+        font-size: 16px;
         .list-user-author{
             display: flex;
             align-items: center;
@@ -36,9 +36,8 @@
         justify-content:space-between;
         border-bottom: 1px solid #80808042;
         &:hover{
-            color: rgb(25, 118, 210);
             cursor: pointer;
-            background-color:rgb(192, 191, 191);
+            background-color: #80808042;
         }
         .list-channel-icon{
             display: flex;
@@ -52,5 +51,16 @@
     .list-channel-header{
         padding-bottom: 11px;
         border-bottom: 1px solid #80808042;
+    }
+}
+
+@media (max-width: 600px){
+    .list-channel{
+        .list-channel-icon{
+            font-size: 12px;
+        }
+        .list-channel-total {
+            font-size: 12px;
+        }
     }
 }
