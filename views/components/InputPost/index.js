@@ -45,6 +45,7 @@ function InputPost() {
                 }
             }
         }
+        setOpenPicker(false)
     }
 
     const handleChangeSearch =(index)=>{
@@ -80,14 +81,14 @@ function InputPost() {
         <div className="container-input-posts" style={{ backgroundColor: state.background ? "rgb(36, 37, 38)": "white"}}>
             <div className="search-input">
                 <TextField
-                    placeholder="Search name or date-date..."
+                    placeholder="Search by user name or posting date..."
                     className="date-picker"
                     sx={{ backgroundColor: state.background ? "rgb(36, 37, 38)": "white"}}
                     value={text}
                     onChange={e => handleChangeSearch(e?.target?.value)}
                     autoFocus
-        onKeyPress={handleKeyPress}
-        onClick={handleInputClick}
+                    onKeyPress={handleKeyPress}
+                    onClick={handleInputClick}
                     InputProps={{
                         startAdornment: (
                             <span className="icon-date-picker">

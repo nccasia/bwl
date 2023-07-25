@@ -42,15 +42,20 @@
     background-color: white;
     padding: 10px 10px 0 10px;
     height: 90vh;
+    animation: fadein .2s ease-out;
+    
     .res-channel-header{
         display:flex;
         justify-content:space-between;
         align-items: center;
         padding: 0 5px;
         margin-bottom: 5px;
+      
     }
 }
-
+.icon_clear{
+    animation: fadeout .2s ease-out;
+}
 @media (max-width: 1240px) {
     .channel-header-container {
         .res-onclick-channel{
@@ -78,4 +83,16 @@
     .res-channel{
         width: 80%;
     }
+}
+@keyframes fadein {
+    from { opacity: 0;
+    width: 0; }
+    to { opacity: 1;
+    width: 50%; }
+}
+@keyframes fadeout {
+    from { opacity: 1;
+    width: 50%; }
+    to { opacity: 0;
+    width: 0; }
 }
