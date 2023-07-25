@@ -56,6 +56,20 @@
 .icon_clear{
     animation: fadeout .2s ease-out;
 }
+
+@keyframes fadein {
+    from { opacity: 0;
+    width: 0; }
+    to { opacity: 1;
+    width: 50%; }
+}
+@keyframes fadeout {
+    from { opacity: 1;
+    width: 50%; }
+    to { opacity: 0;
+    width: 0; }
+}
+
 @media (max-width: 1240px) {
     .channel-header-container {
         .res-onclick-channel{
@@ -79,20 +93,25 @@
     }
 }
 
-@media (max-width: 500px){
-    .res-channel{
+@media (max-width: 500px) {
+    .res-channel {
         width: 80%;
+        animation: fadein .2s ease-out;
     }
-}
-@keyframes fadein {
-    from { opacity: 0;
-    width: 0; }
-    to { opacity: 1;
-    width: 50%; }
-}
-@keyframes fadeout {
-    from { opacity: 1;
-    width: 50%; }
-    to { opacity: 0;
-    width: 0; }
+    .icon_clear{
+        animation: fadeout .2s ease-out;
+    }
+    @keyframes fadein {
+        from { opacity: 0;
+            width: 0; }
+            to { opacity: 1;
+            width: 80%; }
+    }
+
+    @keyframes fadeout {
+        from { opacity: 1;
+            width: 80%; }
+            to { opacity: 0;
+            width: 0; }
+    }
 }
