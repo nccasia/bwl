@@ -42,7 +42,7 @@ function ChannelHeader(props){
                       onClick={()=>setOpenUsers(false)}
                     />
                   </div>
-                  {props?.openReponsive && (<ContentRight />)}
+                  {props?.openReponsive && <ContentRight />}
                 </div>
             )}
         </div>

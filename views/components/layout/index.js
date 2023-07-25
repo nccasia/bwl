@@ -36,10 +36,10 @@ const MainContent = () => {
       setScroll(true);
     }
 
-    if (window.innerWidth <= 1240) {
+    if (window.innerWidth <= 986) {
       setOpenReponsive(true);
     } 
-    if (window.innerWidth > 1240){
+    if (window.innerWidth > 986){
       setOpenReponsive(false);
     }
 
@@ -90,6 +90,7 @@ const MainContent = () => {
           style={{
             opacity: state.onMenu ? 0.5 : 1,
             pointerEvents: state.onMenu ? 'none' : 'auto',
+            backgroundColor: state.background ? 'black' : '#f5f5f500',
           }}
         >
           <ChannelHeader openReponsive={openReponsive}/>

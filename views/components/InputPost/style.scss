@@ -147,16 +147,22 @@
 @media (max-width: 1240px){
     .container-input-posts {
        .date-range-picker{
-        margin-top: 30px;
+            margin-top: 30px;
        }
     }
 }
-@media (max-width: 768px){
+@media (max-width: 968px){
     .container-input-posts {
         .search-input{
             .search-button{
                 width: 20%;
             }
+        }
+        .date-range-picker-dark{
+            top: 100px;
+        }
+        .date-range-picker-light{
+            top: 100px;
         }
     }
 }
