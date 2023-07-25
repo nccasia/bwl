@@ -165,7 +165,7 @@ export class AppController {
         const filePath= `./public/assets/images/${deletePost?.links[0]}`;
         fs.unlinkSync(filePath);
       }
-      return res.status(200).json({ message: "Delete image successfully!" });
+      return res.status(200).json({ message: "Đã xóa đã xóa!" });
     } catch (error) {
       return res.status(500).json({message:"Internal Server Error"});
     }
@@ -276,7 +276,7 @@ export class AppController {
     try {
       const { id, messageId } = req.query;
       await this.appService.deleteComment(id as string, messageId as string);
-      return res.status(200).json({ message: "Delete comment successfully!" });
+      return res.status(200).json({ message: "Đã xóa đã xóa!" });
     } catch (error) {
       return res.status(500).json({message:"Internal Server Error"});
     }
@@ -287,7 +287,7 @@ export class AppController {
     try {
       const { id, content,  messageId } = req.body;
       await this.appService.editComment(id as string, content as string,  messageId as string);
-      return res.status(200).json({ message: "Edit comment successfully!" });
+      return res.status(200).json({ message: "Chúc mừng, bạn đã sữa thành công!" });
     } catch (error) {
       return res.status(500).json({message:"Internal Server Error"});
     }

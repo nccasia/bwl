@@ -86,7 +86,7 @@ function UploadDialog(props){
             if(props?.type==="add"){
                 await addPost({formData: data, id: state.author?.id, channelId: state.channel}).then(data => {
                     if(data){
-                        showToast("success", 'Success!');
+                        showToast("success", 'Đăng bài thành công: Xong rồi! Đợi tớ 1 giây nhé!');
                         props?.setOpen(false);
                     }
                 });
@@ -94,7 +94,7 @@ function UploadDialog(props){
             if(props?.type==="edit"){
                 await editPost({formData: data, messageId: state.author?.id, id: props?.id}).then(data => {
                     if(data){
-                        showToast("success", 'Success!');
+                        showToast("success", 'Sữa bài thành công: Xong rồi! Đợi tớ 1 giây nhé!');
                         props?.setOpen(false);
                     }
                 });
