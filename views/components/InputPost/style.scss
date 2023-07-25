@@ -14,9 +14,9 @@
             border: none;
             width: 90%;
             height: 40px;
-            input::placeholder {
-                font-size: 12px;
-              }
+            // input::placeholder {
+            //     font-size: 12px;
+            //   }
             .css-1uvydh2{
                 color: #6C7588;
             }
@@ -42,6 +42,9 @@
         input{
             color: #6C7588;
             font-size: 16px;
+            &::placeholder {
+                font-size: 12px;
+              }
         }
         .search-button{
             height: 40px;
@@ -160,6 +163,20 @@
         .search-input{
             .search-button{
                 width: 20%;
+            }
+        }
+    }
+}
+@media (max-width: 500px){
+    .container-input-posts {
+        .search-input{
+            .date-picker{
+                .icon{
+                    font-size: 17px;
+                }
+                input::placeholder{
+                    font-size: 9px;
+                }
             }
         }
     }
