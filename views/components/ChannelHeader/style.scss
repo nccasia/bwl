@@ -57,29 +57,7 @@
     animation: fadeout .2s ease-out;
 }
 
-@media (min-width: 1441px) {
-    .channel-header-container {
-        .res-onclick-channel{
-          display: none;
-        }
-    }
-    .res-channel{
-        display:none;
-    }
-}
-
-@media (max-width: 1440px) {
-    .channel-header-container {
-        .res-onclick-channel{
-          display: none;
-        }
-    }
-    .res-channel{
-        display:none;
-    }
-}
-
-@media (max-width: 968px) {
+@media (max-width: 986px) {
     .channel-header-container {
         .res-onclick-channel{
           display: block;
