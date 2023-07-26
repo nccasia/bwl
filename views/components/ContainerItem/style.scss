@@ -276,3 +276,39 @@
     padding: 0 10px;
   }
 }
+@media (max-width: 500px) {
+  .container-item {
+    .container-item-react {
+      .react-comment {
+        .icon-cmt{
+          font-size: 13.5px;
+        }
+        span{
+          font-size: 14px;
+        }
+      }
+      .react-like {
+        .react-like-icon  {
+          .like_icon{
+            font-size: 18px;
+          }
+          span{
+            font-size: 14px;
+          }
+        }
+      }
+    }
+    .container-item-reactInfo {
+      .container-item-icon {
+        .container-item-emoji {
+          .input-icon {
+            font-size: 15px;
+          }
+        }
+        .input-button {
+          font-size: 35px;
+        }
+      }
+    }
+  }
+}

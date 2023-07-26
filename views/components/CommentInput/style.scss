@@ -115,3 +115,13 @@
     }
   }
 }
+
+@media (max-width: 500px) {
+  .container-item-reactInfo {
+    input {
+      &::placeholder {
+        font-size: 13px;
+      }
+    }
+  }
+}
