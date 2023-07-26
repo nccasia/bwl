@@ -10,17 +10,17 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 function OnlineUsers(props){
     const {state, dispatch}=useStore();
     React.useEffect(()=> {
-        if(props?.type=== "channelList"){
+        if(props?.type=== "channelList" && state.channelList?.length === 0){
             getChannel(dispatch);
         } 
         if(props?.type=== "searchUsers" && state.pageUsers !== -1 && state.searchUsersPosts === ""){
             getSearchUsers(state.search, state.pageUsers, dispatch)
         } 
-    },[state.search, state.pageUsers, props?.type]);
+    },[state.search, state.pageUsers, props?.type, state.channelList]);
 
     const handleClickChangeChannel =(index)=>{
         dispatch({type: "SET_CHANNEL", payload: index})
-    }
+    }    
 
     return(
         <div className="container-list-users" style={{ backgroundColor: state.background ? "rgb(36, 37, 38)": "white"}}>

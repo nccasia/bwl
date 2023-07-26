@@ -7,11 +7,18 @@ import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import ClearIcon from '@mui/icons-material/Clear';
 import ContentRight  from "../ContentRight";
 import { useRef } from 'react';
+import {getChannel} from "../../api/apiPosts";
 
 function ChannelHeader(props){
     const {state, dispatch}=useStore();
     const [openUsers, setOpenUsers] = React.useState(false);
     const inputRef = useRef(null);
+
+    React.useEffect(()=> {
+        if(state.channelList?.length === 0 && props?.innerWidth <= 986){
+            getChannel(dispatch);
+        } 
+    },[state.channelList, props?.innerWidth]);
     
     const handlehinebox = () => {
         inputRef.current.classList.add('icon_clear')
@@ -49,7 +56,7 @@ function ChannelHeader(props){
                       onClick={()=>handlehinebox()}
                     />
                   </div>
-                  {props?.openReponsive && <ContentRight />}
+                  {props?.innerWidth <= 986 && <ContentRight />}
                 </div>
             )}
         </div>
