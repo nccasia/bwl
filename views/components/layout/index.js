@@ -22,8 +22,7 @@ const MainContent = () => {
   const { state, dispatch } = useStore();
   const [scroll, setScroll] = React.useState(false);
   const [scrollY, setScrollY] = React.useState(0);
-  const [openReponsive, setOpenReponsive] = React.useState(false);
-
+  const [innerWidth, setInnerWidth] = React.useState(window.innerWidth);
   React.useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY >= 100) {
@@ -36,6 +35,13 @@ const MainContent = () => {
       setScroll(true);
     }
 
+    const handleResize = () => {
+      if (window.innerWidth) {
+        setInnerWidth(window.innerWidth);
+      } 
+    };
+
+    window.addEventListener('resize', handleResize);
     window.addEventListener('scroll', () => {
       handleScroll();
       if (window.scrollY + window.innerHeight >= document.body.scrollHeight - 5 ) {
@@ -44,6 +50,9 @@ const MainContent = () => {
         }
       }
     });
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
   }, [state.page, state.loadingPost]);
 
   React.useEffect(() => {
@@ -55,15 +64,6 @@ const MainContent = () => {
       setValue('1');
     }
   }, [state?.searchMessage]);
-
-  React.useEffect(() => {
-    if (window.innerWidth <= 986) {
-      setOpenReponsive(true);
-    } 
-    if (window.innerWidth > 986){
-      setOpenReponsive(false);
-    }
-  }, [window.innerWidth]);
   const handleScrollUpClick = () => {
     const step = Math.max(window.scrollY / 50, 20);
     const animation = () => {
@@ -82,7 +82,7 @@ const MainContent = () => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
+  
   return (
     <div style={{ backgroundColor: state.background ? 'black' : '#f5f5f500' }}>
       <div className="main-container">
@@ -94,7 +94,7 @@ const MainContent = () => {
             backgroundColor: state.background ? 'black' : '#f5f5f500',
           }}
         >
-          <ChannelHeader openReponsive={openReponsive}/>
+          <ChannelHeader innerWidth={innerWidth}/>
           <TabContext value={value}>
             <div className="main-tabs" style={{ backgroundColor: state.background ? "rgb(36, 37, 38)": "white"}}>
               <Box sx={{ borderBottom: 1, borderColor: 'divider'}} className="box-tabs">
@@ -142,7 +142,7 @@ const MainContent = () => {
             backgroundColor: state.background ? "rgb(36, 37, 38)": "white"
           }}
         >
-          {!openReponsive && <ContentRight />}
+          {innerWidth > 986  && <ContentRight />}
         </div>
         {scroll && state.typePosts !== 'Search' && (
           <FontAwesomeIcon
