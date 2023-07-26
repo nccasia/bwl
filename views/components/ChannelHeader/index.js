@@ -15,10 +15,10 @@ function ChannelHeader(props){
     const inputRef = useRef(null);
 
     React.useEffect(()=> {
-        if(state.channelList?.length === 0){
+        if(state.channelList?.length === 0 && props?.innerWidth <= 986){
             getChannel(dispatch);
         } 
-    },[state.channelList]);
+    },[state.channelList, props?.innerWidth]);
     
     const handlehinebox = () => {
         inputRef.current.classList.add('icon_clear')
