@@ -5,7 +5,6 @@
   align-items: flex-start;
   width: 100%;
   background-color: #fff;
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
   padding: 5%;
 
   .container-item-img {
@@ -31,18 +30,40 @@
       display: flex;
       cursor: pointer;
       padding: 20px;
+      position: relative;
 
       &:hover {
         background-color: #ccc;
       }
-
       .react-like-icon {
         display: flex;
         align-items: center;
         gap: 2px;
+        .react-icon-like{
+          display: flex;
+          align-items: center;
+          gap: 2px;
+        }
         &:hover .delete-comment-btn{
-          display: block;
-          cursor: pointer;
+          display: flex;
+          background-color: red;
+          position: absolute;
+          top: -10px;
+        }
+        .delete-comment-btn{
+          height: 30px;
+          .delete-icon{
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 10px;
+            li{
+              list-style: none;
+            }
+            .p:hover{
+              font-size: 20px;
+            }
+          }
         }
         .like_icon {
           font-size: 20px;
@@ -105,7 +126,6 @@
 
   .comment {
     width: 100%;
-    border-bottom: 1px solid #ccc;
   }
 
   .comment:last-child {
@@ -254,5 +274,41 @@
 @media (max-width: 768px) {
   .container-item {
     padding: 0 10px;
+  }
+}
+@media (max-width: 500px) {
+  .container-item {
+    .container-item-react {
+      .react-comment {
+        .icon-cmt{
+          font-size: 13.5px;
+        }
+        span{
+          font-size: 14px;
+        }
+      }
+      .react-like {
+        .react-like-icon  {
+          .like_icon{
+            font-size: 18px;
+          }
+          span{
+            font-size: 14px;
+          }
+        }
+      }
+    }
+    .container-item-reactInfo {
+      .container-item-icon {
+        .container-item-emoji {
+          .input-icon {
+            font-size: 15px;
+          }
+        }
+        .input-button {
+          font-size: 35px;
+        }
+      }
+    }
   }
 }

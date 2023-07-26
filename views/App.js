@@ -15,7 +15,7 @@ function App() {
     evtSource.onmessage = (event) => {
       const message = JSON.parse(event.data);
       dispatch({type: 'SET_SSE', payload: message});
-    };    
+    };  
   }, []);
 
   return (

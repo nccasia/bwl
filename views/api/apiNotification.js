@@ -9,7 +9,7 @@ export const getNotification = async (index, dispatch) => {
             url: `/api/notifications?messageId=${index?.messageId}&page=${index?.page}`,
             method: "GET",
           });
-        dispatch({type:"CHANGE_NOTIFICATION_ALL", payload: res.data?.notifications})
+        dispatch({type:"CHANGE_NOTIFICATION_ALL", payload:  {list:res.data?.notifications, page: index?.page}})
     } catch(error) {
         dispatch({type:"CHANGE_LOADING_NOTIFICATION", payload: true});
         showToast("error", error?.response?.data?.message);
@@ -23,7 +23,7 @@ export const getNotificationSize = async (index, dispatch) => {
             url: `/api/notifications/size?messageId=${index}`,
             method: "GET",
           });
-        dispatch({type: "SET_LENGTH_NOTIFICATION", payload: res.data?.length})
+        dispatch({type: "SET_LENGTH_NOTIFICATION", payload: res.data})
         return res.data;
     } catch (error) {
         showToast("error", error?.response?.data?.message);
@@ -31,7 +31,7 @@ export const getNotificationSize = async (index, dispatch) => {
     }
 }
 
-export const postNotification = async (messageId, dispatch) => {
+export const postNotification = async (messageId) => {
     try {
         await axios({
             url: "/api/notifications/size",
@@ -40,7 +40,6 @@ export const postNotification = async (messageId, dispatch) => {
             },
             method: "POST",
         });
-        dispatch({type: "SET_NOTIFICATION"});
     } catch (error) {
         showToast("error", error?.response?.data?.message);
         return {};

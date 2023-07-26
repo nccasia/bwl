@@ -9,11 +9,11 @@ import {
 } from "@mui/material";
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
-import { toast } from 'react-toastify';
 import {addPost, editPost} from "../../api/apiPosts";
 import { useStore } from '../../store';
 import "./style.scss";
 import axios from 'axios';
+import { showToast } from '../../util/showToast';
 
 function UploadDialog(props){
     const {state, dispatch}=useStore();
@@ -84,17 +84,9 @@ function UploadDialog(props){
     const handleUpdate  = async () => {
         if(data && state.author?.id){
             if(props?.type==="add"){
-                await addPost({formData: data, id: state.author?.id}).then(data => {
+                await addPost({formData: data, id: state.author?.id, channelId: state.channel}).then(data => {
                     if(data){
-                        toast.success('Success!', {
-                            position: 'bottom-right',
-                            autoClose: 2000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                        });
+                        showToast("success", 'Đăng bài thành công: Xong rồi! Đợi tớ 1 giây nhé!');
                         props?.setOpen(false);
                     }
                 });
@@ -102,29 +94,13 @@ function UploadDialog(props){
             if(props?.type==="edit"){
                 await editPost({formData: data, messageId: state.author?.id, id: props?.id}).then(data => {
                     if(data){
-                        toast.success('Success!', {
-                            position: 'bottom-right',
-                            autoClose: 2000,
-                            hideProgressBar: false,
-                            closeOnClick: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            progress: undefined,
-                        });
+                        showToast("success", 'Sữa bài thành công: Xong rồi! Đợi tớ 1 giây nhé!');
                         props?.setOpen(false);
                     }
                 });
             }
         } else{
-            toast.warning('Not image!', {
-                position: 'bottom-right',
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-            });
+            showToast("warning", 'Not image!');
         }
         setOpenImage(false);
         setImage("");
@@ -205,7 +181,7 @@ function UploadDialog(props){
                 <div className="upload-dialog-div">
                     <h1>{props?.type==="add" ? "New Post":"Edit Post"}</h1>
                     <p onClick={handleOpen}>
-                        <HighlightOffIcon sx={{fontSize: "20px"}}/>
+                        <HighlightOffIcon sx={{fontSize: "25px"}}/>
                     </p>
                 </div>
                 <div className="upload-dialog-div">

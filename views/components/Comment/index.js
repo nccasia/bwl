@@ -7,33 +7,47 @@ import { postComment } from '../../api/apiComment';
 import CommentInput from '../CommentInput';
 import { getComment } from '../../api/apiComment';
 import {showToast}  from "../../util/showToast";
+import {updateSize} from "../../util/updateSize";
+import CircularProgress from '@mui/material/CircularProgress';
 
 function Comment(props) {
   const { state, dispatch } = useStore();
   const [input, setInput] = React.useState('');
   const handleClickComment = async () => {
-    if (state.author?.id) {
-      await postComment({
-        authorId: state.author?.id,
-        content: input,
-        messageId: props?.messageId,
-      })
-      setInput('');
-    } else {
-      showToast("warning", 'Bạn cần đăng nhập để bình luận!');
+    if(input !== ""){
+      if (state.author?.id) {
+        await postComment({
+          authorId: state.author?.id,
+          content: input,
+          messageId: props?.messageId,
+        })
+        setInput('');
+      } else {
+        showToast("warning", 'Bạn cần đăng nhập để bình luận!');
+      }
+    }else{
+      showToast("warning", "Không để trống");
     }
   };
-  const numberComment = Math.ceil(props?.totalComment / state.size);
-  const handleClickPage = async(index) => {
-    if(numberComment > index){
-      getComment({messageId: props?.messageId, page: index + 1}).then((data) =>
-        dispatch({
-          type: 'SET_COMMENTS_PAGE',
-          payload: { comments: data, messageId: props?.messageId },
-        }),
-      );
+  const [page, setPage] = React.useState(0);
+  const [size, setSize] = React.useState(0);
+  React.useEffect(()=>{
+    if(props?.size){
+      setSize(props?.size);
     }
-  }  
+    if(props.page){
+      setPage(props.page);
+    }
+  },[props?.size, props.page]); 
+  const numberComment= Math.ceil(size / 5);
+  const handleClickPage = async(index) => {
+    if(numberComment > index && numberComment >0){
+      const test = updateSize(props?.comments?.length);
+      getComment({messageId: props?.messageId, page: test?.page, size: test?.size, id: state.author?.id}, dispatch);
+      setPage(test?.page);
+      setSize(test?.size);
+    }
+  } 
 
   return (
     <div className="container-comment">
@@ -46,11 +60,28 @@ function Comment(props) {
         ? props?.comments
             .map((comment, index) => (
               <div className="comment" key={index}>
-                <CommentItem {...comment} />
+                <CommentItem 
+                  {...comment} 
+                  messageId={props?.messageId} 
+                  authorMessage={props?.author?.id} 
+                  type="true"
+                />
               </div>
             ))
-        : null}
-      { numberComment > props?.pageComment && <p className="show-page-comment" onClick={() => handleClickPage(props?.pageComment)}>Xem thêm</p>}
+      : null}
+      {props?.loading && (
+        <div className="comment-progress">
+          <CircularProgress sx={{color: "rgb(108, 117, 136)"}}/>
+        </div>
+      )}
+      {numberComment > page && (
+        <p 
+          className="show-page-comment" 
+          onClick={() => handleClickPage(page)}
+        >
+          See More
+        </p>
+      )}
     </div>
   );
 }

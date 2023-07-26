@@ -26,9 +26,9 @@ const EmojiLikeList = (props) => {
           <h1 >
             Tất cả
           </h1>
-          <p onClick={() => props.setOpen('')}>
-            <HighlightOffIcon sx={{fontSize: "20px"}}/>
-          </p>
+          <div className="icon" onClick={() => props.setOpen('')}>
+            <HighlightOffIcon sx={{fontSize: "25px"}}/>
+          </div>
         </div>
         <Box className="box-reaction">
           <Tabs

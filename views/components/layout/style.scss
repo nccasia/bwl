@@ -1,19 +1,39 @@
 .main-container {
   display: flex;
   width: 100%;
-  max-width: 1400px;
   margin: auto;
-  margin-top: 10px;
-  padding: 60px 30px 0 30px;
-  gap: 20px;
+  padding: 70px 0 0 0;
   .sidebar-left {
-    width: 35%;
+    width: 30%;
+    height: 85vh;
+    position: fixed;
+    top: 69px;
+    background-color: white;
+    max-width: 350px;
+    border-radius: 5px;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
   }
   .main-content {
-    width: 65%;
+    width: 70%;
+    position:relative;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
     .notifi-progress{
       text-align: center;
       height: 100px;
+    }
+    .main-tabs{
+      background-color: white;
+      padding: 10px;
+      min-height: 80vh;
+      border-radius:5px;
+    }
+    .css-19kzrtu {
+      padding: 0;
+    }
+    .box-tabs{
+      align-items: center;
+      display: flex;
+      justify-content: space-between;
     }
   }
   .scrollUp {
@@ -21,12 +41,13 @@
     height: 40px;
     position: fixed;
     bottom: 50px;
-    right: 50px;
+    right: 10px;
     font-size: 35px;
     background-color: white;
     border-radius: 50%;
     border: 1px solid #0000004d;
   }
+
 }
 @keyframes fadeIn {
   0% {
@@ -36,32 +57,59 @@
     opacity: 0.5;
   }
 }
+
+@media (min-width: 1441px) {
+  .main-container::before{
+    width: calc((100% - 1350px) / 2);
+    height: 100%;
+  }
+  .main-container {
+    width: 1350px;
+    .main-content{
+      width: 1000px;
+    }
+    .sidebar-left {
+      padding: 10px;
+      width: 350px;
+      left: calc(((100% - 1350px) / 2) + 1000px + 10px);
+    }
+  }
+  .main-container::after{
+    width: calc((100% - 1440px) / 2);
+    height: 100%;
+    background-color:red;
+  }
+}
 @media (max-width: 1440px) {
   .main-container {
+    position:relative;
+    padding: 70px 5% 0 5%;
     .sidebar-left {
-      padding: 10px 5px 0px 25px
+      padding: 10px;
+      left: calc(65% + 10px);
     }
     .main-content {
-      padding: 10px 25px 0px 5px;
+      width: 100%;
+      position:absolute;
+      padding: 0px 35% 0 5%;
+      left: 0;
+      top:70px;
     }
   }
 }
-@media (max-width: 1240px) {
+@media (max-width: 986px) {
   .main-container {
+    padding: 0;
     .sidebar-left {
       display: none;
     }
     .main-content {
       width: 100%;
-      padding: 10px 5% 0px;
-    }
-  }
-}
-@media (max-width: 768px) {
-  .main-container {
-    padding: 0;
-    .main-content {
-      padding: 70px 5% 0px;
+      padding: 0 5%;
+      position:relative;
+      .res-users{
+        width: auto;
+      }
     }
   }
 }

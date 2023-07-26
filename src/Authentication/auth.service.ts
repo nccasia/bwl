@@ -14,21 +14,23 @@ export class AuthService {
   ) {}
 
   async findUserFromDiscordId(id: string): Promise<any> {
-    const user = await this.userservice.findOne(id);
+    const user = await this.userservice.findUpdate(id);
     return user;
   }
 
   async saveUser(
     id: string,
-    discriminator: string,
-    avatar: string,
     username: string,
+    avatar: string,
+    discriminator: string,
+    online: boolean,
   ) {
     const newUser = new this.komuUserModel({
       id,
       discriminator,
       avatar,
       username,
+      online,
     });
     await newUser.save();
   }

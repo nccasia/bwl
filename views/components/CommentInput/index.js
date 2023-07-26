@@ -2,7 +2,7 @@
 import './style.scss';
 import React from 'react';
 import data from '@emoji-mart/data';
-import Picker from '@emoji-mart/react';
+import Picker from '@emoji-mart/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faFaceSmile,
@@ -17,6 +17,7 @@ function CommentInput(props) {
   const onEmojiClick = (emojiObject) => {
     props?.setInput(props?.input.concat(emojiObject.native));
   };
+
   const handleInputChange = (event) => {
     props?.setInput(event.target.value);
   };
@@ -49,6 +50,7 @@ function CommentInput(props) {
       setOpenEmoji(false);
     }
   };
+  const font = 'Segoe UI Emoji'
   
   
   return (
@@ -67,17 +69,19 @@ function CommentInput(props) {
             padding: '0 10px',
             backgroundColor: state.background ? '#242526f7' : 'white',
             color: '#6C7588',
+            fontFamily: font,
           }}
         >
           <input
             type="text"
             className="react-input"
-            placeholder="Add comment"
+            placeholder="Add comment..."
             value={props?.input}
             onChange={handleInputChange}
             autoFocus
             onKeyDown={handleKeyDown}
             onClick={handleInputClick} 
+            style={{ fontFamily: font }}
           />
 
           <div className="container-item-icon">
@@ -94,6 +98,7 @@ function CommentInput(props) {
                     onEmojiSelect={onEmojiClick} 
                     theme={state.background ? "dark": "light"}
                     onClick={handleInputClick}
+                    style={{ fontFamily: font }}
                   />
                 </div>
               )}

@@ -1,8 +1,11 @@
 .container-comment {
   width: 100%;
+  .comment-progress{
+    text-align:center;
+    padding: 20px 0;
+  }
   .comment {
     width: 100%;
-    border-bottom: 1px solid #f8f8f8;
   }
   .comment:last-child {
     border-bottom: none !important;
@@ -11,5 +14,10 @@
     font-size: 13px;
     margin: 15px 0;
     cursor: pointer;
+  }
+}
+@media (max-width: 500px){
+  .container-comment{
+    margin-bottom: 10px;
   }
 }

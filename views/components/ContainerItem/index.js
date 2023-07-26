@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import './style.scss';
-import UserInfo from '../userInfo';
+import UserInfo from '../UserInfo';
 import React from 'react';
 import { useStore } from '../../store';
 import { getComment } from '../../api/apiComment';
@@ -19,19 +19,14 @@ const ContainerItem = (props) => {
   const handleClick = async (index) => {
     setOpen(!open);
     if (open === false) {
-      getComment({ messageId: index, page: 1 }).then((data) =>
-        dispatch({
-          type: 'SET_COMMENTS',
-          payload: { comments: data, messageId: index },
-        }),
-      );
+      getComment({messageId: index, page: 1, size: 5, type: true, id: state.author?.id}, dispatch);
     }
   };
 
-  const handleClickLike = async () => {
+  const handleClickLike = async (index) => {
     if (state.author?.id) {
       if (props?.author?.id !== state.author?.id) {
-        postLike(props?.messageId, state.author?.id);
+        postLike(props?.messageId, state.author?.id, !index);
       } else {
         showToast("warning", 'Ha ha, không được đâu!');
       }
@@ -59,7 +54,7 @@ const ContainerItem = (props) => {
         messageId={props?.messageId}
       />
       <div className="container-item-react">
-        <span className="react-like" onClick={handleClickLike}>
+        <span className="react-like" onClick={()=>handleClickLike(props?.likes)}>
           {props?.likes ? (
             <div className="react-like-icon">
               <ThumbDownAltIcon className="like_icon" />
@@ -80,7 +75,9 @@ const ContainerItem = (props) => {
           <span>Comment </span>
         </span>
       </div>
-      {open && <Comment {...props} />}
+      {open && (
+        <Comment {...props} />
+      )}
     </div>
   );
 };

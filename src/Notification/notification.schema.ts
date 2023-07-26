@@ -10,6 +10,9 @@ export class Notification {
   id: number;
 
   @Prop()
+  authorNotifi: string;
+
+  @Prop()
   messageId: string;
 
   @Prop()
@@ -32,6 +35,18 @@ export class Notification {
 
   @Prop()
   onComment: string;
+
+  @Prop()
+  onItem: string;
+
+  @Prop()
+  onLikeItem: string;
+
+  @Prop()
+  contentItem: string;
+
+  @Prop()
+  authorItem: string;
 
   @Prop({ default: true })
   onLabel: boolean;

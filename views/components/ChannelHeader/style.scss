@@ -1,0 +1,130 @@
+.channel-header-container{
+    display: flex;
+    align-items: center;
+    justify-content:space-between;
+    padding: 0 5px;
+    width: 100%;
+    background-color: white;
+    color: #6C7588;
+    border-radius: 5px;
+    box-shadow: 0.2rem 0.2rem 0.2rem rgba(0,0,0,0.15) !important;
+    margin-bottom: 10px;
+    padding: 10px;
+    .channel-header-item{
+        display: flex;
+        gap: 5px;
+        align-items: center;
+        h1 {
+            font-size: 16px;
+        }
+        .channel-header-name{
+            h2{
+                font-weight: 500;
+                margin-bottom: 3px;
+            }
+            p{
+                font-size: 13px;
+            }
+        }
+    }
+    .res-onclick-channel{
+        display: none;
+    }
+}
+
+.res-channel{
+    display: none;
+    position: fixed;
+    top: 60px;
+    right: 0;
+    z-index: 9999;
+    width: 50%;
+    background-color: white;
+    padding: 10px 10px 0 10px;
+    height: calc(100vh - 60px);
+    animation: fadein .2s ease-out;
+    
+    .res-channel-header{
+        display:flex;
+        justify-content:space-between;
+        align-items: center;
+        padding: 0 5px;
+        margin-bottom: 5px;  
+    }
+}
+.icon_clear{
+    animation: fadeout .2s ease-out;
+}
+
+@media (max-width: 986px) {
+    .channel-header-container {
+        .res-onclick-channel{
+          display: block;
+          cursor: pointer;
+        }
+    }
+    .res-channel{
+        display:block;
+    }
+}
+
+@media (max-width: 600px){
+    .res-channel{
+        width: 70%;
+    }
+}
+@keyframes fadein {
+    from { opacity: 0;
+    width: 0; }
+    to { opacity: 1;
+    width: 50%; }
+}
+@keyframes fadeout {
+    from { opacity: 1;
+    width: 50%; }
+    to { opacity: 0;
+    width: 0; }
+}
+
+@media (max-width: 500px) {
+    .res-channel {
+        width: 80%;
+        animation: fadein .2s ease-out;
+    }
+    .icon_clear{
+        animation: fadeout .2s ease-out;
+    }
+    @keyframes fadein {
+        from { opacity: 0;
+            width: 0; }
+            to { opacity: 1;
+            width: 80%; }
+    }
+
+    @keyframes fadeout {
+        from { opacity: 1;
+            width: 80%; }
+            to { opacity: 0;
+            width: 0; }
+    }
+    .channel-header-container{
+        .channel-header-item{
+            h1{
+                font-size: 10px;
+            }
+            .channel-header-name {
+                h2{
+                    font-size: 12px;
+                }
+                p{
+                    font-size: 10px;
+                }
+            }
+        }
+    }
+}
+@media (max-width: 400px){
+    .res-channel{
+        width: 85%;
+    }
+}

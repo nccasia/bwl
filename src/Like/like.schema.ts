@@ -14,6 +14,12 @@ export class Like {
 
   @Prop()
   createdTimestamp: number;
+
+  @Prop()
+  commentId: string | null;
+
+  @Prop()
+  onLike: boolean | null;
 }
 
 export const LikeSchema = SchemaFactory.createForClass(Like);

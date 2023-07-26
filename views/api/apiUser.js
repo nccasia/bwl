@@ -16,3 +16,18 @@ export const getUser = async (index, dispatch) => {
     return [];
   }
 };
+
+export const getSearchUsers = async (name, page, dispatch) => {
+  try {
+    dispatch({type:"CHANGE_LOADING_USERS", payload: true});
+    const res = await axios({
+      url: `/api/search?name=${name}&page=${page}`,
+      method: 'GET',
+    });
+    dispatch({type:"SET_USERS", payload: {list: res?.data, onSearch: name}});
+  } catch(error) {
+    dispatch({type:"CHANGE_LOADING_USERS", payload: false});
+    showToast("error", error?.response?.data?.message);
+    return [];
+  }
+};

@@ -47,9 +47,9 @@ const Posts = () => {
         className="container-post"
         style={{ backgroundColor: state.background ? "black": "#f5f5f500"}}
       >
-        {state.loadingPost && state.changePage && (
-          <div className="notifi-progress">
-            <CircularProgress />
+        {state.posts?.length === 0 && state.loadingPost && state.changePage && (
+          <div className="posts-progress">
+            <CircularProgress sx={{color: "rgb(108, 117, 136)"}}/>
           </div>
         )}
         <Container type="ONE" messageId={messageId}/>

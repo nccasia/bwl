@@ -27,19 +27,20 @@ function HeaderPage(props) {
   };
   React.useEffect(() => {
     if (state.author?.id) {
-      getNotificationSize(state.author.id, dispatch).then((data) => {
-        dispatch({ type: 'SET_SIZE_NOTIFICATION', payload: data?.size });
-      });
+      getNotificationSize(state.author.id, dispatch);
     }
   }, [state.author?.id]);
   const handleNotification = async () => {
     setOpenNotification(!openNotification);
     setOpen(false);
     setIsHidden(false);
-    dispatch({ type: 'CHANGE_MENU', payload: false });
-    if(openNotification && state?.notification[0]?.onLabel){
-      postNotification(state.author?.id, dispatch);
-    }
+    dispatch({ type: 'CHANGE_MENU', payload: !openNotification  });
+    if(openNotification){
+      if(state?.notification[0]?.onLabel){
+        postNotification(state.author?.id);
+      }
+      dispatch({type: "SET_NOTIFICATION"});
+    } 
   };
   const [isHidden, setIsHidden] = React.useState(false);
   const openMenu =()=>{
@@ -54,21 +55,9 @@ function HeaderPage(props) {
       style={{ backgroundColor: state.background ? '#242526' : 'white' }}
     >
       <div className="nav-header-icon">
-        {props.open!=="ONE" && (
-          <div className="nav-header-menu">
-            {isHidden  && (
-              <div className={`sidebar_mobile ${isHidden ? "open" : " "}`}>
-                <SideBar />
-              </div>
-            )} 
-            {isHidden ?  <ArrowBackIcon onClick={openMenu} className="menu_icon"/> : <MenuIcon onClick={openMenu} className="menu_icon" />}  
-          </div>
-        )}
-        <Link to="/">
-          <div className="logoNcc">
-            <img src="./assets/img/favicon.png" alt="logo" />
-          </div>
-        </Link>
+        <div className="logoNcc">
+          <img src="./assets/img/favicon.png" alt="logo" />
+        </div>
       </div>
       {!state.author?.id ? (
         <div className="person-icon" onClick={() => handleClick()}>

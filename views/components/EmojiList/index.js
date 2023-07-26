@@ -102,7 +102,7 @@ function EmojiList(props) {
                     className="add-list"
                     onClick={() => handleClickPage(props?.page)}
                 >
-                    Xem thêm
+                    See More
                 </p>
             )}
         </div>
