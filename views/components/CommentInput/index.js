@@ -75,7 +75,7 @@ function CommentInput(props) {
           <input
             type="text"
             className="react-input"
-            placeholder="Add comment"
+            placeholder="Add comment..."
             value={props?.input}
             onChange={handleInputChange}
             autoFocus

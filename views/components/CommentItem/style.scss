@@ -221,13 +221,27 @@
   } 
 }
 @media (max-width: 500px){
-  .comment-item{
+  .comment-item {
     .author-avatar {
       gap: 0px;
-      .author-boxcontent{
-        .author-name{
+      .author-image {
+        img {
+          width: 40px;
+          height: 40px;
+        }
+      }
+      .author-boxcontent {
+        .author-name {
           max-width: 215px;
           margin-left: 5px;
+          .author-name-item {
+            .name{
+              font-size: 12px;
+            }
+            .comment-time{
+              font-size: 8px;
+            }
+          }
         }
       }
       .delete-comment-btn{

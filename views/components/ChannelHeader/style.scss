@@ -108,6 +108,21 @@
             to { opacity: 0;
             width: 0; }
     }
+    .channel-header-container{
+        .channel-header-item{
+            h1{
+                font-size: 10px;
+            }
+            .channel-header-name {
+                h2{
+                    font-size: 12px;
+                }
+                p{
+                    font-size: 10px;
+                }
+            }
+        }
+    }
 }
 @media (max-width: 400px){
     .res-channel{

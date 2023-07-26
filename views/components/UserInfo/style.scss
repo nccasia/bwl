@@ -106,3 +106,22 @@
     }
   }
 }
+
+@media (max-width: 500px) {
+  .userInfo-item {
+    .userInfo-item-UserAvatar {
+      img{
+        width: 40px;
+        height: 40px;
+      }
+    }
+    .userInfo-item-userInfo{
+      .userInfo-name{
+        font-size: 12px;
+      }
+      .userInfo-time {
+        font-size: 10px;
+      }
+    }
+  }
+}

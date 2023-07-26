@@ -50,3 +50,35 @@
     }
   }
 }
+
+@media (max-width: 500px) {
+  .container-item-reactTotal {
+    .dialog-like {
+      gap: 2px;
+      .list-inline-item {
+        .btn-reaction{
+          .emoji-like {
+            font-size: 16px;
+          }
+          .emoji {
+            height: 12px;
+          }
+          p {
+            font-size: 12px;
+          }
+          span {
+            font-size: 12.5px;
+          }
+        }
+      }
+    }
+    .comment-icon {
+      span {
+        font-size: 12.5px;
+      }
+      .icon-cmt {
+        font-size: 15px;
+      }
+    } 
+  } 
+}
