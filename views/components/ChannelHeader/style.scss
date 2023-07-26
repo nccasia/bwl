@@ -57,19 +57,6 @@
     animation: fadeout .2s ease-out;
 }
 
-@keyframes fadein {
-    from { opacity: 0;
-    width: 0; }
-    to { opacity: 1;
-    width: 50%; }
-}
-@keyframes fadeout {
-    from { opacity: 1;
-    width: 50%; }
-    to { opacity: 0;
-    width: 0; }
-}
-
 @media (min-width: 1441px) {
     .channel-header-container {
         .res-onclick-channel{
@@ -109,12 +96,19 @@
         width: 70%;
     }
 }
-
-@media (max-width: 400px){
-    .res-channel{
-        width: 85%;
-    }
+@keyframes fadein {
+    from { opacity: 0;
+    width: 0; }
+    to { opacity: 1;
+    width: 50%; }
 }
+@keyframes fadeout {
+    from { opacity: 1;
+    width: 50%; }
+    to { opacity: 0;
+    width: 0; }
+}
+
 @media (max-width: 500px) {
     .res-channel {
         width: 80%;
@@ -135,5 +129,10 @@
             width: 80%; }
             to { opacity: 0;
             width: 0; }
+    }
+}
+@media (max-width: 400px){
+    .res-channel{
+        width: 85%;
     }
 }
