@@ -49,8 +49,7 @@
         justify-content:space-between;
         align-items: center;
         padding: 0 5px;
-        margin-bottom: 5px;
-      
+        margin-bottom: 5px;  
     }
 }
 .icon_clear{
@@ -92,7 +91,7 @@
     }
 }
 
-@media (max-width: 968px) {
+@media (max-width: 986px) {
     .channel-header-container {
         .res-onclick-channel{
           display: block;
