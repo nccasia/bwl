@@ -165,7 +165,7 @@ export class AppController {
         const filePath= `./public/assets/images/${deletePost?.links[0]}`;
         fs.unlinkSync(filePath);
       }
-      return res.status(200).json({ message: "Đã xóa đã xóa!" });
+      return res.status(200).json({ message: "Delete image successfully!" });
     } catch (error) {
       return res.status(500).json({message:"Internal Server Error"});
     }

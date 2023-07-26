@@ -7,6 +7,7 @@ import InputPost  from "../InputPost";
 import {useDataDebouncer} from '../../util/useDebounce';
 import CircularProgress from '@mui/material/CircularProgress';
 import SearchPost  from "../SearchPost";
+import ClearIcon from '@mui/icons-material/Clear';
 
 function ContentRight(){
     const {state, dispatch}=useStore();
@@ -26,6 +27,30 @@ function ContentRight(){
     return(
         <div className="content-right-container" style={{ backgroundColor: state.background ? "rgb(36, 37, 38)": "white"}}>
             <InputPost/>
+            <div className="content-right-header">
+                {state.search === ""  && state.searchTime?.length !==2 && state.searchUsersPosts === "" && <h1>Channel</h1>}
+                {state.search !== "" && state.searchUsersPosts === "" && state.searchTime?.length !==2 && <h1>{"Searches: " + state.lengthUsers}</h1>}
+                {state.searchUsersPosts !== "" && state.search !== "" && state.searchTime?.length !==2 && (
+                    <div className="list-post-header"
+                        style={{
+                            backgroundColor: state.background ? '#242526' : 'white',
+                            color: 'rgb(108, 117, 136)',
+                        }}
+                    >
+                        <p>{"Posts: " + state.lengthUsers}</p>
+                        {state.searchTime?.length !== 2 &&(
+                            <ClearIcon
+                                sx={{fontSize: "20px", cursor: "pointer"}}
+                                onClick={()=> {
+                                    dispatch({type: "SET_SEARCH_MESSAGE", payload: ""});
+                                    dispatch({type: "CHANGE_PAGE_USERS_POST", payload: ""});
+                                }}
+                            />
+                        )}
+                    </div>
+                )}
+                {state.searchTime?.length ===2 && state.search === "" && <h1>{"Posts: " + state.lengthUsers}</h1>}
+            </div>
             <div 
                 ref={spanRef}
                 className="content-right-scroll"

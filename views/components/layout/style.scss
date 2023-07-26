@@ -1,14 +1,12 @@
 .main-container {
   display: flex;
   width: 100%;
-  max-width: 1400px;
   margin: auto;
   padding: 70px 0 0 0;
   .sidebar-left {
-    width: calc(100% - (74% + 55px));
+    width: 30%;
     height: 85vh;
     position: fixed;
-    left: 74%;
     top: 69px;
     background-color: white;
     max-width: 350px;
@@ -16,7 +14,7 @@
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
   }
   .main-content {
-    width: 75%;
+    width: 70%;
     position:relative;
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
     .notifi-progress{
@@ -60,50 +58,58 @@
   }
 }
 
-@media (max-width: 1440px) {
+@media (min-width: 1441px) {
+  .main-container::before{
+    width: calc((100% - 1350px) / 2);
+    height: 100%;
+  }
   .main-container {
+    width: 1350px;
     .main-content{
-      padding: 0 2% 0 4%;
+      width: 1000px;
     }
     .sidebar-left {
       padding: 10px;
+      width: 350px;
+      left: calc(((100% - 1350px) / 2) + 1000px + 10px);
+    }
+  }
+  .main-container::after{
+    width: calc((100% - 1440px) / 2);
+    height: 100%;
+    background-color:red;
+  }
+}
+@media (max-width: 1440px) {
+  .main-container {
+    position:relative;
+    padding: 70px 5% 0 5%;
+    .sidebar-left {
+      padding: 10px;
+      left: calc(65% + 10px);
+    }
+    .main-content {
+      width: 100%;
+      position:absolute;
+      padding: 0px 35% 0 5%;
+      left: 0;
+      top:70px;
     }
   }
 }
-@media (max-width: 1240px) {
+@media (max-width: 986px) {
   .main-container {
+    padding: 0;
     .sidebar-left {
       display: none;
     }
     .main-content {
       width: 100%;
-      padding: 10px 5% 0px;
-      .res-onclick-users{
-        display: block;
-        cursor: pointer;
-        padding: 0 20px 0 0;
-      }
-    }
-  }
-}
-@media (max-width: 768px) {
-  .main-container {
-    padding: 0;
-    .main-content {
-      padding: 70px 5% 0px;
-      .res-onclick-users{
-        display: block;
-      }
+      padding: 0 5%;
+      position:relative;
       .res-users{
         width: auto;
       }
-    }
-  }
-}
-@media (max-width: 500px) {
-  .main-container {
-    .main-content {
-      padding: 70px 14px 0 14px;
     }
   }
 }

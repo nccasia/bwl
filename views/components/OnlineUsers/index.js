@@ -22,13 +22,10 @@ function OnlineUsers(props){
         dispatch({type: "SET_CHANNEL", payload: index})
     }
 
-    //console.log(state?.channelList);
-
     return(
         <div className="container-list-users" style={{ backgroundColor: state.background ? "rgb(36, 37, 38)": "white"}}>
             {props?.type=== "searchUsers" && (
                 <div>
-                    <p>{"Searches: "} {state.lengthUsers}</p>
                     {state.users ? state.users?.map(item =>{
                         return(
                             <div key={Number(item?.id)} className="list-user">                       
@@ -38,8 +35,7 @@ function OnlineUsers(props){
                                     />
                                     <p>{item?.username}</p>
                                 </div>
-                                <p 
-                                    style={{fontSize: "14px"}} 
+                                <p  
                                     className="post-onclick-p"
                                     onClick={() => {
                                         if(item?.total){
@@ -57,7 +53,6 @@ function OnlineUsers(props){
             )}
             {props?.type=== "channelList" && (
                 <div>
-                    <h1 className="list-channel-header">Channel</h1>
                     {state.channelList ? state.channelList?.map(item =>{
                         return(
                             <div key={Number(item?.id)} 
@@ -68,12 +63,20 @@ function OnlineUsers(props){
                                     }
                                 }}
                             >                       
-                                <div className="list-channel-icon">
-                                    {item?.id === state.channel ? <NavigateNextIcon /> : <NavigateBeforeIcon/>}
+                                <div 
+                                    className="list-channel-icon" 
+                                    style={{color: item?.id === state.channel ? "rgb(25, 118, 210" : "#6C7588"}}
+                                >
+                                    {item?.id === state.channel ? <NavigateNextIcon sx={{color: "rgb(25, 118, 210"}}/> : <NavigateBeforeIcon sx={{color: "#6C7588"}}/>}
                                     <p>{item?.icon}</p>
                                     <p>{item?.name}</p>
                                 </div>
-                                <p className="list-channel-total">{item?.total + " Posts"} </p>
+                                <p 
+                                    className="list-channel-total" 
+                                    style={{color: item?.id === state.channel ? "rgb(25, 118, 210" : "#6C7588"}}
+                                >
+                                    {item?.total + " Posts"} 
+                                </p>
                             </div>
                         )
                     })

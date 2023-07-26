@@ -1,5 +1,15 @@
 .content-right-container{
     height: 100%;
+    .content-right-header{
+        padding-bottom: 11px;
+        border-bottom: 1px solid #80808042;
+        color: rgb(108, 117, 136);
+        margin-top: 20px;
+        .list-post-header{
+            display: flex;
+            justify-content: space-between;
+        }
+    }
     .content-right-scroll{
         height: 80%;
         overflow-y:auto;
@@ -19,5 +29,13 @@
     }
     .content-right-scroll::-webkit-scrollbar-thumb {
         background-color: #5a5a64;
+    }
+}
+
+@media (max-width: 968px){
+    .content-right-container{
+        .content-right-scroll{
+            height:72%;
+        }
     }
 }

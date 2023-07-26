@@ -49,7 +49,7 @@ function ChannelHeader(props){
                       onClick={()=>handlehinebox()}
                     />
                   </div>
-                  {props?.openReponsive && (<ContentRight />)}
+                  {props?.openReponsive && <ContentRight />}
                 </div>
             )}
         </div>
