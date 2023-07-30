@@ -34,11 +34,13 @@ const Container = (props) => {
         , dispatch);
       }
     };
-    if (!document.cookie && document.cookie.split("=")[0] !== "token") {
-      foo(null);
-    }else {
-      if(state?.author?.id) {
-        foo(state?.author?.id);
+    if(state.page !== -1){
+      if (!document.cookie && document.cookie.split("=")[0] !== "token") {
+        foo(null);
+      }else {
+        if(state?.author?.id) {
+          foo(state?.author?.id);
+        }
       }
     }
   },[state?.author?.id, state.page, state.typePosts, state.changePage, state.size, props?.messageId, state.channel]);
