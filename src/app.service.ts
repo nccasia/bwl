@@ -154,9 +154,6 @@ export class AppService {
           },
         },
         {
-          $unwind: '$author1',
-        },
-        {
           $addFields: {
             length: 0,
             likeComment:0,
@@ -176,9 +173,9 @@ export class AppService {
             authorLike: id ? 1 : 0,
             messageId: 1,
             author: [{
-              username: "$author1.username",
-              avatar: "$author1.avatar",
-              id: "$author1.id",
+              username: { $arrayElemAt: ["$author1.username", 0] },
+              avatar: { $arrayElemAt: ["$author1.avatar", 0] },
+              id: { $arrayElemAt: ["$author1.id", 0] },
             }],
           }
         },
@@ -484,21 +481,18 @@ export class AppService {
           },
         },
         {
-          $unwind: '$author1',
-        },
-        {
           $project: size === "true" ? 
           {
             author: [{
-              username: "$author1.username",
-              avatar: "$author1.avatar",
-              id: "$author1.id",
+              username: { $arrayElemAt: ["$author1.username", 0] },
+              avatar: { $arrayElemAt: ["$author1.avatar", 0] },
+              id: { $arrayElemAt: ["$author1.id", 0] },
             }],
           }
           : 
           {
             author: [{
-              username: "$author1.username",
+              username: { $arrayElemAt: ["$author1.username", 0] },
             }],
           },
         },
@@ -537,22 +531,19 @@ export class AppService {
           },
         },
         {
-          $unwind: '$author1',
-        },
-        {
           $project: size === "true" ? 
           {
             author: [{
-              username: "$author1.username",
-              avatar: "$author1.avatar",
-              id: "$author1.id",
+              username: { $arrayElemAt: ["$author1.username", 0] },
+              avatar: { $arrayElemAt: ["$author1.avatar", 0] },
+              id: { $arrayElemAt: ["$author1.id", 0] },
             }],
             emoji:1,
           }
           : 
           {
             author: [{
-              username: "$author1.username",
+              username: { $arrayElemAt: ["$author1.username", 0] },
             }],
           },
         },
@@ -687,9 +678,6 @@ export class AppService {
           },
         },
         {
-          $unwind: '$author1',
-        },
-        {
           $project: {
             content:1,
             createdTimestamp:1,
@@ -702,9 +690,9 @@ export class AppService {
             contentItem: 1,
             authorItem: 1,
             author: [{
-              username: "$author1.username",
-              avatar: "$author1.avatar",
-              id: "$author1.id",
+              username: { $arrayElemAt: ["$author1.username", 0] },
+              avatar: { $arrayElemAt: ["$author1.avatar", 0] },
+              id: { $arrayElemAt: ["$author1.id", 0] },
             }],
             message: [{
               links: "$message1.links",
@@ -743,9 +731,6 @@ export class AppService {
         },
       },
       {
-        $unwind: '$author1',
-      },
-      {
         $lookup: {
           from: 'komu_bwlcomments',
           localField: 'messageId',
@@ -781,9 +766,9 @@ export class AppService {
             }
           },
           author: {
-            username: "$author1.username",
-            avatar: "$author1.avatar",
-            id: "$author1.id",
+            username: { $arrayElemAt: ["$author1.username", 0] },
+            avatar: { $arrayElemAt: ["$author1.avatar", 0] },
+            id: { $arrayElemAt: ["$author1.id", 0] },
           },
           totalComment: { $size: "$comments" },
           totalLike: {
@@ -858,9 +843,6 @@ export class AppService {
         },
       },
       {
-        $unwind: '$author1',
-      },
-      {
         $lookup: {
           from: 'komu_bwllikes',
           localField: 'messageId',
@@ -888,9 +870,9 @@ export class AppService {
             }
           },
           author: {
-            username: "$author1.username",
-            avatar: "$author1.avatar",
-            id: "$author1.id",
+            username: { $arrayElemAt: ["$author1.username", 0] },
+            avatar: { $arrayElemAt: ["$author1.avatar", 0] },
+            id: { $arrayElemAt: ["$author1.id", 0] },
           },
           likes: {
             $filter: {
@@ -945,9 +927,6 @@ export class AppService {
         },
       },
       {
-        $unwind: '$author1',
-      },
-      {
         $lookup: {
           from: 'komu_bwllikes',
           localField: 'messageId',
@@ -975,9 +954,9 @@ export class AppService {
             }
           },
           author: {
-            username: "$author1.username",
-            avatar: "$author1.avatar",
-            id: "$author1.id",
+            username: { $arrayElemAt: ["$author1.username", 0] },
+            avatar: { $arrayElemAt: ["$author1.avatar", 0] },
+            id: { $arrayElemAt: ["$author1.id", 0] },
           },
           likes: {
             $filter: {
@@ -1050,6 +1029,7 @@ export class AppService {
     this.addEvent({ data: { 
       posts: "delete", 
       id, 
+      channelId: deletePost?.channelId, 
     } });
     return deletePost;
   }
@@ -1346,7 +1326,7 @@ export class AppService {
     );
     return list;
   }
-  async searchByName(name: string, page: number) {
+  async searchByName(name: string, page: number, channelId: string) {
     return await this.komuUser
       .aggregate([
         {
@@ -1371,7 +1351,7 @@ export class AppService {
                   as: "message",
                   cond: { 
                     $and: [
-                      { $eq: ["$$message.channelId", channel] },
+                      { $eq: ["$$message.channelId", channelId] },
                       { $ne: ["$$message.links", []] }
                     ]
                   },
@@ -1492,6 +1472,7 @@ export class AppService {
     //this.komuMessage.find({channelId: channel});
     //await this.komuUser.deleteMany({id: "1027051170650406913"})
     //await this.komuMessage.find({channelId: channel}).sort({ _id: -1 });
-    return await this.komuMessage.find({messageId: "ec8b7427-7daf-4af2-9ec8-b8c7de76bd4f"});
+    const test =0;
+    return test
   }
 }

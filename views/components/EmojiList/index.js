@@ -76,10 +76,20 @@ function EmojiList(props) {
                     if (props.open === main?.emoji) {
                     return (
                         <div key={index} className="list-reaction-user">
-                        <img
+                        {main?.author[0]?.id ? (
+                            <img
+                            className="list-notifi-image"
                             src={`https://cdn.discordapp.com/avatars/${main?.author[0]?.id}/${main?.author[0]?.avatar}`}
-                        />
-                        <p>{main?.author[0]?.username}</p>
+                            alt="avatar"
+                            />
+                        ): (
+                            <img
+                            src="./assets/img/person.png"
+                            className="img-people-avatar"
+                            alt="avatar"
+                            />
+                        )}
+                        {main?.author[0]?.username ? main?.author[0]?.username : "The Lost"}
                         </div>
                     );
                     }

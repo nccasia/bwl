@@ -312,6 +312,24 @@ function reducer(state, action) {
           }
         }
       });
+      const sseChannelList = state.channelList?.map(item => {
+        if(action.payload?.posts){
+          if(action.payload?.posts === 'add'){
+            return {
+              ...item,
+              total: item?.total + action.payload?.list?.filter(main => main?.channelId === item?.id)?.length,
+            }
+          }
+          if(action.payload?.posts === 'delete'){
+            return {
+              ...item,
+              total: item?.id === action.payload?.channelId ? item?.total- 1 : item?.total,
+            }
+          }
+        } else{
+          return item;
+        }
+      })
       return {
         ...state,
         posts:
@@ -344,6 +362,7 @@ function reducer(state, action) {
               [...[action.payload?.notification], ...state.notification]
               : state.notification
             : state.notification,
+        channelList:  state?.channelList?.length > 0 ? sseChannelList : state?.channelList,
       };
     case 'SET_POSTS':
       const commentList = action.payload?.posts.map((main) => {
@@ -423,7 +442,7 @@ function reducer(state, action) {
         page:
           state.typePosts ==="Search" ? 
             -1 
-            :numberPosts > count?.page && count?.page > 0 && state.page > 0
+            :numberPosts >= count?.page && count?.page > 0 && state.page > 0
               ? count?.page
               : -1,
         size: count?.size,

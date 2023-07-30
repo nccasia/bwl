@@ -105,11 +105,17 @@ const CommentItem = (props) => {
     <div className="comment-item">
       <div className="author-avatar">
         <div className="author-image">
-          <img
-            src={`https://cdn.discordapp.com/avatars/${props?.author[0].id}/${props?.author[0].avatar}`}
-            className="img-people"
-            alt="avatar"
-          />
+          {props?.author[0]?.id ? (
+            <img
+              src={`https://cdn.discordapp.com/avatars/${props?.author[0]?.id}/${props?.author[0]?.avatar}`}
+            />
+          ): (
+            <img
+              src="./assets/img/person.png"
+              className="img-people-avatar"
+              alt="avatar"
+            />
+          )}
         </div>
         <div className="author-boxcontent">
           <div    
@@ -120,7 +126,7 @@ const CommentItem = (props) => {
             }}
           >
             <div className="author-name-item">
-              <p className="name">{props?.author[0]?.username}</p>
+              <p className="name">{props?.author[0]?.username ? props?.author[0]?.username : "The Lost"}</p>
               <div className="comment-time">
                 {formatDay(
                   props?.createdTimestamp

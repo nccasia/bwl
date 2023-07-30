@@ -32,7 +32,7 @@ function ChannelHeader(props){
                 {state.channelList ? state.channelList?.filter(item => item?.id === state.channel).map(item =>{
                     return(     
                         <div className="channel-header-item" key={item?.id}>
-                            <h1>{item?.icon}</h1>
+                            {/* <h1>{item?.icon}</h1> */}
                             <div className="channel-header-name">
                                 <h2>Welcome to {item?.name}</h2>
                                 <p>{item?.title}</p>
