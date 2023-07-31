@@ -14,12 +14,13 @@ function OnlineUsers(props){
             getChannel(dispatch);
         } 
         if(props?.type=== "searchUsers" && state.pageUsers !== -1 && state.searchUsersPosts === ""){
-            getSearchUsers(state.search, state.pageUsers, dispatch)
+            getSearchUsers(state.search, state.pageUsers, state.channel, dispatch);
         } 
-    },[state.search, state.pageUsers, props?.type, state.channelList]);
+    },[state.search, state.pageUsers, props?.type, state.channelList, state.channel]);
 
     const handleClickChangeChannel =(index)=>{
-        dispatch({type: "SET_CHANNEL", payload: index})
+        dispatch({type: "SET_CHANNEL", payload: index});
+        window.scrollTo(0, 0);
     }    
 
     return(
@@ -68,7 +69,7 @@ function OnlineUsers(props){
                                     style={{color: item?.id === state.channel ? "rgb(25, 118, 210" : "#6C7588"}}
                                 >
                                     {item?.id === state.channel ? <NavigateNextIcon sx={{color: "rgb(25, 118, 210"}}/> : <NavigateBeforeIcon sx={{color: "#6C7588"}}/>}
-                                    <p>{item?.icon}</p>
+                                    {/* <p>{item?.icon}</p> */}
                                     <p>{item?.name}</p>
                                 </div>
                                 <p 

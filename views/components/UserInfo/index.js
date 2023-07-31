@@ -20,14 +20,22 @@ const UserInfo = (props) => {
   return (
     <div className="userInfo-item">
       <div className="userInfo-item-UserAvatar">
-        <img
-          src={`https://cdn.discordapp.com/avatars/${props?.author?.id}/${props?.author?.avatar}`}
-        />
+        {props?.author?.id ? (
+          <img
+            src={`https://cdn.discordapp.com/avatars/${props?.author?.id}/${props?.author?.avatar}`}
+          />
+        ): (
+          <img
+            src="./assets/img/person.png"
+            className="img-people-avatar"
+            alt="avatar"
+          />
+        )}
       </div>
       <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%"}}>
         <div className="userInfo-item-userInfo">
           <p className="userInfo-name">
-            {props?.author?.username}
+            {props?.author?.username ? props?.author?.username : "The Lost"}
           </p>
           <p className="userInfo-time">
             {formatDay(props?.createdTimestamp?.$numberDecimal || props?.createdTimestamp)}

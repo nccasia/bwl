@@ -447,8 +447,8 @@ export class AppController {
   @Get('/api/search')
   async getSearch(@Req() req: Request, @Res() res: Response) {
     try {
-      const { name, page } = req.query;
-      const users = await this.appService.searchByName(String(name), Number(page));
+      const { name, page, channelId } = req.query;
+      const users = await this.appService.searchByName(String(name), Number(page), String(channelId));
       const size = await this.appService.searchByLength(String(name));
       return res.status(200).json({ users, size: size?.length });
     } catch (error) {

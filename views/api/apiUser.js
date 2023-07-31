@@ -17,11 +17,11 @@ export const getUser = async (index, dispatch) => {
   }
 };
 
-export const getSearchUsers = async (name, page, dispatch) => {
+export const getSearchUsers = async (name, page, channelId, dispatch) => {
   try {
     dispatch({type:"CHANGE_LOADING_USERS", payload: true});
     const res = await axios({
-      url: `/api/search?name=${name}&page=${page}`,
+      url: `/api/search?name=${name}&page=${page}&channelId=${channelId}`,
       method: 'GET',
     });
     dispatch({type:"SET_USERS", payload: {list: res?.data, onSearch: name}});
