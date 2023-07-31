@@ -329,7 +329,7 @@ function reducer(state, action) {
         } else{
           return item;
         }
-      })
+      });
       return {
         ...state,
         posts:
@@ -362,7 +362,7 @@ function reducer(state, action) {
               [...[action.payload?.notification], ...state.notification]
               : state.notification
             : state.notification,
-        channelList:  state?.channelList?.length > 0 ? sseChannelList : state?.channelList,
+        channelList: state?.channelList?.length > 0 ? sseChannelList : state?.channelList,
       };
     case 'SET_POSTS':
       const commentList = action.payload?.posts.map((main) => {
