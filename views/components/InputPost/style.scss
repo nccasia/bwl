@@ -28,10 +28,10 @@
         .icon-date-picker{
             display: flex;
             align-items: center;
-            margin: 3px;
+            margin: 5px 3px 0 3px;
             .icon{
               color: #6C7588;
-              font-size: 18px;
+              font-size: 13px;
               cursor: pointer;  
             }
         }
@@ -154,6 +154,17 @@
        }
     }
 }
+@media (max-width: 1120px){
+    .container-input-posts {
+        .search-input{
+            .date-picker{
+                input::placeholder{
+                    font-size: 11px;
+                }
+            }
+        }
+    }
+}
 @media (max-width: 968px){
     .container-input-posts {
         .search-input{
@@ -172,9 +183,10 @@
 @media (max-width: 500px){
     .container-input-posts {
         .search-input{
-            .date-picker{
+            .icon-date-picker{
+                margin: 6px 3px 0 3px;
                 .icon{
-                    font-size: 17px;
+                    font-size: 12px;
                 }
                 input::placeholder{
                     font-size: 9px;
