@@ -44,6 +44,7 @@ function SearchPost(props){
             handleClickSearchMessage("");
             dispatch({type: "CHANGE_TAB_POST", payload: "New"});
         }
+        window.scrollTo(0, 0);
     }
 
     return(
