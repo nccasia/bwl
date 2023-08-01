@@ -8,6 +8,7 @@ import {updateSize} from "../../util/updateSize";
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import CircularProgress from '@mui/material/CircularProgress';
+import {changeNumber} from "../../util/changeNumber";
 
 function FeedbackComment(props){
 
@@ -52,7 +53,7 @@ function FeedbackComment(props){
                         onClick={handleClickNumber}
                     >
                         <div>{open ? <KeyboardArrowUpIcon sx={{fontSize: "14px"}}/> : <KeyboardArrowDownIcon sx={{fontSize: "14px"}}/>}</div>
-                        {props?.length + " Reply"} 
+                        {changeNumber(props?.length) + " Reply"} 
                     </p>
                     <div className="comment-feedback-div">
                         {open && props?.item ? props?.item.map((main, index) => (
