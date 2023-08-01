@@ -131,11 +131,6 @@ export class AppController {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   login() {}
 
-  @Get('/posts')
-  @Render('index')
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
-  posts() {}
-
   @Get('/api/channel')
   async getChannel(@Req() req: Request, @Res() res: Response) {
     try {

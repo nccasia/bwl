@@ -6,6 +6,7 @@ import {getSearchUsers} from "../../api/apiUser";
 import {getChannel} from "../../api/apiPosts";
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import {changeNumber} from "../../util/changeNumber";
 
 function OnlineUsers(props){
     const {state, dispatch}=useStore();
@@ -21,8 +22,8 @@ function OnlineUsers(props){
     const handleClickChangeChannel =(index)=>{
         dispatch({type: "SET_CHANNEL", payload: index});
         window.scrollTo(0, 0);
-    }    
-
+    }  
+  
     return(
         <div className="container-list-users" style={{ backgroundColor: state.background ? "rgb(36, 37, 38)": "white"}}>
             {props?.type=== "searchUsers" && (
@@ -44,7 +45,7 @@ function OnlineUsers(props){
                                         }
                                     }}
                                 >
-                                    {item?.total ? item?.total + " Posts" : " 0 Posts"}
+                                    {item?.total ? changeNumber(item?.total) + " Posts" : " 0 Posts"}
                                 </p>
                             </div>
                         )
@@ -76,7 +77,7 @@ function OnlineUsers(props){
                                     className="list-channel-total" 
                                     style={{color: item?.id === state.channel ? "rgb(25, 118, 210" : "#6C7588"}}
                                 >
-                                    {item?.total + " Posts"} 
+                                    {changeNumber(item?.total) + " Posts"} 
                                 </p>
                             </div>
                         )

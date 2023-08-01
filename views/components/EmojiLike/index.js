@@ -8,6 +8,7 @@ import EmojiLikeList from '../EmojiLikeList';
 import { useStore } from '../../store';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
+import {changeNumber} from "../../util/changeNumber";
 
 const EmojiLike = (props) => {
   const { state, dispatch } = useStore();
@@ -102,7 +103,7 @@ const EmojiLike = (props) => {
                       {changeLike(like?.likes)?.slice(0, 3).join(', ')}
                       {' và '}
                       <u>
-                        {like?.total - 3}
+                        {like?.total >=1000 ? changeNumber(like?.total) : like?.total - 3}
                         {' người khác'}
                       </u>
                     </span>
@@ -120,7 +121,7 @@ const EmojiLike = (props) => {
                   className="emoji-like"
                 />
                 <span>
-                  {props?.totalLike}
+                  {changeNumber(props?.totalLike)}
                 </span>
               </div>
             </li>
@@ -181,7 +182,7 @@ const EmojiLike = (props) => {
                           .join(', ')}
                         {' và '}
                         <u>
-                          {reactions?.total-3}
+                          {reactions?.total >=1000 ? changeNumber(reactions?.total) : reactions?.total-3}
                           {' người khác'}
                         </u>
                       </span>
@@ -204,7 +205,7 @@ const EmojiLike = (props) => {
                   ) : (
                     <p>{main?.emoji}</p>
                   )}
-                  <span>{main.count}</span>
+                  <span>{changeNumber(main.count)}</span>
                 </div>
               </li>
             </Tooltip>
@@ -215,7 +216,7 @@ const EmojiLike = (props) => {
       <div
         className="comment-icon"
       >
-        <span>{String(props?.totalComment > 0 ? props?.totalComment : 0)}</span>
+        <span>{String(props?.totalComment > 0 ? changeNumber(props?.totalComment) : 0)}</span>
         <ChatBubbleOutlineIcon
           className="icon-cmt"
         />
