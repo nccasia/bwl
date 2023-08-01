@@ -1,37 +1,41 @@
 .upload-dialog{
     border-radius: 10px;
     padding: 10px;
-    .upload-dialog-div{
-        color: rgb(108, 117, 136);
-        display: flex;
-        justify-content:space-between;
-        align-items:center;;
-        padding: 10px 10px;
-        border-bottom: none;
-        h1{
-            font-weight: 500;
-            font-size: 20px;
-        }
-        p{
-            cursor: pointer;
-        }
-        .upload-dialog-div-user{
+    .upload-dialog-box{
+        width: 500px;
+        .upload-dialog-div{
+            color: rgb(108, 117, 136);
             display: flex;
-            align-items:center;
-            gap: 5px;
-            img{
-                width: 40px;
-                height: 40px;
-                border-radius: 50%;
+            justify-content:space-between;
+            align-items:center;;
+            padding: 10px 10px;
+            border-bottom: none;
+            h1{
+                font-weight: 500;
+                font-size: 20px;
             }
             p{
-                border:none;
-                font-size: 13px;
+                cursor: pointer;
+            }
+            .upload-dialog-div-user{
+                display: flex;
+                align-items:center;
+                gap: 5px;
+                img{
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 50%;
+                }
+                p{
+                    border:none;
+                    font-size: 13px;
+                    font-weight: 500;
+                }
             }
         }
-    }
-    .upload-dialog-div:first-child{
-        border-bottom: 1px solid #8080805c;
+        .upload-dialog-div:first-child{
+            border-bottom: 1px solid #8080805c;
+        }
     }
 }
 
@@ -39,8 +43,8 @@
     border: none;
     word-wrap: break-word;
     margin: 0 10px;
-    width: 330px;
-    height:200px;
+    width: calc(100% - 20px);
+    height: 200px;
 }
 
 .upload-input:focus {
@@ -62,9 +66,26 @@
         color: rgb(108, 117, 136);
         cursor: pointer;
     }
-    .upload-image{
+    .upload-image {
         width: 400px;
-        // height:300px;
+        height: 300px;
+        overflow: auto;    
+        display: flex;
+        align-items: center;
+        .images{
+            width: 100%;
+        }
+        &::-webkit-scrollbar-track {
+            -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+            background-color: #f5f5f5;
+        }
+        &::-webkit-scrollbar {
+            width: 3px;
+            background-color: #f5f5f5;
+        }
+        &::-webkit-scrollbar-thumb {
+            background-color: #5a5a64;
+        }
     }
 }
 
@@ -79,12 +100,23 @@
 }
 
 @media (max-width: 500px){
-    .upload-input{
-        width: 285px;
+    .upload-dialog{
+        .upload-dialog-box{
+            width: 280px;
+            .upload-dialog-div{
+                h1{
+                    font-size: 18px;
+                }  
+            }
+        }
     }
+    // .upload-input{
+    //     width: 285px;
+    // }
     .upload-div-image{
         .upload-image{
-            width: 300px;
+            width: 250px;
+            height: 250px;
         }
     } 
 }

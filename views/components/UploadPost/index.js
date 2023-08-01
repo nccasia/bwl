@@ -23,7 +23,12 @@ function UploadPost() {
                         alt="avatar"
                     />
                 )}
-                <p onClick={()=>setOpen(true)}>Share đi share đii...</p>
+                <p 
+                    style={{
+                        backgroundColor: state.background ? '#242526' : ' ',
+                        color: '#6C7588',
+                    }}
+                    onClick={()=>setOpen(true)}>Share đi share đii...</p>
             </div>
             <UploadDialog open={open} setOpen={setOpen} type="add"/>
         </div>
