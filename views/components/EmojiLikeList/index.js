@@ -6,6 +6,7 @@ import { useStore } from '../../store';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import EmojiList  from "../EmojiList";
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import {changeNumber} from "../../util/changeNumber";
 
 const EmojiLikeList = (props) => {
   const { state, dispatch } = useStore();
@@ -48,7 +49,7 @@ const EmojiLikeList = (props) => {
                       style={{ color: "#6C7588"}}
                       className="emoji"
                     />
-                    {props?.totalLike}
+                    {changeNumber(props?.totalLike)}
                   </div>
                 }
               />
@@ -71,7 +72,7 @@ const EmojiLikeList = (props) => {
                           ) : (
                             <p className="emoji">{main?.emoji}</p>
                           )}
-                          <p>{main.count}</p>
+                          <p>{changeNumber(main.count)}</p>
                         </div>
                       }
                     />

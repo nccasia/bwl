@@ -5,24 +5,19 @@ import LoginButton from '../LoginButton';
 import Notification from '../Notification';
 import { useStore } from '../../store';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBell, faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
+import { faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
 import { getNotificationSize } from '../../api/apiNotification';
-import { Link } from 'react-router-dom';
-import MenuIcon from '@mui/icons-material/Menu';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import SideBar from '../Sidebar';
 import {postNotification } from '../../api/apiNotification';
 import { Badge } from '@mui/material';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 
-function HeaderPage(props) {
+function HeaderPage() {
   const { state, dispatch } = useStore();
   const [open, setOpen] = React.useState(false);
   const [openNotification, setOpenNotification] = React.useState(false);
   const handleClick = () => {
     setOpen(!open);
     setOpenNotification(false);
-    setIsHidden(false);
     dispatch({ type: 'CHANGE_MENU', payload: false });
   };
   React.useEffect(() => {
@@ -33,7 +28,6 @@ function HeaderPage(props) {
   const handleNotification = async () => {
     setOpenNotification(!openNotification);
     setOpen(false);
-    setIsHidden(false);
     dispatch({ type: 'CHANGE_MENU', payload: !openNotification  });
     if(openNotification){
       if(state?.notification[0]?.onLabel){
@@ -42,13 +36,7 @@ function HeaderPage(props) {
       dispatch({type: "SET_NOTIFICATION"});
     } 
   };
-  const [isHidden, setIsHidden] = React.useState(false);
-  const openMenu =()=>{
-    dispatch({ type: 'CHANGE_MENU', payload: !isHidden });
-    setIsHidden(!isHidden);
-    setOpen(false);
-    setOpenNotification(false);
-  }
+  
   return (
     <nav
       className="nav-header"

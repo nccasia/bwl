@@ -15,6 +15,7 @@ import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import PushPinIcon from '@mui/icons-material/PushPin';
 import EditIcon from '@mui/icons-material/Edit';
+import {changeNumber} from "../../util/changeNumber";
 
 const CommentItem = (props) => {
   const { state, dispatch } = useStore();
@@ -61,7 +62,6 @@ const CommentItem = (props) => {
   const handleClickFeedback =() => {
     setOpenFeedback(!openFeedback);
   } 
-
   const handleClickCommentFeedback = async (index) => {
     if(feedback !== ""){
       if (state.author?.id) {
@@ -80,7 +80,6 @@ const CommentItem = (props) => {
       showToast("warning", "Không để trống");
     }
   };
-
   const handleClickLikeComment =(index)=>{
     if(state.author?.id){
       if(state.author?.id !==props?.author[0]?.id){
@@ -152,7 +151,7 @@ const CommentItem = (props) => {
           <div style={{ display: 'flex', alignItems: 'center', gap: '5px',  marginLeft: "15px" }}>
             <div className="comment-like-div">
               <p onClick={()=>handleClickLikeComment(true)}>
-                {props.likeComment}
+                {changeNumber(props.likeComment)}
                 {props?.authorLike=== true?
                   <ThumbUpAltIcon sx={{fontSize: "15px"}}/>
                   :
@@ -160,7 +159,7 @@ const CommentItem = (props) => {
                 }
               </p>
               <p onClick={()=>handleClickLikeComment(false)}>
-                {props.dislikeComment}
+                {changeNumber(props.dislikeComment)}
                 {props?.authorLike === false?
                   <ThumbDownAltIcon sx={{fontSize: "15px"}}/>
                   :
