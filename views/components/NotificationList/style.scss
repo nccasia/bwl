@@ -59,3 +59,15 @@
   text-align: center;
   height: 100px;
 }
+
+@media (max-width: 500px){
+  .notification-list{
+    .list-notifi{
+      span{
+        .ellipsis {
+          width: 175px;
+        }
+      }
+    }
+  }
+}
