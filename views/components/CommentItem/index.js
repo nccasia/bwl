@@ -98,6 +98,7 @@ const CommentItem = (props) => {
   }
   const handlePinComment =(id, onPin)=>{
     postPinComment({id: id, onPin: !onPin});
+    setOpen(false)
   }
 
   return (
