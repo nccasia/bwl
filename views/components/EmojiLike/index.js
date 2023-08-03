@@ -216,10 +216,15 @@ const EmojiLike = (props) => {
       <div
         className="comment-icon"
       >
-        <span>{String(props?.totalComment > 0 ? changeNumber(props?.totalComment) : 0)}</span>
-        <ChatBubbleOutlineIcon
-          className="icon-cmt"
-        />
+      {props?.totalComment ? (
+        <>
+          <span>{String(changeNumber(props?.totalComment))}</span>
+          <ChatBubbleOutlineIcon
+            className="icon-cmt"
+          />
+        </>
+      ) : null}
+        
       </div>
     </ul>
   );
