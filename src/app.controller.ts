@@ -160,7 +160,7 @@ export class AppController {
         const filePath= `./public/assets/images/${deletePost?.links[0]}`;
         fs.unlinkSync(filePath);
       }
-      return res.status(200).json({ message: "Delete image successfully!" });
+      return res.status(200).json({ message: "Delete post successfully!" });
     } catch (error) {
       return res.status(500).json({message:"Internal Server Error"});
     }
@@ -244,7 +244,7 @@ export class AppController {
             authorId,
             id: req.body?.id,
           });
-          return res.json(true);
+          return res.status(200).json({ message: "Add comment successfully!" });
         },
         error: (error) => {
           return res
@@ -271,7 +271,7 @@ export class AppController {
     try {
       const { id, messageId } = req.query;
       await this.appService.deleteComment(id as string, messageId as string);
-      return res.status(200).json({ message: "Đã xóa đã xóa!" });
+      return res.status(200).json({ message: "Delete comment successfully!" });
     } catch (error) {
       return res.status(500).json({message:"Internal Server Error"});
     }
@@ -282,7 +282,7 @@ export class AppController {
     try {
       const { id, content,  messageId } = req.body;
       await this.appService.editComment(id as string, content as string,  messageId as string);
-      return res.status(200).json({ message: "Chúc mừng, bạn đã sữa thành công!" });
+      return res.status(200).json({ message: "Edit comment successfully!" });
     } catch (error) {
       return res.status(500).json({message:"Internal Server Error"});
     }
@@ -296,7 +296,7 @@ export class AppController {
     } else{
       await this.appService.unlike(messageId, authorId);
     }
-    return res.status(200).json(true);
+    return res.status(200).json({message: onLike===true ? "You have successfully liked." : "You have successfully unliked"});
   }
 
   @Get('/api/likes')
@@ -406,7 +406,7 @@ export class AppController {
       const destinationPath = `./public/assets/images/${file.filename}`;
       fs.copyFileSync(file.path, destinationPath);
       await this.appService.updatePost(id as string, file.filename as string);
-      return res.status(200).json({ message: "Edit image successfully!" });
+      return res.status(200).json({ message: "Edit post successfully!" });
     } catch (error) {
       return res.status(500).json({message:"Internal Server Error"});
     }
@@ -416,13 +416,13 @@ export class AppController {
   async postCommentLike(@Req() req: Request, @Res() res: Response) {
     try{
       const { messageId, id, onLike, commentId } = req.body;
-      await this.appService.postLikeComment(
+      const postCommentLike = await this.appService.postLikeComment(
         messageId as string,
         id as string,
         String(onLike) ==="true" ? true: false,
         commentId as string,
       );
-      return res.status(200).json({ message: "Read notification successfully!" });
+      return res.status(200).json({ message: postCommentLike });
     } catch (error) {
       return res.status(500).json({message:"Internal Server Error"});
     }
@@ -433,7 +433,7 @@ export class AppController {
     try {
       const { id, onPin } = req.body;
       await this.appService.pinComment(id as string, onPin);
-      return res.status(200).json({ message: "Pin comment successfully!" });
+      return res.status(200).json({ message: onPin ? "Pin comment successfully!" : "Unpin comment successfully!" });
     } catch (error) {
       return res.status(500).json({message:"Internal Server Error"});
     }

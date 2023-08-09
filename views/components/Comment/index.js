@@ -23,32 +23,34 @@ function Comment(props) {
         })
         setInput('');
       } else {
-        showToast("warning", 'Bạn cần đăng nhập để bình luận!');
+        showToast("warning", 'You need to log in to comment.');
       }
-    }else{
-      showToast("warning", "Không để trống");
+    } else{
+      showToast("warning", "You don't need to leave it blank.");
     }
   };
-  const [page, setPage] = React.useState(0);
-  const [size, setSize] = React.useState(0);
-  React.useEffect(()=>{
-    if(props?.size){
-      setSize(props?.size);
-    }
-    if(props.page){
-      setPage(props.page);
-    }
-  },[props?.size, props.page]); 
-  const numberComment= Math.ceil(size / 5);
-  const handleClickPage = async(index) => {
-    if(numberComment > index && numberComment >0){
-      const test = updateSize(props?.comments?.length);
-      getComment({messageId: props?.messageId, page: test?.page, size: test?.size, id: state.author?.id}, dispatch);
-      setPage(test?.page);
-      setSize(test?.size);
-    }
-  } 
-
+  const scrollRef = React.useRef(null);
+  React.useEffect(()=> {
+    const scrollElement = scrollRef.current;
+    const handleScroll = () => {
+      if (scrollElement.scrollTop + scrollElement.clientHeight >= scrollElement.scrollHeight - 1) {
+        if(props?.comments?.length > 0 && props?.total > 5){
+          const numberComment= Math.ceil(props?.total / 5);
+          const test = updateSize(props?.comments?.length);
+          if(!props?.loading && numberComment > 1 && test?.page > 0){
+            if((numberComment > test?.page && numberComment > 1) || (numberComment === test?.page && test?.size === 5)){
+              getComment({messageId: props?.messageId, page: test?.page, size: test?.size, id: state.author?.id}, dispatch);
+            }
+          }
+        }
+      }
+    };
+    scrollElement.addEventListener('scroll', handleScroll);
+    return () => {
+      scrollElement.removeEventListener('scroll', handleScroll);
+    };
+  },[props?.loading, props?.comments, props?.messageId, state.author?.id, props?.total, scrollRef]);
+  
   return (
     <div className="container-comment">
       <CommentInput
@@ -56,32 +58,29 @@ function Comment(props) {
         input={input}
         setInput={setInput}
       />
-      {props?.comments
-        ? props?.comments
-            .map((comment, index) => (
-              <div className="comment" key={index}>
-                <CommentItem 
-                  {...comment} 
-                  messageId={props?.messageId} 
-                  authorMessage={props?.author?.id} 
-                  type="true"
-                />
-              </div>
-            ))
-      : null}
-      {props?.loading && (
-        <div className="comment-progress">
-          <CircularProgress sx={{color: "rgb(108, 117, 136)"}}/>
-        </div>
-      )}
-      {numberComment > page && (
-        <p 
-          className="show-page-comment" 
-          onClick={() => handleClickPage(page)}
-        >
-          See More
-        </p>
-      )}
+      <div className="container-comment-scroll" ref={scrollRef}>
+        {props?.comments
+          ? props?.comments
+              .map((comment) => (
+                <div 
+                  className="comment" 
+                  key={comment?._id}
+                >
+                  <CommentItem 
+                    {...comment} 
+                    messageId={props?.messageId} 
+                    authorMessage={props?.author?.id} 
+                    type="true"
+                  />
+                </div>
+              ))
+        : null}
+        {props?.loading && (
+          <div className="comment-progress">
+            <CircularProgress sx={{color: "rgb(108, 117, 136)"}}/>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

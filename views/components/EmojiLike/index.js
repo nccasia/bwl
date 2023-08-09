@@ -215,6 +215,7 @@ const EmojiLike = (props) => {
 
       <div
         className="comment-icon"
+        onClick={() => props?.handleClick(props?.messageId)}
       >
         <span>{String(props?.totalComment > 0 ? changeNumber(props?.totalComment) : 0)}</span>
         <ChatBubbleOutlineIcon

@@ -375,7 +375,7 @@ function reducer(state, action) {
       });
       return {
         ...state,
-        posts: state.page ===1 ? commentList : [...state.posts, ...commentList],
+        posts: state.page === 1 && commentList?.length === 5 ? commentList : [...state.posts, ...commentList],
         loadingPost: false,
         lengthPosts: action.payload?.size,
       };
@@ -474,7 +474,8 @@ function reducer(state, action) {
             comments: action.payload?.type ? action.payload?.list : [...main.comments, ...action.payload?.list],
             ...{
               page: action.payload?.type ? 1 : action.payload?.page,
-              size: action.payload?.size,
+              size: action.payload?.type ? 5 : action.payload?.size,
+              total: action.payload?.total,
             }
           };
         } else {
@@ -581,6 +582,7 @@ function reducer(state, action) {
       return {
         ...state,
         searchMessage: action.payload,
+        users:[],
       };
     case 'CHANGE_LOADING_USERS':
       return {

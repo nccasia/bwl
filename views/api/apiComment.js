@@ -13,10 +13,11 @@ export const getComment = async (index, dispatch) => {
       type: "SET_COMMENTS", 
       payload: {
         list: res.data?.comments, 
-        size:res.data?.size, 
+        total:res.data?.size, 
         messageId: index?.messageId, 
         page: index?.page, 
-        type: index?.type
+        type: index?.type,
+        size: index?.size,
       }
     });
     dispatch({type: 'SET_COMMENTS_LOADING', payload: {messageId: index?.messageId, loading: false}})
@@ -29,38 +30,38 @@ export const getComment = async (index, dispatch) => {
 
 export const postComment = async (index) => {
     try {
-        const res = await axios({
-            url: "/api/comment",
-            data: index,
-            method: "POST",
-        });
-        return res.data;
+      const res = await axios({
+          url: "/api/comment",
+          data: index,
+          method: "POST",
+      });
+      showToast("success", res?.data?.message);
     } catch(error) {
-        return {};
+      showToast("error", error?.response?.data?.message);
+      return {};
     }
 }
 
 export const deleteComment = async (index) => {
     try {
-        const res = await axios({
-            url: `/api/comments?id=${index.id}&messageId=${index.messageId}`,
-            method: "DELETE",
-          });
-        return res.data;
+      const res = await axios({
+          url: `/api/comments?id=${index.id}&messageId=${index.messageId}`,
+          method: "DELETE",
+        });
+      showToast("success", res?.data?.message);
     } catch (error){
         showToast("error", error?.response?.data?.message);
-        return false;
     }
 }
 
 export const editComment = async (index) => {
     try {
-        const res = await axios({
-            url: "/api/comment/edit",
-            data: index,
-            method: "POST",
-        });
-        return res.data;
+      const res = await axios({
+          url: "/api/comment/edit",
+          data: index,
+          method: "POST",
+      });
+      showToast("success", res?.data?.message);
     } catch (error){
         showToast("error", error?.response?.data?.message);
         return {};
@@ -69,12 +70,12 @@ export const editComment = async (index) => {
 
 export const postCommentItem = async (index) => {
     try {
-        const res = await axios({
-            url: "/api/comment",
-            data: index,
-            method: "POST",
-        });
-        return res.data;
+      const res = await axios({
+          url: "/api/comment",
+          data: index,
+          method: "POST",
+      });
+      showToast("success", res?.data?.message);
     } catch(error) {
       showToast("error", error?.response?.data?.message);
       return {};
@@ -109,12 +110,12 @@ export const getCommentItem = async (id,commentId, page, size, dispatch, message
 
 export const postCommentLike = async (index) => {
     try {
-        const res = await axios({
-            url: "/api/comment/like",
-            data: index,
-            method: "POST",
-        });
-        return res.data;
+      const res = await axios({
+          url: "/api/comment/like",
+          data: index,
+          method: "POST",
+      });
+      showToast("success", res?.data?.message);
     } catch(error) {
       showToast("error", error?.response?.data?.message);
       return {};
@@ -123,12 +124,12 @@ export const postCommentLike = async (index) => {
 
 export const postPinComment = async (index) => {
   try {
-      const res = await axios({
-          url: "/api/comment/pin",
-          data: index,
-          method: "POST",
-      });
-      return res.data;
+    const res = await axios({
+        url: "/api/comment/pin",
+        data: index,
+        method: "POST",
+    });
+    showToast("success", res?.data?.message);
   } catch(error) {
     showToast("error", error?.response?.data?.message);
     return {};

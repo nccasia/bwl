@@ -1214,6 +1214,7 @@ export class AppService {
           authorNotifi2: authorId,
           notification: {...notification.toObject(), ...{message: messageNoti}, ...{author: author} },
         } });
+        return "You are indifferent to this comment."
       }
       else{
         const _id = test[0]?._id;
@@ -1244,6 +1245,7 @@ export class AppService {
           authorNotifi2: authorId,
           notification: {...notification.toObject(), ...{message: messageNoti}, ...{author: author} },
         } });
+        return onLike ? "You like this comment." : "You do not like this comment."
       }
     } else{
       const createdTimestamp = new Date().getTime();
@@ -1275,7 +1277,7 @@ export class AppService {
         notification: {...notification.toObject(), ...{message: messageNoti}, ...{author: author} },
       } });
       await notification.save();
-      return true;
+      return onLike ? "You like this comment." : "You do not like this comment."
     }
   }
   async testLikesComment(commentId: string, onLike: boolean | null, authorId: string, messageId: string) {  
