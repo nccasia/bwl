@@ -13,7 +13,7 @@ import {changeNumber} from "../../util/changeNumber";
 function FeedbackComment(props){
 
     const { state, dispatch } = useStore();
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] =React.useState(false);
     React.useEffect(()=>{
         if(open && props?.id){
             getCommentItem(state.author?.id, props?.id, 1, 5,  dispatch, props?.messageId, true);
@@ -43,11 +43,21 @@ function FeedbackComment(props){
         setOpen(!open);
         setPage(1);
     }
+    const [renderComment, setRenderComment] = React.useState(false);
+    React.useEffect(() => {
+        if (open) {
+          setRenderComment(true);
+        } else {
+          setTimeout(() => {
+            setRenderComment(false);
+          }, 700);
+        }
+    }, [open]);
 
     return (
         <div>
             {props?.length > 0 && (
-                <div>
+                <div className="feedback-comment-container">
                     <p 
                         className="header-text"
                         onClick={handleClickNumber}
@@ -55,18 +65,20 @@ function FeedbackComment(props){
                         <div>{open ? <KeyboardArrowUpIcon sx={{fontSize: "14px"}}/> : <KeyboardArrowDownIcon sx={{fontSize: "14px"}}/>}</div>
                         {changeNumber(props?.length) + " Reply"} 
                     </p>
-                    <div className="comment-feedback-div">
-                        {open && props?.item ? props?.item.map((main, index) => (
-                            <div className="comment-feedback" key={index}>
-                                <CommentItem {...main} type="false" authorMessage={props?.authorMessage}/>
-                            </div>
-                        )): null}
-                        {props?.loading && (
+                    <div className={`comment-feedback-div ${open ? 'open-feedback' : 'closed-feedback'}`} >
+                        {renderComment && props?.item ? 
+                            props?.item.map((main) => (
+                                <div className="comment-feedback" key={main?._id}>
+                                    <CommentItem {...main} type="false" authorMessage={props?.authorMessage}/>
+                                </div>
+                            )
+                        ): null}
+                        {renderComment && props?.loading && (
                             <div className="comment-item-progress">
                                 <CircularProgress sx={{color: "rgb(108, 117, 136)"}}/>
                             </div>
                         )}
-                        { open && numberComment > page && <p className="show-page-comment" onClick={() => handleClickPage(page)}>See More</p>}
+                        { renderComment && numberComment > page && <p className="show-page-comment" onClick={() => handleClickPage(page)}>See More</p>}
                     </div>
                 </div>
             )}

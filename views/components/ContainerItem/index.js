@@ -16,7 +16,8 @@ import {showToast}  from "../../util/showToast";
 const ContainerItem = (props) => {
   const { state, dispatch } = useStore();
   const [open, setOpen] = React.useState(false);
-  const handleClick = async (index) => {
+  const divAnimationUp = React.useRef(null);
+  const handleClick = (index) => {
     setOpen(!open);
     if (open === false) {
       getComment({messageId: index, page: 1, size: 5, type: true, id: state.author?.id}, dispatch);
@@ -27,13 +28,21 @@ const ContainerItem = (props) => {
     if (state.author?.id) {
       if (props?.author?.id !== state.author?.id) {
         postLike(props?.messageId, state.author?.id, !index);
-      } else {
-        showToast("warning", 'Ha ha, không được đâu!');
       }
     } else {
-      showToast("warning", 'Bạn cần đăng nhập để like!');
+      showToast("warning", 'You need to log in to like.');
     }
   };
+  const [renderComment, setRenderComment] = React.useState(false);
+  React.useEffect(() => {
+    if (open) {
+      setRenderComment(true);
+    } else {
+      setTimeout(() => {
+        setRenderComment(false);
+      }, 700);
+    }
+  }, [open]);
 
   return (
     <div
@@ -52,6 +61,7 @@ const ContainerItem = (props) => {
         totalLike={props?.totalLike}
         totalComment={props?.totalComment}
         messageId={props?.messageId}
+        handleClick={handleClick}
       />
       <div className="container-item-react">
         <span className="react-like" onClick={()=>handleClickLike(props?.likes)}>
@@ -75,9 +85,9 @@ const ContainerItem = (props) => {
           <span>Comment </span>
         </span>
       </div>
-      {open && (
-        <Comment {...props} />
-      )}
+      <div ref={divAnimationUp} className={`comment-animation-div ${open ? 'open' : 'closed'}`}>
+        {renderComment && <Comment {...props}/>}
+      </div>
     </div>
   );
 };

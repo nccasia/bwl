@@ -53,7 +53,7 @@ export const deletePost = async (index) => {
             url: `/api/posts?id=${index.id}&messageId=${index.messageId}`,
             method: "DELETE",
           });
-        return res.data;
+        showToast("success", res?.data?.message);
     } catch (error) {
         showToast("error", error?.response?.data?.message);
         return false;
@@ -70,7 +70,8 @@ export const addPost = async (index) => {
                 'Content-Type': 'multipart/form-data',
             },
           });
-        return res.data;
+        showToast("success", res?.data?.message);
+        return true;
     } catch (error) {
         showToast("error", error?.response?.data?.message);
         return false;
@@ -87,7 +88,8 @@ export const editPost = async (index) => {
                 'Content-Type': 'multipart/form-data',
             },
           });
-        return res.data;
+        showToast("success", res?.data?.message);
+        return true;
     } catch (error) {
         showToast("error", error?.response?.data?.message);
         return false;

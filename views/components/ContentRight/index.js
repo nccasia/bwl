@@ -29,7 +29,15 @@ function ContentRight(){
             <InputPost/>
             <div className="content-right-header">
                 {state.search === ""  && state.searchTime?.length !==2 && state.searchUsersPosts === "" && <h1>Channel</h1>}
-                {state.search !== "" && state.searchUsersPosts === "" && state.searchTime?.length !==2 && <h1>{"Searches: " + state.lengthUsers}</h1>}
+                {state.search !== "" && state.searchUsersPosts === "" && state.searchTime?.length !==2 && (
+                    <h1>
+                        {"Searches: "} 
+                        {state.loadingUsers ? 
+                            <CircularProgress sx={{color: "rgb(108, 117, 136)", fontSize: "12px"}} size={15}/>
+                            : state.lengthUsers
+                        }
+                    </h1>
+                )}
                 {state.searchUsersPosts !== "" && state.search !== "" && state.searchTime?.length !==2 && (
                     <div className="list-post-header"
                         style={{
@@ -37,7 +45,13 @@ function ContentRight(){
                             color: 'rgb(108, 117, 136)',
                         }}
                     >
-                        <p>{"Posts: " + state.lengthUsers}</p>
+                        <p>
+                            {"Posts: "}
+                            {state.loadingUsers ? 
+                                <CircularProgress sx={{color: "rgb(108, 117, 136)", fontSize: "12px"}} size={15}/>
+                                : state.lengthUsers
+                            }
+                        </p>
                         {state.searchTime?.length !== 2 &&(
                             <ClearIcon
                                 sx={{fontSize: "20px", cursor: "pointer"}}
@@ -49,7 +63,15 @@ function ContentRight(){
                         )}
                     </div>
                 )}
-                {state.searchTime?.length ===2 && state.search === "" && <h1>{"Posts: " + state.lengthUsers}</h1>}
+                {state.searchTime?.length ===2 && state.search === "" && 
+                    <h1>
+                        {"Posts: "}
+                        {state.loadingUsers ? 
+                            <CircularProgress sx={{color: "rgb(108, 117, 136)"}} size={15}/>
+                            : state.lengthUsers
+                        }
+                    </h1>
+                }
             </div>
             <div 
                 ref={spanRef}

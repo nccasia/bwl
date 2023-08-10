@@ -16,18 +16,26 @@ import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
 import PushPinIcon from '@mui/icons-material/PushPin';
 import EditIcon from '@mui/icons-material/Edit';
 import {changeNumber} from "../../util/changeNumber";
+import {addTagText}  from "../../util/addTagText";
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 
 const CommentItem = (props) => {
   const { state, dispatch } = useStore();
   const [open, setOpen] = React.useState(false);
   const [openEdit, setOpenEdit] = React.useState(false);
   const [input, setInput] = React.useState('');
-
+  const [openHiden, setOpenHiden] = React.useState("");
+  const [hidenHeight, setHidenHeight]= React.useState([]);
+  const divCommentRef = React.useRef(null);
   React.useEffect(() => {
     if (props?.content) {
       setInput(props?.content);
     }
-  }, [props?.content]);
+    if (divCommentRef?.current && divCommentRef?.current?.scrollHeight) {
+      setHidenHeight(()=>divCommentRef?.current?.scrollHeight)
+    }
+  }, [props?.content, divCommentRef?.current?.scrollHeight]);
   const handleClickComment = async () => {
     if(input !== ""){
       if (state.author?.id) {
@@ -37,10 +45,10 @@ const CommentItem = (props) => {
           messageId: state.author?.id,
         });
       } else {
-        showToast("warning", 'Bạn cần đăng nhập để bình luận!');
+        showToast("warning", 'You need to log in to comment.');
       }
     } else{
-      showToast("warning", "Không để trống");
+      showToast("warning", "You don't need to leave it blank.");
     }
     setOpenEdit(false);
   };
@@ -72,12 +80,11 @@ const CommentItem = (props) => {
           id: index,
         })
         setFeedback('');
-        setOpenFeedback(false);
       } else {
-        showToast("warning", 'Bạn cần đăng nhập để bình luận!');
+        showToast("warning", 'You need to log in to comment.');
       }
-    }else{
-      showToast("warning", "Không để trống");
+    } else{
+      showToast("warning", "You don't need to leave it blank.");
     }
   };
   const handleClickLikeComment =(index)=>{
@@ -116,13 +123,22 @@ const CommentItem = (props) => {
               alt="avatar"
             />
           )}
+          {props?.length > 0  && (
+            <div className="author-image-line"></div>
+          )}
         </div>
-        <div className="author-boxcontent">
+        <div className="author-boxcontent" >
           <div    
             className="author-name"
             style={{
               backgroundColor: state.background ? '#282829f7' : '#ebedf0',
               color: '#6C7588',
+              transition: !openEdit ? "height 0.7s ease" : "none",
+              height: hidenHeight > 35 && !openEdit
+              ?  openHiden !== props?._id
+                ? "100px" 
+                : `${hidenHeight + 65}px`
+              : "100%",
             }}
           >
             <div className="author-name-item">
@@ -135,12 +151,53 @@ const CommentItem = (props) => {
                 )}
               </div>
               {props?.onPin && 
-              <p className="comment-pin-icon">
-                <PushPinIcon sx={{fontSize: "14px"}}/>
-              </p>
-            }
+                <p className="comment-pin-icon">
+                  <PushPinIcon sx={{fontSize: "14px"}}/>
+                </p>
+              }
             </div>
-            {!openEdit && <p className="comment">{props?.content}</p>}
+            {!openEdit && (
+              <div className="comment-item-author" >
+                <div 
+                  dangerouslySetInnerHTML={{  __html: addTagText(props?.content)}}
+                  ref={divCommentRef}
+                  style={{
+                    overflow: "hidden",
+                    transition: "max-height 0.7s ease",
+                    maxHeight: 
+                    hidenHeight > 35 
+                    ?  openHiden !== props?._id 
+                      ? "35px" 
+                      : "100%"
+                    : "none" 
+                  }}
+                />
+                {
+                  hidenHeight > 35 ? 
+                    openHiden !== props?._id ? 
+                      <p 
+                        className="comment-hiden" 
+                        onClick ={() => {
+                          setOpenHiden(props?._id);
+                        }}
+                      >
+                        <KeyboardArrowDownIcon sx={{color: "rgb(108, 117, 136", fontSize: "14px"}}/>
+                        Read More
+                      </p> 
+                      : 
+                      <p 
+                        className="comment-hiden" 
+                        onClick ={() => {
+                          setOpenHiden("");
+                        }}
+                      >
+                        <KeyboardArrowUpIcon sx={{color: "rgb(108, 117, 136", fontSize:"14px"}}/>
+                        Hiden
+                      </p>
+                    :null
+                }
+              </div>
+            )}
             {openEdit && (
               <CommentInput
                 handleClickComment={handleClickComment}
@@ -202,7 +259,9 @@ const CommentItem = (props) => {
                       <p>Edit</p>
                     </div>
                     <div className="content">
-                      <Delcomment id={props?._id}/>
+                      <Delcomment 
+                        id={props?._id}
+                      />
                     </div>
                   </div>
                 )}
@@ -213,7 +272,7 @@ const CommentItem = (props) => {
           </div>
         )}
       </div>
-      <div>
+      <div style={{paddingRight: "5px"}}>
         {openFeedback && (
           <CommentInput 
             handleClickComment={() => handleClickCommentFeedback(props?._id)}

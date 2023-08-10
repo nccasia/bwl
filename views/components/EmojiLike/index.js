@@ -215,6 +215,7 @@ const EmojiLike = (props) => {
 
       <div
         className="comment-icon"
+        onClick={() => props?.handleClick(props?.messageId)}
       >
       {props?.totalComment ? (
         <>

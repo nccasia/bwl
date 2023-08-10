@@ -17,7 +17,6 @@ import { showToast } from '../../util/showToast';
 
 function UploadDialog(props){
     const {state, dispatch}=useStore();
-    const [open, setOpen] = React.useState(false);
     const [data, setData] = React.useState();
     const [image, setImage] = React.useState("");
     const [openImage, setOpenImage] = React.useState(false);
@@ -86,7 +85,6 @@ function UploadDialog(props){
             if(props?.type==="add"){
                 await addPost({formData: data, id: state.author?.id, channelId: state.channel}).then(data => {
                     if(data){
-                        showToast("success", 'Đăng bài thành công: Xong rồi! Đợi tớ 1 giây nhé!');
                         props?.setOpen(false);
                     }
                 });
@@ -94,13 +92,12 @@ function UploadDialog(props){
             if(props?.type==="edit"){
                 await editPost({formData: data, messageId: state.author?.id, id: props?.id}).then(data => {
                     if(data){
-                        showToast("success", 'Sữa bài thành công: Xong rồi! Đợi tớ 1 giây nhé!');
                         props?.setOpen(false);
                     }
                 });
             }
         } else{
-            showToast("warning", 'Not image!');
+            showToast("warning", 'Not an image!');
         }
         setOpenImage(false);
         setImage("");

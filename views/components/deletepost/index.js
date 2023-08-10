@@ -18,11 +18,7 @@ const DelPost = (props) => {
   const { state, dispatch } = useStore();
   const handleDelete = async () => {
     if (state.author?.id) {
-      deletePost({ id: props?.id, messageId: state.author?.id }).then(data => {
-        if(data){
-          showToast("success", data?.message)
-        }
-      });
+      deletePost({ id: props?.id, messageId: state.author?.id });
     }
     setOpen(false);
   };

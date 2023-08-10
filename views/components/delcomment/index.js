@@ -17,11 +17,7 @@ const Delcomment = (props)  => {
   const [openDeleteComment, setOpenDeleteComment] = React.useState(false);
   const handleDelete = async () => {
     if (state.author?.id) {
-      deleteComment({ id: props?.id, messageId: state.author?.id }).then(data=> {
-        if(data){
-          showToast("success", data?.message)
-        }
-      });
+      deleteComment({ id: props?.id, messageId: state.author?.id });
     }
     setOpenDeleteComment(false);
   };

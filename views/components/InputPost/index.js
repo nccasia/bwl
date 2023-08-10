@@ -32,13 +32,13 @@ function InputPost() {
         if(text.trim() !== ""){
             if(dateRange[0] && dateRange[1] && text === (String(format(dateRange[0], 'dd/MM/yyyy')) + " ~ " + String(format(dateRange[1], 'dd/MM/yyyy')))){
                 if(state.searchTime?.length === 2 && text.trim() === String(format(state.searchTime[0], 'dd/MM/yyyy')) + " ~ " + String(format(state.searchTime[1], 'dd/MM/yyyy'))){
-                    showToast("warning", "Khi bạn làm việc với máy tính, sự trùng nhau không bao giờ là lỗi, đó là tính năng!")
+                    //showToast("warning", "Khi bạn làm việc với máy tính, sự trùng nhau không bao giờ là lỗi, đó là tính năng!")
                 } else{
                     dispatch({type:"SET_SEARCH_TIME", payload: [getTime(dateRange[0]), getTime(dateRange[1])]});
                 }
             } else {
                 if(text.trim() === state.search){
-                    showToast("warning", "Khi bạn làm việc với máy tính, sự trùng nhau không bao giờ là lỗi, đó là tính năng!")
+                    //showToast("warning", "Khi bạn làm việc với máy tính, sự trùng nhau không bao giờ là lỗi, đó là tính năng!")
                 } else{
                     dispatch({type:"SET_SEARCH", payload: text});
                 }
