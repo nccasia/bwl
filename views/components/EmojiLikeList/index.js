@@ -1,17 +1,17 @@
 /* eslint-disable prettier/prettier */
 import './style.scss';
 import React from 'react';
-import { Dialog, Tabs, Tab, Box} from '@mui/material';
+import { Dialog, Tabs, Tab, Box } from '@mui/material';
 import { useStore } from '../../store';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
-import EmojiList  from "../EmojiList";
+import EmojiList from '../EmojiList';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
-import {changeNumber} from "../../util/changeNumber";
+import { changeNumber } from '../../util/changeNumber';
 
 const EmojiLikeList = (props) => {
   const { state, dispatch } = useStore();
-  
-  const [page, setPage]= React.useState(1);
+
+  const [page, setPage] = React.useState(1);
   const handleChange = (event, newValue) => {
     props.setOpen(newValue);
     setPage(1);
@@ -22,13 +22,11 @@ const EmojiLikeList = (props) => {
       open={props.open !== '' ? true : false}
       onClose={() => props.setOpen('')}
     >
-      <div style={{ backgroundColor: state.background ? "#242526": "white"}}>
+      <div style={{ backgroundColor: state.background ? '#242526' : 'white' }}>
         <div className="header-all">
-          <h1 >
-            Tất cả
-          </h1>
+          <h1>Tất cả</h1>
           <div className="icon" onClick={() => props.setOpen('')}>
-            <HighlightOffIcon sx={{fontSize: "25px"}}/>
+            <HighlightOffIcon sx={{ fontSize: '25px' }} />
           </div>
         </div>
         <Box className="box-reaction">
@@ -46,7 +44,7 @@ const EmojiLikeList = (props) => {
                 label={
                   <div className="button-emoji">
                     <ThumbUpOffAltIcon
-                      style={{ color: "#6C7588"}}
+                      style={{ color: '#6C7588' }}
                       className="emoji"
                     />
                     {changeNumber(props?.totalLike)}
@@ -81,14 +79,14 @@ const EmojiLikeList = (props) => {
               : null}
             <Tab value="" />
           </Tabs>
-          <EmojiList 
+          <EmojiList
             page={page}
             setPage={setPage}
             messageId={props?.messageId}
             open={props?.open}
             setOpen={props?.setOpen}
           />
-        </Box>  
+        </Box>
       </div>
     </Dialog>
   );

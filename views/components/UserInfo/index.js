@@ -8,11 +8,11 @@ import DelPost from '../Deletepost';
 
 const UserInfo = (props) => {
   const { state, dispatch } = useStore();
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(false);
 
-  const handleMoreIconClick = () =>{
-    setOpen(!open)
-  }
+  const handleMoreIconClick = () => {
+    setOpen(!open);
+  };
 
   const handleContainerMouseLeave = () => {
     setOpen(false);
@@ -24,7 +24,7 @@ const UserInfo = (props) => {
           <img
             src={`https://cdn.discordapp.com/avatars/${props?.author?.id}/${props?.author?.avatar}`}
           />
-        ): (
+        ) : (
           <img
             src="./assets/img/person.png"
             className="img-people-avatar"
@@ -32,29 +32,52 @@ const UserInfo = (props) => {
           />
         )}
       </div>
-      <div style={{display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%"}}>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          width: '100%',
+        }}
+      >
         <div className="userInfo-item-userInfo">
           <p className="userInfo-name">
-            {props?.author?.username ? props?.author?.username : "The Lost"}
+            {props?.author?.username ? props?.author?.username : 'The Lost'}
           </p>
           <p className="userInfo-time">
-            {formatDay(props?.createdTimestamp?.$numberDecimal || props?.createdTimestamp)}
+            {formatDay(
+              props?.createdTimestamp?.$numberDecimal ||
+                props?.createdTimestamp,
+            )}
           </p>
         </div>
         {state.author?.id && state.author?.id === props?.author?.id && (
-          <div className="delete-post-btn"
-            onMouseLeave={handleContainerMouseLeave}>
-            <div 
-              className={state.background ? "delete-post-icon-dark" : "delete-post-icon-light"}
+          <div
+            className="delete-post-btn"
+            onMouseLeave={handleContainerMouseLeave}
+          >
+            <div
+              className={
+                state.background
+                  ? 'delete-post-icon-dark'
+                  : 'delete-post-icon-light'
+              }
               onClick={handleMoreIconClick}
             >
               <MoreHorizIcon />
             </div>
             {open ? (
-              <div 
-                className={state.background ? "dialog-form-dark" : "dialog-form-light"}
+              <div
+                className={
+                  state.background ? 'dialog-form-dark' : 'dialog-form-light'
+                }
               >
-                <DelPost id={props?._id} messageId={state.author?.id} link={props?.links[0]} source={props?.source}/>
+                <DelPost
+                  id={props?._id}
+                  messageId={state.author?.id}
+                  link={props?.links[0]}
+                  source={props?.source}
+                />
               </div>
             ) : (
               <></>

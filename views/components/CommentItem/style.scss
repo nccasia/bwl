@@ -68,6 +68,9 @@
           transition: max-height 0.7s ease;
           width: 100%;
           overflow:hidden;
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
         }
       }
     }
@@ -166,10 +169,10 @@
 }
 .comment-hiden{
   font-weight: 500;
-  margin-top: 5px;
   cursor: pointer;
   display: flex;
   align-items: center;
+  font-size: 9px;
   .css-ovhbpk{
     font-size:14px;
   }

@@ -7,7 +7,7 @@ import { useStore } from '../../store';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
 import { getNotificationSize } from '../../api/apiNotification';
-import {postNotification } from '../../api/apiNotification';
+import { postNotification } from '../../api/apiNotification';
 import { Badge } from '@mui/material';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 
@@ -28,15 +28,15 @@ function HeaderPage() {
   const handleNotification = async () => {
     setOpenNotification(!openNotification);
     setOpen(false);
-    dispatch({ type: 'CHANGE_MENU', payload: !openNotification  });
-    if(openNotification){
-      if(state?.notification[0]?.onLabel){
+    dispatch({ type: 'CHANGE_MENU', payload: !openNotification });
+    if (openNotification) {
+      if (state?.notification[0]?.onLabel) {
         postNotification(state.author?.id);
       }
-      dispatch({type: "SET_NOTIFICATION"});
-    } 
+      dispatch({ type: 'SET_NOTIFICATION' });
+    }
   };
-  
+
   return (
     <nav
       className="nav-header"
@@ -85,7 +85,10 @@ function HeaderPage() {
             onClick={handleNotification}
           >
             <Badge badgeContent={state.sizeNotifi} color="primary">
-              <NotificationsIcon sx={{ color: openNotification ? 'white' : '#6C7588'}} color="action" />
+              <NotificationsIcon
+                sx={{ color: openNotification ? 'white' : '#6C7588' }}
+                color="action"
+              />
             </Badge>
             {openNotification && (
               <div
@@ -95,7 +98,10 @@ function HeaderPage() {
                     : 'dialog-button-light dialog-button-light_notifi'
                 }
               >
-                <Notification setOpenNotification={setOpenNotification} openNotification={openNotification}/>
+                <Notification
+                  setOpenNotification={setOpenNotification}
+                  openNotification={openNotification}
+                />
               </div>
             )}
           </div>

@@ -19,7 +19,7 @@ import { Request, Response } from 'express';
 import { AuthService } from './Authentication/auth.service';
 import { first, map, Observable, switchMap } from 'rxjs';
 import { FileInterceptor } from '@nestjs/platform-express';
-import {multerOptions} from "./Util"
+import { multerOptions } from './Util';
 import * as fs from 'fs';
 
 const discordTokenUrl = 'https://discord.com/api/oauth2/token';
@@ -125,7 +125,7 @@ export class AppController {
     } else {
     }
   }
-  
+
   @Get('/login')
   @Render('index')
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -135,34 +135,40 @@ export class AppController {
   async getChannel(@Req() req: Request, @Res() res: Response) {
     try {
       const channel = await this.appService.getChannelTotal();
-      return res.status(200).json({channel});
+      return res.status(200).json({ channel });
     } catch (error) {
-      return res.status(500).json({message:"Internal Server Error"});
+      return res.status(500).json({ message: 'Internal Server Error' });
     }
   }
 
   @Get('/api/posts')
   async getPostsOne(@Req() req: Request, @Res() res: Response) {
     try {
-      const posts = await this.appService.getPostsOne(req.query?.messageId as string, String(req.query?.id)? String(req.query?.id) : null);
-      return res.status(200).json({posts, size: 1});
+      const posts = await this.appService.getPostsOne(
+        req.query?.messageId as string,
+        String(req.query?.id) ? String(req.query?.id) : null,
+      );
+      return res.status(200).json({ posts, size: 1 });
     } catch (error) {
-      return res.status(500).json({message:"Internal Server Error"});
+      return res.status(500).json({ message: 'Internal Server Error' });
     }
   }
 
   @Delete('/api/posts')
   async deletePost(@Req() req: Request, @Res() res: Response) {
-      try{
+    try {
       const { id, messageId } = req.query;
-      const deletePost = await this.appService.deletePost(id as string, messageId as string);
-      if(deletePost.source){
-        const filePath= `./public/assets/images/${deletePost?.links[0]}`;
+      const deletePost = await this.appService.deletePost(
+        id as string,
+        messageId as string,
+      );
+      if (deletePost.source) {
+        const filePath = `./public/assets/images/${deletePost?.links[0]}`;
         fs.unlinkSync(filePath);
       }
-      return res.status(200).json({ message: "Delete post successfully!" });
+      return res.status(200).json({ message: 'Delete post successfully!' });
     } catch (error) {
-      return res.status(500).json({message:"Internal Server Error"});
+      return res.status(500).json({ message: 'Internal Server Error' });
     }
   }
 
@@ -176,45 +182,58 @@ export class AppController {
       )}&response_type=code&scope=identify`;
       return res.status(200).json({ url });
     } catch (error) {
-      return res.status(500).json({message:"Internal Server Error"});
+      return res.status(500).json({ message: 'Internal Server Error' });
     }
   }
 
   @Get('/api/logout')
-  async logout(@Req() req: Request,@Res() res: Response) {
+  async logout(@Req() req: Request, @Res() res: Response) {
     try {
       res.clearCookie('token');
       res.redirect('/');
-      const { messageId} = req.query;  
-      await this.appService.onlineUser(
-        String(messageId),
-        false,
-      );
+      const { messageId } = req.query;
+      await this.appService.onlineUser(String(messageId), false);
     } catch (error) {
-      return res.status(500).json({message:"Internal Server Error"});
+      return res.status(500).json({ message: 'Internal Server Error' });
     }
   }
 
   @Get('/api/getAllPaging')
   async getAllPaging(@Req() req: Request, @Res() res: Response) {
     try {
-      const posts= await this.appService.getAll(Number(req.query?.page), Number(req.query?.size), String(req.query?.messageId)? String(req.query?.messageId) : null, String(req.query?.channel));
-      const size= await this.appService.findLengthMessage(String(req.query?.channel));
-      return res.status(200).json({posts, size})
+      const posts = await this.appService.getAll(
+        Number(req.query?.page),
+        Number(req.query?.size),
+        String(req.query?.messageId) ? String(req.query?.messageId) : null,
+        String(req.query?.channel),
+      );
+      const size = await this.appService.findLengthMessage(
+        String(req.query?.channel),
+      );
+      return res.status(200).json({ posts, size });
     } catch (error) {
-      return res.status(500).json({message:"Internal Server Error"});
+      return res.status(500).json({ message: 'Internal Server Error' });
     }
   }
 
   @Get('/api/comment/item')
   async getCommentItem(@Req() req: Request, @Res() res: Response) {
-    try{
-      const { id , page, size, messageId, commentId } = req.query;  
-      const item= await this.appService.getCommentsItem(String(id) as string, String(commentId), String(messageId), Number(page), Number(size));
-      const total = await this.appService.getCommentsItemLength(String(commentId), messageId as string);
-    return res.status(200).json({ item, size: total?.length });
+    try {
+      const { id, page, size, messageId, commentId } = req.query;
+      const item = await this.appService.getCommentsItem(
+        String(id) as string,
+        String(commentId),
+        String(messageId),
+        Number(page),
+        Number(size),
+      );
+      const total = await this.appService.getCommentsItemLength(
+        String(commentId),
+        messageId as string,
+      );
+      return res.status(200).json({ item, size: total?.length });
     } catch (error) {
-      return res.status(500).json({message:"Internal Server Error"});
+      return res.status(500).json({ message: 'Internal Server Error' });
     }
   }
 
@@ -244,7 +263,7 @@ export class AppController {
             authorId,
             id: req.body?.id,
           });
-          return res.status(200).json({ message: "Add comment successfully!" });
+          return res.status(200).json({ message: 'Add comment successfully!' });
         },
         error: (error) => {
           return res
@@ -258,11 +277,19 @@ export class AppController {
   async getComments(@Req() req: Request, @Res() res: Response) {
     try {
       const { messageId, id, page, size } = req.query;
-      const comments = await this.appService.getComments(messageId as string, String(id),  Number(page), Number(size));
-      const total = await this.appService.getCommentsItemLength(null, messageId as string);
+      const comments = await this.appService.getComments(
+        messageId as string,
+        String(id),
+        Number(page),
+        Number(size),
+      );
+      const total = await this.appService.getCommentsItemLength(
+        null,
+        messageId as string,
+      );
       return res.status(200).json({ comments, size: total?.length });
     } catch (error) {
-      return res.status(500).json({message:"Internal Server Error"});
+      return res.status(500).json({ message: 'Internal Server Error' });
     }
   }
 
@@ -271,57 +298,79 @@ export class AppController {
     try {
       const { id, messageId } = req.query;
       await this.appService.deleteComment(id as string, messageId as string);
-      return res.status(200).json({ message: "Delete comment successfully!" });
+      return res.status(200).json({ message: 'Delete comment successfully!' });
     } catch (error) {
-      return res.status(500).json({message:"Internal Server Error"});
+      return res.status(500).json({ message: 'Internal Server Error' });
     }
   }
 
   @Post('/api/comment/edit')
   async postEditComment(@Req() req: Request, @Res() res: Response) {
     try {
-      const { id, content,  messageId } = req.body;
-      await this.appService.editComment(id as string, content as string,  messageId as string);
-      return res.status(200).json({ message: "Edit comment successfully!" });
+      const { id, content, messageId } = req.body;
+      await this.appService.editComment(
+        id as string,
+        content as string,
+        messageId as string,
+      );
+      return res.status(200).json({ message: 'Edit comment successfully!' });
     } catch (error) {
-      return res.status(500).json({message:"Internal Server Error"});
+      return res.status(500).json({ message: 'Internal Server Error' });
     }
   }
 
   @Post('/api/like')
   async postLike(@Req() req: Request, @Res() res: Response) {
     const { messageId, authorId, onLike } = req.body;
-    if(onLike===true){
+    if (onLike === true) {
       await this.appService.like(messageId, authorId, true);
-    } else{
+    } else {
       await this.appService.unlike(messageId, authorId);
     }
-    return res.status(200).json({message: onLike===true ? "You have successfully liked." : "You have successfully unliked"});
+    return res
+      .status(200)
+      .json({
+        message:
+          onLike === true
+            ? 'You have successfully liked.'
+            : 'You have successfully unliked',
+      });
   }
 
   @Get('/api/likes')
   async getLikes(@Req() req: Request, @Res() res: Response) {
     try {
       const { messageId, size, page } = req.query;
-      const likes = await this.appService.getLikes(messageId as string, String(size) as string, Number(page) as number);
+      const likes = await this.appService.getLikes(
+        messageId as string,
+        String(size) as string,
+        Number(page) as number,
+      );
       const total = await this.appService.getLikesLength(messageId as string);
       return res.status(200).json({ likes, total: total?.length });
     } catch (error) {
-      return res.status(500).json({message:"Internal Server Error"});
+      return res.status(500).json({ message: 'Internal Server Error' });
     }
   }
-  
+
   @Get('/api/reactions')
   async getReactions(@Req() req: Request, @Res() res: Response) {
     try {
       const { messageId, emoji, size, page } = req.query;
-      const reactions = await this.appService.getReactions(messageId as string, emoji as string, String(size) as string, Number(page) as number);
-      const total = await this.appService.getReactionsLength(messageId as string, emoji as string);
-      return res.status(200).json({ reactions, total: total?.length});
+      const reactions = await this.appService.getReactions(
+        messageId as string,
+        emoji as string,
+        String(size) as string,
+        Number(page) as number,
+      );
+      const total = await this.appService.getReactionsLength(
+        messageId as string,
+        emoji as string,
+      );
+      return res.status(200).json({ reactions, total: total?.length });
     } catch (error) {
-      return res.status(500).json({message:"Internal Server Error"});
+      return res.status(500).json({ message: 'Internal Server Error' });
     }
-    
   }
 
   @Get('/api/notifications')
@@ -333,9 +382,9 @@ export class AppController {
         Number(page) as number,
         5,
       );
-      return res.status(200).json({notifications});
+      return res.status(200).json({ notifications });
     } catch (error) {
-      return res.status(500).json({message:"Internal Server Error"});
+      return res.status(500).json({ message: 'Internal Server Error' });
     }
   }
 
@@ -343,23 +392,29 @@ export class AppController {
   async getNotificationsSize(@Req() req: Request, @Res() res: Response) {
     try {
       const { messageId } = req.query;
-      const notification= await this.appService.getNotificationsSize(messageId as string);
+      const notification = await this.appService.getNotificationsSize(
+        messageId as string,
+      );
       const length = notification?.length;
-      const size = notification?.filter((item: any) => item?.onLabel === true).length;
+      const size = notification?.filter(
+        (item: any) => item?.onLabel === true,
+      ).length;
       return res.status(200).json({ size, length });
     } catch (error) {
-      return res.status(500).json({message:"Internal Server Error"});
+      return res.status(500).json({ message: 'Internal Server Error' });
     }
   }
 
   @Post('/api/notifications/size')
   async postNotificationsSize(@Req() req: Request, @Res() res: Response) {
-    try{
+    try {
       const { messageId } = req.body;
-      await this.appService.postNotification(messageId as string)
-      return res.status(200).json({ message: "Read notification successfully!" });
+      await this.appService.postNotification(messageId as string);
+      return res
+        .status(200)
+        .json({ message: 'Read notification successfully!' });
     } catch (error) {
-      return res.status(500).json({message:"Internal Server Error"});
+      return res.status(500).json({ message: 'Internal Server Error' });
     }
   }
 
@@ -367,18 +422,27 @@ export class AppController {
   async getHotPosts(@Req() req: Request, @Res() res: Response) {
     try {
       const { messageId, page, size, channel } = req.query;
-      const posts = await this.appService.getHotPosts(String(messageId), Number(page), Number(size), String(channel));
-      const size1= await this.appService.findLengthMessage(String(channel));
-      return res.status(200).json({ posts, size: size1});
+      const posts = await this.appService.getHotPosts(
+        String(messageId),
+        Number(page),
+        Number(size),
+        String(channel),
+      );
+      const size1 = await this.appService.findLengthMessage(String(channel));
+      return res.status(200).json({ posts, size: size1 });
     } catch (error) {
-      return res.status(500).json({message:"Internal Server Error"});
+      return res.status(500).json({ message: 'Internal Server Error' });
     }
   }
 
   @Post('/api/upload')
   @UseInterceptors(FileInterceptor('image', multerOptions))
-  async uploadFile(@UploadedFile() file: Express.Multer.File, @Req() req: Request, @Res() res: Response) {
-    try{
+  async uploadFile(
+    @UploadedFile() file: Express.Multer.File,
+    @Req() req: Request,
+    @Res() res: Response,
+  ) {
+    try {
       const { id, channelId } = req.query;
       const destinationPath = `./public/assets/images/${file.filename}`;
       const destinationDir = './public/assets/images';
@@ -386,45 +450,56 @@ export class AppController {
         fs.mkdirSync(destinationDir);
       }
       fs.copyFileSync(file.path, destinationPath);
-      await this.appService.addPost(String(id), file.filename, String(channelId));
-      return res.status(200).json({ message: "Upload image successfully!" });
+      await this.appService.addPost(
+        String(id),
+        file.filename,
+        String(channelId),
+      );
+      return res.status(200).json({ message: 'Upload image successfully!' });
     } catch (error) {
-      return res.status(500).json({message:"Internal Server Error"});
+      return res.status(500).json({ message: 'Internal Server Error' });
     }
   }
 
   @Post('/api/edit/post')
   @UseInterceptors(FileInterceptor('image', multerOptions))
-  async editPost(@UploadedFile() file: Express.Multer.File, @Req() req: Request, @Res() res: Response) {
-    try{
+  async editPost(
+    @UploadedFile() file: Express.Multer.File,
+    @Req() req: Request,
+    @Res() res: Response,
+  ) {
+    try {
       const { id, messageId } = req.query;
-      const editPost:any = await this.appService.editPost(id as string, messageId as string);
-      if(editPost[0]?.source){
-        const filePath= `./public/assets/images/${editPost[0]?.links[0]}`;
+      const editPost: any = await this.appService.editPost(
+        id as string,
+        messageId as string,
+      );
+      if (editPost[0]?.source) {
+        const filePath = `./public/assets/images/${editPost[0]?.links[0]}`;
         fs.unlinkSync(filePath);
-      } 
+      }
       const destinationPath = `./public/assets/images/${file.filename}`;
       fs.copyFileSync(file.path, destinationPath);
       await this.appService.updatePost(id as string, file.filename as string);
-      return res.status(200).json({ message: "Edit post successfully!" });
+      return res.status(200).json({ message: 'Edit post successfully!' });
     } catch (error) {
-      return res.status(500).json({message:"Internal Server Error"});
+      return res.status(500).json({ message: 'Internal Server Error' });
     }
   }
 
   @Post('/api/comment/like')
   async postCommentLike(@Req() req: Request, @Res() res: Response) {
-    try{
+    try {
       const { messageId, id, onLike, commentId } = req.body;
       const postCommentLike = await this.appService.postLikeComment(
         messageId as string,
         id as string,
-        String(onLike) ==="true" ? true: false,
+        String(onLike) === 'true' ? true : false,
         commentId as string,
       );
       return res.status(200).json({ message: postCommentLike });
     } catch (error) {
-      return res.status(500).json({message:"Internal Server Error"});
+      return res.status(500).json({ message: 'Internal Server Error' });
     }
   }
 
@@ -433,9 +508,15 @@ export class AppController {
     try {
       const { id, onPin } = req.body;
       await this.appService.pinComment(id as string, onPin);
-      return res.status(200).json({ message: onPin ? "Pin comment successfully!" : "Unpin comment successfully!" });
+      return res
+        .status(200)
+        .json({
+          message: onPin
+            ? 'Pin comment successfully!'
+            : 'Unpin comment successfully!',
+        });
     } catch (error) {
-      return res.status(500).json({message:"Internal Server Error"});
+      return res.status(500).json({ message: 'Internal Server Error' });
     }
   }
 
@@ -443,11 +524,15 @@ export class AppController {
   async getSearch(@Req() req: Request, @Res() res: Response) {
     try {
       const { name, page, channelId } = req.query;
-      const users = await this.appService.searchByName(String(name), Number(page), String(channelId));
+      const users = await this.appService.searchByName(
+        String(name),
+        Number(page),
+        String(channelId),
+      );
       const size = await this.appService.searchByLength(String(name));
       return res.status(200).json({ users, size: size?.length });
     } catch (error) {
-      return res.status(500).json({message:"Internal Server Error"});
+      return res.status(500).json({ message: 'Internal Server Error' });
     }
   }
 
@@ -455,11 +540,18 @@ export class AppController {
   async getSearchPosts(@Req() req: Request, @Res() res: Response) {
     try {
       const { messageId, page, channelId } = req.query;
-      const posts = await this.appService.searchPosts(String(messageId), Number(page), String(channelId));
-      const size = await this.appService.searchPostsLength(String(messageId), String(channelId));
-      return res.status(200).json({ posts, total: size?.length});
+      const posts = await this.appService.searchPosts(
+        String(messageId),
+        Number(page),
+        String(channelId),
+      );
+      const size = await this.appService.searchPostsLength(
+        String(messageId),
+        String(channelId),
+      );
+      return res.status(200).json({ posts, total: size?.length });
     } catch (error) {
-      return res.status(500).json({message:"Internal Server Error"});
+      return res.status(500).json({ message: 'Internal Server Error' });
     }
   }
 
@@ -467,21 +559,30 @@ export class AppController {
   async getSearchTimePosts(@Req() req: Request, @Res() res: Response) {
     try {
       const { start, end, page, channelId } = req.query;
-      const posts = await this.appService.searchTimePosts(Number(start), Number(end) + 86400000, Number(page), String(channelId));
-      const size = await this.appService.searchTimePostsLength(Number(start), Number(end) + 86400000, String(channelId));
-      return res.status(200).json({ posts, total: size?.length});
+      const posts = await this.appService.searchTimePosts(
+        Number(start),
+        Number(end) + 86400000,
+        Number(page),
+        String(channelId),
+      );
+      const size = await this.appService.searchTimePostsLength(
+        Number(start),
+        Number(end) + 86400000,
+        String(channelId),
+      );
+      return res.status(200).json({ posts, total: size?.length });
     } catch (error) {
-      return res.status(500).json({message:"Internal Server Error"});
+      return res.status(500).json({ message: 'Internal Server Error' });
     }
   }
 
   @Get('/api/test')
   async getTest(@Req() req: Request, @Res() res: Response) {
     try {
-      const a= await this.appService.deleteStart();
+      const a = await this.appService.deleteStart();
       return res.status(200).json(a);
     } catch (error) {
-      return res.status(500).json({message:"Internal Server Error"});
+      return res.status(500).json({ message: 'Internal Server Error' });
     }
   }
 }

@@ -3,7 +3,7 @@ import { updateSize } from '../util/updateSize';
 
 const initState = {
   posts: [],
-  typePosts: "",
+  typePosts: '',
   author: [],
   background: false,
   notification: [],
@@ -20,16 +20,16 @@ const initState = {
   onMenu: false,
   users: [],
   sizeUsers: 0,
-  search: "",
+  search: '',
   searchPosts: [],
-  searchMessage: "",
+  searchMessage: '',
   pageUsers: 1,
   loadingUsers: false,
   lengthUsers: 0,
-  searchTime:[],
-  searchUsersPosts:"",
-  channel:"924543969357099018",
-  channelList: []
+  searchTime: [],
+  searchUsersPosts: '',
+  channel: '924543969357099018',
+  channelList: [],
 };
 
 function reducer(state, action) {
@@ -42,7 +42,9 @@ function reducer(state, action) {
               ...main,
               totalLike:
                 action.payload?.like === 'true'
-                  ? main.totalLike ? main.totalLike + 1 : 1
+                  ? main.totalLike
+                    ? main.totalLike + 1
+                    : 1
                   : main.totalLike - 1,
               likes:
                 action.payload?.authorNotifi2 === state.author?.id
@@ -61,19 +63,39 @@ function reducer(state, action) {
                 ...main,
                 totalComment:
                   action.payload?.comment === 'add'
-                    ? main.totalComment ? main.totalComment + 1 : 1
-                    :action.payload?.comment === 'addItem' ?
-                      main.totalComment + 1
+                    ? main.totalComment
+                      ? main.totalComment + 1
+                      : 1
+                    : action.payload?.comment === 'addItem'
+                    ? main.totalComment + 1
                     : action.payload?.comment === 'deleteItem'
-                      ? main.totalComment - 1
-                      :action.payload?.comment === 'delete' ?
-                        main.totalComment - 1 - action.payload?.lengthItem
-                        : main.totalComment,
-                total: action.payload?.comment === 'add' ? main.total + 1 : action.payload?.comment === 'delete' ? main.total - 1 : main.total,
+                    ? main.totalComment - 1
+                    : action.payload?.comment === 'delete'
+                    ? main.totalComment - 1 - action.payload?.lengthItem
+                    : main.totalComment,
+                total:
+                  action.payload?.comment === 'add'
+                    ? main.total + 1
+                    : action.payload?.comment === 'delete'
+                    ? main.total - 1
+                    : main.total,
                 comments:
                   action.payload?.comment === 'add'
-                    ? [...[{...action.payload,...{likeComment: 0, dislikeComment: 0, authorLike: null, itemList: [], length: 0}}], ...main?.comments]
-                      .sort(function(a, b) {
+                    ? [
+                        ...[
+                          {
+                            ...action.payload,
+                            ...{
+                              likeComment: 0,
+                              dislikeComment: 0,
+                              authorLike: null,
+                              itemList: [],
+                              length: 0,
+                            },
+                          },
+                        ],
+                        ...main?.comments,
+                      ].sort(function (a, b) {
                         if (a.onPin > b.onPin) {
                           return -1;
                         } else if (a.onPin < b.onPin) {
@@ -88,162 +110,27 @@ function reducer(state, action) {
                           }
                         }
                       })
-                    : action.payload?.comment === 'addItem' && main?.comments?.length >0 ? 
-                      main?.comments?.map(item=> {
-                        if(item?._id === action.payload?.item ){
-                          if(item?.itemList?.length> 0){
+                    : action.payload?.comment === 'addItem' &&
+                      main?.comments?.length > 0
+                    ? main?.comments?.map((item) => {
+                        if (item?._id === action.payload?.item) {
+                          if (item?.itemList?.length > 0) {
                             return {
-                              ...item, 
-                              length: item?.length+ 1, 
-                              itemList: [...[{...action.payload,...{likeComment: 0, dislikeComment: 0, authorLike: null,}}],...item?.itemList]
-                                .sort(function(a, b) {
-                                  if (a.onPin > b.onPin) {
-                                    return -1;
-                                  } else if (a.onPin < b.onPin) {
-                                    return 1;
-                                  } else {
-                                    if (a._id > b._id) {
-                                      return -1;
-                                    } else if (a._id < b._id) {
-                                      return 1;
-                                    } else {
-                                      return 0;
-                                    }
-                                  }
-                                })}
-                          } else{
-                            return {...item, length: item?.length+ 1}
-                          }
-                        }
-                        else{
-                          return item
-                        }
-                      })
-                      : action.payload?.comment === 'delete'
-                      ? main?.comments?.filter(
-                          (item) => item?._id !== action.payload?.id,
-                        )
-                      : action.payload?.comment === 'deleteItem'? 
-                        main?.comments?.map(item=> {
-                          if(item?._id === action.payload?.item){
-                            return {...item, length: item?.length - 1, itemList: item?.itemList?.filter(e=> e._id !==action.payload?.id)}
-                          }
-                          else{
-                            return item
-                          }
-                        })
-                    :action.payload?.comment === 'edit'
-                    ? main?.comments.map((item) => {
-                        if (item._id === action.payload?.id) {
-                          return {
-                            ...item,
-                            content: action.payload?.input,
-                            onEdit: action.payload?.onEdit,
-                            createdTimestamp: action.payload?.createdTimestamp,
-                          };
-                        } else {
-                          return item;
-                        }
-                      })
-                    : action.payload?.comment === 'editItem'? 
-                      main?.comments?.map(item=> {
-                        if(item?._id === action.payload?.item){
-                          return {
-                            ...item, 
-                            itemList: item?.itemList?.map(e=>{
-                              if(e?._id === action.payload?.id){
-                                return {
-                                  ...e,
-                                  content: action.payload?.input,
-                                  onEdit: action.payload?.onEdit,
-                                  createdTimestamp: action.payload?.createdTimestamp,
-                                };
-                              }else{
-                                return e;
-                              }
-                            })
-                          }
-                        }
-                        else{
-                          return item
-                        }
-                      })
-                      :action.payload?.comment === 'commentLike' ? 
-                        main?.comments?.map(item=> {
-                          if(item?._id === action.payload?.commentId){
-                            return {
-                              ...item, 
-                              likeComment: 
-                                action.payload?.onLikeComment=== true? 
-                                  item?.likeComment + 1 
-                                  : action.payload?.onLikeComment=== false && action.payload?.test? 
-                                    item?.likeComment-1 
-                                    :action.payload?.onLikeComment=== null &&  item?.authorLike === true? 
-                                      item?.likeComment -1 
-                                      : item?.likeComment,
-                              dislikeComment: 
-                                action.payload?.onLikeComment=== false? 
-                                  item?.dislikeComment + 1 
-                                  : action.payload?.onLikeComment=== true && action.payload?.test? 
-                                    item?.dislikeComment -1 
-                                    : action.payload?.onLikeComment=== null &&  item?.authorLike === false? 
-                                      item?.dislikeComment -1 
-                                      :item?.dislikeComment,
-                              authorLike: action.payload?.onLikeComment,
-                            }
-                          }
-                          else{
-                            return item
-                          }
-                        })
-                        :action.payload?.comment === 'commentLikeItem'? 
-                          main?.comments?.map(item=> {
-                            if(item?._id === action.payload?.item){
-                              return {
-                                ...item,
-                                itemList:
-                                  item?.itemList?.map(e => {
-                                    if(e?._id === action.payload?.commentId){
-                                      return {
-                                        ...e, 
-                                        likeComment: 
-                                          action.payload?.onLikeComment=== true ? 
-                                            e?.likeComment + 1 
-                                            : action.payload?.onLikeComment=== false && action.payload?.test? 
-                                              e?.likeComment-1 
-                                              :action.payload?.onLikeComment=== null &&  e?.authorLike === true? 
-                                                e?.likeComment -1 
-                                                : e?.likeComment,
-                                        dislikeComment: 
-                                          action.payload?.onLikeComment=== false ? 
-                                            e?.dislikeComment + 1 
-                                            : action.payload?.onLikeComment=== true && action.payload?.test? 
-                                              e?.dislikeComment -1 
-                                              : action.payload?.onLikeComment=== null &&  e?.authorLike === false? 
-                                                e?.dislikeComment -1 
-                                                :e?.dislikeComment,
-                                        authorLike: action.payload?.onLikeComment,
-                                      }
-                                    }else{
-                                      return e
-                                    }
-                                })
-                              }
-                            } else{
-                              return item;
-                            }
-                            
-                          })
-                          :action.payload?.comment === 'pinComment'? 
-                            main?.comments
-                              .map(item => {
-                                if(item._id === action.payload?.id){
-                                  return {...item, onPin: action.payload?.onPin}
-                                } else{
-                                  return item;
-                                }
-                              })
-                              .sort(function(a, b) {
+                              ...item,
+                              length: item?.length + 1,
+                              itemList: [
+                                ...[
+                                  {
+                                    ...action.payload,
+                                    ...{
+                                      likeComment: 0,
+                                      dislikeComment: 0,
+                                      authorLike: null,
+                                    },
+                                  },
+                                ],
+                                ...item?.itemList,
+                              ].sort(function (a, b) {
                                 if (a.onPin > b.onPin) {
                                   return -1;
                                 } else if (a.onPin < b.onPin) {
@@ -257,42 +144,198 @@ function reducer(state, action) {
                                     return 0;
                                   }
                                 }
+                              }),
+                            };
+                          } else {
+                            return { ...item, length: item?.length + 1 };
+                          }
+                        } else {
+                          return item;
+                        }
+                      })
+                    : action.payload?.comment === 'delete'
+                    ? main?.comments?.filter(
+                        (item) => item?._id !== action.payload?.id,
+                      )
+                    : action.payload?.comment === 'deleteItem'
+                    ? main?.comments?.map((item) => {
+                        if (item?._id === action.payload?.item) {
+                          return {
+                            ...item,
+                            length: item?.length - 1,
+                            itemList: item?.itemList?.filter(
+                              (e) => e._id !== action.payload?.id,
+                            ),
+                          };
+                        } else {
+                          return item;
+                        }
+                      })
+                    : action.payload?.comment === 'edit'
+                    ? main?.comments.map((item) => {
+                        if (item._id === action.payload?.id) {
+                          return {
+                            ...item,
+                            content: action.payload?.input,
+                            onEdit: action.payload?.onEdit,
+                            createdTimestamp: action.payload?.createdTimestamp,
+                          };
+                        } else {
+                          return item;
+                        }
+                      })
+                    : action.payload?.comment === 'editItem'
+                    ? main?.comments?.map((item) => {
+                        if (item?._id === action.payload?.item) {
+                          return {
+                            ...item,
+                            itemList: item?.itemList?.map((e) => {
+                              if (e?._id === action.payload?.id) {
+                                return {
+                                  ...e,
+                                  content: action.payload?.input,
+                                  onEdit: action.payload?.onEdit,
+                                  createdTimestamp:
+                                    action.payload?.createdTimestamp,
+                                };
+                              } else {
+                                return e;
+                              }
+                            }),
+                          };
+                        } else {
+                          return item;
+                        }
+                      })
+                    : action.payload?.comment === 'commentLike'
+                    ? main?.comments?.map((item) => {
+                        if (item?._id === action.payload?.commentId) {
+                          return {
+                            ...item,
+                            likeComment:
+                              action.payload?.onLikeComment === true
+                                ? item?.likeComment + 1
+                                : action.payload?.onLikeComment === false &&
+                                  action.payload?.test
+                                ? item?.likeComment - 1
+                                : action.payload?.onLikeComment === null &&
+                                  item?.authorLike === true
+                                ? item?.likeComment - 1
+                                : item?.likeComment,
+                            dislikeComment:
+                              action.payload?.onLikeComment === false
+                                ? item?.dislikeComment + 1
+                                : action.payload?.onLikeComment === true &&
+                                  action.payload?.test
+                                ? item?.dislikeComment - 1
+                                : action.payload?.onLikeComment === null &&
+                                  item?.authorLike === false
+                                ? item?.dislikeComment - 1
+                                : item?.dislikeComment,
+                            authorLike: action.payload?.onLikeComment,
+                          };
+                        } else {
+                          return item;
+                        }
+                      })
+                    : action.payload?.comment === 'commentLikeItem'
+                    ? main?.comments?.map((item) => {
+                        if (item?._id === action.payload?.item) {
+                          return {
+                            ...item,
+                            itemList: item?.itemList?.map((e) => {
+                              if (e?._id === action.payload?.commentId) {
+                                return {
+                                  ...e,
+                                  likeComment:
+                                    action.payload?.onLikeComment === true
+                                      ? e?.likeComment + 1
+                                      : action.payload?.onLikeComment ===
+                                          false && action.payload?.test
+                                      ? e?.likeComment - 1
+                                      : action.payload?.onLikeComment ===
+                                          null && e?.authorLike === true
+                                      ? e?.likeComment - 1
+                                      : e?.likeComment,
+                                  dislikeComment:
+                                    action.payload?.onLikeComment === false
+                                      ? e?.dislikeComment + 1
+                                      : action.payload?.onLikeComment ===
+                                          true && action.payload?.test
+                                      ? e?.dislikeComment - 1
+                                      : action.payload?.onLikeComment ===
+                                          null && e?.authorLike === false
+                                      ? e?.dislikeComment - 1
+                                      : e?.dislikeComment,
+                                  authorLike: action.payload?.onLikeComment,
+                                };
+                              } else {
+                                return e;
+                              }
+                            }),
+                          };
+                        } else {
+                          return item;
+                        }
+                      })
+                    : action.payload?.comment === 'pinComment'
+                    ? main?.comments
+                        .map((item) => {
+                          if (item._id === action.payload?.id) {
+                            return { ...item, onPin: action.payload?.onPin };
+                          } else {
+                            return item;
+                          }
+                        })
+                        .sort(function (a, b) {
+                          if (a.onPin > b.onPin) {
+                            return -1;
+                          } else if (a.onPin < b.onPin) {
+                            return 1;
+                          } else {
+                            if (a._id > b._id) {
+                              return -1;
+                            } else if (a._id < b._id) {
+                              return 1;
+                            } else {
+                              return 0;
+                            }
+                          }
+                        })
+                    : action.payload?.comment === 'pinCommentItem'
+                    ? main?.comments.map((item) => {
+                        if (item._id === action.payload?.item) {
+                          return {
+                            ...item,
+                            itemList: item?.itemList
+                              .map((e) => {
+                                if (e._id === action.payload?.id) {
+                                  return { ...e, onPin: action.payload?.onPin };
+                                } else {
+                                  return e;
+                                }
                               })
-                              :action.payload?.comment === 'pinCommentItem'? 
-                                main?.comments
-                                  .map(item => {
-                                    if(item._id === action.payload?.item){
-                                      return {
-                                        ...item,
-                                        itemList: item?.itemList
-                                          .map(e => {
-                                            if(e._id === action.payload?.id){
-                                              return {...e, onPin: action.payload?.onPin}
-                                            } else{
-                                              return e;
-                                            }
-                                          })
-                                          .sort(function(a, b) {
-                                            if (a.onPin > b.onPin) {
-                                              return -1;
-                                            } else if (a.onPin < b.onPin) {
-                                              return 1;
-                                            } else {
-                                              if (a._id > b._id) {
-                                                return -1;
-                                              } else if (a._id < b._id) {
-                                                return 1;
-                                              } else {
-                                                return 0;
-                                              }
-                                            }
-                                          })
-                                      }
-                                    } else{
-                                      return item;
-                                    }
-                                  })
-                                :main?.comments,
+                              .sort(function (a, b) {
+                                if (a.onPin > b.onPin) {
+                                  return -1;
+                                } else if (a.onPin < b.onPin) {
+                                  return 1;
+                                } else {
+                                  if (a._id > b._id) {
+                                    return -1;
+                                  } else if (a._id < b._id) {
+                                    return 1;
+                                  } else {
+                                    return 0;
+                                  }
+                                }
+                              }),
+                          };
+                        } else {
+                          return item;
+                        }
+                      })
+                    : main?.comments,
               };
             } else {
               return main;
@@ -313,39 +356,48 @@ function reducer(state, action) {
           }
         }
       });
-      const sseChannelList = state.channelList?.map(item => {
-        if(action.payload?.posts){
-          if(action.payload?.posts === 'add'){
+      const sseChannelList = state.channelList?.map((item) => {
+        if (action.payload?.posts) {
+          if (action.payload?.posts === 'add') {
             return {
               ...item,
-              total: item?.total + action.payload?.list?.filter(main => main?.channelId === item?.id)?.length,
-            }
+              total:
+                item?.total +
+                action.payload?.list?.filter(
+                  (main) => main?.channelId === item?.id,
+                )?.length,
+            };
           }
-          if(action.payload?.posts === 'delete'){
+          if (action.payload?.posts === 'delete') {
             return {
               ...item,
-              total: item?.id === action.payload?.channelId ? item?.total- 1 : item?.total,
-            }
+              total:
+                item?.id === action.payload?.channelId
+                  ? item?.total - 1
+                  : item?.total,
+            };
           }
-        } else{
+        } else {
           return item;
         }
       });
       return {
         ...state,
         posts:
-          action.payload?.posts === 'add' && !state.typePosts 
+          action.payload?.posts === 'add' && !state.typePosts
             ? [
-                ...action.payload?.list?.filter(main => main?.channelId === state.channel).map((main) => {
-                  return {
-                    ...main,
-                    ...{
-                      comments: [],
-                      pageComment: 1,
-                      loading: false,
-                    },
-                  };
-                }),
+                ...action.payload?.list
+                  ?.filter((main) => main?.channelId === state.channel)
+                  .map((main) => {
+                    return {
+                      ...main,
+                      ...{
+                        comments: [],
+                        pageComment: 1,
+                        loading: false,
+                      },
+                    };
+                  }),
                 ...state.posts,
               ]
             : action.payload?.posts === 'delete'
@@ -353,17 +405,18 @@ function reducer(state, action) {
             : ssePosts,
         sizeNotifi:
           action.payload?.authorNotifi === state.author?.id &&
-          action.payload?.authorNotifi2 !== state.author?.id? 
-            state.sizeNotifi + 1
-            :state.sizeNotifi,
+          action.payload?.authorNotifi2 !== state.author?.id
+            ? state.sizeNotifi + 1
+            : state.sizeNotifi,
         notification:
-          state.notification?.length > 0 ?
-            action.payload?.authorNotifi === state.author?.id &&
-            action.payload?.authorNotifi2 !== state.author?.id? 
-              [...[action.payload?.notification], ...state.notification]
+          state.notification?.length > 0
+            ? action.payload?.authorNotifi === state.author?.id &&
+              action.payload?.authorNotifi2 !== state.author?.id
+              ? [...[action.payload?.notification], ...state.notification]
               : state.notification
             : state.notification,
-        channelList: state?.channelList?.length > 0 ? sseChannelList : state?.channelList,
+        channelList:
+          state?.channelList?.length > 0 ? sseChannelList : state?.channelList,
       };
     case 'SET_POSTS':
       const commentList = action.payload?.posts.map((main) => {
@@ -371,13 +424,16 @@ function reducer(state, action) {
           ...main,
           ...{
             comments: [],
-            total:0,
+            total: 0,
           },
         };
       });
       return {
         ...state,
-        posts: state.page === 1 && commentList?.length === 5 ? commentList : [...state.posts, ...commentList],
+        posts:
+          state.page === 1 && commentList?.length === 5
+            ? commentList
+            : [...state.posts, ...commentList],
         loadingPost: false,
         lengthPosts: action.payload?.size,
       };
@@ -421,7 +477,7 @@ function reducer(state, action) {
       return {
         ...state,
         lengthNotication: action.payload?.length,
-        sizeNotifi:action.payload?.size,
+        sizeNotifi: action.payload?.size,
       };
     case 'CHANGE_NOTIFICATION_ALL':
       return {
@@ -442,11 +498,11 @@ function reducer(state, action) {
       return {
         ...state,
         page:
-          state.typePosts ==="Search" ? 
-            -1 
-            :numberPosts >= count?.page && count?.page > 0 && state.page > 0
-              ? count?.page
-              : -1,
+          state.typePosts === 'Search'
+            ? -1
+            : numberPosts >= count?.page && count?.page > 0 && state.page > 0
+            ? count?.page
+            : -1,
         size: count?.size,
       };
     case 'CHANGE_PAGE_NOTIFICATION':
@@ -473,12 +529,14 @@ function reducer(state, action) {
         if (main.messageId === action.payload?.messageId) {
           return {
             ...main,
-            comments: action.payload?.type ? action.payload?.list : [...main.comments, ...action.payload?.list],
+            comments: action.payload?.type
+              ? action.payload?.list
+              : [...main.comments, ...action.payload?.list],
             ...{
               page: action.payload?.type ? 1 : action.payload?.page,
               size: action.payload?.type ? 5 : action.payload?.size,
               total: action.payload?.total,
-            }
+            },
           };
         } else {
           return main;
@@ -496,18 +554,24 @@ function reducer(state, action) {
     case 'SET_COMMENTS_ITEM':
       const listCommentItem = state.posts.map((main) => {
         if (main.messageId === action.payload?.messageId) {
-          const listItemComment= main?.comments.map(item=>{
-            if(item?._id === action.payload?.id){
-              const itemList=action.payload?.list;
-              const addItem={
+          const listItemComment = main?.comments.map((item) => {
+            if (item?._id === action.payload?.id) {
+              const itemList = action.payload?.list;
+              const addItem = {
                 page: action.payload?.type ? 1 : action.payload?.page,
                 size: action.payload?.size,
-              }
-              return action.payload?.type ? {...item, itemList, ...addItem} : {...item, itemList: [...item?.itemList, ...itemList], ...addItem};
-            } else{
+              };
+              return action.payload?.type
+                ? { ...item, itemList, ...addItem }
+                : {
+                    ...item,
+                    itemList: [...item?.itemList, ...itemList],
+                    ...addItem,
+                  };
+            } else {
               return item;
             }
-          })
+          });
           return {
             ...main,
             comments: listItemComment,
@@ -521,38 +585,41 @@ function reducer(state, action) {
         posts: listCommentItem,
       };
     case 'SET_COMMENTS_LOADING':
-      const loadingComment = state.posts?.map(item => {
-        if(item?.messageId === action.payload?.messageId){
-          if(action.payload?.item){
+      const loadingComment = state.posts?.map((item) => {
+        if (item?.messageId === action.payload?.messageId) {
+          if (action.payload?.item) {
             return {
               ...item,
-              comments: item?.comments?.map(e=>{
-                if(e?._id ===action.payload?.item){
-                  if(e?.loading){
-                    return {...e, ...{loading: action.payload?.loading}}
-                  } else{
-                    return {...e, loading: action.payload?.loading}
+              comments: item?.comments?.map((e) => {
+                if (e?._id === action.payload?.item) {
+                  if (e?.loading) {
+                    return { ...e, ...{ loading: action.payload?.loading } };
+                  } else {
+                    return { ...e, loading: action.payload?.loading };
                   }
-                } else{
+                } else {
                   return e;
                 }
-              })
-            }
-          } else{
-            return {...item, loading: action.payload?.loading}
+              }),
+            };
+          } else {
+            return { ...item, loading: action.payload?.loading };
           }
-        } else{
+        } else {
           return item;
         }
-      })
+      });
       return {
         ...state,
         posts: loadingComment,
-      };  
+      };
     case 'SET_USERS':
       return {
         ...state,
-        users: state.pageUsers === 1 ? action.payload?.list?.users : [...state?.users,...action.payload?.list?.users],
+        users:
+          state.pageUsers === 1
+            ? action.payload?.list?.users
+            : [...state?.users, ...action.payload?.list?.users],
         lengthUsers: action.payload?.list?.size,
         sizeUsers: action.payload?.list?.online,
         loadingUsers: false,
@@ -562,29 +629,32 @@ function reducer(state, action) {
         ...state,
         search: action.payload,
         pageUsers: 1,
-        users:[],
-        searchTime:[],
-        searchUsersPosts:"",
+        users: [],
+        searchTime: [],
+        searchUsersPosts: '',
       };
     case 'RESET_SEARCH':
       return {
         ...state,
         search: action.payload,
         pageUsers: 1,
-        searchTime:[],
+        searchTime: [],
       };
     case 'SET_SEARCH_POSTS':
       return {
         ...state,
-        searchPosts: state.pageUsers ===1 ? action.payload?.posts : [...state.searchPosts, ...action.payload?.posts],
+        searchPosts:
+          state.pageUsers === 1
+            ? action.payload?.posts
+            : [...state.searchPosts, ...action.payload?.posts],
         lengthUsers: action.payload?.total,
-        loadingUsers:false,
+        loadingUsers: false,
       };
     case 'SET_SEARCH_MESSAGE':
       return {
         ...state,
         searchMessage: action.payload,
-        users:[],
+        users: [],
       };
     case 'CHANGE_LOADING_USERS':
       return {
@@ -592,7 +662,7 @@ function reducer(state, action) {
         loadingUsers: action.payload,
       };
     case 'CHANGE_PAGE_USERS':
-      const numberUsers = Math.ceil(action.payload?.length/ 10);
+      const numberUsers = Math.ceil(action.payload?.length / 10);
       return {
         ...state,
         pageUsers:
@@ -615,23 +685,23 @@ function reducer(state, action) {
       return {
         ...state,
         pageUsers: 1,
-        searchUsersPosts:action.payload,
+        searchUsersPosts: action.payload,
       };
     case 'SET_SEARCH_TIME':
       return {
         ...state,
         searchTime: action.payload,
-        search:"",
-        searchPosts:[],
+        search: '',
+        searchPosts: [],
         lengthUsers: 0,
         pageUsers: 1,
-        searchUsersPosts:"",
+        searchUsersPosts: '',
       };
     case 'SET_CHANNEL':
       return {
         ...state,
         channel: action.payload,
-        page:1,
+        page: 1,
         posts: [],
       };
     case 'SET_CHANNEL_LIST':
@@ -639,8 +709,8 @@ function reducer(state, action) {
         ...state,
         channelList: action.payload,
       };
-      default:
-    throw new Error('Error');
+    default:
+      throw new Error('Error');
   }
 }
 export { initState };
