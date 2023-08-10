@@ -616,6 +616,7 @@ function reducer(state, action) {
         ...state,
         pageUsers: 1,
         searchUsersPosts:action.payload,
+        searchPosts:[],
       };
     case 'SET_SEARCH_TIME':
       return {

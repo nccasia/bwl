@@ -14,6 +14,7 @@ import { useStore } from '../../store';
 import "./style.scss";
 import axios from 'axios';
 import { showToast } from '../../util/showToast';
+import ClearIcon from '@mui/icons-material/Clear';
 
 function UploadDialog(props){
     const {state, dispatch}=useStore();
@@ -222,9 +223,9 @@ function UploadDialog(props){
                             color: '#6C7588',
                         }}
                     />
-                )}
-                <div className="upload-div-image">
-                    {image && openImage && (
+                )} 
+                {image && openImage && (
+                    <div className={state.background ? "upload-div-image-dark" : "upload-div-image-light"}>
                         <div 
                             onClick={handleDelete}
                             className="upload-delete-image"
@@ -233,15 +234,11 @@ function UploadDialog(props){
                                 color: '#6C7588',
                             }}
                         >
-                            <HighlightOffIcon />
-                        </div >
-                    )}
-                    {image && openImage && 
-                     <div  className="upload-image">
-                        <img  src={image} alt="Preview" className="images"/>
-                     </div>
-                    } 
-                </div>
+                            <ClearIcon />
+                        </div>
+                        <img src={image} alt="Preview" className="upload-image"/>
+                    </div>
+                )}     
                 <button 
                     onClick={handleUpdate}
                     className="upload-button"
