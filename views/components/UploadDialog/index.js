@@ -170,6 +170,7 @@ function UploadDialog(props){
             className="upload-dialog"
         >  
             <div
+            className="upload-dialog-box"
                 style={{
                     backgroundColor: state.background ? '#242526' : 'white',
                     color: '#6C7588',
@@ -214,6 +215,7 @@ function UploadDialog(props){
                         placeholder="Paste image or provide link..." 
                         value={image} 
                         onChange={handleChange}
+                        autoFocus
                         className="upload-input"
                         style={{
                             backgroundColor: state.background ? '#242526' : 'white',
@@ -234,7 +236,11 @@ function UploadDialog(props){
                             <HighlightOffIcon />
                         </div >
                     )}
-                    {image && openImage && <img src={image} alt="Preview" className="upload-image"/>}
+                    {image && openImage && 
+                     <div  className="upload-image">
+                        <img  src={image} alt="Preview" className="images"/>
+                     </div>
+                    } 
                 </div>
                 <button 
                     onClick={handleUpdate}

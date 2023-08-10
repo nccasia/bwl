@@ -105,6 +105,7 @@ const CommentItem = (props) => {
   }
   const handlePinComment =(id, onPin)=>{
     postPinComment({id: id, onPin: !onPin});
+    setOpen(false)
   }
 
   return (
@@ -258,7 +259,9 @@ const CommentItem = (props) => {
                       <p>Edit</p>
                     </div>
                     <div className="content">
-                      <Delcomment id={props?._id}/>
+                      <Delcomment 
+                        id={props?._id}
+                      />
                     </div>
                   </div>
                 )}

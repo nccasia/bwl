@@ -69,6 +69,7 @@ function reducer(state, action) {
                       :action.payload?.comment === 'delete' ?
                         main.totalComment - 1 - action.payload?.lengthItem
                         : main.totalComment,
+                total: action.payload?.comment === 'add' ? main.total + 1 : action.payload?.comment === 'delete' ? main.total - 1 : main.total,
                 comments:
                   action.payload?.comment === 'add'
                     ? [...[{...action.payload,...{likeComment: 0, dislikeComment: 0, authorLike: null, itemList: [], length: 0}}], ...main?.comments]
@@ -370,6 +371,7 @@ function reducer(state, action) {
           ...main,
           ...{
             comments: [],
+            total:0,
           },
         };
       });

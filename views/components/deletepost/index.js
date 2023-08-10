@@ -35,22 +35,24 @@ const DelPost = (props) => {
 
   return (
     <div>
-      <div 
-        className="button-dialog"
-        style={{
-          backgroundColor: state.background ? '#242526' : 'white',
-          color: '#6C7588',
-        }}
-      >
-        <div className="button" onClick={() => setOpenEdit(true)}>
-          <EditIcon sx={{fontSize: "16px"}}/>
-          <p>Edit</p>
+      {!open && !openEdit &&(
+          <div 
+          className="button-dialog"
+          style={{
+            backgroundColor: state.background ? '#242526' : 'white',
+            color: '#6C7588',
+          }}
+        >
+          <div className="button" onClick={()=>setOpenEdit(true)} >
+            <EditIcon sx={{fontSize: "16px"}}/>
+            <p>Edit</p>
+          </div>
+          <div className="button" onClick={handleClickOpen}>
+            <DeleteForeverIcon sx={{fontSize: "16px"}}/>
+            <p>Delete</p>
+          </div>
         </div>
-        <div className="button" onClick={handleClickOpen}>
-          <DeleteForeverIcon sx={{fontSize: "16px"}}/>
-          <p>Delete</p>
-        </div>
-      </div>
+      )}
       <UploadDialog
         open={openEdit}
         setOpen={setOpenEdit}

@@ -30,19 +30,34 @@ function Comment(props) {
     }
   };
   const scrollRef = React.useRef(null);
+  const [openSeeMore, setOpenSeeMore] = React.useState(0);
+  const handleGetCommentPage = () => {
+    if(props?.comments?.length < 5 && props?.total > props?.comments?.length){
+      const test = props?.total - props?.comments?.length;
+      if(props?.total > 5){
+        handleGetPage();
+      } else{
+        getComment({messageId: props?.messageId, page: 1, size: test, id: state.author?.id}, dispatch);
+      }
+    }
+  }
+  const handleGetPage =()=> {
+    if(props?.comments?.length > 0 && props?.total > 5){
+      const numberComment= Math.ceil(props?.total / 5);
+      const test = updateSize(props?.comments?.length);
+      if(!props?.loading && numberComment > 1 && test?.page > 0){
+        if((numberComment > test?.page && numberComment > 1) || (numberComment === test?.page && test?.size === 5)){
+          getComment({messageId: props?.messageId, page: test?.page, size: test?.size, id: state.author?.id}, dispatch);
+        }
+      }
+    }
+  }
   React.useEffect(()=> {
     const scrollElement = scrollRef.current;
+    setOpenSeeMore(scrollElement?.scrollHeight);
     const handleScroll = () => {
       if (scrollElement.scrollTop + scrollElement.clientHeight >= scrollElement.scrollHeight - 1) {
-        if(props?.comments?.length > 0 && props?.total > 5){
-          const numberComment= Math.ceil(props?.total / 5);
-          const test = updateSize(props?.comments?.length);
-          if(!props?.loading && numberComment > 1 && test?.page > 0){
-            if((numberComment > test?.page && numberComment > 1) || (numberComment === test?.page && test?.size === 5)){
-              getComment({messageId: props?.messageId, page: test?.page, size: test?.size, id: state.author?.id}, dispatch);
-            }
-          }
-        }
+        handleGetPage();
       }
     };
     scrollElement.addEventListener('scroll', handleScroll);
@@ -80,6 +95,14 @@ function Comment(props) {
             <CircularProgress sx={{color: "rgb(108, 117, 136)"}}/>
           </div>
         )}
+        {props?.comments?.length < 5 && props?.total > props?.comments?.length  &&  openSeeMore < 380 && 
+          <p 
+            className="show-page-comment"
+            onClick={handleGetCommentPage}
+          >
+            See More
+          </p>
+        }
       </div>
     </div>
   );

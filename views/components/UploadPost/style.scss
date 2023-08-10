@@ -26,6 +26,12 @@
             padding: 0 20px;
             font-size: 14px;
             color: rgb(108, 117, 136);
+            cursor: pointer;
+            background-color: #f0f2f5;
+            &:hover{
+                // background-color: #eff0f1;
+                box-shadow: 0 0px 5px rgba(0,0,0,0.10);
+            }
         }
     }
 }
