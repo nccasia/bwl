@@ -44,7 +44,10 @@ const UserInfo = (props) => {
         {state.author?.id && state.author?.id === props?.author?.id && (
           <div className="delete-post-btn"
             onMouseLeave={handleContainerMouseLeave}>
-            <div className="delete-icon" onClick={handleMoreIconClick}>
+            <div 
+              className={state.background ? "delete-post-icon-dark" : "delete-post-icon-light"}
+              onClick={handleMoreIconClick}
+            >
               <MoreHorizIcon />
             </div>
             {open ? (

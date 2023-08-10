@@ -96,11 +96,9 @@ const CommentItem = (props) => {
           onLike: index, 
           commentId: props?._id,
         })
-      } else{
-        showToast("warning", "Gian lận không tốt đâu!")
       }
     } else{
-      showToast("warning", "Bạn nên đăng nhập!");
+      showToast("warning", 'You need to log in to like.');
     }
   }
   const handlePinComment =(id, onPin)=>{
@@ -241,7 +239,10 @@ const CommentItem = (props) => {
             className="delete-comment-btn"
             onMouseLeave={handleContainerMouseLeave}
           >
-            <div className="delete-icon" onClick={handleMoreIconClick}>
+            <div 
+              className={state.background ? "delete-icon-dark" : "delete-icon-light"}
+              onClick={handleMoreIconClick}
+            >
               <MoreHorizIcon />
             </div>
             {open ? (
