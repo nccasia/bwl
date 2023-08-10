@@ -73,7 +73,10 @@ function Comment(props) {
         input={input}
         setInput={setInput}
       />
-      <div className="container-comment-scroll" ref={scrollRef}>
+      <div 
+        className={`container-comment-scroll ${state.background ? "scroll-dark" : "scroll-light"}`}
+        ref={scrollRef}
+      >
         {props?.comments
           ? props?.comments
               .map((comment) => (

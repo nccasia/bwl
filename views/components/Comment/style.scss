@@ -10,12 +10,12 @@
 }
 .container-comment {
   width: 100%;
-  .container-comment-scroll{
+  .container-comment-scroll {
     overflow-y: auto;
     overflow-x: hidden;
     width:100%;
     max-height: 380px;
-    padding-bottom: 30px;
+    padding-bottom: 55px;
     .comment-progress{
       text-align:center;
       padding: 20px 0;
@@ -24,13 +24,13 @@
     .comment {
       width: 100%;
       animation-name: fadeInDown;
-      animation-duration: 0.3s;
+      animation-duration: 0.5s;
     }
     .comment:last-child {
       border-bottom: none !important;
     }
     .show-page-comment{
-      font-size: 13px;
+      font-size: 15px;
       font-weight: 500;
       cursor: pointer;
     }
@@ -38,16 +38,27 @@
       text-decoration: underline;
     }
   }
-  .container-comment-scroll::-webkit-scrollbar-track {
+  .scroll-light::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
     background-color: #f5f5f5;
   }
-  .container-comment-scroll::-webkit-scrollbar {
+  .scroll-light::-webkit-scrollbar {
     width: 3px;
     background-color: #f5f5f5;
   }
-  .container-comment-scroll::-webkit-scrollbar-thumb {
-    background-color: #5a5a6499;
+  .scroll-light::-webkit-scrollbar-thumb {
+    background-color: #5a5a6452;
+  }
+  .scroll-dark::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #282829eb;
+  }
+  .scroll-dark::-webkit-scrollbar {
+    width: 3px;
+    background-color: #282829eb;
+  }
+  .scroll-dark::-webkit-scrollbar-thumb {
+    background-color: #3e3e46f2;
   }
 }
 @media (max-width: 500px){
