@@ -10,7 +10,7 @@ import { useStore } from '../../store';
 import './style.scss';
 import { deletePost } from '../../api/apiPosts';
 import UploadDialog from '../UploadDialog';
-import {showToast} from "../../util/showToast";
+import { showToast } from '../../util/showToast';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
@@ -35,20 +35,20 @@ const DelPost = (props) => {
 
   return (
     <div>
-      {!open && !openEdit &&(
-          <div 
+      {!open && !openEdit && (
+        <div
           className="button-dialog"
           style={{
             backgroundColor: state.background ? '#242526' : 'white',
             color: '#6C7588',
           }}
         >
-          <div className="button" onClick={()=>setOpenEdit(true)} >
-            <EditIcon sx={{fontSize: "16px"}}/>
+          <div className="button" onClick={() => setOpenEdit(true)}>
+            <EditIcon sx={{ fontSize: '16px' }} />
             <p>Edit</p>
           </div>
           <div className="button" onClick={handleClickOpen}>
-            <DeleteForeverIcon sx={{fontSize: "16px"}}/>
+            <DeleteForeverIcon sx={{ fontSize: '16px' }} />
             <p>Delete</p>
           </div>
         </div>
@@ -67,7 +67,7 @@ const DelPost = (props) => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <div 
+        <div
           style={{
             backgroundColor: state.background ? '#242526' : 'white',
             color: '#6C7588',

@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import * as React from 'react';
-import Container from '../Container';
+import Container from '../container';
 import './style.scss';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -15,8 +15,9 @@ import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import ContentRight  from "../ContentRight";
-import ChannelHeader from "../ChannelHeader";
+import ContentRight from '../ContentRight';
+import ChannelHeader from '../ChannelHeader';
+
 
 const MainContent = () => {
   const { state, dispatch } = useStore();
@@ -38,15 +39,21 @@ const MainContent = () => {
     const handleResize = () => {
       if (window.innerWidth) {
         setInnerWidth(window.innerWidth);
-      } 
+      }
     };
 
     window.addEventListener('resize', handleResize);
     window.addEventListener('scroll', () => {
       handleScroll();
-      if (window.scrollY + window.innerHeight >= document.body.scrollHeight - 5 ) {
-        if(!state.loadingPost && state.page !== -1){
-          useDataDebouncer(dispatch({type: "CHANGE_PAGE", payload: {page: state.page}}), 500);
+      if (
+        window.scrollY + window.innerHeight >=
+        document.body.scrollHeight - 5
+      ) {
+        if (!state.loadingPost && state.page !== -1) {
+          useDataDebouncer(
+            dispatch({ type: 'CHANGE_PAGE', payload: { page: state.page } }),
+            500,
+          );
         }
       }
     });
@@ -82,7 +89,7 @@ const MainContent = () => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  
+
   return (
     <div style={{ backgroundColor: state.background ? 'black' : '#f5f5f500' }}>
       <div className="main-container">
@@ -94,19 +101,53 @@ const MainContent = () => {
             backgroundColor: state.background ? 'black' : '#f5f5f500',
           }}
         >
-          <ChannelHeader innerWidth={innerWidth}/>
+          <ChannelHeader innerWidth={innerWidth} />
           <TabContext value={value}>
-            <div className="main-tabs" style={{ backgroundColor: state.background ? "rgb(36, 37, 38)": "white"}}>
-              <Box sx={{ borderBottom: 1, borderColor: 'divider'}} className="box-tabs">
-                <TabList onChange={handleChange} aria-label="lab API tabs example">
-                  <Tab  sx={{ color: 'rgb(108, 117, 136)' }} label="New" value="1" onClick={() => dispatch({type: "CHANGE_TAB_POST", payload: "New"})}/>
-                  <Tab  sx={{ color: 'rgb(108, 117, 136)' }} label="Top" value="2" onClick={() => dispatch({type: "CHANGE_TAB_POST", payload: "Hot"})}/>
-                  {state?.searchMessage !== "" && <Tab  sx={{ color: 'rgb(108, 117, 136)' }} label="Search" value="3" onClick={() => dispatch({type: "CHANGE_TAB_POST", payload: "Search"})}/>}
+            <div
+              className="main-tabs"
+              style={{
+                backgroundColor: state.background ? 'rgb(36, 37, 38)' : 'white',
+              }}
+            >
+              <Box
+                sx={{ borderBottom: 1, borderColor: 'divider' }}
+                className="box-tabs"
+              >
+                <TabList
+                  onChange={handleChange}
+                  aria-label="lab API tabs example"
+                >
+                  <Tab
+                    sx={{ color: 'rgb(108, 117, 136)' }}
+                    label="New"
+                    value="1"
+                    onClick={() =>
+                      dispatch({ type: 'CHANGE_TAB_POST', payload: 'New' })
+                    }
+                  />
+                  <Tab
+                    sx={{ color: 'rgb(108, 117, 136)' }}
+                    label="Top"
+                    value="2"
+                    onClick={() =>
+                      dispatch({ type: 'CHANGE_TAB_POST', payload: 'Hot' })
+                    }
+                  />
+                  {state?.searchMessage !== '' && (
+                    <Tab
+                      sx={{ color: 'rgb(108, 117, 136)' }}
+                      label="Search"
+                      value="3"
+                      onClick={() =>
+                        dispatch({ type: 'CHANGE_TAB_POST', payload: 'Search' })
+                      }
+                    />
+                  )}
                 </TabList>
               </Box>
               <TabPanel value="1">
-                {state.author?.id && <UploadPost/>}
-                <Container type="New"/>
+                {state.author?.id && <UploadPost />}
+                <Container type="New" />
                 {state.loadingPost && (
                   <div className="notifi-progress">
                     <CircularProgress sx={{ color: 'rgb(108, 117, 136)' }} />
@@ -114,21 +155,21 @@ const MainContent = () => {
                 )}
               </TabPanel>
               <TabPanel value="2">
-                <Container/>
+                <Container />
                 {state.loadingPost && (
                   <div className="notifi-progress">
-                    <CircularProgress sx={{color: "rgb(108, 117, 136)"}}/>
+                    <CircularProgress sx={{ color: 'rgb(108, 117, 136)' }} />
                   </div>
                 )}
               </TabPanel>
-              {state?.searchMessage !== "" && (
+              {state?.searchMessage !== '' && (
                 <TabPanel value="3">
                   {state.loadingPost && (
                     <div className="notifi-progress">
-                      <CircularProgress sx={{color: "rgb(108, 117, 136)"}}/>
+                      <CircularProgress sx={{ color: 'rgb(108, 117, 136)' }} />
                     </div>
                   )}
-                  <Container messageId={state?.searchMessage}/>
+                  <Container messageId={state?.searchMessage} />
                 </TabPanel>
               )}
             </div>
@@ -138,11 +179,11 @@ const MainContent = () => {
           className="sidebar-left"
           style={{
             opacity: state.onMenu ? 0.5 : 1,
-            pointerEvents: state.onMenu ? "none": "auto",
-            backgroundColor: state.background ? "rgb(36, 37, 38)": "white"
+            pointerEvents: state.onMenu ? 'none' : 'auto',
+            backgroundColor: state.background ? 'rgb(36, 37, 38)' : 'white',
           }}
         >
-          {innerWidth > 986  && <ContentRight />}
+          {innerWidth > 986 && <ContentRight />}
         </div>
         {scroll && state.typePosts !== 'Search' && (
           <FontAwesomeIcon
@@ -152,7 +193,7 @@ const MainContent = () => {
             style={{
               opacity: state.onMenu ? 0.5 : 1,
               pointerEvents: state.onMenu ? 'none' : 'auto',
-              cursor:"pointer",
+              cursor: 'pointer',
             }}
           />
         )}
