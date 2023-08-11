@@ -15,6 +15,7 @@ import "./style.scss";
 import axios from 'axios';
 import { showToast } from '../../util/showToast';
 import ClearIcon from '@mui/icons-material/Clear';
+import { Buffer } from 'buffer';
 
 function UploadDialog(props){
     const {state, dispatch}=useStore();
@@ -33,19 +34,36 @@ function UploadDialog(props){
     const handlePaste = async (event) => {
         const items = (event.clipboardData || event.originalEvent.clipboardData).items;
         for (const item of items) {
-          if (item.type.indexOf('image') !== -1) {
-            const blob = item.getAsFile();
-            try {
-                await createImageBitmap(blob);
-                const imageUrl = URL.createObjectURL(blob);
-                setImage(imageUrl);
-                setOpenImage(true);
-                const formData = await convertImageUrlToFormData(imageUrl);
-                setData(formData);
-              } catch (error) {
-                setOpenImage(false);
-              }
-          }
+            if (item.type.indexOf('image') !== -1) {
+                const blob = item.getAsFile();
+                try {
+                    await createImageBitmap(blob);
+                    const imageUrl = URL.createObjectURL(blob);
+                    setImage(imageUrl);
+                    setOpenImage(true);
+                    const formData = await convertImageUrlToFormData(imageUrl);
+                    setData(formData);
+                } catch (error) {
+                    setOpenImage(false);
+                }
+            } else if (item.type === 'text/plain') {
+                const base64Data = await new Promise((resolve) => item.getAsString(resolve));
+                if (base64Data.startsWith('data:image/')) {
+                    const rawData = base64Data.split(',')[1];
+                    const byteArray = new Uint8Array(Buffer.from(rawData, 'base64'));
+                    const imageBlob = new Blob([byteArray], { type: base64Data.split(':')[1].split(';')[0] });
+                    try {
+                        await createImageBitmap(imageBlob);
+                        const imageUrl = URL.createObjectURL(imageBlob);
+                        setImage(imageUrl);
+                        setOpenImage(true);
+                        const formData = await convertImageUrlToFormData(imageUrl);
+                        setData(formData);
+                    } catch (error) {
+                        setOpenImage(false);
+                    }
+                }
+            }
         }
     };
     const handleChange = async (event) => {
@@ -61,8 +79,7 @@ function UploadDialog(props){
     function checkURLStartsWithHTTP(urlString) {
         const pattern = /^(http|https):\/\//;
         return pattern.test(urlString);
-    }
-      
+    }    
     const isValidImageURL = async (url) => {
         try {
             const response = await axios.head(url);
@@ -80,7 +97,6 @@ function UploadDialog(props){
             return false;
           }
     };
-
     const handleUpdate  = async () => {
         if(data && state.author?.id){
             if(props?.type==="add"){
@@ -152,12 +168,10 @@ function UploadDialog(props){
           xhr.send();
         });
     };
-
     const handleDelete =()=>{
         setOpenImage(false);
         setImage("");
     }
-
     const handleOpen =()=>{
         props?.setOpen(false)
         setImage("");
@@ -171,7 +185,7 @@ function UploadDialog(props){
             className="upload-dialog"
         >  
             <div
-            className="upload-dialog-box"
+                className="upload-dialog-box"
                 style={{
                     backgroundColor: state.background ? '#242526' : 'white',
                     color: '#6C7588',

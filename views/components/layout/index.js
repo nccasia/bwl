@@ -46,7 +46,7 @@ const MainContent = () => {
       handleScroll();
       if (window.scrollY + window.innerHeight >= document.body.scrollHeight - 5 ) {
         if(!state.loadingPost && state.page !== -1){
-          useDataDebouncer(dispatch({type: "CHANGE_PAGE", payload: {page: state.page}}), 500);
+          useDataDebouncer(dispatch({type: "CHANGE_PAGE"}), 500);
         }
       }
     });
@@ -106,7 +106,7 @@ const MainContent = () => {
               </Box>
               <TabPanel value="1">
                 {state.author?.id && <UploadPost/>}
-                <Container type="New"/>
+                <Container/>
                 {state.loadingPost && (
                   <div className="notifi-progress">
                     <CircularProgress sx={{ color: 'rgb(108, 117, 136)' }} />
