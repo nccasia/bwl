@@ -34,7 +34,6 @@
       }
       .ellipsis{
         font-size: 12px;
-        margin-left: 5px;
         width: 200px;
         word-wrap: break-word;
         line-height: 16px;
@@ -58,4 +57,17 @@
 
 .notifi-progress {
   text-align: center;
+  height: 100px;
+}
+
+@media (max-width: 500px){
+  .notification-list{
+    .list-notifi{
+      span{
+        .ellipsis {
+          width: 175px;
+        }
+      }
+    }
+  }
 }

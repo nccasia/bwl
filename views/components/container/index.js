@@ -7,41 +7,59 @@ import { getAll, getOne, getHotPosts } from '../../api/apiPosts';
 
 const Container = (props) => {
   const { state, dispatch } = useStore();
-  React.useEffect(()=>{
+  React.useEffect(() => {
     const foo = async (index) => {
-      if(state.typePosts==="New" || props?.type ==="New" && state.page !== -1){
+      if (
+        state.typePosts === 'New' ||
+        (props?.type === 'New' && state.page !== -1)
+      ) {
         await getAll(
           {
-            page: state.page, 
-            size: state.size, 
+            page: state.page,
+            size: state.size,
             messageId: index,
             channel: state.channel,
-          }, 
-          dispatch
+          },
+          dispatch,
         );
       }
-      if(state.typePosts==="Search" && props?.messageId && state.page !== -1){
-        await getOne({messageId: props?.messageId, id: index}, dispatch);
+      if (
+        state.typePosts === 'Search' &&
+        props?.messageId &&
+        state.page !== -1
+      ) {
+        await getOne({ messageId: props?.messageId, id: index }, dispatch);
       }
-      if(state.typePosts==="Hot" && state.page !== -1){
+      if (state.typePosts === 'Hot' && state.page !== -1) {
         getHotPosts(
           {
-            messageId:index, 
-            page: state.page, 
-            size: state.size, 
+            messageId: index,
+            page: state.page,
+            size: state.size,
             channel: state.channel,
-          }
-        , dispatch);
+          },
+          dispatch,
+        );
       }
     };
-    if (!document.cookie && document.cookie.split("=")[0] !== "token") {
-      foo(null);
-    }else {
-      if(state?.author?.id) {
-        foo(state?.author?.id);
+    if (state.page !== -1) {
+      if (!document.cookie && document.cookie.split('=')[0] !== 'token') {
+        foo(null);
+      } else {
+        if (state?.author?.id) {
+          foo(state?.author?.id);
+        }
       }
     }
-  },[state?.author?.id, state.page, state.typePosts, state.changePage, state.size, props?.messageId, state.channel]);
+  }, [
+    state?.author?.id,
+    state.page,
+    state.typePosts,
+    state.changePage,
+    state.size,
+    props?.messageId,
+    state.channel,
+  ]);
 
   return (
     <div className="container-list">

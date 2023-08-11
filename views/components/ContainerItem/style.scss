@@ -5,16 +5,13 @@
   align-items: flex-start;
   width: 100%;
   background-color: #fff;
-  padding: 5%;
-
+  padding: 5% 5% 0 5%;
   .container-item-img {
     width: 100%;
-
     img {
       width: 100%;
     }
   }
-
   .container-item-react {
     display: flex;
     align-items: center;
@@ -123,21 +120,17 @@
       }
     }
   }
-
   .comment {
     width: 100%;
   }
-
   .comment:last-child {
     border-bottom: none !important;
   }
-
   .show {
     margin-top: 15px;
     cursor: pointer;
     font-size: 13px;
   }
-
   .container-item-reactInfo {
     display: flex;
     justify-content: space-between;
@@ -263,6 +256,23 @@
       }
     }
   }
+}
+
+.comment-animation-div{
+  width: 100%;
+  margin: 0;
+  padding:0;
+  transition: max-height 0.6s ease-in-out;
+  max-height:calc(110vh + 50px);
+}
+
+.open {
+  max-height: auto;
+}
+
+.closed {
+  max-height: 0;
+  overflow:hidden;
 }
 
 @media (min-width: 1400px) {

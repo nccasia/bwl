@@ -10,7 +10,7 @@ import { useStore } from '../../store';
 import './style.scss';
 import { deletePost } from '../../api/apiPosts';
 import UploadDialog from '../UploadDialog';
-import {showToast} from "../../util/showToast";
+import { showToast } from '../../util/showToast';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
@@ -18,11 +18,7 @@ const DelPost = (props) => {
   const { state, dispatch } = useStore();
   const handleDelete = async () => {
     if (state.author?.id) {
-      deletePost({ id: props?.id, messageId: state.author?.id }).then(data => {
-        if(data){
-          showToast("success", data?.message)
-        }
-      });
+      deletePost({ id: props?.id, messageId: state.author?.id });
     }
     setOpen(false);
   };
@@ -39,22 +35,24 @@ const DelPost = (props) => {
 
   return (
     <div>
-      <div 
-        className="button-dialog"
-        style={{
-          backgroundColor: state.background ? '#242526' : 'white',
-          color: '#6C7588',
-        }}
-      >
-        <div className="button" onClick={() => setOpenEdit(true)}>
-          <EditIcon sx={{fontSize: "16px"}}/>
-          <p>Edit</p>
+      {!open && !openEdit && (
+        <div
+          className="button-dialog"
+          style={{
+            backgroundColor: state.background ? '#242526' : 'white',
+            color: '#6C7588',
+          }}
+        >
+          <div className="button" onClick={() => setOpenEdit(true)}>
+            <EditIcon sx={{ fontSize: '16px' }} />
+            <p>Edit</p>
+          </div>
+          <div className="button" onClick={handleClickOpen}>
+            <DeleteForeverIcon sx={{ fontSize: '16px' }} />
+            <p>Delete</p>
+          </div>
         </div>
-        <div className="button" onClick={handleClickOpen}>
-          <DeleteForeverIcon sx={{fontSize: "16px"}}/>
-          <p>Delete</p>
-        </div>
-      </div>
+      )}
       <UploadDialog
         open={openEdit}
         setOpen={setOpenEdit}
@@ -69,7 +67,7 @@ const DelPost = (props) => {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <div 
+        <div
           style={{
             backgroundColor: state.background ? '#242526' : 'white',
             color: '#6C7588',

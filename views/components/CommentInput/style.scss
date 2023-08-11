@@ -1,4 +1,16 @@
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 .container-item-reactInfo {
+  animation-name: fadeInDown;
+  animation-duration: 0.5s;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -113,6 +125,43 @@
       color: #cdcaca;
       pointer-events: none;
     }
+  }
+  .react-input{
+    width: 100%;
+    height: 100%;
+    line-height: 20px;
+    border: none;
+    outline: none;
+    margin-top: 8px;
+    color: #6C7588;
+    overflow-y: auto;
+    max-height: 50vh;
+    &::placeholder {
+      color: #6C7588;
+    }
+  }
+  .react-input::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #f5f5f5;
+  }
+  .react-input::-webkit-scrollbar {
+    width: 0px;
+    background-color: #f5f5f5;
+  }
+  .react-input::-webkit-scrollbar-thumb {
+    background-color: #5a5a64;
+  }
+  .react-input::before {
+    content: 'Add comment...';
+    position: absolute;
+    color: #aaa;
+    pointer-events: none;
+  }
+  .react-input:not(:empty)::before {
+    display: none;
+  }
+  .react-input-url{
+    color: blue;
   }
 }
 

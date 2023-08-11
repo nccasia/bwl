@@ -2,12 +2,9 @@
 import './style.scss';
 import React from 'react';
 import data from '@emoji-mart/data';
-import Picker from '@emoji-mart/react'
+import Picker from '@emoji-mart/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faFaceSmile,
-  faXmark,
-} from '@fortawesome/free-solid-svg-icons';
+import { faFaceSmile, faXmark } from '@fortawesome/free-solid-svg-icons';
 import SendIcon from '@mui/icons-material/Send';
 import { useStore } from '../../store';
 
@@ -16,16 +13,20 @@ function CommentInput(props) {
   const [openEmoji, setOpenEmoji] = React.useState(false);
   const onEmojiClick = (emojiObject) => {
     props?.setInput(props?.input.concat(emojiObject.native));
+    const currentText = textareaRef.current.innerText;
+    const newText = currentText.concat(emojiObject.native);
+    textareaRef.current.innerText = newText;
   };
-
-  const handleInputChange = (event) => {
-    props?.setInput(event.target.value);
-  };
-
+  const textareaRef = React.useRef(null);
   const isDisabled = props.input.trim() === '';
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
-      props?.handleClickComment();
+      if (!event.shiftKey) {
+        props?.handleClickComment();
+        textareaRef.current.style.height = '20px';
+        textareaRef.current.innerText = '';
+        event.preventDefault();
+      }
     }
   };
   const wrapperRef = React.useRef(null);
@@ -34,7 +35,16 @@ function CommentInput(props) {
       setOpenEmoji(false);
     }
   };
+
   React.useEffect(() => {
+    if (props?.input !== '') {
+      textareaRef.current.innerText = props?.input;
+    }
+    const textarea = document.getElementById('auto-resize-textarea');
+    textarea.addEventListener('input', () => {
+      textarea.style.height = 'auto';
+      textarea.style.height = textarea.scrollHeight + 'px';
+    });
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
@@ -50,65 +60,80 @@ function CommentInput(props) {
       setOpenEmoji(false);
     }
   };
-  const font = 'Segoe UI Emoji'
-  
-  
+  const font = 'Segoe UI Emoji';
   return (
     <div
-      style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        width: '100%',
-      }}
+      className="container-item-reactInfo"
+      ref={wrapperRef}
+      style={{ margin: 0 }}
     >
-      <div className="container-item-reactInfo" ref={wrapperRef}>
-        <div 
-          style={{ 
-            width: '100%', 
-            padding: '0 10px',
-            backgroundColor: state.background ? '#242526f7' : 'white',
-            color: '#6C7588',
-            fontFamily: font,
+      <div
+        style={{
+          width: '100%',
+          padding: '0 10px',
+          backgroundColor: state.background ? '#242526f7' : 'white',
+          color: '#6C7588',
+          fontFamily: font,
+        }}
+      >
+        <div
+          id="auto-resize-textarea"
+          ref={textareaRef}
+          className="react-input"
+          contenteditable="true"
+          onKeyDown={handleKeyDown}
+          onClick={handleInputClick}
+          onInput={(event) => props?.setInput(event.target.innerText)}
+          onPaste={(event) => {
+            event.preventDefault();
+            const pastedText = event.clipboardData.getData('text');
+            const currentText = textareaRef.current.innerText;
+            const newText = currentText.concat(pastedText);
+            textareaRef.current.innerText = newText;
+            props?.setInput(props?.input.concat(pastedText));
+            textareaRef.current.style.color = '#6C7588';
+            textareaRef.current.style.height = 'auto';
+            textareaRef.current.style.height =
+              textareaRef.current.style.scrollHeight + 'px';
+            textareaRef.current.style.backgroundColor = state.background
+              ? 'rgb(43 44 45)'
+              : 'white';
           }}
-        >
-          <input
-            type="text"
-            className="react-input"
-            placeholder="Add comment..."
-            value={props?.input}
-            onChange={handleInputChange}
-            autoFocus
-            onKeyDown={handleKeyDown}
-            onClick={handleInputClick} 
-            style={{ fontFamily: font }}
-          />
-
-          <div className="container-item-icon">
-            <div className="container-item-emoji">
-              <FontAwesomeIcon
-                className="input-icon"
-                icon={openEmoji ? faXmark : faFaceSmile}
-                onClick={handleEmojiIconClick}
-              />
-              {openEmoji &&  (
-                <div className="emoji-box">
-                  <Picker 
-                    data={data} 
-                    onEmojiSelect={onEmojiClick} 
-                    theme={state.background ? "dark": "light"}
-                    onClick={handleInputClick}
-                    style={{ fontFamily: font }}
-                  />
-                </div>
-              )}
-            </div>
-            <div onClick={props?.handleClickComment}>
-              <SendIcon
-                className={`input-button ${isDisabled ? 'disabled' : ''}`}
-                disabled={isDisabled}
-              />
-            </div>
+          style={{
+            fontFamily: font,
+            backgroundColor: state.background ? 'rgb(43 44 45)' : 'white',
+          }}
+        />
+        <div className="container-item-icon">
+          <div className="container-item-emoji">
+            <FontAwesomeIcon
+              className="input-icon"
+              icon={openEmoji ? faXmark : faFaceSmile}
+              onClick={handleEmojiIconClick}
+            />
+            {openEmoji && (
+              <div className="emoji-box">
+                <Picker
+                  data={data}
+                  onEmojiSelect={onEmojiClick}
+                  theme={state.background ? 'dark' : 'light'}
+                  onClick={handleInputClick}
+                  style={{ fontFamily: font }}
+                />
+              </div>
+            )}
+          </div>
+          <div
+            onClick={() => {
+              props?.handleClickComment();
+              textareaRef.current.style.height = '20px';
+              textareaRef.current.innerText = '';
+            }}
+          >
+            <SendIcon
+              className={`input-button ${isDisabled ? 'disabled' : ''}`}
+              disabled={isDisabled}
+            />
           </div>
         </div>
       </div>

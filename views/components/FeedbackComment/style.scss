@@ -1,12 +1,12 @@
 .header-text{
     font-size: 12px;
-    margin-top: 10px;
     display: flex; 
     align-items: center;
     gap: 3px;
     position: relative;
     padding-left: 20px;
     margin-left: 20px;
+    padding-top: 5px;
     cursor: pointer;
     &::before {
         content: "";
@@ -29,14 +29,36 @@
     }
 }
 
+.open-feedback {
+    opacity: 1;
+    transform: translateY(0);
+}
 
+.closed-feedback {
+    transform: translateY(-5px);
+    opacity: 0;
+}
+
+@keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+}
 
 .comment-feedback-div{
     margin: 5px 0 0 45px; 
+    transition: height 0.5s ease-in-out, opacity 0.5s ease-in-out;
     .comment-feedback {
-        position: relative;
+        position: relative; 
+        animation-name: fadeInDown;
+        animation-duration: 0.5s;
         &:last-child{
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
         .comment-item{
             .author-avatar{
@@ -61,7 +83,7 @@
         &::after {
             content: "";
             position: absolute;
-            top: 55%;
+            top: 30px;
             left: 0;
             width: 18px;
             height: 2px;
@@ -73,13 +95,13 @@
             top: 0;
             left: 0;
             width: 2px;
-            height: 57%;
+            height: 32px;
             border-left: 2px solid #ccc;
         }
         &:last-child::after {
             content: "";
             position: absolute;
-            top: 55%;
+            top: 30px;
             left: 0;
             width: 18px;
             height: 2px;
@@ -176,6 +198,9 @@
     }
 }
 @media (max-width: 500px){
+    .feedback-comment-container{
+        padding-left: 10px;
+    }
     .header-text{
         margin-left: 0;
         padding-left: 0;
@@ -189,6 +214,7 @@
     .comment-feedback-div{
         margin: 0 0 0 6px;
         .comment-feedback{
+            padding-left: 20px;
             .comment-item{
                 .author-avatar{
                     .author-boxcontent{
