@@ -28,7 +28,7 @@ function UploadPost() {
                         backgroundColor: state.background ? '#242526' : ' ',
                         color: '#6C7588',
                     }}
-                    onClick={()=>setOpen(true)}>Share đi share đii...</p>
+                    onClick={()=>setOpen(true)}>Share your post......</p>
             </div>
             <UploadDialog open={open} setOpen={setOpen} type="add"/>
         </div>
