@@ -61,7 +61,6 @@ function CommentInput(props) {
     }
   };
   const font = 'Segoe UI Emoji';
-
   return (
     <div
       className="container-item-reactInfo"

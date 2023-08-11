@@ -239,42 +239,57 @@ function UploadDialog(props) {
                 color: '#6C7588',
               }}
             >
-                {!openImage && (
-                    <textarea 
-                        type="text"
-                        placeholder="Paste image or provide link..." 
-                        value={image} 
-                        onChange={handleChange}
-                        autoFocus
-                        className="upload-input"
-                        style={{
-                            backgroundColor: state.background ? '#242526' : 'white',
-                            color: '#6C7588',
-                        }}
-                    />
-                )} 
-                {image && openImage && (
-                    <div className={state.background ? "upload-div-image-dark" : "upload-div-image-light"}>
-                        <div 
-                            onClick={handleDelete}
-                            className="upload-delete-image"
-                            style={{
-                                backgroundColor: state.background ? '#242526' : 'white',
-                                color: '#6C7588',
-                            }}
-                        >
-                            <ClearIcon />
-                        </div>
-                        <img src={image} alt="Preview" className="upload-image"/>
-                    </div>
-                )}     
-                <button 
-                    onClick={handleUpdate}
-                    className="upload-button"
-                    style={(image && openImage) ? {backgroundColor: "#00bbff", color: "#f8f8f8"} : {backgroundColor: state.background ? "#0000000a" : "white", color: "rgb(108, 117, 136)"}}
+              {!openImage && (
+                <textarea
+                  type="text"
+                  placeholder="Paste image or provide link..."
+                  value={image}
+                  onChange={handleChange}
+                  autoFocus
+                  className="upload-input"
+                  style={{
+                    backgroundColor: state.background ? '#242526' : 'white',
+                    color: '#6C7588',
+                  }}
+                />
+              )}
+              {image && openImage && (
+                <div
+                  className={
+                    state.background
+                      ? 'upload-div-image-dark'
+                      : 'upload-div-image-light'
+                  }
                 >
-                    {props?.type==="add" ? "Create":"Update"}
-                </button>
+                  <div
+                    onClick={handleDelete}
+                    className="upload-delete-image"
+                    style={{
+                      backgroundColor: state.background ? '#242526' : 'white',
+                      color: '#6C7588',
+                    }}
+                  >
+                    <ClearIcon />
+                  </div>
+                  <img src={image} alt="Preview" className="upload-image" />
+                </div>
+              )}
+              <button
+                onClick={handleUpdate}
+                className="upload-button"
+                style={
+                  image && openImage
+                    ? { backgroundColor: '#00bbff', color: '#f8f8f8' }
+                    : {
+                        backgroundColor: state.background
+                          ? '#0000000a'
+                          : 'white',
+                        color: 'rgb(108, 117, 136)',
+                      }
+                }
+              >
+                {props?.type === 'add' ? 'Create' : 'Update'}
+              </button>
             </div>
           )}
           {image && openImage && (

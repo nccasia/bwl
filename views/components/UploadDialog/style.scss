@@ -13,7 +13,7 @@
             border-bottom: none;
             h1{
                 font-weight: 500;
-                font-size: 20px;
+                font-size: 18px;
             }
             p{
                 cursor: pointer;
@@ -70,9 +70,10 @@
         top: -10px;
         right: -10px;
         float: right;
-        height: 20px;
         border-radius: 50%;
         cursor: pointer;
+        width: 25px;
+        height: 25px;
     }
     .upload-image{
         max-width: 330px;
@@ -95,7 +96,7 @@
     justify-content: center;
     height: 200px;
     margin: 0 15px;
-    background-color: #6c758805;
+    background-color: #5a5a6408;
     .upload-delete-image{
         display: none;
         color:white;
@@ -104,9 +105,10 @@
         top: -10px;
         right: -10px;
         float: right;
-        height: 20px;
         border-radius: 50%;
         cursor: pointer;
+        width: 25px;
+        height: 25px;
     }
     .upload-image{
         max-width: 330px;
@@ -132,7 +134,7 @@
     width: calc(100% - 20px);
 }
 
-@media (max-width: 400px){
+@media (max-width: 500px){
     .upload-dialog{
         .upload-dialog-box{
             width: 280px;
@@ -147,10 +149,24 @@
         .upload-image{
             max-width: 250px;
         }
+        .upload-delete-image{
+            display: block;
+        }
     }
     .upload-div-image-light{
         .upload-image{
             max-width: 250px;
         }
+        .upload-delete-image{
+            display: block;
+        }
+    }
+    .upload-div-image-light:hover{
+        background-color: #ebedf078;
+        opacity:1;
+    }
+    .upload-div-image-dark:hover{
+        background-color: #5a5a6408;
+        opacity:1;
     }
 }
