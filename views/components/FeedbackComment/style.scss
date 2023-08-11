@@ -53,13 +53,12 @@
 .comment-feedback-div{
     margin: 5px 0 0 45px; 
     transition: height 0.5s ease-in-out, opacity 0.5s ease-in-out;
-    overflow: hidden;
     .comment-feedback {
         position: relative; 
         animation-name: fadeInDown;
         animation-duration: 0.5s;
         &:last-child{
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
         .comment-item{
             .author-avatar{
