@@ -12,12 +12,12 @@ const Container = (props) => {
       if(state.typePosts==="New"){
         getAll(
           {
-            page: state.page, 
-            size: state.size, 
+            page: state.page,
+            size: state.size,
             messageId: index,
             channel: state.channel,
-          }, 
-          dispatch
+          },
+          dispatch,
         );
       }
       if(state.typePosts==="Search" && props?.messageId){
@@ -26,12 +26,13 @@ const Container = (props) => {
       if(state.typePosts==="Hot"){
         getHotPosts(
           {
-            messageId:index, 
-            page: state.page, 
-            size: state.size, 
+            messageId: index,
+            page: state.page,
+            size: state.size,
             channel: state.channel,
-          }
-        , dispatch);
+          },
+          dispatch,
+        );
       }
     };
     if(state.page !== -1){
@@ -41,7 +42,15 @@ const Container = (props) => {
         foo(null);
       }
     }
-  },[state?.author?.id, state.page, state.typePosts, state.changePage, state.size, props?.messageId, state.channel]);
+  }, [
+    state?.author?.id,
+    state.page,
+    state.typePosts,
+    state.changePage,
+    state.size,
+    props?.messageId,
+    state.channel,
+  ]);
 
   return (
     <div className="container-list">

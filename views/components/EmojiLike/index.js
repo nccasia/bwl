@@ -8,28 +8,28 @@ import EmojiLikeList from '../EmojiLikeList';
 import { useStore } from '../../store';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
-import {changeNumber} from "../../util/changeNumber";
+import { changeNumber } from '../../util/changeNumber';
 
 const EmojiLike = (props) => {
   const { state, dispatch } = useStore();
   const [like, setLike] = React.useState([]);
   const [reactions, setReactions] = React.useState([]);
   const [open, setOpen] = React.useState('');
-  
-  React.useEffect(()=> {
-    const runList = async() => {
-      if(open==="like-icon-x"){
+
+  React.useEffect(() => {
+    const runList = async () => {
+      if (open === 'like-icon-x') {
         await getLikes({
-          messageId:props?.messageId,
+          messageId: props?.messageId,
           size: false,
           page: 1,
         }).then((item) => {
           if (item?.likes) {
-            setLike({likes: item?.likes, total: item?.total});
+            setLike({ likes: item?.likes, total: item?.total });
           }
         });
       }
-      if(open !== "" && open!=="like-icon-x"){
+      if (open !== '' && open !== 'like-icon-x') {
         await getReactions({
           messageId: props?.messageId,
           emoji: open,
@@ -39,12 +39,12 @@ const EmojiLike = (props) => {
           setReactions({ list: item?.reactions, total: item?.total });
         });
       }
-    }
+    };
     runList();
   }, [open]);
-  
+
   const handleClickGetLike = async () => {
-    setOpen("like-icon-x");
+    setOpen('like-icon-x');
   };
   const handleClickGetReactions = async (index) => {
     setOpen(index.emoji);
@@ -74,16 +74,16 @@ const EmojiLike = (props) => {
           <Tooltip
             arrow
             placement="top"
-            open={open === "like-icon-x"? true : false}
+            open={open === 'like-icon-x' ? true : false}
             onOpen={handleClickGetLike}
-            onClose={() => setOpen("")}
+            onClose={() => setOpen('')}
             title={
               <div
                 className="dialog-like-list"
                 onClick={() => setOpenList('like-icon-x')}
                 style={{
                   display: 'flex',
-                  gap: "5px",
+                  gap: '5px',
                   alignItems: 'center',
                   padding: '8px',
                   cursor: 'pointer',
@@ -96,14 +96,16 @@ const EmojiLike = (props) => {
                 <p>
                   <b>Like:</b>
                   {' đã được tương tác bởi: '}
-                  {like && like?.total< 4 ? (
+                  {like && like?.total < 4 ? (
                     changeLike(like?.likes).join(', ')
                   ) : (
                     <span>
                       {changeLike(like?.likes)?.slice(0, 3).join(', ')}
                       {' và '}
                       <u>
-                        {like?.total >=1000 ? changeNumber(like?.total) : like?.total - 3}
+                        {like?.total >= 1000
+                          ? changeNumber(like?.total)
+                          : like?.total - 3}
                         {' người khác'}
                       </u>
                     </span>
@@ -112,17 +114,13 @@ const EmojiLike = (props) => {
               </div>
             }
           >
-            <li 
+            <li
               className="list-inline-item list-reaction "
               onTouchStart={handleClickGetLike}
             >
               <div className="btn-reaction">
-                <ThumbUpOffAltIcon
-                  className="emoji-like"
-                />
-                <span>
-                  {changeNumber(props?.totalLike)}
-                </span>
+                <ThumbUpOffAltIcon className="emoji-like" />
+                <span>{changeNumber(props?.totalLike)}</span>
               </div>
             </li>
           </Tooltip>
@@ -135,7 +133,7 @@ const EmojiLike = (props) => {
               interactive
               open={open === main.emoji ? true : false}
               onOpen={() => handleClickGetReactions(main)}
-              onClose={() => setOpen("")}
+              onClose={() => setOpen('')}
               key={index}
               title={
                 <div
@@ -143,7 +141,7 @@ const EmojiLike = (props) => {
                   onClick={() => setOpenList(main.emoji)}
                   style={{
                     display: 'flex',
-                    gap: "5px",
+                    gap: '5px',
                     alignItems: 'center',
                     padding: '8px',
                     cursor: 'pointer',
@@ -177,12 +175,12 @@ const EmojiLike = (props) => {
                       changeLike(reactions?.list)?.join(', ')
                     ) : (
                       <span>
-                        {changeLike(reactions?.list)
-                          ?.slice(0, 3)
-                          .join(', ')}
+                        {changeLike(reactions?.list)?.slice(0, 3).join(', ')}
                         {' và '}
                         <u>
-                          {reactions?.total >=1000 ? changeNumber(reactions?.total) : reactions?.total-3}
+                          {reactions?.total >= 1000
+                            ? changeNumber(reactions?.total)
+                            : reactions?.total - 3}
                           {' người khác'}
                         </u>
                       </span>
@@ -191,7 +189,7 @@ const EmojiLike = (props) => {
                 </div>
               }
             >
-              <li 
+              <li
                 className="list-inline-item list-reaction"
                 onTouchStart={() => handleClickGetReactions(main)}
               >
@@ -217,15 +215,12 @@ const EmojiLike = (props) => {
         className="comment-icon"
         onClick={() => props?.handleClick(props?.messageId)}
       >
-      {props?.totalComment ? (
-        <>
-          <span>{String(changeNumber(props?.totalComment))}</span>
-          <ChatBubbleOutlineIcon
-            className="icon-cmt"
-          />
-        </>
-      ) : null}
-        
+        {props?.totalComment ? (
+          <>
+            <span>{String(changeNumber(props?.totalComment))}</span>
+            <ChatBubbleOutlineIcon className="icon-cmt" />
+          </>
+        ) : null}
       </div>
     </ul>
   );

@@ -10,15 +10,22 @@ import { truncatedContent } from '../../util/truncatedContent';
 const NotificationList = (props) => {
   const { state, dispatch } = useStore();
   const handleChangePage = async (index) => {
-    dispatch({type: "SET_SEARCH_MESSAGE", payload: index});
-    if(state?.notification[0]?.onLabel){
+    dispatch({ type: 'SET_SEARCH_MESSAGE', payload: index });
+    if (state?.notification[0]?.onLabel) {
       postNotification(state.author?.id);
     }
   };
 
   React.useEffect(() => {
-    if (state.author?.id && state.pageNotification > 0 && props?.openNotification) {
-      getNotification({ messageId: state.author.id, page: state.pageNotification },dispatch);
+    if (
+      state.author?.id &&
+      state.pageNotification > 0 &&
+      props?.openNotification
+    ) {
+      getNotification(
+        { messageId: state.author.id, page: state.pageNotification },
+        dispatch,
+      );
     }
   }, [state.pageNotification, state.author?.id, props?.openNotification]);
 
@@ -41,7 +48,7 @@ const NotificationList = (props) => {
                       src={`https://cdn.discordapp.com/avatars/${main?.author[0]?.id}/${main?.author[0]?.avatar}`}
                       alt="avatar"
                     />
-                  ): (
+                  ) : (
                     <img
                       src="./assets/img/person.png"
                       className="img-people-avatar"
@@ -56,7 +63,9 @@ const NotificationList = (props) => {
                             color: state.background ? '#c0c0cd' : 'black',
                           }}
                         >
-                          {main?.author[0]?.username ? main?.author[0]?.username : "The Lost"}
+                          {main?.author[0]?.username
+                            ? main?.author[0]?.username
+                            : 'The Lost'}
                         </b>
                         {' đã' +
                           main?.onComment +
@@ -75,7 +84,9 @@ const NotificationList = (props) => {
                             color: state.background ? '#c0c0cd' : 'black',
                           }}
                         >
-                          {main?.author[0]?.username ? main?.author[0]?.username : "The Lost"}
+                          {main?.author[0]?.username
+                            ? main?.author[0]?.username
+                            : 'The Lost'}
                         </b>
                         {` đã ${main?.onItem} phản hồi vào bình luận: `}
                         <b className="ellipsis">"{truncateditem}"</b>
@@ -97,7 +108,9 @@ const NotificationList = (props) => {
                             color: state.background ? '#c0c0cd' : 'black',
                           }}
                         >
-                          {main?.author[0]?.username ? main?.author[0]?.username : "The Lost"}{' '}
+                          {main?.author[0]?.username
+                            ? main?.author[0]?.username
+                            : 'The Lost'}{' '}
                         </b>
                         {main?.onLikeItem === 'true'
                           ? ' đã thích'
@@ -120,7 +133,9 @@ const NotificationList = (props) => {
                             color: state.background ? '#c0c0cd' : 'black',
                           }}
                         >
-                          {main?.author[0]?.username ? main?.author[0]?.username : "The Lost"}{' '}
+                          {main?.author[0]?.username
+                            ? main?.author[0]?.username
+                            : 'The Lost'}{' '}
                         </b>
                         {main?.onLike
                           ? ' đã thích bài viết của bạn.'
@@ -147,7 +162,7 @@ const NotificationList = (props) => {
         : null}
       {state.loadingNotifi && (
         <div className="notifi-progress">
-          <CircularProgress sx={{color: "rgb(108, 117, 136)"}}/>
+          <CircularProgress sx={{ color: 'rgb(108, 117, 136)' }} />
         </div>
       )}
     </div>
