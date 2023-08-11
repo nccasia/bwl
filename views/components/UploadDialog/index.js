@@ -204,7 +204,7 @@ function UploadDialog(props){
                             }}
                         />
                         <Tooltip title="Upload image">
-                            <Button component="span" >
+                            <Button component="span" sx={{minWidth: "20px"}}>
                                 <PhotoCameraIcon sx={{fontSize: "20px"}}/>
                             </Button>
                         </Tooltip>
