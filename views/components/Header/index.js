@@ -43,8 +43,8 @@ function HeaderPage() {
       style={{ backgroundColor: state.background ? '#242526' : 'white' }}
     >
       <div className="nav-header-icon">
-        <div className="logoNcc">
-          <img src="./assets/img/favicon.png" alt="logo" />
+        <div>
+          <img src="./assets/img/logo.png" alt="logo" width="30px" height="30px"/>
         </div>
       </div>
       {!state.author?.id ? (

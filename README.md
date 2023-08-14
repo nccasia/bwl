@@ -1,10 +1,10 @@
 <p align="center">
-  <a href="http://bwl.vn/" target="blank"><img src="https://bwl.vn/assets/img/favicon.png" width="320" alt="Ncc Logo" /></a>
+  <a href="http://bwl.vn/" target="blank"><img src="https://bwl.vn/assets/img/logo.png" width="300" alt="Ncc Logo" /></a>
 </p>
 
 ## Description
 
-BWL is...
+BWL is a web project designed for interacting with images shared from several channels of the KOMU NCC Discord. The code is built using NestJS + MongoDB, ReactJS, Webpack,...
 
 ## Installation
 
@@ -17,10 +17,14 @@ $ npm install
 ```bash
 # development
 $ npm run start
+```
 
+```bash
 # watch mode
 $ npm run start:dev
+```
 
+```bash
 # production mode
 $ npm run start:prod
 ```
@@ -30,10 +34,14 @@ $ npm run start:prod
 ```bash
 # unit tests
 $ npm run test
+```
 
+```bash
 # e2e tests
 $ npm run test:e2e
+```
 
+```bash
 # test coverage
 $ npm run test:cov
 ```
@@ -42,6 +50,6 @@ $ npm run test:cov
 
 - Video - [https://bwl.vn/](https://bwl.vn/)
 
-## Stay in touch
+## Website
 
 - Website - [https://bwl.vn/](https://bwl.vn/)
