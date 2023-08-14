@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="http://bwl.vn/" target="blank"><img src="https://bwl.vn/assets/img/logo.png" width="300" alt="Ncc Logo" /></a>
+  <a href="http://bwl.vn/" target="blank"><img src="https://bwl.vn/assets/img/logo.png" width="100" height="100" alt="Ncc Logo" /></a>
 </p>
 
 ## Description
@@ -14,41 +14,37 @@ $ npm install
 
 ## Running the app
 
+- development
 ```bash
-# development
 $ npm run start
 ```
 
+- watch mode
 ```bash
-# watch mode
 $ npm run start:dev
 ```
 
+- production mode
 ```bash
-# production mode
 $ npm run start:prod
 ```
 
 ## Test
 
+- unit tests
 ```bash
-# unit tests
 $ npm run test
 ```
 
+- e2e tests
 ```bash
-# e2e tests
 $ npm run test:e2e
 ```
 
+- test coverage
 ```bash
-# test coverage
 $ npm run test:cov
 ```
-
-## Demo
-
-- Video - [https://bwl.vn/](https://bwl.vn/)
 
 ## Website
 
