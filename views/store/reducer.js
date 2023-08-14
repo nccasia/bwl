@@ -3,7 +3,7 @@ import { updateSize } from '../util/updateSize';
 
 const initState = {
   posts: [],
-  typePosts: '',
+  typePosts: "New",
   author: [],
   background: false,
   notification: [],
@@ -14,7 +14,7 @@ const initState = {
   size: 5,
   loadingNotifi: false,
   loadingPost: false,
-  lengthPosts: 0,
+  lengthPosts: 5,
   changePage: false,
   onEdit: false,
   onMenu: false,
@@ -437,14 +437,6 @@ function reducer(state, action) {
         loadingPost: false,
         lengthPosts: action.payload?.size,
       };
-    case 'SET_POSTS_PAGE':
-      return {
-        ...state,
-        changePage: action.payload,
-        posts: [],
-        page: action.payload ? -1 : 1,
-        onMenu: false,
-      };
     case 'CHANGE_LOADING_POST':
       return {
         ...state,
@@ -498,11 +490,11 @@ function reducer(state, action) {
       return {
         ...state,
         page:
-          state.typePosts === 'Search'
-            ? -1
-            : numberPosts >= count?.page && count?.page > 0 && state.page > 0
-            ? count?.page
-            : -1,
+          state.typePosts ==="Search" ? 
+            -1
+            :numberPosts >= count?.page && count?.page > 0 && state.page > 0
+              ? count?.page
+              : -1,
         size: count?.size,
       };
     case 'CHANGE_PAGE_NOTIFICATION':

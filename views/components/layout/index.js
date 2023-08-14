@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import * as React from 'react';
-import Container from '../container';
+import Container from '../Container';
 import './style.scss';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -45,15 +45,9 @@ const MainContent = () => {
     window.addEventListener('resize', handleResize);
     window.addEventListener('scroll', () => {
       handleScroll();
-      if (
-        window.scrollY + window.innerHeight >=
-        document.body.scrollHeight - 5
-      ) {
-        if (!state.loadingPost && state.page !== -1) {
-          useDataDebouncer(
-            dispatch({ type: 'CHANGE_PAGE', payload: { page: state.page } }),
-            500,
-          );
+      if (window.scrollY + window.innerHeight >= document.body.scrollHeight - 5 ) {
+        if(!state.loadingPost && state.page !== -1){
+          useDataDebouncer(dispatch({type: "CHANGE_PAGE"}), 500);
         }
       }
     });
@@ -146,8 +140,8 @@ const MainContent = () => {
                 </TabList>
               </Box>
               <TabPanel value="1">
-                {state.author?.id && <UploadPost />}
-                <Container type="New" />
+                {state.author?.id && <UploadPost/>}
+                <Container/>
                 {state.loadingPost && (
                   <div className="notifi-progress">
                     <CircularProgress sx={{ color: 'rgb(108, 117, 136)' }} />

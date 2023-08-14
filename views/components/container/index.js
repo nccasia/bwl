@@ -7,13 +7,10 @@ import { getAll, getOne, getHotPosts } from '../../api/apiPosts';
 
 const Container = (props) => {
   const { state, dispatch } = useStore();
-  React.useEffect(() => {
-    const foo = async (index) => {
-      if (
-        state.typePosts === 'New' ||
-        (props?.type === 'New' && state.page !== -1)
-      ) {
-        await getAll(
+  React.useEffect(()=>{
+    const foo = (index) => {
+      if(state.typePosts==="New"){
+        getAll(
           {
             page: state.page,
             size: state.size,
@@ -23,14 +20,10 @@ const Container = (props) => {
           dispatch,
         );
       }
-      if (
-        state.typePosts === 'Search' &&
-        props?.messageId &&
-        state.page !== -1
-      ) {
-        await getOne({ messageId: props?.messageId, id: index }, dispatch);
+      if(state.typePosts==="Search" && props?.messageId){
+        getOne({messageId: props?.messageId, id: index}, dispatch);
       }
-      if (state.typePosts === 'Hot' && state.page !== -1) {
+      if(state.typePosts==="Hot"){
         getHotPosts(
           {
             messageId: index,
@@ -42,13 +35,11 @@ const Container = (props) => {
         );
       }
     };
-    if (state.page !== -1) {
-      if (!document.cookie && document.cookie.split('=')[0] !== 'token') {
+    if(state.page !== -1){
+      if(state?.author?.id) {
+        foo(state?.author?.id);
+      } else{
         foo(null);
-      } else {
-        if (state?.author?.id) {
-          foo(state?.author?.id);
-        }
       }
     }
   }, [

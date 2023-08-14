@@ -9,7 +9,6 @@ const Bwl = () => {
   const {state, dispatch}=useStore();
   React.useEffect(() => {
     const foo = async() =>{
-      await dispatch({type: "SET_POSTS_PAGE", payload: false});
       if(document.cookie && document.cookie.split("=")[0] === "token"){
         await getUser(document.cookie.split("=")[1], dispatch);
       }
