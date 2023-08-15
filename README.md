@@ -9,13 +9,14 @@ BWL is a web project designed for interacting with images shared from several ch
 ## Basic functions of Website
 
 ```bash
-- Web bwl, in addition to taking photos from the BWL channel on discord, users can post images directly on <br/> the web, helping you quickly share the moments you want
+- Web bwl, in addition to taking photos from the BWL channel on discord, users can post images directly on the web.
+ helping you quickly share the moments you want
 ```
 ```bash
 - On that post, you can edit or delete the post if you don't like it
 ```
 ```bash
-- Other users will see the post and they will express their feelings by: liking and commenting on the post <br/> and all those interactions will notify you about the account.
+- Other users will see the post and they will express their feelings by: liking and commenting on the post and all those interactions will notify you about the account.
 ```
 ```bash
 - Users can unlike posts they have liked, edit or delete previous comments, and they can also see <br/> specifically which users have reacted or liked the post.
