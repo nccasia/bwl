@@ -50,6 +50,11 @@ function CommentInput(props) {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+  React.useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.focus();
+    }
+  }, []);
 
   const handleEmojiIconClick = (event) => {
     event.stopPropagation();
