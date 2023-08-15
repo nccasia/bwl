@@ -11,11 +11,11 @@ BWL is a web project designed for interacting with images shared from several ch
 - Web bwl, in addition to taking photos from the BWL channel on discord, users can post images directly on the web, helping you quickly share the moments you want
 
 - On that post, you can edit or delete the post if you don't like it
-- 
+  
 - Other users will see the post and they will express their feelings by: liking and commenting on the post, and all those interactions will notify you about the account.
 
 - Users can unlike posts they have liked, edit or delete previous comments, and they can also see specifically which users have reacted or liked the post.
-- 
+  
 - In the comments of the article, there are also functions such as: responding to comments, liking and disliking commen, pinning comments to help you freely express your feelings.
 
 - The search function by date makes it possible to search all the posts in a period of time, and search by  user helps you find all the posts of that user.
