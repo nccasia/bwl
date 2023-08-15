@@ -10,22 +10,26 @@ BWL is a web project designed for interacting with images shared from several ch
 
 ```bash
 - Web bwl, in addition to taking photos from the BWL channel on discord, users can post images directly on the web.
- helping you quickly share the moments you want
+ Helping you quickly share the moments you want
 ```
 ```bash
 - On that post, you can edit or delete the post if you don't like it
 ```
 ```bash
-- Other users will see the post and they will express their feelings by: liking and commenting on the post and all those interactions will notify you about the account.
+- Other users will see the post and they will express their feelings by: liking and commenting on the post.
+ And all those interactions will notify you about the account.
 ```
 ```bash
-- Users can unlike posts they have liked, edit or delete previous comments, and they can also see <br/> specifically which users have reacted or liked the post.
+- Users can unlike posts they have liked, edit or delete previous comments.
+ And they can also see specifically which users have reacted or liked the post.
 ```
 ```bash
-- In the comments of the article, there are also functions such as: responding to comments, liking and <br/>disliking commen, pinning comments to help you freely express your feelings.
+- In the comments of the article, there are also functions such as: responding to comments, liking and disliking commen.
+ Pinning comments to help you freely express your feelings.
 ```
 ```bash
-- The search function by date makes it possible to search all the posts in a period of time and search by <br/> user helps you find all the posts of that user.
+- The search function by date makes it possible to search all the posts in a period of time.
+And search by  user helps you find all the posts of that user.
 ```
 ```bash
 - In addition, the web not only retrieves data from its channel bwl but also from wibu and nccgaming channels <br/> and has similar functions.
