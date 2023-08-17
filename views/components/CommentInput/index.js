@@ -57,6 +57,11 @@ function CommentInput(props) {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
+  React.useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.focus();
+    }
+  }, []);
 
   const handleEmojiIconClick = (event) => {
     event.stopPropagation();
