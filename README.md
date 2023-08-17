@@ -6,13 +6,21 @@
 
 BWL is a web project designed for interacting with images shared from several channels of the KOMU NCC Discord. The code is built using NestJS + MongoDB, ReactJS, Webpack,...
 
-## Installation
+## Getting Started
+
+# Installation
 
 ```bash
 $ npm install
 ```
 
-## Running the app
+# Edit
+- If you've edited the code, run this command before executing the 'run' command.
+```bash
+$ npx webpack
+```
+
+# Run
 
 - development
 ```bash
@@ -29,7 +37,7 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Test
+# Test
 
 - unit tests
 ```bash
@@ -45,6 +53,14 @@ $ npm run test:e2e
 ```bash
 $ npm run test:cov
 ```
+
+## Demo
+
+- Video - [https://youtu.be/w3OiLwThbVE](https://youtu.be/w3OiLwThbVE)
+
+<p align="center">
+  <img src="https://bwl.vn/assets/img/logo.png" width="100" height="100" alt="Ncc Logo" />
+</p>
 
 ## Website
 

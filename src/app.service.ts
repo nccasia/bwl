@@ -684,109 +684,123 @@ export class AppService {
       ])
       .exec();
   }
-  async like(messageId: string, authorId: string, onLike: boolean) {
-    const like = new this.komuLike({
+  async findLikePosts(messageId: string, authorId: string) {
+    const findLikePosts=this.komuLike.find({
       messageId,
       authorId,
-      createdTimestamp: Date.now(),
       commentId: null,
-      onLike,
-    });
-    await like.save();
-    const message = await this.komuMessage.find({ messageId });
-    await this.komuMessage.findOneAndUpdate(
-      { messageId },
-      {
-        $set: {
-          totalLike: message[0]?.totalLike ? message[0]?.totalLike + 1 : 1,
-        },
-      },
-      { new: true },
-    );
-    if (message[0]?.authorId !== authorId) {
-      const onLike = true;
-      const createdTimestamp = new Date().getTime();
-      const notification = new this.komuNotification({
+    })
+    return findLikePosts;
+  }
+  async like(messageId: string, authorId: string, onLike: boolean) {
+    const test = await this.findLikePosts(messageId, authorId)
+    if(test?.length ===0){
+      const like = new this.komuLike({
         messageId,
         authorId,
+        createdTimestamp: Date.now(),
+        commentId: null,
         onLike,
-        createdTimestamp,
-        authorNotifi: message[0]?.authorId,
       });
-      const author = await this.komuUser.find({ id: authorId }).exec();
-      await notification.save();
-      this.addEvent({
-        data: {
-          like: 'true',
-          messageId,
-          authorNotifi: message[0]?.authorId,
-          authorNotifi2: authorId,
-          notification: {
-            ...notification.toObject(),
-            ...{ message: message },
-            ...{ author: author },
+      await like.save();
+      const message = await this.komuMessage.find({ messageId });
+      await this.komuMessage.findOneAndUpdate(
+        { messageId },
+        {
+          $set: {
+            totalLike: message[0]?.totalLike ? message[0]?.totalLike + 1 : 1,
           },
         },
-      });
-    } else {
-      this.addEvent({
-        data: {
-          like: 'true',
+        { new: true },
+      );
+      if (message[0]?.authorId !== authorId) {
+        const onLike = true;
+        const createdTimestamp = new Date().getTime();
+        const notification = new this.komuNotification({
           messageId,
-        },
-      });
+          authorId,
+          onLike,
+          createdTimestamp,
+          authorNotifi: message[0]?.authorId,
+        });
+        const author = await this.komuUser.find({ id: authorId }).exec();
+        await notification.save();
+        this.addEvent({
+          data: {
+            like: 'true',
+            messageId,
+            authorNotifi: message[0]?.authorId,
+            authorNotifi2: authorId,
+            notification: {
+              ...notification.toObject(),
+              ...{ message: message },
+              ...{ author: author },
+            },
+          },
+        });
+      } else {
+        this.addEvent({
+          data: {
+            like: 'true',
+            messageId,
+          },
+        });
+      }
+      return like;
     }
-    return like;
   }
   async unlike(messageId: string, authorId: string) {
-    await this.komuLike
-      .deleteOne({
-        messageId,
-        authorId,
-        commentId: null,
-        onLike: true,
-      })
-      .exec();
-    const message = await this.komuMessage.find({ messageId });
-    await this.komuMessage.findOneAndUpdate(
-      { messageId },
-      { $set: { totalLike: message[0]?.totalLike - 1 } },
-      { new: true },
-    );
-    if (message[0]?.authorId !== authorId) {
-      const onLike = false;
-      const createdTimestamp = new Date().getTime();
-      const notification = new this.komuNotification({
-        messageId,
-        authorId,
-        onLike,
-        createdTimestamp,
-        authorNotifi: message[0]?.authorId,
-      });
-      const author = await this.komuUser.find({ id: authorId }).exec();
-      await notification.save();
-      this.addEvent({
-        data: {
-          like: 'false',
+    const test = await this.findLikePosts(messageId, authorId)
+    if(test?.length === 1){
+      await this.komuLike
+        .deleteOne({
           messageId,
+          authorId,
+          commentId: null,
+          onLike: true,
+        })
+        .exec();
+      const message = await this.komuMessage.find({ messageId });
+      await this.komuMessage.findOneAndUpdate(
+        { messageId },
+        { $set: { totalLike: message[0]?.totalLike - 1 } },
+        { new: true },
+      );
+      if (message[0]?.authorId !== authorId) {
+        const onLike = false;
+        const createdTimestamp = new Date().getTime();
+        const notification = new this.komuNotification({
+          messageId,
+          authorId,
+          onLike,
+          createdTimestamp,
           authorNotifi: message[0]?.authorId,
-          authorNotifi2: authorId,
-          notification: {
-            ...notification.toObject(),
-            ...{ message: message },
-            ...{ author: author },
+        });
+        const author = await this.komuUser.find({ id: authorId }).exec();
+        await notification.save();
+        this.addEvent({
+          data: {
+            like: 'false',
+            messageId,
+            authorNotifi: message[0]?.authorId,
+            authorNotifi2: authorId,
+            notification: {
+              ...notification.toObject(),
+              ...{ message: message },
+              ...{ author: author },
+            },
           },
-        },
-      });
-    } else {
-      this.addEvent({
-        data: {
-          like: 'false',
-          messageId,
-        },
-      });
+        });
+      } else {
+        this.addEvent({
+          data: {
+            like: 'false',
+            messageId,
+          },
+        });
+      }
+      return true;
     }
-    return true;
   }
   async getNotifications(authorId: string, page: number, size: number) {
     return await this.komuNotification

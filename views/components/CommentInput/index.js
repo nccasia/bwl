@@ -35,7 +35,7 @@ function CommentInput(props) {
       setOpenEmoji(false);
     }
   };
-
+  const [innerWidth, setInnerWidth] = React.useState(window.innerWidth);
   React.useEffect(() => {
     if (props?.input !== '') {
       textareaRef.current.innerText = props?.input;
@@ -46,8 +46,15 @@ function CommentInput(props) {
       textarea.style.height = textarea.scrollHeight + 'px';
     });
     document.addEventListener('mousedown', handleClickOutside);
+    const handleResize = () => {
+      if (window.innerWidth) {
+        setInnerWidth(window.innerWidth);
+      }
+    };
+    window.addEventListener('resize', handleResize);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
@@ -112,13 +119,14 @@ function CommentInput(props) {
               onClick={handleEmojiIconClick}
             />
             {openEmoji && (
-              <div className="emoji-box">
+              <div className="emoji-box-comment">
                 <Picker
                   data={data}
                   onEmojiSelect={onEmojiClick}
                   theme={state.background ? 'dark' : 'light'}
                   onClick={handleInputClick}
-                  style={{ fontFamily: font }}
+                  style={{ fontFamily: font}}
+                  perLine={innerWidth > 400 ? 9 : 6}
                 />
               </div>
             )}
