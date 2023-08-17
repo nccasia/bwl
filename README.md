@@ -2,11 +2,11 @@
   <a href="http://bwl.vn/" target="blank"><img src="https://bwl.vn/assets/img/logo.png" width="100" height="100" alt="Ncc Logo" /></a>
 </p>
 
-## Description
+# Description
 
 BWL is a web project designed for interacting with images shared from several channels of the KOMU NCC Discord. The code is built using NestJS + MongoDB, ReactJS, Webpack,...
 
-## Basic functions of Website
+# Basic functions of Website
 
 - Web bwl, in addition to taking photos from the BWL channel on discord, users can post images directly on the web, helping you quickly share the moments you want
 
@@ -22,21 +22,21 @@ BWL is a web project designed for interacting with images shared from several ch
 
 - In addition, the web not only retrieves data from its channel bwl but also from wibu and nccgaming channels and has similar functions.
 
-## Getting Started
+# Getting Started
 
-# Installation
+## Installation
 
 ```bash
 $ npm install
 ```
 
-# Edit
+## Edit
 - If you've edited the code, run this command before executing the 'run' command.
 ```bash
 $ npx webpack
 ```
 
-# Run
+## Run
 
 - development
 ```bash
@@ -53,7 +53,7 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-# Test
+## Test
 
 - unit tests
 ```bash
@@ -70,10 +70,10 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Demo
+# Demo
 
 - Video - [https://youtu.be/w3OiLwThbVE](https://youtu.be/w3OiLwThbVE)
 
-## Website
+# Website
 
 - Website - [https://bwl.vn/](https://bwl.vn/)
