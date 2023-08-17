@@ -22,13 +22,21 @@ BWL is a web project designed for interacting with images shared from several ch
 
 - In addition, the web not only retrieves data from its channel bwl but also from wibu and nccgaming channels and has similar functions.
 
-## Installation
+## Getting Started
+
+# Installation
 
 ```bash
 $ npm install
 ```
 
-## Running the app
+# Edit
+- If you've edited the code, run this command before executing the 'run' command.
+```bash
+$ npx webpack
+```
+
+# Run
 
 - development
 ```bash
@@ -45,7 +53,7 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Test
+# Test
 
 - unit tests
 ```bash
@@ -61,6 +69,10 @@ $ npm run test:e2e
 ```bash
 $ npm run test:cov
 ```
+
+## Demo
+
+- Video - [https://youtu.be/w3OiLwThbVE](https://youtu.be/w3OiLwThbVE)
 
 ## Website
 
