@@ -48,10 +48,11 @@
     --border: var(--c-border-active);
     --shadow: var(--c-shadow-active);
   }
-  .emoji-box {
+  .emoji-box-comment {
     position: absolute;
-    top: 40px;
-    right: 0;
+    top: calc(100% + 5px);
+    left: -5px;
+    width: 100%;
     z-index: 9999;
   }
   input {

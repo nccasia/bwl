@@ -9,6 +9,7 @@ import './style.scss';
 import axios from 'axios';
 import { showToast } from '../../util/showToast';
 import ClearIcon from '@mui/icons-material/Clear';
+import { Buffer } from 'buffer';
 
 function UploadDialog(props) {
   const { state, dispatch } = useStore();
@@ -39,6 +40,23 @@ function UploadDialog(props) {
           setData(formData);
         } catch (error) {
           setOpenImage(false);
+        }
+      }else if (item.type === 'text/plain') {
+        const base64Data = await new Promise((resolve) => item.getAsString(resolve));
+        if (base64Data.startsWith('data:image/')) {
+            const rawData = base64Data.split(',')[1];
+            const byteArray = new Uint8Array(Buffer.from(rawData, 'base64'));
+            const imageBlob = new Blob([byteArray], { type: base64Data.split(':')[1].split(';')[0] });
+            try {
+                await createImageBitmap(imageBlob);
+                const imageUrl = URL.createObjectURL(imageBlob);
+                setImage(imageUrl);
+                setOpenImage(true);
+                const formData = await convertImageUrlToFormData(imageUrl);
+                setData(formData);
+            } catch (error) {
+                setOpenImage(false);
+            }
         }
       }
     }
@@ -209,7 +227,7 @@ function UploadDialog(props) {
               }}
             />
             <Tooltip title="Upload image">
-              <Button component="span">
+              <Button component="span" sx={{minWidth: "20px"}}>
                 <PhotoCameraIcon sx={{ fontSize: '20px' }} />
               </Button>
             </Tooltip>
@@ -318,3 +336,4 @@ function UploadDialog(props) {
 }
 
 export default UploadDialog;
+

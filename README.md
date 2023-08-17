@@ -1,30 +1,28 @@
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
+  <a href="http://bwl.vn/" target="blank"><img src="https://bwl.vn/assets/img/logo.png" width="100" height="100" alt="Ncc Logo" /></a>
 </p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+# Description
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+BWL is a web project designed for interacting with images shared from several channels of the KOMU NCC Discord. The code is built using NestJS + MongoDB, ReactJS, Webpack,...
 
-## Description
+# Basic functions of Website
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- Web bwl, in addition to taking photos from the BWL channel on discord, users can post images directly on the web, helping you quickly share the moments you want
+
+- On that post, you can edit or delete the post if you don't like it
+  
+- Other users will see the post and they will express their feelings by: liking and commenting on the post, and all those interactions will notify you about the account.
+
+- Users can unlike posts they have liked, edit or delete previous comments, and they can also see specifically which users have reacted or liked the post.
+  
+- In the comments of the article, there are also functions such as: responding to comments, liking and disliking commen, pinning comments to help you freely express your feelings.
+
+- The search function by date makes it possible to search all the posts in a period of time, and search by  user helps you find all the posts of that user.
+
+- In addition, the web not only retrieves data from its channel bwl but also from wibu and nccgaming channels and has similar functions.
+
+# Getting Started
 
 ## Installation
 
@@ -32,42 +30,50 @@
 $ npm install
 ```
 
-## Running the app
-
+## Edit
+- If you've edited the code, run this command before executing the 'run' command.
 ```bash
-# development
+$ npx webpack
+```
+
+## Run
+
+- development
+```bash
 $ npm run start
+```
 
-# watch mode
+- watch mode
+```bash
 $ npm run start:dev
+```
 
-# production mode
+- production mode
+```bash
 $ npm run start:prod
 ```
 
 ## Test
 
+- unit tests
 ```bash
-# unit tests
 $ npm run test
+```
 
-# e2e tests
+- e2e tests
+```bash
 $ npm run test:e2e
+```
 
-# test coverage
+- test coverage
+```bash
 $ npm run test:cov
 ```
 
-## Support
+# Demo
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- Video - [https://youtu.be/w3OiLwThbVE](https://youtu.be/w3OiLwThbVE)
 
-## Stay in touch
+# Website
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+- Website - [https://bwl.vn/](https://bwl.vn/)

@@ -40,7 +40,8 @@ const CommentItem = (props) => {
     if (divCommentRef?.current && divCommentRef?.current?.scrollHeight) {
       setHidenHeight(() => divCommentRef?.current?.scrollHeight);
     }
-  }, [props?.content, divCommentRef?.current?.scrollHeight]);
+  }, [props?.content, divCommentRef, openEdit]);
+
   const handleClickComment = async () => {
     if (input !== '') {
       if (state.author?.id) {
