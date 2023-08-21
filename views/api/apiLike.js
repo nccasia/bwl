@@ -26,7 +26,7 @@ export const postLike = async (messageId, authorId, onLike) => {
       },
       method: 'POST',
     });
-    showToast('success', res?.data?.message);
+    // showToast('success', res?.data?.message);
   } catch (error) {
     showToast('error', error?.response?.data?.message);
     return {};
