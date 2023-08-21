@@ -44,7 +44,7 @@ export const postComment = async (index) => {
       data: index,
       method: 'POST',
     });
-    showToast('success', res?.data?.message);
+    // showToast('success', res?.data?.message);
   } catch (error) {
     showToast('error', error?.response?.data?.message);
     return {};
