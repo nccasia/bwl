@@ -25,7 +25,6 @@
         background-color: #fff;
         transition: transform 1s ease; /* Áp dụng hiệu ứng chuyển động */
         transition-duration: 0.5s; /* Áp dụng hiệu ứng chuyển động */
-        
       }
       .open {
         left: 0; /* Di chuyển sidebar vào màn hình */
@@ -36,6 +35,37 @@
         font-size: 25px;
         color: #a1a1b6;
       }
+    }
+  }
+  .channel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5px;
+    width: 100%;
+    color: #6c7588;
+    border-radius: 5px;
+    padding: 10px;
+    .channel-header-item {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+      h1 {
+        font-size: 16px;
+      }
+      .channel-header-name {
+        h2 {
+          font-weight: 500;
+          margin-bottom: 3px;
+          font-size: 15px;
+        }
+        p {
+          font-size: 12px;
+        }
+      }
+    }
+    .res-onclick-channel {
+      display: none;
     }
   }
   .header-left {
@@ -183,5 +213,16 @@
   .dialog-button-dark_notifi::before,
   .dialog-button-light_notifi::before {
     right: 16%;
+  }
+}
+@media (max-width: 550px) {
+  .nav-header {
+    .channel-header {
+      .channel-header-item {
+        .channel-header-name {
+          display: none;
+        }
+      }
+    }
   }
 }
