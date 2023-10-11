@@ -26,6 +26,28 @@
       padding: 10px;
       min-height: 80vh;
       border-radius:5px;
+      .res-channels{
+        display: none;
+        position: fixed;
+        top: 60px;
+        right: 0;
+        z-index: 9999;
+        width: 50%;
+        background-color: white;
+        padding: 10px 10px 0 10px;
+        height: calc(100vh - 60px);
+        animation: fadein 0.2s ease-out;
+        .res-channel-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0 5px;
+          margin-bottom: 5px;
+          .icon_clear {
+            animation: fadeout 1s ease-out;
+          }
+        }
+      }
     }
     .css-19kzrtu {
       padding: 0;
@@ -34,6 +56,9 @@
       align-items: center;
       display: flex;
       justify-content: space-between;
+      .res-onclick-channel{
+        display: none;
+      }
     }
   }
   .scrollUp {
@@ -47,6 +72,7 @@
     border-radius: 50%;
     border: 1px solid #0000004d;
   }
+
 
 }
 @keyframes fadeIn {
@@ -109,6 +135,99 @@
       position:relative;
       .res-users{
         width: auto;
+      }
+      .main-tabs{
+        .res-channels{
+          display: block;
+        }
+      }
+      .box-tabs{
+        .res-onclick-channel{
+          display: block;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}
+@media (max-width: 600px) {
+  .main-container{
+    .main-content{
+      .main-tabs{
+        .res-channels{
+          width: 70%;
+        }
+      }
+    }
+  }
+}
+@keyframes fadein {
+  from {
+    opacity: 0;
+    width: 0;
+  }
+  to {
+    opacity: 1;
+    width: 50%;
+  }
+}
+
+@keyframes fadeout {
+  from {
+    opacity: 1;
+    width: 50%;
+  }
+  to {
+    opacity: 0;
+    width: 0;
+  }
+}
+@media (max-width: 500px) {
+  .main-container{
+    .main-content{
+      .main-tabs{
+        .res-channels{
+          width: 80%;
+          animation: fadein 0.2s ease-out;
+          .res-channel-header{
+            .icon_clear {
+              animation: fadeout 0.2s ease-out;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @keyframes fadein {
+    from {
+      opacity: 0;
+      width: 0;
+    }
+    to {
+      opacity: 1;
+      width: 80%;
+    }
+  }
+
+  @keyframes fadeout {
+    from {
+      opacity: 1;
+      width: 80%;
+    }
+    to {
+      opacity: 0;
+      width: 0;
+    }
+  }
+}
+@media (max-width: 400px) {
+  .main-container{
+    .main-content{
+      .main-tabs{
+        .res-channels{
+          width: 85%;
+        }
       }
     }
   }

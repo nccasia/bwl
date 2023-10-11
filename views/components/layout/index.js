@@ -10,6 +10,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import UploadPost from '../UploadPost';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleChevronUp } from '@fortawesome/free-solid-svg-icons';
+import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
@@ -18,11 +19,17 @@ import TabPanel from '@mui/lab/TabPanel';
 import ContentRight from '../ContentRight';
 import ChannelHeader from '../ChannelHeader';
 
+import ClearIcon from '@mui/icons-material/Clear';
+import { getChannel } from '../../api/apiPosts';
 
-const MainContent = () => {
+const MainContent = (props) => {
   const { state, dispatch } = useStore();
   const [scroll, setScroll] = React.useState(false);
   const [scrollY, setScrollY] = React.useState(0);
+
+  const [openUsers, setOpenUsers] = React.useState(false);
+  const inputRef = React.useRef(null);
+
   const [innerWidth, setInnerWidth] = React.useState(window.innerWidth);
   React.useEffect(() => {
     const handleScroll = () => {
@@ -45,9 +52,12 @@ const MainContent = () => {
     window.addEventListener('resize', handleResize);
     window.addEventListener('scroll', () => {
       handleScroll();
-      if (window.scrollY + window.innerHeight >= document.body.scrollHeight - 5 ) {
-        if(!state.loadingPost && state.page !== -1){
-          useDataDebouncer(dispatch({type: "CHANGE_PAGE"}), 500);
+      if (
+        window.scrollY + window.innerHeight >=
+        document.body.scrollHeight - 5
+      ) {
+        if (!state.loadingPost && state.page !== -1) {
+          useDataDebouncer(dispatch({ type: 'CHANGE_PAGE' }), 500);
         }
       }
     });
@@ -84,6 +94,21 @@ const MainContent = () => {
     setValue(newValue);
   };
 
+  // 
+  React.useEffect(() => {
+    if (state.channelList?.length === 0 && props?.innerWidth <= 986) {
+      console.log(props?.innerWidth )
+      getChannel(dispatch);
+    }
+  }, [state.channelList, props?.innerWidth]);
+
+  const handlehinebox = () => {
+    inputRef.current.classList.add('icon_clear');
+    setTimeout(() => {
+      setOpenUsers(false);
+    }, 190);
+  };
+
   return (
     <div style={{ backgroundColor: state.background ? 'black' : '#f5f5f500' }}>
       <div className="main-container">
@@ -95,7 +120,7 @@ const MainContent = () => {
             backgroundColor: state.background ? 'black' : '#f5f5f500',
           }}
         >
-          <ChannelHeader innerWidth={innerWidth} />
+          {/* <ChannelHeader innerWidth={innerWidth} /> */}
           <TabContext value={value}>
             <div
               className="main-tabs"
@@ -138,10 +163,46 @@ const MainContent = () => {
                     />
                   )}
                 </TabList>
+                {/*  */}
+                <p
+                  className="res-onclick-channel"
+                  onClick={() => setOpenUsers(true)}
+                >
+                  <PersonSearchIcon
+                    sx={{ fontSize: '25px', color: '#6C7588' }}
+                  />
+                </p>
+              
               </Box>
+              {openUsers && (
+                  <div
+                    ref={inputRef}
+                    className="res-channel"
+                    style={{
+                      backgroundColor: state.background
+                        ? 'rgb(36, 37, 38)'
+                        : 'white',
+                    }}
+                  >
+                    <div className="res-channel-header">
+                      <PersonSearchIcon
+                        sx={{ fontSize: '28px', color: '#6C7588' }}
+                      />
+                      <ClearIcon
+                        sx={{
+                          fontSize: '20px',
+                          color: '#6C7588',
+                          cursor: 'pointer',
+                        }}
+                        onClick={() => handlehinebox()}
+                      />
+                    </div>
+                    {<ContentRight/>}
+                  </div>
+                )}
               <TabPanel value="1">
-                {state.author?.id && <UploadPost/>}
-                <Container/>
+                {state.author?.id && <UploadPost />}
+                <Container />
                 {state.loadingPost && (
                   <div className="notifi-progress">
                     <CircularProgress sx={{ color: 'rgb(108, 117, 136)' }} />
