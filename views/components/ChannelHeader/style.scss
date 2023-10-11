@@ -95,13 +95,6 @@
 }
 
 @media (max-width: 500px) {
-  .res-channel {
-    width: 80%;
-    animation: fadein 0.2s ease-out;
-  }
-  .icon_clear {
-    animation: fadeout 0.2s ease-out;
-  }
   @keyframes fadein {
     from {
       opacity: 0;
@@ -123,6 +116,14 @@
       width: 0;
     }
   }
+  .res-channel {
+    width: 80%;
+    animation: fadein 0.2s ease-out;
+  }
+  .icon_clear {
+    animation: fadeout 0.2s ease-out;
+  }
+ 
   .channel-header-container {
     .channel-header-item {
       h1 {
