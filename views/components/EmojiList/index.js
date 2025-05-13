@@ -4,6 +4,7 @@ import './style.scss';
 import { getReactions } from '../../api/apiReactions';
 import { getLikes } from '../../api/apiLike';
 
+
 function EmojiList(props) {
   const [listReactions, setListReactions] = React.useState([]);
   const [like, setLike] = React.useState([]);
@@ -72,41 +73,41 @@ function EmojiList(props) {
     <div className="list-reaction-like">
       {props.open !== 'like-icon-x' && listReactions && props.open
         ? listReactions?.map((main, index) => {
-            if (props.open === main?.emoji) {
-              return (
-                <div key={index} className="list-reaction-user">
-                  {main?.author[0]?.id ? (
-                    <img
-                      className="list-notifi-image"
-                      src={`https://cdn.discordapp.com/avatars/${main?.author[0]?.id}/${main?.author[0]?.avatar}`}
-                      alt="avatar"
-                    />
-                  ) : (
-                    <img
-                      src="./assets/img/person.png"
-                      className="img-people-avatar"
-                      alt="avatar"
-                    />
-                  )}
-                  {main?.author[0]?.username
-                    ? main?.author[0]?.username
-                    : 'The Lost'}
-                </div>
-              );
-            }
-          })
+          if (props.open === main?.emoji) {
+            return (
+              <div key={index} className="list-reaction-user">
+                {main?.author[0]?.id ? (
+                  <img
+                    className="list-notifi-image"
+                    src={`${main?.author[0]?.avatar}`}
+                    alt="avatar"
+                  />
+                ) : (
+                  <img
+                    src="./assets/img/person.png"
+                    className="img-people-avatar"
+                    alt="avatar"
+                  />
+                )}
+                {main?.author[0]?.username
+                  ? main?.author[0]?.username
+                  : 'The Lost'}
+              </div>
+            );
+          }
+        })
         : null}
       {props.open === 'like-icon-x' && like
         ? like?.map((main, index) => {
-            return (
-              <div key={index} className="list-reaction-user">
-                <img
-                  src={`https://cdn.discordapp.com/avatars/${main?.author[0]?.id}/${main?.author[0]?.avatar}`}
-                />
-                <p>{main?.author[0]?.username}</p>
-              </div>
-            );
-          })
+          return (
+            <div key={index} className="list-reaction-user">
+              <img
+                src={`${main?.author[0]?.avatar}`}
+              />
+              <p>{main?.author[0]?.username}</p>
+            </div>
+          );
+        })
         : null}
       {numberTotal > props?.page && (
         <p className="add-list" onClick={() => handleClickPage(props?.page)}>

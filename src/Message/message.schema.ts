@@ -16,9 +16,6 @@ export class Message {
   channelId: string;
 
   @Prop()
-  guildId: string;
-
-  @Prop()
   createdTimestamp: number;
 
   @Prop()

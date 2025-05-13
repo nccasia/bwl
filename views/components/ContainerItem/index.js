@@ -66,8 +66,8 @@ const ContainerItem = (props) => {
         <img
           src={
             props?.source
-              ? `https://bwl.vn/assets/images/${props?.links[0]}`
-              : `https://bwl.vn/images/${props?.links[0]}`
+            ? `${props?.links[0]}`
+              : `/assets/images/${props?.links[0]}`
           }
         />
       </div>

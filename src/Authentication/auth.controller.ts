@@ -4,8 +4,8 @@ import { AuthGuard } from '@nestjs/passport';
 
 @Controller('auth')
 export class AuthController {
-  @Get('discord')
-  @UseGuards(AuthGuard('discord'))
+  @Get('mezon')
+  @UseGuards(AuthGuard('mezon'))
   async getUserFromDiscordLogin(@Req() req): Promise<any> {
     return req.user;
   }

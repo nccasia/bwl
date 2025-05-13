@@ -86,8 +86,8 @@ function SearchPost(props) {
                     <img
                       src={
                         item?.source
-                          ? `https://bwl.vn/assets/images/${item?.links[0]}`
-                          : `https://bwl.vn/images/${item?.links[0]}`
+                        ? `${item?.links[0]}`
+                        : `https://bwl.vn/${item?.links[0]}`
                       }
                     />
                   </div>

@@ -118,7 +118,7 @@ const CommentItem = (props) => {
         <div className="author-image">
           {props?.author[0]?.id ? (
             <img
-              src={`https://cdn.discordapp.com/avatars/${props?.author[0]?.id}/${props?.author[0]?.avatar}`}
+              src={`${props?.author[0]?.avatar}`}
             />
           ) : (
             <img

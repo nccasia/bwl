@@ -45,32 +45,32 @@ function OnlineUsers(props) {
         <div>
           {state.users
             ? state.users?.map((item) => {
-                return (
-                  <div key={Number(item?.id)} className="list-user">
-                    <div className="list-user-author">
-                      <img
-                        src={`https://cdn.discordapp.com/avatars/${item?.id}/${item?.avatar}`}
-                      />
-                      <p>{item?.username}</p>
-                    </div>
-                    <p
-                      className="post-onclick-p"
-                      onClick={() => {
-                        if (item?.total) {
-                          dispatch({
-                            type: 'CHANGE_PAGE_USERS_POST',
-                            payload: item?.id,
-                          });
-                        }
-                      }}
-                    >
-                      {item?.total
-                        ? changeNumber(item?.total) + ' Posts'
-                        : ' 0 Posts'}
-                    </p>
+              return (
+                <div key={Number(item?.id)} className="list-user">
+                  <div className="list-user-author">
+                    <img
+                      src={`${item?.avatar}`}
+                    />
+                    <p>{item?.username}</p>
                   </div>
-                );
-              })
+                  <p
+                    className="post-onclick-p"
+                    onClick={() => {
+                      if (item?.total) {
+                        dispatch({
+                          type: 'CHANGE_PAGE_USERS_POST',
+                          payload: item?.id,
+                        });
+                      }
+                    }}
+                  >
+                    {item?.total
+                      ? changeNumber(item?.total) + ' Posts'
+                      : ' 0 Posts'}
+                  </p>
+                </div>
+              );
+            })
             : null}
         </div>
       )}
@@ -78,47 +78,47 @@ function OnlineUsers(props) {
         <div>
           {state.channelList
             ? state.channelList?.map((item) => {
-                return (
+              return (
+                <div
+                  key={Number(item?.id)}
+                  className="list-channel"
+                  onClick={() => {
+                    if (item?.id !== state.channel) {
+                      handleClickChangeChannel(item?.id);
+                    }
+                  }}
+                >
                   <div
-                    key={Number(item?.id)}
-                    className="list-channel"
-                    onClick={() => {
-                      if (item?.id !== state.channel) {
-                        handleClickChangeChannel(item?.id);
-                      }
+                    className="list-channel-icon"
+                    style={{
+                      color:
+                        item?.id === state.channel
+                          ? 'rgb(25, 118, 210'
+                          : '#6C7588',
                     }}
                   >
-                    <div
-                      className="list-channel-icon"
-                      style={{
-                        color:
-                          item?.id === state.channel
-                            ? 'rgb(25, 118, 210'
-                            : '#6C7588',
-                      }}
-                    >
-                      {item?.id === state.channel ? (
-                        <NavigateNextIcon sx={{ color: 'rgb(25, 118, 210' }} />
-                      ) : (
-                        <NavigateBeforeIcon sx={{ color: '#6C7588' }} />
-                      )}
-                      {/* <p>{item?.icon}</p> */}
-                      <p>{item?.name}</p>
-                    </div>
-                    <p
-                      className="list-channel-total"
-                      style={{
-                        color:
-                          item?.id === state.channel
-                            ? 'rgb(25, 118, 210'
-                            : '#6C7588',
-                      }}
-                    >
-                      {changeNumber(item?.total) + ' Posts'}
-                    </p>
+                    {item?.id === state.channel ? (
+                      <NavigateNextIcon sx={{ color: 'rgb(25, 118, 210' }} />
+                    ) : (
+                      <NavigateBeforeIcon sx={{ color: '#6C7588' }} />
+                    )}
+                    {/* <p>{item?.icon}</p> */}
+                    <p>{item?.name}</p>
                   </div>
-                );
-              })
+                  <p
+                    className="list-channel-total"
+                    style={{
+                      color:
+                        item?.id === state.channel
+                          ? 'rgb(25, 118, 210'
+                          : '#6C7588',
+                    }}
+                  >
+                    {changeNumber(item?.total) + ' Posts'}
+                  </p>
+                </div>
+              );
+            })
             : null}
         </div>
       )}
