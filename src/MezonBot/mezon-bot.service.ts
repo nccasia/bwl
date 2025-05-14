@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ChannelMessage, MezonClient } from 'mezon-sdk';
 import { Model } from 'mongoose';
-import { AuthService } from 'src/Authentication/auth.service';
-import { WHITELIST_CHANNELS } from 'src/constants';
 import { AppService } from '../app.service';
+import { AuthService } from '../Authentication/auth.service';
 import { Channel, ChannelDocument } from '../Channel/channel.schema';
+import { WHITELIST_CHANNELS } from '../constants';
 @Injectable()
 export class MezonBotService {
   private _mezonClient: MezonClient;
