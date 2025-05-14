@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { ChannelMessage, MezonClient } from 'mezon-sdk';
 import { Model } from 'mongoose';
 import { AuthService } from 'src/Authentication/auth.service';
+import { WHITELIST_CHANNELS } from 'src/constants';
 import { AppService } from '../app.service';
 import { Channel, ChannelDocument } from '../Channel/channel.schema';
 @Injectable()
@@ -24,6 +25,10 @@ export class MezonBotService {
 
   public listenChanelMessages = async (event: ChannelMessage) => {
     // Handle the channel message event here
+    if (!WHITELIST_CHANNELS.includes(event.channel_id)) {
+      return;
+    }
+
     const channel = this._mezonClient.channels.get(event.channel_id);
     if (event.attachments && event.attachments.length > 0) {
       const existsChannel = await this.channelModel.findOne({ id: channel.id });
