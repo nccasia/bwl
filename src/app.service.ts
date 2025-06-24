@@ -2,24 +2,26 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Reaction, ReactionDocument } from './Reaction/reaction.schema';
-import { emojis } from './constants';
-import { Message, MessageDocument } from './Message/message.schema';
+import { Observable, Subject } from 'rxjs';
+import { v4 as uuidv4 } from 'uuid';
+import { Channel, ChannelDocument } from './Channel/channel.schema';
 import { Comment, CommentDocument } from './Comment/comment.schema';
+import { emojis } from './constants';
+import { KomuUsers, KomuUsersDocument } from './Komu_users/komu_users.schema';
 import { Like, LikeDocument } from './Like/like.schema';
+import { Message, MessageDocument } from './Message/message.schema';
 import {
   Notification,
   NotificationDocument,
 } from './Notification/notification.schema';
-import { Observable, Subject } from 'rxjs';
-import { KomuUsers, KomuUsersDocument } from './Komu_users/komu_users.schema';
-import { channel, guild, channelList } from './Channel';
-import { v4 as uuidv4 } from 'uuid';
+import { Reaction, ReactionDocument } from './Reaction/reaction.schema';
 
 @Injectable()
 export class AppService {
   commentModel: any;
   constructor(
+    @InjectModel(Channel.name)
+    private readonly komuChannel: Model<ChannelDocument>,
     @InjectModel(Reaction.name)
     private readonly komuReaction: Model<ReactionDocument>,
     @InjectModel(Message.name)
@@ -39,6 +41,7 @@ export class AppService {
   private setTime = 0;
   private checkForChanges() {
     const checkChanges = async (index: number) => {
+      const channelList = await this.komuChannel.find({}).exec();
       const currentTime = index;
       const channelIdArray = channelList.map((channel) => channel.id);
       const aggregatorOpts = [
@@ -65,11 +68,6 @@ export class AppService {
     };
     const findTime = async () => {
       const result = await this.komuMessage.aggregate([
-        {
-          $match: {
-            channelId: channel,
-          },
-        },
         {
           $group: {
             _id: null,
@@ -110,7 +108,6 @@ export class AppService {
   async findMessageAuthorId(authorId: string): Promise<any> {
     return await this.komuMessage.find({
       authorId: authorId,
-      channelId: channel,
     });
   }
   async findCommentFromDiscordId(messageId: string): Promise<any> {
@@ -1253,7 +1250,7 @@ export class AppService {
     const count = await this.komuMessage.countDocuments({ messageId });
     return count > 0;
   }
-  async addPost(authorId: string, links: string, channelId: string) {
+  async addPost(authorId: string, links: string[], channelId: string, source?: boolean) {
     let messageId: string;
     let isMessageIdExists1: boolean;
 
@@ -1263,13 +1260,12 @@ export class AppService {
     } while (isMessageIdExists1);
 
     const addPost = new this.komuMessage({
-      links: [links],
+      links: links,
       channelId: channelId,
-      guildId: guild,
       createdTimestamp: new Date().getTime(),
       authorId: authorId,
       messageId,
-      source: true,
+      source: source ? source : false,
     });
     await addPost.save();
     return addPost;
@@ -1578,10 +1574,19 @@ export class AppService {
       .exec();
   }
   async getChannelTotal() {
+    const listChannel = await this.komuChannel.find()
+    if (!listChannel || listChannel.length === 0) {
+      return null;
+    }
     const list = await Promise.all(
-      channelList?.map(async (item: any) => {
+      listChannel?.map(async (item) => {
         const length = await this.findLengthMessage(item?.id);
-        return { ...item, ...{ total: length } };
+        return {
+          id: item?.id,
+          name: item?.name,
+          title: item?.title,
+          type: item?.type,
+          ...{ total: length } };
       }),
     );
     return list;

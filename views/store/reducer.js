@@ -28,7 +28,7 @@ const initState = {
   lengthUsers: 0,
   searchTime: [],
   searchUsersPosts: '',
-  channel: '924543969357099018',
+  channel: '',
   channelList: [],
 };
 
@@ -701,6 +701,7 @@ function reducer(state, action) {
       return {
         ...state,
         channelList: action.payload,
+        channel: action.payload[0]?.id,
       };
     default:
       throw new Error('Error');

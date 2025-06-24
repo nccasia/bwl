@@ -54,24 +54,24 @@ function HeaderPage() {
       </div>
       <div
         className="channel-header"
-        // style={{
-        //   backgroundColor: state.background ? 'rgb(36, 37, 38)' : 'white',
-        // }}
+      // style={{
+      //   backgroundColor: state.background ? 'rgb(36, 37, 38)' : 'white',
+      // }}
       >
         {state.channelList
           ? state.channelList
-              ?.filter((item) => item?.id === state.channel)
-              .map((item) => {
-                return (
-                  <div className="channel-header-item" key={item?.id}>
-                    {/* <h1>{item?.icon}</h1> */}
-                    <div className="channel-header-name">
-                      <h2>Welcome to {item?.name}</h2>
-                      <p>{item?.title}</p>
-                    </div>
+            ?.filter((item) => item?.id === state.channel)
+            .map((item) => {
+              return (
+                <div className="channel-header-item" key={item?.id}>
+                  {/* <h1>{item?.icon}</h1> */}
+                  <div className="channel-header-name">
+                    <h2>Welcome to {item?.name}</h2>
+                    <p>{item?.title}</p>
                   </div>
-                );
-              })
+                </div>
+              );
+            })
           : null}
       </div>
       {!state.author?.id ? (
@@ -134,7 +134,7 @@ function HeaderPage() {
           </div>
           <div className="person-icon logout" onClick={() => handleClick()}>
             <img
-              src={`https://cdn.discordapp.com/avatars/${state.author?.id}/${state.author?.avatar}`}
+              src={`${state.author?.avatar}`}
               className="img-people-avatar"
               alt="avatar"
             />

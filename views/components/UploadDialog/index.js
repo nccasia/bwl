@@ -10,7 +10,6 @@ import axios from 'axios';
 import { showToast } from '../../util/showToast';
 import ClearIcon from '@mui/icons-material/Clear';
 import { Buffer } from 'buffer';
-
 function UploadDialog(props) {
   const { state, dispatch } = useStore();
   const [data, setData] = React.useState();
@@ -41,22 +40,22 @@ function UploadDialog(props) {
         } catch (error) {
           setOpenImage(false);
         }
-      }else if (item.type === 'text/plain') {
+      } else if (item.type === 'text/plain') {
         const base64Data = await new Promise((resolve) => item.getAsString(resolve));
         if (base64Data.startsWith('data:image/')) {
-            const rawData = base64Data.split(',')[1];
-            const byteArray = new Uint8Array(Buffer.from(rawData, 'base64'));
-            const imageBlob = new Blob([byteArray], { type: base64Data.split(':')[1].split(';')[0] });
-            try {
-                await createImageBitmap(imageBlob);
-                const imageUrl = URL.createObjectURL(imageBlob);
-                setImage(imageUrl);
-                setOpenImage(true);
-                const formData = await convertImageUrlToFormData(imageUrl);
-                setData(formData);
-            } catch (error) {
-                setOpenImage(false);
-            }
+          const rawData = base64Data.split(',')[1];
+          const byteArray = new Uint8Array(Buffer.from(rawData, 'base64'));
+          const imageBlob = new Blob([byteArray], { type: base64Data.split(':')[1].split(';')[0] });
+          try {
+            await createImageBitmap(imageBlob);
+            const imageUrl = URL.createObjectURL(imageBlob);
+            setImage(imageUrl);
+            setOpenImage(true);
+            const formData = await convertImageUrlToFormData(imageUrl);
+            setData(formData);
+          } catch (error) {
+            setOpenImage(false);
+          }
         }
       }
     }
@@ -210,7 +209,7 @@ function UploadDialog(props) {
           <div className="upload-dialog-div-user">
             {state.author?.id && (
               <img
-                src={`https://cdn.discordapp.com/avatars/${state.author?.id}/${state.author?.avatar}`}
+                src={`${state.author?.avatar}`}
                 alt="avatar"
               />
             )}
@@ -227,7 +226,7 @@ function UploadDialog(props) {
               }}
             />
             <Tooltip title="Upload image">
-              <Button component="span" sx={{minWidth: "20px"}}>
+              <Button component="span" sx={{ minWidth: "20px" }}>
                 <PhotoCameraIcon sx={{ fontSize: '20px' }} />
               </Button>
             </Tooltip>
@@ -299,11 +298,11 @@ function UploadDialog(props) {
                   image && openImage
                     ? { backgroundColor: '#00bbff', color: '#f8f8f8' }
                     : {
-                        backgroundColor: state.background
-                          ? '#0000000a'
-                          : 'white',
-                        color: 'rgb(108, 117, 136)',
-                      }
+                      backgroundColor: state.background
+                        ? '#0000000a'
+                        : 'white',
+                      color: 'rgb(108, 117, 136)',
+                    }
                 }
               >
                 {props?.type === 'add' ? 'Create' : 'Update'}
@@ -323,9 +322,9 @@ function UploadDialog(props) {
             image && openImage
               ? { backgroundColor: '#00bbff', color: '#f8f8f8' }
               : {
-                  backgroundColor: state.background ? '#0000000a' : 'white',
-                  color: 'rgb(108, 117, 136)',
-                }
+                backgroundColor: state.background ? '#0000000a' : 'white',
+                color: 'rgb(108, 117, 136)',
+              }
           }
         >
           {props?.type === 'add' ? 'Create' : 'Update'}

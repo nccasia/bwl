@@ -4,7 +4,7 @@ import './app.scss';
 import Login from './features/Login';
 import Bwl from './features/Bwl';
 import { Routes, Route } from 'react-router-dom';
-import {useStore} from "./store";
+import { useStore } from "./store";
 
 function App() {
   const {state, dispatch}=useStore();

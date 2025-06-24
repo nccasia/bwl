@@ -162,3 +162,6 @@ export const emojis = [
   { id: '1097030219489087509', name: 'becuong' },
   { id: '1044140788470263879', name: 'gion' },
 ];
+
+
+export const WHITELIST_CHANNELS = process.env.WHITELIST_CHANNEL_IDS ? process.env.WHITELIST_CHANNEL_IDS.split(',') : [];

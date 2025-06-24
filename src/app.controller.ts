@@ -1,40 +1,35 @@
 /* eslint-disable prettier/prettier */
+import { HttpService } from '@nestjs/axios';
 import {
   Controller,
+  Delete,
   Get,
-  Res,
+  Post,
   Query,
   Render,
   Req,
-  Post,
-  UnauthorizedException,
+  Res,
   Sse,
-  Delete,
-  UseInterceptors,
+  UnauthorizedException,
   UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
-import { HttpService } from '@nestjs/axios';
-import { AppService } from './app.service';
-import { Request, Response } from 'express';
-import { AuthService } from './Authentication/auth.service';
-import { first, map, Observable, switchMap } from 'rxjs';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { multerOptions } from './Util';
+import { Request, Response } from 'express';
 import * as fs from 'fs';
-
-const discordTokenUrl = 'https://discord.com/api/oauth2/token';
-const discordUserUrl = 'https://discord.com/api/users/@me';
+import { first, map, Observable, throwError } from 'rxjs';
+import { catchError, switchMap } from 'rxjs/operators';
+import { AppService } from './app.service';
+import { AuthService } from './Authentication/auth.service';
+import { multerOptions } from './Util';
 
 @Controller()
 export class AppController {
-  getHello(): any {
-    return 'Hello World!';
-  }
   constructor(
     private readonly appService: AppService,
     private httpService: HttpService,
     private authService: AuthService,
-  ) {}
+  ) { }
 
   @Sse('/api/sse')
   sse(): Observable<MessageEvent> {
@@ -45,8 +40,8 @@ export class AppController {
   async index(@Query() query: any, @Req() req: Request, @Res() res: Response) {
     if (req.cookies['token']) {
       try {
-        return this.httpService
-          .get(discordUserUrl, {
+        this.httpService
+          .get(`${process.env.MEZON_AUTH_URL}/userinfo`, {
             headers: {
               Authorization: `Bearer ${req.cookies['token']}`,
             },
@@ -57,43 +52,49 @@ export class AppController {
             }),
             map(async (user) => {
               const userDb: any = await this.appService.onlineUser(
-                user.id,
+                user.username,
                 true,
               );
               if (!userDb) {
                 await this.authService.saveUser(
-                  user.id,
+                  user.username,
                   user.username,
                   user.avatar,
-                  user.discriminator,
+                  user.display_name,
                   true,
                 );
               }
             }),
             first(),
+            catchError((error) => {
+              console.log("error: ", error)
+              throw error;
+            })
           );
       } catch (error) {
-        throw new error();
+        console.log("error: ", error)
+        res.clearCookie('token');
+        return res.redirect('/');
       }
     } else if (query.code) {
-      const body = new URLSearchParams({
-        client_id: process.env.CLIENT_ID,
-        client_secret: process.env.CLIENT_SECRET,
+      const requestBody = new URLSearchParams({
         grant_type: 'authorization_code',
         code: query.code,
+        client_secret: process.env.MEZON_CLIENT_SECRET,
+        client_id: process.env.MEZON_CLIENT_ID,
         redirect_uri: process.env.REDIRECT_URI,
-        scope: 'identify',
       });
-
       try {
         return this.httpService
-          .post(discordTokenUrl, body, {
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          .post(`${process.env.MEZON_AUTH_URL}/oauth2/token`, requestBody, {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            }
           })
           .pipe(
             switchMap((response) => {
               res.cookie('token', response.data.access_token);
-              return this.httpService.get(discordUserUrl, {
+              return this.httpService.get(`${process.env.MEZON_AUTH_URL}/userinfo`, {
                 headers: {
                   Authorization: `Bearer ${response.data.access_token}`,
                 },
@@ -104,32 +105,37 @@ export class AppController {
             }),
             map(async (user) => {
               const userDb: any = await this.appService.onlineUser(
-                user.id,
+                user.username,
                 true,
               );
               if (!userDb) {
                 await this.authService.saveUser(
-                  user.id,
+                  user.username,
                   user.username,
                   user.avatar,
-                  user.discriminator,
+                  user.display_name,
                   true,
                 );
               }
             }),
             first(),
+            catchError((error) => {
+              console.log("error: ", error)
+              throw error;
+            }),
           );
       } catch (error) {
-        throw new error();
+        console.log("error: ", error)
+        res.clearCookie('token');
+        return res.redirect('/');
       }
-    } else {
     }
   }
 
   @Get('/login')
   @Render('index')
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  login() {}
+  login() { }
 
   @Get('/api/channel')
   async getChannel(@Req() req: Request, @Res() res: Response) {
@@ -175,12 +181,23 @@ export class AppController {
   @Get('/api/login')
   async root(@Res() res: Response) {
     try {
-      const url = `https://discord.com/api/oauth2/authorize?client_id=${
-        process.env.CLIENT_ID
-      }&redirect_uri=${encodeURIComponent(
-        process.env.REDIRECT_URI,
-      )}&response_type=code&scope=identify`;
-      return res.status(200).json({ url });
+      const authServer = process.env.MEZON_AUTH_URL;
+      const clientId = process.env.MEZON_CLIENT_ID;
+      const redirectUri = process.env.REDIRECT_URI;
+      const scope = "openid offline";
+      const responseType = "code";
+      const state = new Date().getTime();
+
+      const urlSearchParams = new URLSearchParams({
+        client_id: clientId ?? "",
+        redirect_uri: redirectUri ?? "",
+        response_type: responseType ?? "",
+        scope: scope ?? "",
+        state: state.toString() ?? "",
+      });
+
+      const authUrl = `${authServer}/oauth2/auth?${urlSearchParams.toString()}`;
+      return res.status(200).json({ url: authUrl });
     } catch (error) {
       return res.status(500).json({ message: 'Internal Server Error' });
     }
@@ -204,11 +221,11 @@ export class AppController {
       const posts = await this.appService.getAll(
         Number(req.query?.page),
         Number(req.query?.size),
-        String(req.query?.messageId) ? String(req.query?.messageId) : null,
-        String(req.query?.channel),
+        String(req.query?.messageId) ?? null,
+        String(req.query?.channel) ?? null,
       );
       const size = await this.appService.findLengthMessage(
-        String(req.query?.channel),
+        String(req.query?.channel) ?? null
       );
       return res.status(200).json({ posts, size });
     } catch (error) {
@@ -237,13 +254,57 @@ export class AppController {
     }
   }
 
+  @Get('/api/current-user')
+  async getCurrentUser(@Req() req: Request, @Res() res: Response) {
+    if (!req.cookies['token']) {
+      res.clearCookie('token');
+      res.redirect('/');
+      return;
+    }
+    try {
+      this.httpService
+        .get(`${process.env.MEZON_AUTH_URL}/userinfo`, {
+          headers: {
+            Authorization: `Bearer ${req.cookies['token']}`,
+          },
+        })
+        .pipe(
+          map((userResponse) => {
+            return userResponse.data;
+          }),
+          first(),
+          catchError((error) => {
+            return throwError(() => new Error(error));
+          }),
+        )
+        .subscribe({
+          next: async (user) => {
+            const userDb: any = await this.appService.onlineUser(
+              user.username,
+              true,
+            );
+            return res.status(200).json(userDb);
+          },
+          error: (error) => {
+            console.log("Get current user error: ", error)
+            res.clearCookie('token');
+            return res.redirect('/');
+          }
+        });
+    } catch (error) {
+      console.log("Error thrown from appController.getCurrentUser: ", error)
+      res.clearCookie('token');
+      return res.redirect('/');
+    }
+
+  }
   @Post('/api/comment')
   async postComment(@Req() req: Request, @Res() res: Response) {
     if (!req.cookies['token']) {
       throw new UnauthorizedException();
     }
     return this.httpService
-      .get(discordUserUrl, {
+      .get(`${process.env.MEZON_AUTH_URL}/userinfo`, {
         headers: {
           Authorization: `Bearer ${req.cookies['token']}`,
         },
@@ -452,8 +513,9 @@ export class AppController {
       fs.copyFileSync(file.path, destinationPath);
       await this.appService.addPost(
         String(id),
-        file.filename,
+        [file.filename],
         String(channelId),
+        false,
       );
       return res.status(200).json({ message: 'Upload image successfully!' });
     } catch (error) {

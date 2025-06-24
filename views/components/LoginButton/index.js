@@ -16,7 +16,7 @@ const LoginButton = (props) => {
       {props.title === 'Logout' ? (
         <div className="logout-button-info">
           <img
-            src={`https://cdn.discordapp.com/avatars/${state.author?.id}/${state.author?.avatar}`}
+            src={`${state.author?.avatar}`}
             className="img-people-avatar"
             alt="avatar"
           />

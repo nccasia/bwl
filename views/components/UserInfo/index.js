@@ -22,7 +22,7 @@ const UserInfo = (props) => {
       <div className="userInfo-item-UserAvatar">
         {props?.author?.id ? (
           <img
-            src={`https://cdn.discordapp.com/avatars/${props?.author?.id}/${props?.author?.avatar}`}
+            src={`${props?.author?.avatar}`}
           />
         ) : (
           <img
@@ -47,7 +47,7 @@ const UserInfo = (props) => {
           <p className="userInfo-time">
             {formatDay(
               props?.createdTimestamp?.$numberDecimal ||
-                props?.createdTimestamp,
+              props?.createdTimestamp,
             )}
           </p>
         </div>

@@ -6,17 +6,17 @@ export type KomuUsersDocument = KomuUsers & Document;
 
 @Schema({ collection: 'komu_users' })
 export class KomuUsers {
-  @Prop()
+  @Prop({ unique: true })
   id: string;
 
   @Prop()
   username: string;
 
   @Prop()
-  discriminator: string;
+  display_name?: string | null;
 
   @Prop()
-  avatar: string;
+  avatar?: string | null;
 
   @Prop()
   online: boolean | null;
@@ -27,6 +27,6 @@ export const KomuUsersSchema = SchemaFactory.createForClass(KomuUsers);
 export interface IKomuUsers {
   id: string;
   username: string;
-  discriminator: string;
-  avatar: string;
+  display_name?: string | null;
+  avatar?: string | null;
 }
