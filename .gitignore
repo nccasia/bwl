@@ -38,3 +38,5 @@ lerna-debug.log*
 tsconfig.build.json
 tsconfig.json
 webpack.config.js
+# Mezon cache
+/mezon-cache
