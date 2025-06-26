@@ -5,17 +5,18 @@ import { Model } from 'mongoose';
 import { AppService } from '../app.service';
 import { AuthService } from '../Authentication/auth.service';
 import { Channel, ChannelDocument } from '../Channel/channel.schema';
-import { WHITELIST_CHANNELS } from '../constants';
 @Injectable()
 export class MezonBotService {
   private _mezonClient: MezonClient;
-
+  private whitelistChannels: string[];
   constructor(
     private readonly appService: AppService,
     private readonly authService: AuthService,
     @InjectModel(Channel.name)
     private readonly channelModel: Model<ChannelDocument>,
   ) {
+    this.whitelistChannels =
+      process.env.WHITELIST_CHANNEL_IDS?.split(',') || [];
     this._mezonClient = new MezonClient(process.env.MEZON_BOT_TOKEN);
     this._mezonClient.login().then(() => {
       console.log('Mezon bot is ready!');
@@ -25,9 +26,12 @@ export class MezonBotService {
 
   public listenChanelMessages = async (event: ChannelMessage) => {
     // Handle the channel message event here
-    if (!WHITELIST_CHANNELS.includes(event.channel_id)) {
+    console.log(this.whitelistChannels);
+    console.log('Received channel message:', event);
+    if (!this.whitelistChannels.includes(event?.channel_id)) {
       return;
     }
+    console.log('Received channel message:', event);
 
     const channel = this._mezonClient.channels.get(event.channel_id);
     if (event.attachments && event.attachments.length > 0) {

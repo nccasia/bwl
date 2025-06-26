@@ -11,7 +11,7 @@ import { changeNumber } from '../../util/changeNumber';
 function OnlineUsers(props) {
   const { state, dispatch } = useStore();
   React.useEffect(() => {
-    if (props?.type === 'channelList' && state.channelList?.length === 0) {
+    if (props?.type === 'channelList' && !state.channelsFetched && !state.loadingUsers) {
       getChannel(dispatch);
     }
     if (
@@ -25,8 +25,9 @@ function OnlineUsers(props) {
     state.search,
     state.pageUsers,
     props?.type,
-    state.channelList,
+    state.channelsFetched,
     state.channel,
+    state.loadingUsers,
   ]);
 
   const handleClickChangeChannel = (index) => {

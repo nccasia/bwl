@@ -96,11 +96,10 @@ const MainContent = (props) => {
 
   // 
   React.useEffect(() => {
-    if (state.channelList?.length === 0 && props?.innerWidth <= 986) {
-      console.log(props?.innerWidth )
+    if (!state.channelsFetched && props?.innerWidth <= 986 && !state.loadingUsers) {
       getChannel(dispatch);
     }
-  }, [state.channelList, props?.innerWidth]);
+  }, [state.channelsFetched, props?.innerWidth, state.loadingUsers]);
 
   const handlehinebox = () => {
     inputRef.current.classList.add('icon_clear');
