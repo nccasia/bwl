@@ -137,8 +137,10 @@ export const getChannel = async (dispatch) => {
       url: '/api/channel',
       method: 'GET',
     });
+
+    const channelData = res?.data?.channel ?? []
+    dispatch({ type: 'SET_CHANNEL_LIST', payload: channelData });
     dispatch({ type: 'CHANGE_LOADING_USERS', payload: false });
-    dispatch({ type: 'SET_CHANNEL_LIST', payload: res?.data?.channel });
   } catch (error) {
     showToast('error', error?.response?.data?.message);
     dispatch({ type: 'CHANGE_LOADING_USERS', payload: false });

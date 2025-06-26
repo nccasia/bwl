@@ -30,6 +30,7 @@ const initState = {
   searchUsersPosts: '',
   channel: '',
   channelList: [],
+  channelsFetched: false,
 };
 
 function reducer(state, action) {
@@ -702,6 +703,7 @@ function reducer(state, action) {
         ...state,
         channelList: action.payload,
         channel: action.payload[0]?.id,
+        channelsFetched: true,
       };
     default:
       throw new Error('Error');

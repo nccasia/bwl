@@ -15,10 +15,10 @@ function ChannelHeader(props) {
   const inputRef = useRef(null);
 
   React.useEffect(() => {
-    if (state.channelList?.length === 0 && props?.innerWidth <= 986) {
+    if (!state.channelsFetched && props?.innerWidth <= 986 && !state.loadingUsers) {
       getChannel(dispatch);
     }
-  }, [state.channelList, props?.innerWidth]);
+  }, [state.channelsFetched, props?.innerWidth, state.loadingUsers]);
 
   const handlehinebox = () => {
     inputRef.current.classList.add('icon_clear');
@@ -39,7 +39,7 @@ function ChannelHeader(props) {
           backgroundColor: state.background ? 'rgb(36, 37, 38)' : 'white',
         }}
       >
-        {state.channelList
+          {state.channelList
           ? state.channelList
               ?.filter((item) => item?.id === state.channel)
               .map((item) => {
