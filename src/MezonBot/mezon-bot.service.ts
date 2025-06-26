@@ -26,13 +26,10 @@ export class MezonBotService {
 
   public listenChanelMessages = async (event: ChannelMessage) => {
     // Handle the channel message event here
-    console.log(this.whitelistChannels);
-    console.log('Received channel message:', event);
     if (!this.whitelistChannels.includes(event?.channel_id)) {
       return;
     }
-    console.log('Received channel message:', event);
-
+    
     const channel = this._mezonClient.channels.get(event.channel_id);
     if (event.attachments && event.attachments.length > 0) {
       const existsChannel = await this.channelModel.findOne({ id: channel.id });
