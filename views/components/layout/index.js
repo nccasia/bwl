@@ -1,23 +1,22 @@
 /* eslint-disable prettier/prettier */
+import { faCircleChevronUp } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import PersonSearchIcon from '@mui/icons-material/PersonSearch';
+import TabContext from '@mui/lab/TabContext';
+import TabList from '@mui/lab/TabList';
+import TabPanel from '@mui/lab/TabPanel';
+import Box from '@mui/material/Box';
+import CircularProgress from '@mui/material/CircularProgress';
+import Tab from '@mui/material/Tab';
 import * as React from 'react';
-import Container from '../Container';
-import './style.scss';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useStore } from '../../store';
 import { useDataDebouncer } from '../../util/useDebounce';
-import CircularProgress from '@mui/material/CircularProgress';
-import UploadPost from '../UploadPost';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleChevronUp } from '@fortawesome/free-solid-svg-icons';
-import PersonSearchIcon from '@mui/icons-material/PersonSearch';
-import Box from '@mui/material/Box';
-import Tab from '@mui/material/Tab';
-import TabContext from '@mui/lab/TabContext';
-import TabList from '@mui/lab/TabList';
-import TabPanel from '@mui/lab/TabPanel';
+import Container from '../Container';
 import ContentRight from '../ContentRight';
-import ChannelHeader from '../ChannelHeader';
+import UploadPost from '../UploadPost';
+import './style.scss';
 
 import ClearIcon from '@mui/icons-material/Clear';
 import { getChannel } from '../../api/apiPosts';
@@ -171,37 +170,37 @@ const MainContent = (props) => {
                     sx={{ fontSize: '25px', color: '#6C7588' }}
                   />
                 </p>
-              
+
               </Box>
               {openUsers && (
-                  <div
-                    ref={inputRef}
-                    className="res-channel"
-                    style={{
-                      backgroundColor: state.background
-                        ? 'rgb(36, 37, 38)'
-                        : 'white',
-                    }}
-                  >
-                    <div className="res-channel-header">
-                      <PersonSearchIcon
-                        sx={{ fontSize: '28px', color: '#6C7588' }}
-                      />
-                      <ClearIcon
-                        sx={{
-                          fontSize: '20px',
-                          color: '#6C7588',
-                          cursor: 'pointer',
-                        }}
-                        onClick={() => handlehinebox()}
-                      />
-                    </div>
-                    {<ContentRight/>}
+                <div
+                  ref={inputRef}
+                  className="res-channel"
+                  style={{
+                    backgroundColor: state.background
+                      ? 'rgb(36, 37, 38)'
+                      : 'white',
+                  }}
+                >
+                  <div className="res-channel-header">
+                    <PersonSearchIcon
+                      sx={{ fontSize: '28px', color: '#6C7588' }}
+                    />
+                    <ClearIcon
+                      sx={{
+                        fontSize: '20px',
+                        color: '#6C7588',
+                        cursor: 'pointer',
+                      }}
+                      onClick={() => handlehinebox()}
+                    />
                   </div>
-                )}
+                  {<ContentRight />}
+                </div>
+              )}
               <TabPanel value="1">
                 {state.author?.id && <UploadPost />}
-                <Container />
+                <Container isActive={value === "1"} tabType="New" />
                 {state.loadingPost && (
                   <div className="notifi-progress">
                     <CircularProgress sx={{ color: 'rgb(108, 117, 136)' }} />
@@ -209,7 +208,7 @@ const MainContent = (props) => {
                 )}
               </TabPanel>
               <TabPanel value="2">
-                <Container />
+                <Container isActive={value === "2"} tabType="Hot" />
                 {state.loadingPost && (
                   <div className="notifi-progress">
                     <CircularProgress sx={{ color: 'rgb(108, 117, 136)' }} />
@@ -223,7 +222,7 @@ const MainContent = (props) => {
                       <CircularProgress sx={{ color: 'rgb(108, 117, 136)' }} />
                     </div>
                   )}
-                  <Container messageId={state?.searchMessage} />
+                  <Container isActive={value === "3"} tabType="Search" messageId={state?.searchMessage} />
                 </TabPanel>
               )}
             </div>
