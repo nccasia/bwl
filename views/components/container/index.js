@@ -1,15 +1,27 @@
 /* eslint-disable prettier/prettier */
+import React from 'react';
+import { getAll, getHotPosts, getOne } from '../../api/apiPosts';
+import { useStore } from '../../store';
 import ContainerItem from '../ContainerItem';
 import './style.scss';
-import { useStore } from '../../store';
-import React from 'react';
-import { getAll, getOne, getHotPosts } from '../../api/apiPosts';
 
 const Container = (props) => {
   const { state, dispatch } = useStore();
-  React.useEffect(()=>{
+  const lastApiCall = React.useRef(null);
+
+  React.useEffect(() => {
+    if (!props.isActive) {
+      return;
+    }
+
+    const apiKey = `${props.tabType}-${state?.author?.id || 'null'}-${state.page}-${state.channel}-${props?.messageId || ''}`;
+    if (lastApiCall.current === apiKey) {
+      return;
+    }
+
+    lastApiCall.current = apiKey;
     const foo = (index) => {
-      if(state.typePosts==="New"){
+      if (props.tabType === "New") {
         getAll(
           {
             page: state.page,
@@ -20,10 +32,10 @@ const Container = (props) => {
           dispatch,
         );
       }
-      if(state.typePosts==="Search" && props?.messageId){
-        getOne({messageId: props?.messageId, id: index}, dispatch);
+      if (props.tabType === "Search" && props?.messageId) {
+        getOne({ messageId: props?.messageId, id: index }, dispatch);
       }
-      if(state.typePosts==="Hot"){
+      if (props.tabType === "Hot") {
         getHotPosts(
           {
             messageId: index,
@@ -35,17 +47,18 @@ const Container = (props) => {
         );
       }
     };
-    if(state.page !== -1){
-      if(state?.author?.id) {
+    if (state.page !== -1) {
+      if (state?.author?.id) {
         foo(state?.author?.id);
-      } else{
+      } else {
         foo(null);
       }
     }
   }, [
+    props.isActive,
+    props.tabType,
     state?.author?.id,
     state.page,
-    state.typePosts,
     state.changePage,
     state.size,
     props?.messageId,
