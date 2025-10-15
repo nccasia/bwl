@@ -17,7 +17,10 @@ export class MezonBotService {
   ) {
     this.whitelistChannels =
       process.env.WHITELIST_CHANNEL_IDS?.split(',') || [];
-    this._mezonClient = new MezonClient(process.env.MEZON_BOT_TOKEN);
+    this._mezonClient = new MezonClient({
+      botId: process.env.MEZON_BOT_ID,
+      token: process.env.MEZON_BOT_TOKEN,
+    });
     this._mezonClient.login().then(() => {
       console.log('Mezon bot is ready!');
     });
