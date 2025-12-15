@@ -21,8 +21,8 @@ export class MezonBotService {
       botId: process.env.MEZON_BOT_ID,
       token: process.env.MEZON_BOT_TOKEN,
     });
-    this._mezonClient.login().then(() => {
-      console.log('Mezon bot is ready!');
+    this._mezonClient.login().then((result) => {
+      console.log('Mezon bot logged in:', result);
     });
     this._mezonClient.onChannelMessage(this.listenChanelMessages);
   }
@@ -32,7 +32,7 @@ export class MezonBotService {
     if (!this.whitelistChannels.includes(event?.channel_id)) {
       return;
     }
-    
+
     const channel = this._mezonClient.channels.get(event.channel_id);
     if (event.attachments && event.attachments.length > 0) {
       const existsChannel = await this.channelModel.findOne({ id: channel.id });
