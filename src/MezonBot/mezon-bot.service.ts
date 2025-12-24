@@ -33,7 +33,11 @@ export class MezonBotService {
       return;
     }
 
-    const channel = this._mezonClient.channels.get(event.channel_id);
+    const channel = await this._mezonClient.channels.fetch(event.channel_id);
+    if (!channel) {
+      return;
+    }
+
     if (event.attachments && event.attachments.length > 0) {
       const existsChannel = await this.channelModel.findOne({ id: channel.id });
       const existsAuthor = await this.authService.findUser(event.username);
