@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { ChannelMessage, MezonClient } from 'mezon-sdk';
+import { MezonClient, ChannelMessage } from 'mezon-sdk';
 import { Model } from 'mongoose';
 import { AppService } from '../app.service';
 import { AuthService } from '../Authentication/auth.service';
